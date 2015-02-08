@@ -54,6 +54,12 @@
 								<a href="/password/email">Forgot Your Password?</a>
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="col-md-4 control-label">Or login with:</label>
+						</div>
+						<div class="col-md-6">
+							<ul><li><a href="/auth/github">Github</a></li><li>Google</li></ul>
+						</div>
 					</form>
 				</div>
 			</div>
