@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers\Auth;
 
+use Auth;
 use Config;
+use App\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
@@ -45,6 +47,7 @@ class AuthController extends Controller {
 
 	public function getGithub()
 	{
+		// TODO: Abstract this all out to a service
 		$serviceFactory = new ServiceFactory;
 
 		$uriFactory = new UriFactory;
@@ -62,23 +65,50 @@ class AuthController extends Controller {
 
 		// Instantiate the GitHub service using the credentials, http client and storage mechanism for the token
 		/** @var $gitHub GitHub */
-		$gitHub = $serviceFactory->createService('GitHub', $credentials, $storage, array('user'));
+		$gitHub = $serviceFactory->createService('GitHub', $credentials, $storage, array('user:email'));
 
 		if (!empty($_GET['code'])) {
 			// This was a callback request from github, get the token
 			$gitHub->requestAccessToken($_GET['code']);
 
-			$result = json_decode($gitHub->request('user/emails'), true);
+			// Just log in if we find a recognized and verified email
+			$result = json_decode($gitHub->request('/user/emails'));
+			$emails = [];
+			$primary = null;
 
-			echo 'The first email on your github account is ' . $result[0];
+			foreach($result as $emailDetails) {
+				// TODO: If github is ever wanted, figure out how to get verified emails
+				//       Apparently the documentation is lying about this
+				/*
+				if($emailDetails->verified) {
+					$emails[] = $emailDetails->email;
+					if($emailDetails->primary) {
+						$primary = $emailDetails->email;
+					}
+				}
+				*/
+				$primary = $emailDetails;
+				$emails[] = $emailDetails;
+			}
 
-		} elseif (!empty($_GET['go']) && $_GET['go'] === 'go') {
-			$url = $gitHub->getAuthorizationUri();
-			header('Location: ' . $url);
+			if(count($emails) && ($user = User::whereIn('email', $emails)->first())) {
+				Auth::login($user);
+				return redirect()->action('HomeController@index');
+			}
 
-		} else {
-			$url = $currentUri->getRelativeUri() . '?go=go';
-			echo "<a href='$url'>Login with Github!</a>";
+			$result = json_decode($gitHub->request('user'));
+			$name = $result->name;
+
+			if(!$primary) {
+				echo 'TODO: Show message "Can only register with verified email addresses"';
+			}
+			else {
+				echo 'TODO: show register form with name: ' . $name . ', email: ' . $primary;
+			}
+		}
+		else {
+			// Redirect to Github login page
+			return redirect($gitHub->getAuthorizationUri()->getAbsoluteUri());
 		}
 	}
 
