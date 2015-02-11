@@ -31,4 +31,75 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
+	public function roles() {
+		return $this->belongsToMany('\App\Role');
+	}
+
+	public function addRole($role) {
+		if(is_object($role)) {
+			$role = $role->getKey();
+		}
+		elseif(is_string($role)) {
+			$role = Role::where('name', '=', $role)->pluck('id');
+		}
+
+		$this->roles()->attach($role);
+	}
+
+	public function addRoles($roles) {
+		foreach($roles as $role) {
+			$this->addRole($role);
+		}
+	}
+
+	public function removeRole($role) {
+		if(is_object($role)) {
+			$role = $role->getKey();
+		}
+		elseif(is_string($role)) {
+			$role = Role::where('name', '=', $role)->pluck('id');
+		}
+
+		$this->roles()->detach($role);
+	}
+
+	public function removeRoles($roles) {
+		foreach($roles as $role) {
+			$this->removeRole($role);
+		}
+	}
+
+	/**
+	 * Return whether the user has the named role.
+	 *
+	 * @param  string  $role
+	 * @return bool
+	 */
+	public function hasRole($role) {
+		foreach($this->roles as $r) {
+			if($r->name === $role) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Return whether the user has the requested permission via any of its roles.
+	 *
+	 * @param  string  $permission
+	 * @return bool
+	 */
+	public function can($permission) {
+		foreach($this->roles as $role) {
+			foreach($role->permissions as $p) {
+				if($p->name === $permission) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 }
