@@ -38,24 +38,4 @@ class HomeController extends Controller {
 		$permissions = Permission::all();
 		return view('home', compact(['user', 'permissions']));
 	}
-
-	// TODO: Remove after demo
-	public function permupdate(Request $request) {
-		$user = Auth::user();
-		$input = $request->all();
-
-		if($input['perm'] === "Make me organisation admin") {
-			if(!$user->hasRole('organisation_admin')) {
-				$user->addRole('organisation_admin');
-			}
-		}
-		if($input['perm'] === "Make me global admin") {
-			if(!$user->hasRole('global_admin')) {
-				$user->addRole('global_admin');
-			}
-		}
-
-		$permissions = Permission::all();
-		return view('home', compact(['user', 'permissions']));
-	}
 }
