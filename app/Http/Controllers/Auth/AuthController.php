@@ -130,7 +130,7 @@ class AuthController extends Controller {
 			}
 			else {
 				Session::put('oauth.register', true);
-				Session::put('oauth.name', $name);
+				Session::put('oauth.first_name', $name);
 				Session::put('oauth.email', $primary);
 				return redirect()->action('Auth\AuthController@getRegister');
 			}
@@ -167,7 +167,8 @@ class AuthController extends Controller {
 			$token = $linkedIn->requestAccessToken($_GET['code'], $state);
 
 			$result = json_decode($linkedIn->request('/people/~?format=json'));
-			$name = trim($result->firstName . ' ' . $result->lastName);
+			$firstName = $result->firstName;
+			$lastName = $result->lastName;
 
 			$result = json_decode($linkedIn->request('/people/~/email-address?format=json'));
 			$email = $result;
@@ -178,7 +179,8 @@ class AuthController extends Controller {
 			}
 
 			Session::put('oauth.register', true);
-			Session::put('oauth.name', $name);
+			Session::put('oauth.first_name', $firstName);
+			Session::put('oauth.last_name', $lastName);
 			Session::put('oauth.email', $email);
 			return redirect()->action('Auth\AuthController@getRegister');
 		}

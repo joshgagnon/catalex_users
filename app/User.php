@@ -2,13 +2,14 @@
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword;
+	use Authenticatable, CanResetPassword, SoftDeletes;
 
 	/**
 	 * The database table used by the model.
@@ -22,7 +23,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['name', 'email', 'password'];
+	protected $fillable = ['first_name', 'last_name', 'email', 'password', 'organisation_id', 'billing_detail_id'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -31,8 +32,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
+	public function billing_details() {
+		return $this->belongsTo('App\BillingDetail');
+	}
+
+	public function organisation() {
+		return $this->belongsTo('App\Organisation');
+	}
+
 	public function roles() {
 		return $this->belongsToMany('\App\Role');
+	}
+
+	public function fullName() {
+		return $this->first_name . ' ' . $this->last_name;
 	}
 
 	public function addRole($role) {
