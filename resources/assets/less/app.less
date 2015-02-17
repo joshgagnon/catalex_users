@@ -1,8 +1,21 @@
 @import "bootstrap/bootstrap";
 
+@brand-primary: #d11820;
+
 @btn-font-weight: 300;
 @font-family-sans-serif: "Roboto", Helvetica, Arial, sans-serif;
 
 body, label, .checkbox label {
 	font-weight: 300;
 }
+
+.navbar-brand img {
+	max-height: 54px;
+}
+@media (min-width: @grid-float-breakpoint) {
+	.navbar-nav > li > a {
+		padding-top: 44px;
+		padding-bottom: 20px;
+	}
+}
+

@@ -4,21 +4,27 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Laravel</title>
+	<title>
+	@section('title')
+		CataLex Law Browser
+	@show
+	</title>
+
+	{{-- TODO: <link rel="shortcut icon" type="image/png" href="/favicon.png" /> --}}
 
 	<link href="/css/app.css" rel="stylesheet">
 
-	<!-- Fonts -->
+	{{-- Fonts --}}
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+	<link href='//brick.a.ssl.fastly.net/Ubuntu:300,400,400i,700' rel='stylesheet' type='text/css'>
 
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
 <body>
-	<nav class="navbar navbar-default">
+	<nav class="navbar">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -27,16 +33,18 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Laravel</a>
+				<a class="navbar-brand" href="/"><img alt="Catalex" src="/images/logo-colourx2.png"></a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="/">Home</a></li>
-				</ul>
+				@if(Auth::check())
+					<ul class="nav navbar-nav">
+						<li><a href="/">Home</a></li>
+					</ul>
+				@endif
 
 				<ul class="nav navbar-nav navbar-right">
-					@if (Auth::guest())
+					@if(Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
 						<li><a href="/auth/register">Register</a></li>
 					@else
@@ -54,7 +62,6 @@
 
 	@yield('content')
 
-	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </body>
