@@ -1,9 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use Auth; // TODO: Remove after demo
-use App\Permission; // TODO: Remove after demo
-use Illuminate\Http\Request; // TODO: Remove after demo
-
 class HomeController extends Controller {
 
 	/*
