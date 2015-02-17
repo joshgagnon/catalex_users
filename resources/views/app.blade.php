@@ -25,7 +25,7 @@
 </head>
 <body>
 	<nav class="navbar">
-		<div class="container-fluid">
+		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="sr-only">Toggle Navigation</span>
@@ -63,6 +63,14 @@
 	</nav>
 
 	@yield('content')
+
+	<footer class="footer">
+		<div class="container text-center">
+			<p class="copyright">© Copyright {{ date('Y') }} - CataLex Limited. All rights reserved.</p>
+            <p>P: C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland, 0620, New Zealand</p>
+            <p>E: <a href="mailto:mail@catalex.nz">mail@catalex.nz</a> &nbsp; M: +64 274 538 552</p>
+		</div>
+	</footer>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
