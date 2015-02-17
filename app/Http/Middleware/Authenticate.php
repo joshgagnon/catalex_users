@@ -1,5 +1,6 @@
 <?php namespace App\Http\Middleware;
 
+use View;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 
@@ -42,6 +43,10 @@ class Authenticate {
 			{
 				return redirect()->guest('auth/login');
 			}
+		}
+		else {
+			// Make user available in all views
+			View::share(['user' => $this->auth->user()]);
 		}
 
 		return $next($request);

@@ -34,8 +34,6 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
-		$user = Auth::user();
-		$permissions = Permission::all();
-		return view('home', compact(['user', 'permissions']));
+		return view('home');
 	}
 }
