@@ -19,6 +19,8 @@ use OAuth\Common\Consumer\Credentials;
 
 class AuthController extends Controller {
 
+	protected $redirectTo = '/';
+
 	/*
 	|--------------------------------------------------------------------------
 	| Registration & Login Controller
@@ -64,9 +66,6 @@ class AuthController extends Controller {
 			// Success, oauth flow over
 			Session::forget('oauth.register');
 		}
-
-		// Give all registered users the registered_user role
-		Auth::user()->addRole('registered_user');
 
 		return $response;
 	}

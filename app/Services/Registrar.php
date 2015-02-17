@@ -63,7 +63,7 @@ class Registrar implements RegistrarContract {
 			]);
 		}
 
-		return User::create([
+		$user = User::create([
 			'first_name' => $data['first_name'],
 			'last_name' => $data['last_name'],
 			'email' => $data['email'],
@@ -72,6 +72,15 @@ class Registrar implements RegistrarContract {
 			'organisation_id' => $organisation ? $organisation->id : null,
 			'billing_detail_id' => $organisation ? null : $billing->id,
 		]);
+
+		// Add basic roles for the user
+		$user->addRole('registered_user');
+		// And org roles if registering as an organistaion - it's assumed the first user is an admin
+		if($organisation) {
+			$user->addRole('organisation_admin');
+		}
+
+		return $user;
 	}
 
 }
