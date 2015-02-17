@@ -24,8 +24,8 @@
 							<label class="col-md-4 control-label">Login with</label>
 							<div class="col-md-6">
 								<ul class="social-logins">
-									<li><a href="/auth/github">Github</a></li>
-									<li><a href="/auth/linkedin">LinkedIn</a></li>
+									{{-- TODO: Other auth methods <li><a href="/auth/github">Github</a></li> --}}
+									<li><a href="/auth/linkedin"><img alt="LinkedIn" src="/images/social-login/linkedin.png"></a></li>
 								</ul>
 							</div>
 						</div>

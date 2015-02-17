@@ -39,7 +39,9 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				@if(Auth::check())
 					<ul class="nav navbar-nav">
+						{{-- TODO: Use route helper --}}
 						<li><a href="/">Home</a></li>
+						<li><a href="/organisation">Organisation</a></li>
 					</ul>
 				@endif
 

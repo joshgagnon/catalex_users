@@ -18,6 +18,10 @@ class Organisation extends Model {
 		'name' => 'required|max:255',
 	];
 
+	public function members() {
+		return $this->hasMany('App\User');
+	}
+
 	public function billing_details() {
 		return $this->belongsTo('App\BillingDetail');
 	}

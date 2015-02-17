@@ -128,11 +128,10 @@
 				<div class="panel-body">
 					@if(!Session::get('oauth.register', false))
 						<div class="row">
-							<label class="col-md-4 control-label">Register with</label>
+							<label class="col-md-4 control-label text-right">Register with</label>
 							<div class="col-md-6">
-								<ul>
-									<li><a href="/auth/github">Github</a></li>
-									<li><a href="/auth/linkedin">LinkedIn</a></li>
+								<ul class="social-logins">
+									<li><a href="/auth/linkedin"><img alt="LinkedIn" src="/images/social-login/linkedin.png"></a></li>
 								</ul>
 							</div>
 						</div>
