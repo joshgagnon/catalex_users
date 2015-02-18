@@ -200,7 +200,20 @@
 				</div>
 			</div>
 		</div>
-		<div class="hidden-xs hidden-sm col-med-4"><img src="/images/under-the-surface.jpg" alt="Find what's under the surface"></div>
+		<div class="col-xs-12 col-md-4">
+			<div class="trial-info">
+				<h2>How the free trial works.</h2>
+				<p>
+					<span class="highlight">Trial length:</span><br>
+					*After a 14 day trial period, your account will be disabled and you will be sent an email with a link to confirm your subscription.
+				</p>
+				<p>
+					<span class="highlight">Billing and Credit Card information:</span><br>
+					You will be asked to enter your credit card details when creating your account. No funds will be deducted from your credit card until you have confirmed your subscription.
+				</p>
+				<img class="hidden-xs hidden-sm" src="/images/under-the-surface.jpg" alt="Find what's under the surface">
+			</div>
+		</div>
 	</div>
 </div>
 @endsection

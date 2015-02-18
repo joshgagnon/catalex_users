@@ -6248,6 +6248,12 @@ ul.social-logins > li {
   float: left;
   margin-right: 8px;
 }
+.trial-info h2 {
+  margin-top: 0;
+}
+.trial-info img {
+  margin-bottom: 20px;
+}
 html {
   position: relative;
   min-height: 100%;
