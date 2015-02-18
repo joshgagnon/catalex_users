@@ -1,6 +1,6 @@
 @extends('app')
 @section('content')
-<div class="container">
+<div class="container legal-doc">
 <h2>CUSTOMER AGREEMENT</h2>
 <em>This Agreement sets out the terms governing the relationship between You and CataLex.  Please read it carefully. </em>
 <ol><li><h5>DEFINITIONS </h5><ol>
@@ -17,10 +17,10 @@
 <li><strong>"Trial Period"</strong> means the period of 14 days from (but not including) the date the Customer created 	their account with CataLex.</li>
 <li><strong>"Users"</strong> means the people with individual access to the Services as determined by the Customer, and <strong>"User"</strong> means any one of them.</li>
 <li><strong>"Website" </strong> means the Internet site at the domain www.catalex.nz or any other site operated by CataLex. </li>
-<li><strong>"You"</strong> means the Customer and, and where the context permits, Users. <strong>"Your"</strong>  has a corresponding meaning. </li></ol></li>
+<li><strong>"You"</strong>  means the Customer and, and where the context permits, Users. <strong>"Your"</strong>  has a corresponding meaning. </li></ol></li>
 <li><h5>USE OF THE SERVICES</h5><ol>
 <li><strong>Access and use: </strong>  CataLex grants You the right to access and use the Services.  This right is non-exclusive, non-transferable, and limited by and subject to this Agreement. </li>
-<li><strong>Trial Period: </strong>  You may access and use the Services free of charge during the Trial Period.  At the end of the Trial Period, You will have the option to either continue Your subscription or cancel under clause 9(a) below. </li>
+<li><strong>Trial Period: </strong>  You may access and use the Services free of charge during the" Trial Period.  At the end of the Trial Period, You will have the option to either continue Your subscription or cancel under clause 9(a) below. </li>
 <li><strong>Users: </strong>  You acknowledge and agree that, subject to law and any applicable agreement between the Customer and Users:<ol>
 <li>the Customer determines who is a User and what kind of access to the Services that User has;</li>
 <li>the Customer is responsible for all Users’ use of the Services;</li>
@@ -52,15 +52,15 @@ The provisions of clauses 4(a)(i) and 4(a)(ii) shall not apply to any informatio
 <li><strong>No warranties: </strong> CataLex gives no warranty about the Services. Without limiting the foregoing, CataLex does not warrant that the Services will meet Your requirements or that it will be suitable for any particular purpose. To avoid doubt, all implied conditions or warranties are excluded in so far as is permitted by law, including (without limitation) warranties of merchantability, fitness for purpose, title and non-infringement. </li>
 <li><strong>Consumer guarantees: </strong> You warrant and represent that You are acquiring the right to access and use the Services for the purposes of a business and that, to the maximum extent permitted by law, any statutory consumer guarantees or legislation intended to protect non-business consumers in any jurisdiction does not apply to the supply of the Services, the Website or this Agreement. </li></ol></li>
 <li><h5>ACKNOWLEDGEMENTS</h5><ol>
-<li><strong>Authority to access: </strong>  You are authorised to use the Services and the Website and to access the information and Data that You input into the Website, including any information or Data input into the Website by any person you have authorised to use the Service. You are also authorised to access the processed information and Data that is made available to You through Your use of the Website and the Services (whether that information and Data is Your own or that of anyone else). </li>
-<li><strong>No responsibility to third parties: </strong>  CataLex has no responsibility to any person other than You and nothing in this Agreement confers, or purports to confer, a benefit on any person other than You. If You use the Services or access the Website on behalf of or for the benefit of anyone other than yourself (whether a body corporate or otherwise) you agree that:
+<li><strong>Authority to access: </strong> You are authorised to use the Services and the Website and to access the information and Data that You input into the Website, including any information or Data input into the Website by any person you have authorised to use the Service. You are also authorised to access the processed information and Data that is made available to You through Your use of the Website and the Services (whether that information and Data is Your own or that of anyone else). </li>
+<li><strong>No responsibility to third parties: </strong> CataLex has no responsibility to any person other than You and nothing in this Agreement confers, or purports to confer, a benefit on any person other than You. If You use the Services or access the Website on behalf of or for the benefit of anyone other than yourself (whether a body corporate or otherwise) you agree that:
 <ol><li>You are responsible for ensuring that You have the right to do so;</li>
 <li>You are responsible for authorising any person who is given access to information or Data, and you agree that CataLex has no obligation to provide any person access to such information or Data without Your authorisation and may refer any requests for information to You to address; and</li>
 <li>You will indemnify CataLex against any claims or loss relating to: (1) CataLex's refusal to provide any person access to Your information or Data in accordance with this Agreement; or (2) CataLex’s making available information or Data to any person with Your authorisation. </li></ol></li>
 <li><strong>Own Risk: </strong> The provision of, access to, and use of, the Services is on an "as is " basis and at Your own risk. </li>
-<li><strong>Interruptions and errors: </strong>  CataLex does not warrant that the use of the Service will be uninterrupted or error free. Among other things, the operation and availability of the systems used for accessing the Service, including public telephone services, computer networks and the Internet, can be unpredictable and may from time to time interfere with or prevent access to the Services. CataLex is not in any way responsible for any such interference or prevention of Your access or use of the Services. </li>
-<li><strong>Not a Lawyer: </strong>  CataLex is not Your lawyer and use of the Services does not constitute the receipt of legal advice. If You have any legal questions, please contact a lawyer. </li>
-<li><strong>Suitability: </strong>  It is Your sole responsibility to determine that the Services meet the needs of Your business and are suitable for the purposes for which they are used. </li>
+<li><strong>Interruptions and errors: </strong> CataLex does not warrant that the use of the Service will be uninterrupted or error free. Among other things, the operation and availability of the systems used for accessing the Service, including public telephone services, computer networks and the Internet, can be unpredictable and may from time to time interfere with or prevent access to the Services. CataLex is not in any way responsible for any such interference or prevention of Your access or use of the Services. </li>
+<li><strong>Not a Lawyer: </strong> CataLex is not Your lawyer and use of the Services does not constitute the receipt of legal advice. If You have any legal questions, please contact a lawyer. </li>
+<li><strong>Suitability: </strong> It is Your sole responsibility to determine that the Services meet the needs of Your business and are suitable for the purposes for which they are used. </li>
 <li><strong>Compliance with law: </strong>  You remain solely responsible for complying with all applicable laws. It is Your responsibility to check that storage of and access to your Data via the Software and the Website will comply with laws applicable to you (including any laws requiring you to retain records). </li></ol></li>
 <li><h5>LIMITATION OF LIABILITY</h5><ol>
 <li><strong>Exclusion: </strong>  To the maximum extent permitted by law, CataLex excludes all liability and responsibility to You (or any other person) in contract, tort (including negligence), or otherwise, for any loss (including loss of information, Data, profits and savings) or damage resulting, directly or indirectly, from any use of, or reliance on, the Service or Website. </li>

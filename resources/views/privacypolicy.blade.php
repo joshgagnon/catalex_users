@@ -1,5 +1,5 @@
 @extends('app')@section('content')
-<div class="container">
+<div class="container legal-doc">
 <h3>PRIVACY POLICY</h3>
 <p>
 This privacy policy (Policy) is where we explain how we treat personal information. We encourage You to read it carefully. It will help You make informed decisions about sharing Your personal information with us.The defined terms in this Policy have the same meaning as in our Customer Agreement, which You should read together with this Policy.  By accessing our Website and using our Services, You consent to the terms of this Policy and agree to be bound by it and our Terms of Use.</p>
@@ -34,7 +34,7 @@ This privacy policy (Policy) is where we explain how we treat personal informati
 </ol>
 <p>By using the Services, You consent to Your personal information being collected, held and used in this way and for any other use You authorise. CataLex will only use Your personal information for the purposes described in this Policy or with Your express permission.</p>
 <p>It is Your responsibility to keep Your password to the Service safe. You should notify us as soon as possible if You become aware of any misuse of Your password, and immediately change your password within the Service or via the “Forgotten Password” process.</p>
-<h5>CataLex can aggregate Your non-personally identifiable data</p>
+<h5>CataLex can aggregate Your non-personally identifiable data</h5></p>
 <p>By using the Services, You agree that CataLex can access, aggregate and use non-personally identifiable data CataLex has collected from You. This data will in no way identify You or any other individual.</p>
 <p>CataLex may use this aggregated non-personally identifiable data to:</p>
 <ul>
