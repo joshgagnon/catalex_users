@@ -129,13 +129,13 @@
 				@if(Session::get('oauth.register', false))
 					Please confirm your details
 				@else
-					Register
+					Sign Up
 				@endif
 				</div>
 				<div class="panel-body">
 					@if(!Session::get('oauth.register', false))
 						<div class="row">
-							<label class="col-md-4 control-label text-right">Register with</label>
+							<label class="col-md-4 control-label text-right">Sign up with</label>
 							<div class="col-md-6">
 								<ul class="social-logins">
 									<li><a href="/auth/linkedin"><img alt="LinkedIn" src="/images/social-login/linkedin.png"></a></li>
