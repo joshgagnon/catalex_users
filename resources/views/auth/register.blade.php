@@ -54,6 +54,13 @@
 <h4>Billing Cycle</h4>
 <div class="row">
 	<div class="col-md-4"></div>
+	<div class="col-md-6">
+		<p>All transactions will be billed in New Zealand dollars.<p>
+		<p>You will be able to access Law Browser immediately once your credit card details have been accepted.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4"></div>
 	<div class="col-md-4">
 		<div class="form-group">
 			<label class="radio-inline">
