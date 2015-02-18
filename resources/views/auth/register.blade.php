@@ -99,7 +99,7 @@
 	<div class="col-md-6 col-md-offset-4">
 		<div class="checkbox">
 			<label>
-				<input type="checkbox" id="customer_agreement" name="customer_agreement"> I accept the <a href="#">Customer Agreement</a> and <a href="#">Law Browser Terms of Use</a>
+				<input type="checkbox" id="customer_agreement" name="customer_agreement"> I accept the <a href="/customeragreement">Customer Agreement</a> and <a href="/termsofuse">Law Browser Terms of Use</a>
 			</label>
 		</div>
 	</div>
@@ -107,7 +107,7 @@
 <div class="form-group">
 	<div class="col-md-6 col-md-offset-4">
 		<button type="submit" class="btn btn-primary">
-			Register
+			Continue to Billing
 		</button>
 	</div>
 </div>

@@ -12,9 +12,13 @@
 */
 
 Route::get('/', 'HomeController@index');
+Route::get('/termsofuse', 'LegalController@termsofuse');
+Route::get('/customeragreement', 'LegalController@customeragreement');
+Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 	'organisation' => 'OrganisationController',
 ]);
+
