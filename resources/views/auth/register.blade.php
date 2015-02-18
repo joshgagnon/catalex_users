@@ -123,7 +123,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-xs-12 col-md-8">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 				@if(Session::get('oauth.register', false))
@@ -200,6 +200,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="hidden-xs hidden-sm col-med-4"><img src="/images/under-the-surface.jpg" alt="Find what's under the surface"></div>
 	</div>
 </div>
 @endsection
