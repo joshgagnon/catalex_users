@@ -64,14 +64,14 @@
 	<div class="col-md-4">
 		<div class="form-group">
 			<label class="radio-inline">
-				<input type="radio" {{ old('billing_period') === 'monthly' ? 'checked' : '' }} value="monthly" name="billing_period" id="billing-monthly"> Monthly ($14.99) per user
+				<input type="radio" {{ old('billing_period') === 'monthly' ? 'checked' : '' }} value="monthly" name="billing_period" id="billing-monthly"> Monthly ($14.99)<span class="per-user"> per user</span>
 			</label>
 		</div>
 	</div>
 	<div class="col-md-4">
 		<div class="form-group">
 			<label class="radio-inline">
-				<input type="radio" {{ old('billing_period') === 'annually' ? 'checked' : '' }} value="annually" name="billing_period" id="billing-annually"> Annual ($179) per user
+				<input type="radio" {{ old('billing_period') === 'annually' ? 'checked' : '' }} value="annually" name="billing_period" id="billing-annually"> Annual ($179)<span class="per-user"> per user</span>
 			</label>
 		</div>
 	</div>

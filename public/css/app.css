@@ -6257,6 +6257,9 @@ ul.social-logins > li {
 .trial-info img {
   margin-bottom: 20px;
 }
+#tab-individual .per-user {
+  display: none;
+}
 html {
   position: relative;
   min-height: 100%;
