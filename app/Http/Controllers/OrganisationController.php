@@ -16,11 +16,17 @@ class OrganisationController extends Controller {
 		$user = Auth::user();
 
 		if($user->can('view_own_organisation')) {
-			return view('organisation.overview', ['organisation' => $user->organisation]);
+			$organisation = $user->organisation;
+
+			if(!$organisation) {
+				// TODO: Redirect to page offering upgrade to organisation
+				return redirect ('/');
+			}
+
+			return view('organisation.overview', ['organisation' => $organisation]);
 		}
-		else {
-			// TODO: Error saying not enough permission or not currently in org
-			return redirect('/');
-		}
+
+		// TODO: Error saying not enough permission
+		return redirect('/');
 	}
 }
