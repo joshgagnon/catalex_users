@@ -183,7 +183,7 @@
 									<div class="form-group">
 										<div class="col-md-4"></div>
 										<div class="col-md-6">
-											<p>You can add additional users once your organisation is signed up with CataLex</p>
+											<p>Create an account for your organisation. Once your organisation is signed up with CataLex, you can add as many users as you like.</p>
 										</div>
 									</div>
 									<h4>Business Details</h4>
