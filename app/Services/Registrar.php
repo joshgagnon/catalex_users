@@ -23,7 +23,7 @@ class Registrar implements RegistrarContract {
 			'last_name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users',
 			'password' => 'required|confirmed|min:6',
-			'address_line_1' => 'required|max:255',
+			'address_line_1' => 'max:255',
 			'address_line_2' => 'max:255',
 			'city' => 'required|max:255',
 			'state' => 'max:255',
