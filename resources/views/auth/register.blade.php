@@ -180,6 +180,12 @@
 									<input type="hidden" name="type" value="organisation">
 									<h4>Your Details</h4>
 									@yield('personal-input')
+									<div class="form-group">
+										<div class="col-md-4"></div>
+										<div class="col-md-6">
+											<p>You can add additional users once your organisation is signed up with CataLex</p>
+										</div>
+									</div>
 									<h4>Business Details</h4>
 									<div class="form-group">
 										<label class="col-md-4 control-label">Business Name</label>
