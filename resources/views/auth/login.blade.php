@@ -68,7 +68,7 @@
 
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
-								Not yet a member? <a href="/auth/register">Register here</a>
+								Not yet a member? <a href="/auth/register">Sign up here</a>
 							</div>
 						</div>
 					</form>

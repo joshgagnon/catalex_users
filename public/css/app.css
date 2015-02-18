@@ -976,7 +976,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: inherit;
+  font-family: "Ubuntu", sans-serif;
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
@@ -6226,6 +6226,9 @@ button.close {
     display: none !important;
   }
 }
+p {
+  font-family: "Ubuntu", sans-serif;
+}
 body,
 label,
 .checkbox label {
@@ -6254,19 +6257,27 @@ ul.social-logins > li {
 .trial-info img {
   margin-bottom: 20px;
 }
+#tab-individual .per-user {
+  display: none;
+}
 html {
   position: relative;
   min-height: 100%;
 }
 body {
-  margin-bottom: 110px;
+  margin-bottom: 160px;
 }
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 110px;
-  padding-top: 10px;
-  color: #999999;
+  height: 160px;
+  padding-top: 24px;
+  color: #595757;
   background-color: #141414;
+}
+.footer .links a {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  padding: 0 10px;
 }

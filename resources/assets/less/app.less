@@ -5,6 +5,12 @@
 @btn-font-weight: 300;
 @font-family-sans-serif: "Roboto", Helvetica, Arial, sans-serif;
 
+@headings-font-family: "Ubuntu", sans-serif;
+
+p {
+	font-family: @headings-font-family;
+}
+
 body, label, .checkbox label {
 	font-weight: 300;
 }
@@ -38,8 +44,12 @@ ul.social-logins {
 	}
 }
 
+#tab-individual .per-user {
+	display: none;
+}
+
 // Sticky footer styles
-@footer-height: 140px;
+@footer-height: 160px;
 html {
 	position: relative;
 	min-height: 100%;
@@ -52,7 +62,13 @@ body {
 	bottom: 0;
 	width: 100%;
 	height: @footer-height;
-	padding-top: 10px;
-	color: #999999;
+	padding-top: 24px;
+	color: #595757;
 	background-color: #141414;
+
+	.links a {
+		font-size: 0.8em;
+		text-transform: uppercase;
+		padding: 0 10px;
+	}
 }

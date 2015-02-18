@@ -64,14 +64,14 @@
 	<div class="col-md-4">
 		<div class="form-group">
 			<label class="radio-inline">
-				<input type="radio" {{ old('billing_period') === 'monthly' ? 'checked' : '' }} value="monthly" name="billing_period" id="billing-monthly"> Monthly ($14.99) per user
+				<input type="radio" {{ old('billing_period') === 'monthly' ? 'checked' : '' }} value="monthly" name="billing_period" id="billing-monthly"> Monthly ($14.99)<span class="per-user"> per user</span>
 			</label>
 		</div>
 	</div>
 	<div class="col-md-4">
 		<div class="form-group">
 			<label class="radio-inline">
-				<input type="radio" {{ old('billing_period') === 'annually' ? 'checked' : '' }} value="annually" name="billing_period" id="billing-annually"> Annual ($179) per user
+				<input type="radio" {{ old('billing_period') === 'annually' ? 'checked' : '' }} value="annually" name="billing_period" id="billing-annually"> Annual ($179)<span class="per-user"> per user</span>
 			</label>
 		</div>
 	</div>
@@ -129,13 +129,13 @@
 				@if(Session::get('oauth.register', false))
 					Please confirm your details
 				@else
-					Register
+					Sign Up
 				@endif
 				</div>
 				<div class="panel-body">
 					@if(!Session::get('oauth.register', false))
 						<div class="row">
-							<label class="col-md-4 control-label text-right">Register with</label>
+							<label class="col-md-4 control-label text-right">Sign up with</label>
 							<div class="col-md-6">
 								<ul class="social-logins">
 									<li><a href="/auth/linkedin"><img alt="LinkedIn" src="/images/social-login/linkedin.png"></a></li>
@@ -180,6 +180,12 @@
 									<input type="hidden" name="type" value="organisation">
 									<h4>Your Details</h4>
 									@yield('personal-input')
+									<div class="form-group">
+										<div class="col-md-4"></div>
+										<div class="col-md-6">
+											<p>Create an account for your organisation. Once your organisation is signed up with CataLex, you can add as many users as you like.</p>
+										</div>
+									</div>
 									<h4>Business Details</h4>
 									<div class="form-group">
 										<label class="col-md-4 control-label">Business Name</label>
