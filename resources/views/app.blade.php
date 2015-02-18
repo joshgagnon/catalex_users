@@ -67,9 +67,9 @@
 	<footer class="footer">
 		<div class="container text-center">
 			<p class="copyright">© Copyright {{ date('Y') }} - CataLex Limited. All rights reserved.</p>
-			<p class="links"><a href="/customeragreement">Customer Agreement</a><a href="/privacypolicy">Privacy Policy</a><a href="/termsofuse">Terms of Use</a></p>
+			<p class="links"><a href="/customeragreement">Customer Agreement</a><a href="/privacypolicy">Privacy Policy</a><a href="/termsofuse">Law Browser Terms of Use</a></p>
 			<p>P: C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland, 0620, New Zealand</p>
-			<p>E: <a href="mailto:mail@catalex.nz">mail@catalex.nz</a> &nbsp; M: +64 274 538 552 &nbsp; Fax: +64 09 929 3332 </p>
+			<p>E: <a href="mailto:mail@catalex.nz">mail@catalex.nz</a> &nbsp; M: +64 274 538 552 &nbsp; Fax: +64 9 929 3332</p>
 		</div>
 	</footer>
 

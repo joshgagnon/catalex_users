@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-<div class="container">
+<div class="container legal-doc">
 <h3>Law Browser</h3>
 <h2>TERMS OF USE</h2>
 <strong>Between</strong>: CataLex Limited (<strong>CataLex</strong>) and you, the user (<strong>You</strong>)

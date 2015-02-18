@@ -6260,6 +6260,12 @@ ul.social-logins > li {
 #tab-individual .per-user {
   display: none;
 }
+.legal-doc ol ol {
+  list-style: lower-alpha;
+}
+.legal-doc ol ol ol {
+  list-style: lower-roman;
+}
 html {
   position: relative;
   min-height: 100%;
