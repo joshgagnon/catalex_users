@@ -54,6 +54,13 @@
 <h4>Billing Cycle</h4>
 <div class="row">
 	<div class="col-md-4"></div>
+	<div class="col-md-6">
+		<p>All transactions will be billed in New Zealand dollars.<p>
+		<p>You will be able to access Law Browser immediately once your credit card details have been accepted.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4"></div>
 	<div class="col-md-4">
 		<div class="form-group">
 			<label class="radio-inline">
@@ -116,7 +123,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-xs-12 col-md-8">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 				@if(Session::get('oauth.register', false))
@@ -191,6 +198,20 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<div class="trial-info">
+				<h2>How the free trial works.</h2>
+				<p>
+					<span class="highlight">Trial length:</span><br>
+					*After a 14 day trial period, your account will be disabled and you will be sent an email with a link to confirm your subscription.
+				</p>
+				<p>
+					<span class="highlight">Billing and Credit Card information:</span><br>
+					You will be asked to enter your credit card details when creating your account. No funds will be deducted from your credit card until you have confirmed your subscription.
+				</p>
+				<img class="hidden-xs hidden-sm" src="/images/under-the-surface.jpg" alt="Find what's under the surface">
 			</div>
 		</div>
 	</div>
