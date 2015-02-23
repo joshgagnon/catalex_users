@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'HomeController@index');
+Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
 Route::get('/termsofuse', 'LegalController@termsofuse');
 Route::get('/customeragreement', 'LegalController@customeragreement');
 Route::get('/privacypolicy', 'LegalController@privacypolicy');
