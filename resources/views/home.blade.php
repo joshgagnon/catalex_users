@@ -9,6 +9,7 @@
 
 				<div class="panel-body">
 					<p>You are logged in!</p>
+					<p><a href="{{ route('browser-login') }}">Go to law browser</a></p>
 				</div>
 			</div>
 		</div>
