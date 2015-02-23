@@ -67,7 +67,7 @@ The provisions of clauses 4(a)(i) and 4(a)(ii) shall not apply to any informatio
 <li><strong>Limitation: </strong>  If You suffer loss or damage as a result of CataLex's negligence or failure to comply with this Agreement, any claim by You against CataLex arising from CataLex's negligence or failure will be limited in respect of any one incident, or series of connected incidents, to the Access Fees paid by You in the previous 12 months. </li>
 <li><strong>Remedy: </strong>  If You are not satisfied with the Service, Your sole and exclusive remedy is to terminate this Agreement in accordance with clause 9. </li></ol></li>
 <li><h5>TERMINATION</h5><ol>
-<li><strong>Termination within Trial period: </strong>  You may terminate this Agreement after the Trial Period by giving notice to CataLex. </li>
+<li><strong>Termination after Trial period: </strong>  You may terminate this Agreement after the Trial Period by giving notice to CataLex. </li>
 <li><strong>No-fault termination: </strong> This Agreement will continue for the period covered by the Access Fee paid under clause 3(a). At the end of each billing period this Agreement will automatically continue for another period of the same duration as that period, unless either party terminates this Agreement by giving notice to the other party at least 14 days before the end of the relevant period. </li>
 <li><strong>No refunds: </strong>  CataLex is not under any obligation to refund Access Fees that the Customer paid prior to termination of this Agreement. </li>
 <li><strong>Breach: </strong> If You:<ol>
