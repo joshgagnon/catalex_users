@@ -15,7 +15,6 @@
 Although CataLex has taken care to ensure the content provided through Law Browser is accurate in all respects and in compliance with applicable standards, You agree that your use of and reliance on Law Browser is entirely Your responsibility.  You agree that You will have no claim against CataLex for any kind of loss or damage arising in connection with Your use of Law Browser.</p></li>
 <li><strong>Coverage and Source</strong><p>
 Law Browser is limited in coverage to New Zealand legislation reproduced from http://www.legislation.govt.nz, and case law reproduced from the Ministry of Justice’s ‘Judicial Decisions Online’ database at https://forms.justice.govt.nz/jdo/Search.jsp.  The terms and conditions for the use of those resources may apply or be relevant to Your use of Law Browser.</p></li>
-<li><strong>Crown Copyright</strong><p>
-All legislation and case law displayed in Law Browser is subject to Crown copyright.</p></li></ol>
+</ol>
 </div>
 @endsection
