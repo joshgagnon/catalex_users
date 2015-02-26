@@ -4897,6 +4897,9 @@ ul.social-logins {
   .legal-doc ol ol ol {
     list-style: lower-roman; }
 
+.form-inline .form-group label {
+  display: block; }
+
 html {
   position: relative;
   min-height: 100%; }

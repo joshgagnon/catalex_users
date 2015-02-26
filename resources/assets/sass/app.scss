@@ -36,6 +36,11 @@ ul.social-logins {
 	}
 }
 
+// TODO: Remove or tidy
+.form-inline .form-group label {
+	display: block;
+}
+
 // Sticky footer styles
 $footer-height: 160px;
 html {
