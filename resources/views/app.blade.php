@@ -40,7 +40,7 @@
 					@if(Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
 						<li><a href="/auth/register">Sign Up</a></li>
-					@else
+					@elseif(isset($user)) {{-- Move View::share(['user'] such that $user is always correctly available here --}}
 						{{-- TODO: Use route helper --}}
 						<li><a href="/organisation">Organisation</a></li>
 						<li class="dropdown">
