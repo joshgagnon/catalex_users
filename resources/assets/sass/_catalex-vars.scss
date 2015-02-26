@@ -1,0 +1,60 @@
+$white: #ffffff;
+
+$body-bg: $white;
+
+$text-color: #231f20;
+
+$brand-primary: #d11820;
+$brand-success: #5cb85c; // TODO
+$brand-info: #5bc0de; // TODO
+$brand-warning: #f0ad4e; // TODO
+$brand-danger: #d9534f; // TODO
+
+$font-family-sans-serif: "Ubuntu", sans-serif;
+
+$font-size-base: 17px;
+
+$font-size-h1: 50px;
+$font-size-h2: 30px;
+$font-size-h3: 20px;
+$font-size-h4: 19px;
+$font-size-h5: 17px;
+$font-size-h6: 15px;
+
+$headings-font-family: "Ubuntu", sans-serif;
+$headings-font-weight: 400;
+$headings-line-height: 1.2;
+
+$btn-font-weight: 300;
+$btn-primary-border: transparent;
+$btn-success-border: transparent;
+$btn-info-border: transparent;
+$btn-warning-border: transparent;
+$btn-danger-border: transparent;
+
+$navbar-height: 116px;
+$navbar-default-bg: #a6171d;
+$navbar-default-color: $white;
+$navbar-default-link-color: $navbar-default-color;
+$navbar-default-link-hover-color: $white;
+$navbar-default-link-hover-bg: rgba(0, 0, 0, 0.2);
+$navbar-default-link-active-color: $brand-primary;
+$navbar-default-link-active-bg: $white;
+$navbar-default-border: transparent;
+$navbar-border-radius: 0;
+
+$navbar-default-toggle-hover-bg: $navbar-default-link-hover-bg;
+$navbar-default-toggle-icon-bar-bg: $white;
+$navbar-default-toggle-border-color: transparent;
+
+$panel-bg: #f9f9f9;
+$panel-body-padding: 15px;
+$panel-default-heading-bg: $panel-bg;
+$panel-heading-padding: 22px $panel-body-padding;
+$panel-border-radius: 6px;
+$panel-inner-border: #e5eff4;
+$panel-footer-bg: $panel-bg;
+$panel-default-text: #404040;
+$panel-default-border: #efefef;
+
+$btn-font-weight: 500;

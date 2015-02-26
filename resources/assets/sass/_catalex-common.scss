@@ -1,0 +1,75 @@
+h1, h2, h5, h6 {
+	color: $brand-primary;
+}
+
+h3, h4 {
+	color: $text-color;
+}
+
+@mixin nav-header {
+	background-image: url('/images/nav-bg.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.navbar {
+	border: none;
+}
+@media (min-width: $screen-sm-min) {
+	.navbar {
+		@include nav-header;
+	}
+}
+@media (max-width: $screen-xs-max) {
+	.navbar-header {
+		@include nav-header;
+	}
+	.navbar-collapse {
+		border: none;
+		> ul {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+	}
+}
+.navbar-header .pull-left img {
+	max-height: $navbar-height - $line-height-computed;
+	margin-top: $line-height-computed / 2;
+
+	@media (max-width: $screen-xs-max) {
+		margin-left: $grid-gutter-width / 2;
+	}
+}
+.navbar-nav > li > a {
+	font-size: 22px;
+
+	@media (min-width: $screen-sm-min) {
+		padding-top: $navbar-padding-vertical + 10px;
+		padding-bottom: $navbar-padding-vertical - 10px;
+	}
+}
+
+.navbar-nav > li > .dropdown-menu {
+	border: none;
+	border-radius: 0;
+	min-width: 100%;
+	box-shadow: none;
+}
+
+.panel-default {
+	border-width: 3px;
+
+	.panel-heading {
+		font-size: 19px;
+		color: $brand-primary;
+		border-color: $panel-inner-border;
+	}
+}
+
+label, .form-label {
+	font-size: 14px;
+}
+
+.btn {
+	min-width: 170px;
+}

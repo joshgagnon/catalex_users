@@ -30,7 +30,7 @@
 							</div>
 						</div>
 
-						<div class="form-group text-center">&mdash; or &mdash;</div>
+						<div class="form-group text-center form-label">&mdash; or &mdash;</div>
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">E-Mail Address</label>
@@ -62,12 +62,12 @@
 									Login
 								</button>
 
-								<a href="/password/email">Forgot Your Password?</a>
+								<a class="form-label" href="/password/email">Forgot Your Password?</a>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
+							<div class="col-md-6 col-md-offset-4 form-label">
 								Not yet a member? <a href="/auth/register">Sign up here</a>
 							</div>
 						</div>
