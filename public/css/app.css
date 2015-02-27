@@ -4905,17 +4905,23 @@ html {
   min-height: 100%; }
 
 body {
-  margin-bottom: 160px; }
+  margin-bottom: 240px; }
+  @media (min-width: 768px) {
+    body {
+      margin-bottom: 160px; } }
 
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 160px;
+  height: 240px;
   padding-top: 24px;
   color: #595757;
   background-color: #141414;
   font-size: 13px; }
+  @media (min-width: 768px) {
+    .footer {
+      height: 160px; } }
   .footer .links a {
     text-transform: uppercase;
     padding: 0 10px; }

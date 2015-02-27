@@ -42,19 +42,26 @@ ul.social-logins {
 }
 
 // Sticky footer styles
-$footer-height: 160px;
+$large-footer-height: 160px;
+$small-footer-height: 240px;
 html {
 	position: relative;
 	min-height: 100%;
 }
 body {
-	margin-bottom: $footer-height;
+	margin-bottom: $small-footer-height;
+	@media (min-width: $screen-sm-min) {
+		margin-bottom: $large-footer-height;
+	}
 }
 .footer {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	height: $footer-height;
+	height: $small-footer-height;
+	@media (min-width: $screen-sm-min) {
+		height: $large-footer-height;
+	}
 	padding-top: 24px;
 	color: #595757;
 	background-color: #141414;
