@@ -1,8 +1,8 @@
-@import 'catalex-vars';
+@import '../../../node_modules/catalex_shared/sass/catalex-vars';
 
 @import 'bootstrap/bootstrap';
 
-@import 'catalex-common';
+@import '../../../node_modules/catalex_shared/sass/catalex-common';
 
 ul.social-logins {
 	list-style: none;

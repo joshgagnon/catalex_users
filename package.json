@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "catalex_shared": "git+https://github.com/joshgagnon/catalex_shared.git",
     "gulp": "^3.8.8",
     "laravel-elixir": "*"
   }
