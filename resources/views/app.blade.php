@@ -36,6 +36,7 @@
 			</div>
 
 			<div class="collapse navbar-collapse" id="app-navbar-collapse">
+				<img class="chev-left" src="/images/left-chevron.png"/><img class="chev-right" src="/images/right-chevron.png"/>
 				<ul class="nav navbar-nav navbar-right">
 					@if(Auth::guest())
 						<li><a href="/auth/login">Login</a></li>
