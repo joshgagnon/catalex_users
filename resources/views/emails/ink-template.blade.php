@@ -10,7 +10,28 @@
 			<tr>
 			<td class="center" align="center" valign="top">
 				<center>
-					<table class="container header">
+					<table class="container header-large hide-for-small">
+						<tr>
+							<td>
+								<table class="row">
+									<tr>
+										<td class="wrapper"><table class="nine columns"><tr><td></td></tr></table></td>
+										<td class="wrapper title">
+											<table class="two columns">
+												<tr>
+													<td class="center">
+														{{ $title }}
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td class="wrapper last"><table class="one columns"><tr><td></td></tr></table></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<table class="container header-small show-for-small">
 						<tr>
 							<td>
 								<table class="row">

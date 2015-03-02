@@ -612,23 +612,24 @@ p {
   p.center {
     text-align: center; }
 
-.header td {
-  padding: 0 !important; }
+.header-large {
+  background-image: url('https://users.catalex.nz/images/email/header.png');
+  background-repeat: no-repeat;
+  background-position: top left;
+  height: 116px; }
+  .header-large .title {
+    padding: 52px 0 12px !important;
+    background-color: #d11820; }
+    .header-large .title td {
+      color: #ffffff !important;
+      font-size: 15px;
+      font-weight: 500; }
+
 @media only screen and (max-width: 600px) {
-  table .header.container {
+  table .header-small.container {
     width: 100% !important; } }
-.header .title {
-  position: absolute;
-  top: 0;
-  right: 40px;
-  width: 104px;
-  height: 40px;
-  padding-top: 56px;
-  background-color: #d11820;
-  color: #ffffff;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 500; }
+.header-small td {
+  padding: 0 !important; }
 
 .footer {
   background-color: #141414; }
