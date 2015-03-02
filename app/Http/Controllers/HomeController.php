@@ -2,6 +2,8 @@
 
 use Auth;
 use Mail; // TODO: Remove
+use File; // TODO: Remove
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class HomeController extends Controller {
 
@@ -56,7 +58,13 @@ class HomeController extends Controller {
 		$destination = $user->email;
 		$name = $user->fullName();
 
-		Mail::send('emails.welcome', ['title' => 'Welcome', 'name' => $name], function($message) use ($destination, $name) {
+		$html = view('emails.welcome', ['title' => 'Welcome', 'name' => $name])->render();
+		$css = File::get(public_path('/css/email.css'));
+
+		$inliner = new CssToInlineStyles($html, $css);
+		$markup = $inliner->convert();
+
+		Mail::send('emails.echo', ['html' => $markup], function($message) use ($destination, $name) {
 			$message->to($destination, $name)->subject('Welcome to Catalex');
 		});
 
