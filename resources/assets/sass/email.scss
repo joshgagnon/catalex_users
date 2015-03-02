@@ -1,0 +1,125 @@
+@import 'ink/ink';
+
+// Allows ink responsive views to work in browser for debugging
+@media only screen and (max-width: 600px) {
+	table[class="body"] .row tr, table[class="body"] .row tbody {
+		display: block;
+	}
+}
+
+@import '../../../node_modules/catalex_shared/sass/catalex-vars';
+
+body, table.body, h1, h2, h3, h4, h5, h6, p, a, td,
+table.button td a, table.tiny-button td a, table.small-button td a, table.medium-button td a, table.large-button td a {
+	font-family: $font-family-sans-serif;
+}
+
+table.button td, table.tiny-button td, table.small-button td, table.medium-button td, table.large-button td {
+	border: none;
+	border-radius: $border-radius-base;
+}
+
+a {
+	color: $brand-primary;
+	&:hover,
+	&:focus,
+	&:visited {
+		color: darken($brand-primary, 15%) !important;
+		text-decoration: underline;
+	}
+}
+
+h2 {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	font-size: 22px;
+}
+
+p {
+	font-size: 16px;
+	&.center {
+		text-align: center;
+	}
+}
+
+.header {
+	td {
+		padding: 0 !important;
+	}
+	@media only screen and (max-width: 600px) {
+		table &.container {
+			width: 100% !important;
+		}
+	}
+
+	.title {
+		position: absolute;
+		top: 0;
+		right: 40px;
+		width: 104px;
+		height: 40px;
+		padding-top: 56px;
+		background-color: $brand-primary;
+		color: $white;
+		text-align: center;
+		font-size: 16px;
+		font-weight: 500;
+	}
+}
+
+.footer {
+	background-color: $footer-bg;
+	p {
+		font-size: 14px;
+		color: #bbbbbb;
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+	@media only screen and (max-width: 600px) {
+		table &.container {
+			width: 100% !important;
+		}
+	}
+}
+
+.container.buttons {
+	background-image: url('https://users.catalex.nz/images/email/button-bg.png');
+	background-repeat: no-repeat;
+	background-position: top center;
+	@media only screen and (max-width: 600px) {
+		background-image: none;
+	}
+}
+
+.btn-primary {
+	td {
+		background-color: #e74c3c !important;
+	}
+	&.button:hover td,
+	&.button:active td,
+	&.button:visited td {
+		background-color: darken(#e74c3c, 10%) !important;
+	}
+}
+
+.btn-orange {
+	td {
+		background-color: $brand-warning !important;
+	}
+	&.button:hover td,
+	&.button:active td,
+	&.button:visited td {
+		background-color: darken($brand-warning, 10%) !important;
+	}
+}
+
+.btn-facebook {
+	td {
+		background-color: $facebook-blue !important;
+	}
+	&.button:hover td,
+	&.button:active td,
+	&.button:visited td {
+		background-color: darken($facebook-blue, 10%) !important;
+	}
+}

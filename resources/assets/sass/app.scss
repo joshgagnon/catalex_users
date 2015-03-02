@@ -63,8 +63,8 @@ body {
 		height: $large-footer-height;
 	}
 	padding-top: 24px;
-	color: #595757;
-	background-color: #141414;
+	color: $footer-text;
+	background-color: $footer-bg;
 	font-size: 13px;
 
 	.links a {

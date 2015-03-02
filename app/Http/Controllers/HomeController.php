@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Auth;
+use Mail; // TODO: Remove
 
 class HomeController extends Controller {
 
@@ -47,5 +48,18 @@ class HomeController extends Controller {
 		$redirect = env('BROWSER_LOGIN_URL', null) . '?user_id=' . $userId . '&name=' . $fullName . '&timestamp=' . $timestamp . '&code=' . $digest;
 
 		return redirect($redirect);
+	}
+
+	// TODO: Remove function after responsive email test
+	public function getSendWelcome() {
+		$user = Auth::user();
+		$destination = $user->email;
+		$name = $user->fullName();
+
+		Mail::send('emails.welcome', ['title' => 'Welcome', 'name' => $name], function($message) use ($destination, $name) {
+			$message->to($destination, $name)->subject('Welcome to Catalex');
+		});
+
+		return redirect('/');
 	}
 }
