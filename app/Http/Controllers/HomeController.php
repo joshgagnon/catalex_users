@@ -58,7 +58,7 @@ class HomeController extends Controller {
 		$destination = $user->email;
 		$name = $user->fullName();
 
-		$html = view('emails.welcome', ['title' => 'Welcome', 'name' => $name])->render();
+		$html = view('emails.welcome', ['name' => $name])->render();
 		$css = File::get(public_path('/css/email.css'));
 
 		$inliner = new CssToInlineStyles($html, $css);
