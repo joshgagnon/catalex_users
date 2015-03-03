@@ -32,7 +32,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="pull-left" href="/"><img alt="Catalex" src="/images/law-browser.png"></a>
+				<a class="pull-left" href="/"><img alt="CataLex" src="/images/law-browser.png"></a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="app-navbar-collapse">

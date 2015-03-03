@@ -11,9 +11,9 @@
 							<tr>
 								<td>
 									<center>
-										<h2 class="center">Get Started With Catalex</h2>
+										<h2 class="center">Get Started With CataLex</h2>
 										<p>Hi {{ $name }},</p>
-										<p class="center">Welcome to Catalex Law Browser!</p>
+										<p class="center">Welcome to CataLex Law Browser!</p>
 										<p class="center">At CataLex, we aim to re-invent law or, more accurately, how the public interacts with it. We believe that by combining technology and innovative thinking, legal services can be more accessible, cost-effective, understandable, and, most importantly, useful to business.</p>
 										<p class="center">Choose from the links below to get started.</p>
 									</center>
