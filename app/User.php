@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use App\Models\ActiveUser;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +10,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword, SoftDeletes;
+	use Authenticatable, CanResetPassword, SoftDeletes, ActiveUser;
 
 	/**
 	 * The database table used by the model.
@@ -114,5 +115,40 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		}
 
 		return false;
+	}
+
+	/**
+	 * Override SoftDelete trait implementation to play nicely with ActiveUser trait.
+	 *
+	 * @return void
+	 */
+	protected function runSoftDelete() {
+		$query = $this->newQueryWithoutScopes()->where($this->getKeyName(), $this->getKey());
+
+		$this->{$this->getDeletedAtColumn()} = $time = $this->freshTimestamp();
+
+		$query->update(array($this->getDeletedAtColumn() => $this->fromDateTime($time)));
+	}
+
+	/**
+	 * Make this user active.
+	 *
+	 * @return void
+	 */
+	public function activate() {
+		$this->active = true;
+
+		$this->save();
+	}
+
+	/**
+	 * Make this user inactive.
+	 *
+	 * @return void
+	 */
+	public function deactivate() {
+		$this->active = false;
+
+		$this->save();
 	}
 }

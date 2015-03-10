@@ -65,7 +65,7 @@ class HomeController extends Controller {
 		$markup = $inliner->convert();
 
 		Mail::send('emails.echo', ['html' => $markup], function($message) use ($destination, $name) {
-			$message->to($destination, $name)->subject('Welcome to Catalex');
+			$message->to($destination, $name)->subject('Welcome to CataLex');
 		});
 
 		return redirect('/');

@@ -13,6 +13,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
 		$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
+		$app['Illuminate\Contracts\Console\Kernel']->call('migrate:refresh', ['--seeder' => 'TestSeeder']);
+
 		return $app;
 	}
 
