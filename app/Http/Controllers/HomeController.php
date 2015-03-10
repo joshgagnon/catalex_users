@@ -43,12 +43,12 @@ class HomeController extends Controller {
 		$userId = $user->id;
 		$fullName = $user->fullName();
 		$timestamp = time(); // UTC
-		$message = $userId . $fullName . $timestamp;
+		$admin = $user->hasRole('admin') ? 'true' : 'false';
+		$message = $userId . $fullName . $timestamp . $admin;
 
 		$digest = hash_hmac('sha256', $message, env('SSO_SHARED_SECRET', null));
 
-		$redirect = env('BROWSER_LOGIN_URL', null) . '?user_id=' . $userId . '&name=' . $fullName . '&timestamp=' . $timestamp . '&code=' . $digest;
-
+		$redirect = env('BROWSER_LOGIN_URL', null) . '?user_id=' . $userId . '&name=' . $fullName . '&timestamp=' . $timestamp  . '&admin=' . $admin. '&code=' . $digest;
 		return redirect($redirect);
 	}
 
