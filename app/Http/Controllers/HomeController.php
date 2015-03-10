@@ -44,7 +44,7 @@ class HomeController extends Controller {
 		$fullName = $user->fullName();
 		$timestamp = time(); // UTC
 		$admin = $user->hasRole('admin') ? 'true' : 'false';
-		$message = $userId . $fullName . $timestamp . $admin;
+		$message = env('BROWSER_LOGIN_URL', null) . $userId . $fullName . $timestamp . $admin;
 
 		$digest = hash_hmac('sha256', $message, env('SSO_SHARED_SECRET', null));
 
