@@ -4911,8 +4911,11 @@ ul.social-logins {
   .legal-doc ol ol ol {
     list-style: lower-roman; }
 
-.form-inline .form-group label {
+form.form-inline .form-group label {
   display: block; }
+
+.tabular label {
+  width: 100px; }
 
 html {
   position: relative;

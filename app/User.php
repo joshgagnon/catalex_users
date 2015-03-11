@@ -118,6 +118,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	/**
+	 * Return whether this user and another belong to the same organisation.
+	 *
+	 * @param  App\User  $other
+	 * @return bool
+	 */
+	public function sharesOrganisation($other) {
+		return $this->organisation && $other->organisation && $this->organisation->id === $other->organisation->id;
+	}
+
+	/**
 	 * Override SoftDelete trait implementation to play nicely with ActiveUser trait.
 	 *
 	 * @return void

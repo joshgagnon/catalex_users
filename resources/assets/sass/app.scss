@@ -37,8 +37,12 @@ ul.social-logins {
 }
 
 // TODO: Remove or tidy
-.form-inline .form-group label {
+form.form-inline .form-group label {
 	display: block;
+}
+
+.tabular label {
+	width: 100px;
 }
 
 // Sticky footer styles

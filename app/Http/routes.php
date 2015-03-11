@@ -26,6 +26,7 @@ Route::get('/email', function() {
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
+    'user' => 'UserController',
 	'organisation' => 'OrganisationController',
 ]);
 
