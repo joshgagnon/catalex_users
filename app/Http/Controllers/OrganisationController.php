@@ -58,7 +58,12 @@ class OrganisationController extends Controller {
 			'billing_detail_id' => null,
 		]);
 
-		$user->addRole('registered_user');
+		if($organisation->id == 1) {
+			$user->addRole('beta_tester');
+		}
+		else {
+			$user->addRole('registered_user');
+		}
 
 		// Send out invite to allow user to log in
 		// TODO: Template should say 'you can create password at <x link> or login <here> with linkedIn
