@@ -12,11 +12,10 @@
                                 <td>
                                     <center>
                                         <h2 class="center">Get Started With CataLex</h2>
-                                        <p>Hi {{ $name }},</p>
+                                        <p>Hi {{ $user->fullName }},</p>
                                         <p class="center">Welcome to CataLex Law Browser!</p>
                                         <p class="center">At CataLex, we aim to re-invent law or, more accurately, how the public interacts with it. We believe that by combining technology and innovative thinking, legal services can be more accessible, cost-effective, understandable, and, most importantly, useful to business.</p>
-                                        <p><a href="{{ $loginURL }}">Please login here </a> with the temporary password: {{ $tempPassword }}</p>
-                                        <p>You should verify your details and choose a new password, then you'll be ready to use the Law Browser app.</p>
+                                        <p><a href="{{ url('password/reset/' . $token) }}">Click here</a> to create your account with CataLex and access Law Browser</p>
                                     </center>
                                 </td>
                             </tr>

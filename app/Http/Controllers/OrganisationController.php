@@ -5,7 +5,6 @@ use File;
 use Mail;
 use Session;
 use App\User;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InviteFormRequest;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -49,14 +48,12 @@ class OrganisationController extends Controller {
 
 		$organisation = Auth::user()->organisation;
 
-		$tempPassword = Str::quickRandom(8);
-
 		// Create a user for the invitee with random password
 		$user = User::create([
 			'first_name' => $data['first_name'],
 			'last_name' => $data['last_name'],
 			'email' => $data['email'],
-			'password' => bcrypt($tempPassword),
+			'password' => bcrypt(str_random(40)),
 			'organisation_id' => $organisation->id,
 			'billing_detail_id' => null,
 		]);
@@ -65,23 +62,8 @@ class OrganisationController extends Controller {
 
 		// Send out invite to allow user to log in
 		// TODO: Template should say 'you can create password at <x link> or login <here> with linkedIn
-		/*$response = $this->passwordBroker->sendResetLink(['email' => $data['email']], function($mail) {
-			$mail->subject('Welcome to CataLex');
-		});*/
-
-		// TODO: functionise css inlining for mail
-		$destination = $user->email;
-		$name = $user->fullName();
-		$loginURL = action('UserController@getProfile');
-
-		$html = view('emails.invite', compact(['name', 'tempPassword', 'loginURL']))->render();
-		$css = File::get(public_path('/css/email.css'));
-
-		$inliner = new CssToInlineStyles($html, $css);
-		$markup = $inliner->convert();
-
-		Mail::send('emails.echo', ['html' => $markup], function($message) use ($destination, $name) {
-			$message->to($destination, $name)->subject('Welcome to CataLex');
+		$response = $this->passwordBroker->sendResetLink(['email' => $data['email']], function($mail) {
+			$mail->subject('You have been invited to use CataLex Law Browser');
 		});
 
 		Session::flash('success', 'An invite has been sent to ' . $data['email']);
