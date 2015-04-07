@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use File;
+use Closure;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
