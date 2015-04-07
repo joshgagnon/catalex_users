@@ -10,7 +10,6 @@
 				<div class="panel-body">
 					<p>You are logged in!</p>
 					<p><a href="{{ route('browser-login') }}">Go to law browser</a></p>
-					<p><a href="{{ route('send-welcome') }}">Resend welcome email</a></p>{{-- TODO: Remove after email test --}}
 				</div>
 			</div>
 		</div>
