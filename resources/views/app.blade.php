@@ -43,7 +43,9 @@
 						<li><a href="/auth/register">Sign Up</a></li>
 					@elseif(isset($user)) {{-- Move View::share(['user'] such that $user is always correctly available here --}}
 						{{-- TODO: Use route helper --}}
-						<li><a href="/organisation">Organisation</a></li>
+						@if($user->can('view_own_organisation'))
+							<li><a href="/organisation">Organisation</a></li>
+						@endif
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
