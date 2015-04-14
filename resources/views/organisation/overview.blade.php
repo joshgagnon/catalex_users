@@ -5,34 +5,8 @@
 	<h2>{{ $organisation->name }}</h2>
 	<div class="row">
 		<div class="col-xs-12">
-			@if(Session::has('success'))
-				<div class="alert alert-success">
-					{{ Session::get('success') }}
-				</div>
-			@endif
-			@if(count($errors) > 0)
-				<div class="alert alert-danger">
-					<ul>
-						@foreach ($errors->all() as $error)
-							<li>{{ $error }}</li>
-						@endforeach
-					</ul>
-				</div>
-			@endif
-			<h3>Active Members</h3>
-			<div class="tabular">
-				@foreach($organisation->members as $member)
-					<div>
-						<label>{{ $member->fullName() }}</label>
-						@if($user->can('view_organisation_user'))
-							<a href="{{ action('UserController@getView', $member->id) }}">View</a>
-						@endif
-						@if($user->can('edit_organisation_user'))
-							<a href="{{ action('UserController@getEdit', $member->id) }}">Edit</a>
-						@endif
-					</div>
-				@endforeach
-			</div>
+			@include('components.messages')
+			@include('user.components.list', ['users' => $organisation->members()->paginate(Config::get('constants.items_per_page')), 'title' => 'Organisation Members', 'viewPermission' => 'view_organisation_user', 'editPermission' => 'edit_organisation_user'])
 			@if($user->can('edit_own_organisation'))
 				<form class="form-inline" role="form" method="POST" action="{{ action('OrganisationController@postInvite') }}">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">

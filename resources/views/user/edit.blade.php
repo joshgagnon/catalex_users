@@ -11,15 +11,7 @@ CataLex Law Browser - Edit User
 		<div class="col-xs-12">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					@if(count($errors))
-						<div class="alert alert-danger">
-							<ul>
-								@foreach ($errors->all() as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-							</ul>
-						</div>
-					@endif
+					@include('components.messages')
 					<form method="POST" role="form" class="form-horizontal">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<input type="hidden" name="user_id" value="{{ $subject->id }}">

@@ -117,4 +117,47 @@ class UserController extends Controller {
 
 		$user->save();
 	}
+
+	/**
+	 * Delete a user (soft delete only).
+	 *
+	 * @return Response
+	 */
+	public function postDelete($subjectId) {
+		$user = Auth::user();
+
+		$subject = User::withInactive()->find($subjectId);
+
+		if(!$subject) return view('auth.denied');
+
+		if(($user->can('edit_any_user') || ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject))) &&
+		   $user->id !== $subject->id) {
+			$name = $subject->fullName();
+			$subject->delete();
+			return redirect()->back()->with('success', 'User "' . $name . '" successfully deleted.');
+		}
+
+		return view('auth.denied');
+	}
+
+	/**
+	 * Restore a user from deleted status.
+	 *
+	 * @return Response
+	 */
+	public function postUndelete($subjectId) {
+		$user = Auth::user();
+
+		$subject = User::withInactive()->onlyTrashed()->find($subjectId);
+
+		if(!$subject) return view('auth.denied');
+
+		if(($user->can('edit_any_user') || ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject))) &&
+		   $user->id !== $subject->id) {
+			$subject->restore();
+			return redirect()->back()->with('success', 'User "' . $subject->fullName() . '" successfully restored.');
+		}
+
+		return view('auth.denied');
+	}
 }

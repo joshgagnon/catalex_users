@@ -36,6 +36,25 @@ ul.social-logins {
 	}
 }
 
+table .small-cell {
+	@extend .text-center;
+	max-width: 100px;
+	width: 100px;
+	.btn-xs {
+		min-width: 0;
+		max-width: 80px;
+	}
+}
+
+.user-list {
+	.deleted {
+		td:first-child {
+			color: $gray-light;
+			text-decoration: line-through;
+		}
+	}
+}
+
 // TODO: Remove or tidy
 form.form-inline .form-group label {
 	display: block;

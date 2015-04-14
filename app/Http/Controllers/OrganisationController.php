@@ -3,6 +3,7 @@
 use Auth;
 use File;
 use Mail;
+use Config;
 use Session;
 use App\User;
 use App\Http\Controllers\Controller;
@@ -58,7 +59,7 @@ class OrganisationController extends Controller {
 			'billing_detail_id' => null,
 		]);
 
-		if($organisation->id == 1) {
+		if($organisation->id == Config::get('constants.beta_organisation')) {
 			$user->addRole('beta_tester');
 		}
 		else {

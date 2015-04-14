@@ -1,10 +1,9 @@
 <?php namespace App\Http\Middleware;
 
-use View;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 
-class Authenticate {
+class CheckGlobalAdmin {
 
 	/**
 	 * The Guard implementation.
@@ -19,8 +18,7 @@ class Authenticate {
 	 * @param  Guard  $auth
 	 * @return void
 	 */
-	public function __construct(Guard $auth)
-	{
+	public function __construct(Guard $auth) {
 		$this->auth = $auth;
 	}
 
@@ -31,21 +29,24 @@ class Authenticate {
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next)
-	{
-		if ($this->auth->guest())
-		{
-			if ($request->ajax())
-			{
-				return response('Unauthorized.', 401);
+	public function handle($request, Closure $next) {
+		if($this->auth->guest()) {
+			if($request->ajax()) {
+				return response('Forbidden', 403);
 			}
-			else
-			{
-				return redirect()->guest('auth/login');
+			else {
+				return redirect()->guest(action('Auth\AuthController@getLogin'));
+			}
+		}
+		elseif(!$this->auth->user()->hasRole('global_admin')) {
+			if($request->ajax()) {
+				return response('Forbidden', 403);
+			}
+			else {
+				abort(403, 'Forbidden');
 			}
 		}
 
 		return $next($request);
 	}
-
 }
