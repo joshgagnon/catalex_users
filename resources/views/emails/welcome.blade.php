@@ -39,7 +39,7 @@
 									<table class="button btn-orange">
 										<tr>
 											<td>
-												<a href="#">Tips &amp; Tricks</a>
+												<a href="#{{-- TODO --}}">Tips &amp; Tricks</a>
 											</td>
 										</tr>
 									</table>
@@ -57,7 +57,7 @@
 									<table class="button btn-primary">
 										<tr>
 											<td>
-												<a href="#">Login Now</a>
+												<a href="{{ action('Auth\AuthController@getLogin') }}">Login Now</a>
 											</td>
 										</tr>
 									</table>
@@ -75,7 +75,7 @@
 									<table class="button btn-facebook">
 										<tr>
 											<td>
-												<a href="#">Facebook</a>
+												<a href="#{{-- TODO --}}">Facebook</a>
 											</td>
 										</tr>
 									</table>
