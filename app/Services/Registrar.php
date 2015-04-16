@@ -2,6 +2,7 @@
 
 use App\User;
 use App\Address;
+use App\Library\Mail;
 use App\Organisation;
 use App\BillingDetail;
 
@@ -79,6 +80,9 @@ class Registrar implements RegistrarContract {
 		if($organisation) {
 			$user->addRole('organisation_admin');
 		}
+
+		// Send out welcome email
+		Mail::sendStyledMail('emails.welcome', ['name' => $user->fullName()], $user->email, $user->fullName(), 'Welcome to CataLex');
 
 		return $user;
 	}

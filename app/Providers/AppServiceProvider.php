@@ -42,6 +42,15 @@ class AppServiceProvider extends ServiceProvider {
 				'emails.invite'
 			);
 		});
+
+		$this->app->bind('App\Services\ResetBroker', function() {
+			return new \App\Services\ResetBroker(
+				$this->app->make('Illuminate\Auth\Passwords\TokenRepositoryInterface'),
+				$this->app->make('Illuminate\Contracts\Auth\UserProvider'),
+				$this->app->make('Illuminate\Contracts\Mail\Mailer'),
+				'emails.reset-password'
+			);
+		});
 	}
 
 }

@@ -9,7 +9,6 @@ use App\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InviteFormRequest;
 use App\Services\InviteBroker as PasswordBroker;
-use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class OrganisationController extends Controller {
 

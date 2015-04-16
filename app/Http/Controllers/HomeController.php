@@ -51,23 +51,4 @@ class HomeController extends Controller {
 		$redirect = env('BROWSER_LOGIN_URL', null) . '?user_id=' . $userId . '&name=' . $fullName . '&timestamp=' . $timestamp  . '&admin=' . $admin. '&code=' . $digest;
 		return redirect($redirect);
 	}
-
-	// TODO: Remove function after responsive email test
-	public function getSendWelcome() {
-		$user = Auth::user();
-		$destination = $user->email;
-		$name = $user->fullName();
-
-		$html = view('emails.welcome', ['name' => $name])->render();
-		$css = File::get(public_path('/css/email.css'));
-
-		$inliner = new CssToInlineStyles($html, $css);
-		$markup = $inliner->convert();
-
-		Mail::send('emails.echo', ['html' => $markup], function($message) use ($destination, $name) {
-			$message->to($destination, $name)->subject('Welcome to CataLex');
-		});
-
-		return redirect('/');
-	}
 }
