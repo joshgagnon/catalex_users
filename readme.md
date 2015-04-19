@@ -1,23 +1,97 @@
-## Laravel PHP Framework
+# CataLex User Management Portal
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+This app provides users, organisations and global admins an interface to manage their own (and others) user and billing details. It also provides login support for the Law Browser.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+## Deployment
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+### Local Dev Copy
 
-## Official Documentation
+Any PHP enabled webserver, i.e. Apache + mod_php, but nginx + php-fpm  is recommended both to more closely match the live environment and because it's easier to configure. Likewise MySQL and sqlite will both work, but postgresql is recommended. The following packages will provide such a setup on Ubuntu:
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+`apt-get install git postgresql nginx curl php5-fpm php5-cli php5-mcrypt php5-curl php5-gd php5-pgsql`
 
-## Contributing
+Composer must be installed globally, for example:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+`curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/bin`
 
-### License
+Enable php5-mcrypt with `sudo php5enmod mcrypt`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+You will need an up to date version of node and npm installed globally - on Ubuntu and some other distros the package managed version will be too far behind, so grab them from the [node website](https://nodejs.org/).
+
+Install gulp globally with `npm install -g gulp`
+
+Create a new empty database - i.e. with postgres: `createdb catalex_users -O yourusername`
+
+Clone the repo, then cd into the folder an run
+
+    sudo chown -R www-data:www-data storage  # Your webserver user
+    composer install
+    gulp
+    cp .env.example .env
+
+Edit .env to match your environment, in particular set the database name, username and password, then run: `./artisan migrate --seed`
+
+Finally, add an entry to your hosts file or dnsmasq config to point a domain to localhost then add an nginx config file to respond to that domain with the `public` folder, for example
+
+    server {
+        listen 80;
+
+        root /home/code/catalex/catalex_users/public;
+        index index.php;
+
+        server_name catalex-users.dev;
+
+        location / {
+            try_files $uri $uri/ /index.php$is_args$args;
+        }
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        location ~ \.php$ {
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
+            # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+            # With php5-cgi alone:
+            # fastcgi_pass 127.0.0.1:9000;
+            # With php5-fpm:
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        }
+    }
+
+Restart the nginx and php services to load the new configurations
+
+    sudo service nginx restart
+    sudo service php5-fpm restart
+
+### Deploying Live
+
+To perform the initial deployment on a live server, clone the https://github.com/joshgagnon/catalex_utils.git repo. Edit the variables at the top of the install\_users.sh script then run it as root.
+
+### Updating Live
+
+**IMPORTANT**: All commands should be run as the webserver user to avoid file permission issues. Easiest way to do that is change shells with `sudo -u www-data -s`
+
+Live installations can be updated with the following sequence:
+
+    git pull
+    rm vendor/compiled.php
+    composer update
+    gulp
+
+## Development
+
+Most code in written in idiomatic Laravel style to avoid any surprises. See the [Laravel 5 documentation](http://laravel.com/docs/5.0) for further details. Exceptions to this rule and some other notes are below.
+
+### Generic Functionality
+
+To add non-model specific, non-controller functionality to the app, the best place is `app/Library`. Functionality that won't need to be mocked for testing should be made as a static function directly accessible on in a library class. Testable functions should not be static, even if they require no state - instead use non-static methods and add a class binding in `App\Providers\AppServiceProvider`.
+
+### Emails
+
+All emails must pass through a css inliner before being sent, so do not use the laravel provided `Mail` class directly but instead use `App\Library\Mail`. To create an new email, extend the `emails.ink-template` view and use a table-based layout as describe by the [Zurb Ink documentation](http://zurb.com/ink/docs.php).
+
+### User Scope
+
+When using the `User` model, note that it has an applied scope which filters out inactive users in the same way the default `SoftDelete` scope does. The scope adds a `withInactive()` builder method equivalent to the Laravel `withTrashed()`. They can be used together to retrieve a user who was made inactive before being deleted.
