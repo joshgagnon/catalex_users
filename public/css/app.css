@@ -4850,7 +4850,10 @@ h3, h4 {
   .navbar {
     background-image: url('/images/nav-bg.png');
     background-repeat: no-repeat;
-    background-position: center center; } }
+    background-position: center center; }
+  ul.navbar-nav {
+    min-width: 1px;
+    min-height: 116px; } }
 
 @media (max-width: 767px) {
   .navbar-header {
