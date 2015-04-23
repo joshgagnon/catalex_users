@@ -71,14 +71,11 @@ To perform the initial deployment on a live server, clone the https://github.com
 
 ### Updating Live
 
-**IMPORTANT**: All commands should be run as the webserver user to avoid file permission issues. Easiest way to do that is change shells with `sudo -u www-data -s`
+Live installations can be updated with the following command:
 
-Live installations can be updated with the following sequence:
+    sudo ./update.sh www-data
 
-    git pull
-    rm vendor/compiled.php
-    composer update
-    gulp
+It must be run as root and provide the webserver username to avoid file permission errors. It will pull updates from git, apply migrations and update dependencies, so the application may be in the 'down' status for a few minutes.
 
 ## Development
 
