@@ -45,6 +45,11 @@ table .small-cell {
 		max-width: 80px;
 	}
 }
+table .mid-cell {
+	@extend .text-right;
+	max-width: 220px;
+	width: 220px;
+}
 
 .user-list {
 	.deleted {

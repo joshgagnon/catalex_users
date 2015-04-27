@@ -37,8 +37,19 @@ class LogAccess {
 
 		$route = $request->path();
 
-		AccessLog::create(['user_id' => $userId, 'route' => $route]);
+		// Don't log when checking logs, and wait for after login
+		if(!in_array($route, ['admin/access-log', 'auth/login'])) {
+			AccessLog::create(['user_id' => $userId, 'route' => $route]);
+		}
 
-		return $next($request);
+		$response = $next($request);
+
+		// Log successful logins
+		$user = $this->auth->user();
+		if($user && $route === 'auth/login') {
+			AccessLog::create(['user_id' => $user->id, 'route' => $route]);
+		}
+
+		return $response;
 	}
 }

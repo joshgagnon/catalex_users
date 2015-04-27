@@ -49,6 +49,7 @@
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="{{ action('AdminController@getUsers') }}">Users</a></li>
 									<li><a href="{{ action('AdminController@getOrganisations') }}">Organisations</a></li>
+									<li><a href="{{ action('AdminController@getAccessLog') }}">Access Log</a></li>
 								</ul>
 							</li>
 						@endif

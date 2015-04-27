@@ -4,6 +4,7 @@ use Input;
 use Config;
 use App\User;
 use App\Address;
+use App\AccessLog;
 use App\Organisation;
 use App\BillingDetail;
 use App\Http\Requests\UserCreateRequest;
@@ -42,6 +43,37 @@ class AdminController extends Controller {
 		// TODO: Populate org list
 
 		return view('admin.organisations', compact('showDeleted'));
+	}
+
+	public function getAccessLog() {
+		$filterEmail = trim(Input::get('filter_email', ''));
+		if(!strlen($filterEmail)) {
+			$filterEmail = null;
+		}
+
+		$includeUserLogins = Input::has('user_logins');
+		$includeBrowserLogins = Input::has('browser_logins');
+		$includeLogouts = Input::has('logouts');
+
+		$logModel = AccessLog::orderBy('timestamp', 'DESC');
+
+		if($includeUserLogins || $includeBrowserLogins || $includeLogouts) {
+			$logModel->whereNotNull('user_id');
+			$logModel->where(function($q) use($includeUserLogins, $includeBrowserLogins, $includeLogouts) {
+				if($includeUserLogins) $q->orWhere('route', '=', 'auth/login');
+				if($includeBrowserLogins) $q->orWhere('route', '=', 'browser-login');
+				if($includeLogouts) $q->orWhere('route', '=', 'auth/logout');
+			});
+		}
+		if($filterEmail) {
+			$logModel->whereHas('user', function($q) use($filterEmail) {
+				$q->where('email', 'like', '%' . $filterEmail . '%');
+			});
+		}
+
+		$logs = $logModel->paginate(Config::get('constants.items_per_page'));
+
+		return view('admin.access-log', compact('logs', 'filterEmail', 'includeUserLogins', 'includeBrowserLogins', 'includeLogouts'));
 	}
 
 	public function getAddUser() {

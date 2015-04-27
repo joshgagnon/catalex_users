@@ -1136,7 +1136,7 @@ mark, .mark {
 .text-left {
   text-align: left; }
 
-.text-right {
+.text-right, table .mid-cell {
   text-align: right; }
 
 .text-center, table .small-cell {
@@ -4936,6 +4936,10 @@ table .small-cell {
   table .small-cell .btn-xs, table .small-cell .btn-group-xs > .btn {
     min-width: 0;
     max-width: 80px; }
+
+table .mid-cell {
+  max-width: 220px;
+  width: 220px; }
 
 .user-list .deleted td:first-child {
   color: #777777;

@@ -41,4 +41,8 @@ class AccessLog extends Model {
 	public function setUpdatedAt($value) {
 		// Nothing to do
 	}
+
+	public function user() {
+		return $this->belongsTo('App\User');
+	}
 }
