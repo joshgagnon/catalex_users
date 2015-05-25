@@ -4,6 +4,7 @@ use Auth;
 use Config;
 use Session;
 use App\User;
+use App\Http\Requests\InitialRegisterRequest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -52,6 +53,13 @@ class AuthController extends Controller {
 	}
 
 	public function postRegister(Request $request) {
+		if(!Session::has('register.personal')) {
+			return redirect()->action('Auth\AuthController@getRegister')->withErrors(['Session has expired, please try again.']);
+		}
+
+		// Fold previous step post data into this request
+		$request->replace($request->input() + Session::get('register.personal'));
+
 		// For OAuth registrations, generate a long random password so we can
 		// still use Laravel default auth (ie. for password reset)
 		if(Session::get('oauth.register', false)) {
@@ -68,6 +76,22 @@ class AuthController extends Controller {
 		}
 
 		return $response;
+	}
+
+	public function postBilling(InitialRegisterRequest $request) {
+		// Store current progress in Session and show form for billing step
+		Session::put('register.personal', $request->except(['_token']));
+
+		// Show from get rather than post so that users can be redirected back to form on validation errors
+		return redirect()->action('Auth\AuthController@getBilling');
+	}
+
+	public function getBilling() {
+		if(!Session::has('register.personal')) {
+			return redirect()->action('Auth\AuthController@getRegister')->withErrors(['Session has expired, please try again.']);
+		}
+
+		return view('auth.register-billing');
 	}
 
 	public function getGithub()

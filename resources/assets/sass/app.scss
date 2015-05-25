@@ -14,6 +14,11 @@ ul.social-logins {
 	}
 }
 
+.small-social {
+	max-height: 1.15em;
+	vertical-align: top;
+}
+
 .trial-info {
 	h2 {
 		margin-top: 0;
@@ -58,6 +63,10 @@ table .mid-cell {
 			text-decoration: line-through;
 		}
 	}
+}
+
+.form-group p.small {
+	margin-bottom: 0;
 }
 
 // TODO: Remove or tidy

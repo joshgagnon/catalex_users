@@ -14,7 +14,12 @@ class VerifyCsrfToken extends BaseVerifier {
 	 */
 	public function handle($request, Closure $next)
 	{
-		return parent::handle($request, $next);
+		try {
+			return parent::handle($request, $next);
+		}
+		catch(\Illuminate\Session\TokenMismatchException $e) {
+			return redirect()->back()->withErrors(['Session has expired, please try again.']);
+		}
 	}
 
 }

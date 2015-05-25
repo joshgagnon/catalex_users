@@ -19,7 +19,6 @@ class Registrar implements RegistrarContract {
 	 */
 	public function validator(array $data) {
 		return Validator::make($data, [
-			'type' => 'required|in:individual,organisation',
 			'first_name' => 'required|max:255',
 			'last_name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users',
@@ -28,8 +27,8 @@ class Registrar implements RegistrarContract {
 			'address_line_2' => 'max:255',
 			'city' => 'required|max:255',
 			'state' => 'max:255',
-			'country' => 'required',
-			'business_name' => 'required_if:type,organisation|max:255',
+			'country' => 'required|size:2',
+			'business_name' => 'max:255',
 			'billing_period' => 'required|in:monthly,annually',
 			'customer_agreement' => 'accepted',
 		]);
@@ -57,7 +56,7 @@ class Registrar implements RegistrarContract {
 			'address_id' => $address->id,
 		]);
 
-		if($data['type'] === 'organisation') {
+		if(strlen(trim($data['business_name']))) {
 			$organisation = Organisation::create([
 				'name' => $data['business_name'],
 				'billing_detail_id' => $billing->id,
