@@ -18,6 +18,8 @@ use OAuth\Common\Storage\Session as OAuthSession;
 use OAuth\Common\Http\Uri\UriFactory;
 use OAuth\Common\Consumer\Credentials;
 
+use Omnipay\Omnipay;
+
 class AuthController extends Controller {
 
 	protected $redirectTo = '/';
@@ -68,6 +70,12 @@ class AuthController extends Controller {
 			$request->replace($input + ['password' => $password, 'password_confirmation' => $password]);
 		}
 
+		// Check that we got a valid billing token
+		if(!(Session::has('billing.dps_billing_id') && Session::has('billing.date_expiry'))) {
+			return redirect()->back()->withErrors(['You must verify your credit card before beginning the free trial. It will not be charged until the trial expires.']);
+		}
+
+		// Hand over to internal Laravel user setup
 		$response = $this->defaultPostRegister($request);
 
 		if(Auth::check()) {
@@ -91,7 +99,48 @@ class AuthController extends Controller {
 			return redirect()->action('Auth\AuthController@getRegister')->withErrors(['Session has expired, please try again.']);
 		}
 
-		return view('auth.register-billing');
+		// Create a new payment gayway request to get iframe url to show
+		// TODO: Move to a payment library as getGateway()
+		$gateway = Omnipay::create('PaymentExpress_PxPay');
+		$gateway->setUsername(env('PXPAY_USERNAME', ''));
+		$gateway->setPassword(env('PXPAY_KEY', ''));
+
+		$returnUrl = action('Auth\AuthController@getCardAuthorization');
+
+		// Start the request to DPS
+		$response = $gateway->createCard(['returnUrl' => $returnUrl])->send();
+
+		if(!$response->isRedirect()) {
+			return redirect()->action('Auth\AuthController@getRegister')->withErrors(['An error occurred contacting the payment gateway, please try again.']);
+		}
+
+		$gatewayURL = $response->getRedirectUrl();
+
+		return view('auth.register-billing', compact('gatewayURL'));
+	}
+
+	public function getCardAuthorization(Request $request) {
+		// TODO: Use getGateway() as above
+		$gateway = Omnipay::create('PaymentExpress_PxPay');
+		$gateway->setUsername(env('PXPAY_USERNAME', ''));
+		$gateway->setPassword(env('PXPAY_KEY', ''));
+
+		// Use result query param to get real auth result data
+		$response = $gateway->completeCreateCard()->send();
+
+		$responseData = $response->getData();
+
+		$success = boolval((string)$responseData->Success) && ((string)$responseData->Cvc2ResultCode == 'M');
+
+		if(!$success) {
+			return view('auth.frames.billing-auth-failure');
+		}
+
+		// Only need to save billing id and card expiry data
+		Session::put('billing.dps_billing_id', (string)$responseData->DpsBillingId);
+		Session::put('billing.date_expiry', (string)$responseData->DateExpiry);
+
+		return view('auth.frames.billing-auth-success');
 	}
 
 	public function getGithub()

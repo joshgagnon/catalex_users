@@ -40,6 +40,11 @@ class HomeController extends Controller {
 
 	public function getBrowserLogin() {
 		$user = Auth::user();
+
+		if(!$user->hasBrowserAccess()) {
+			return view('auth.denied');
+		}
+
 		$userId = $user->id;
 		$fullName = $user->fullName();
 		$timestamp = time(); // UTC

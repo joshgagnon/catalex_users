@@ -5890,6 +5890,9 @@ ul.social-logins {
   .legal-doc ol ol ol {
     list-style: lower-roman; }
 
+.inside-panel {
+  background-color: #f9f9f9; }
+
 table .small-cell {
   max-width: 100px;
   width: 100px; }

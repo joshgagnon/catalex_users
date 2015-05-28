@@ -6,6 +6,7 @@ use App\Library\Mail;
 use App\Organisation;
 use App\BillingDetail;
 
+use Session;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 
@@ -23,11 +24,6 @@ class Registrar implements RegistrarContract {
 			'last_name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users',
 			'password' => 'required|confirmed|min:6',
-			'address_line_1' => 'max:255',
-			'address_line_2' => 'max:255',
-			'city' => 'required|max:255',
-			'state' => 'max:255',
-			'country' => 'required|size:2',
 			'business_name' => 'max:255',
 			'billing_period' => 'required|in:monthly,annually',
 			'customer_agreement' => 'accepted',
@@ -43,17 +39,12 @@ class Registrar implements RegistrarContract {
 	public function create(array $data) {
 		$organisation = null;
 
-		$address = Address::create([
-			'line_1' => $data['address_line_1'],
-			'line_2' => $data['address_line_2'],
-			'city' => $data['city'],
-			'state' => $data['state'],
-			'iso3166_country' => $data['country'],
-		]);
-
 		$billing = BillingDetail::create([
 			'period' => $data['billing_period'],
-			'address_id' => $address->id,
+			'address_id' => null,
+			'dps_billing_token' => Session::get('billing.dps_billing_id'),
+			'expiry_date' => Session::get('billing.date_expiry'),
+			'last_billed' => null,
 		]);
 
 		if(strlen(trim($data['business_name']))) {

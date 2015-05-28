@@ -41,6 +41,10 @@ ul.social-logins {
 	}
 }
 
+.inside-panel {
+	background-color: $panel-bg;
+}
+
 table .small-cell {
 	@extend .text-center;
 	max-width: 100px;

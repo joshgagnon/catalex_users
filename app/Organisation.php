@@ -1,11 +1,12 @@
 <?php namespace App;
 
+use App\Models\Billable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organisation extends Model {
 
-	use SoftDeletes;
+	use SoftDeletes, Billable;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -20,9 +21,5 @@ class Organisation extends Model {
 
 	public function members() {
 		return $this->hasMany('App\User');
-	}
-
-	public function billing_details() {
-		return $this->belongsTo('App\BillingDetail');
 	}
 }

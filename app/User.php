@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use App\Models\Billable;
 use App\Models\ActiveUser;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword, SoftDeletes, ActiveUser;
+	use Authenticatable, CanResetPassword, SoftDeletes, ActiveUser, Billable;
 
 	/**
 	 * The database table used by the model.
@@ -33,16 +34,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
-	public function billing_details() {
-		return $this->belongsTo('App\BillingDetail');
-	}
-
 	public function organisation() {
 		return $this->belongsTo('App\Organisation');
 	}
 
 	public function roles() {
-		return $this->belongsToMany('\App\Role');
+		return $this->belongsToMany('App\Role');
 	}
 
 	public function fullName() {
