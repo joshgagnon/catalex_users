@@ -12,8 +12,8 @@ class AddBillingTokenFields extends Migration {
 	 */
 	public function up() {
 		Schema::table('billing_details', function(Blueprint $table) {
-			$table->string('dps_billing_token', 16);
-			$table->string('expiry_date', 4);
+			$table->string('dps_billing_token', 16)->default('xxxxxxxxxxxxxxxx');
+			$table->string('expiry_date', 4)->default('0199');
 			$table->dateTime('last_billed')->nullable();
 		});
 	}
