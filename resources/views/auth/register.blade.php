@@ -105,7 +105,7 @@
 				</p>
 				<p>
 					<span class="highlight">Billing and Credit Card information:</span><br>
-					You will be asked to enter your credit card details when creating your account. No funds will be deducted from your credit card until you have confirmed your subscription.
+					You will need to enter your credit card details in order to create your account and have access to the free trial. However, no funds will be deducted until you have confirmed your subscription at the end of the free trial.
 				</p>
 				<img class="hidden-xs hidden-sm" src="/images/under-the-surface.jpg" alt="Find what's under the surface">
 			</div>
