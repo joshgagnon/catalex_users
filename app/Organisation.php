@@ -22,4 +22,10 @@ class Organisation extends Model {
 	public function members() {
 		return $this->hasMany('App\User');
 	}
+
+	protected function memberCount() {
+		return count(array_filter($this->members, function($member) {
+			return $member->active;
+		}));
+	}
 }

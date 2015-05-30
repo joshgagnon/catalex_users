@@ -4,6 +4,14 @@
 
 @import '../../../node_modules/catalex_shared/sass/catalex-common';
 
+// TODO: Move to common?
+#app-navbar-collapse {
+	margin-left: 173px;
+	.chev-left {
+		left: -306px;
+	}
+}
+
 ul.social-logins {
 	list-style: none;
 	padding-left: 0;

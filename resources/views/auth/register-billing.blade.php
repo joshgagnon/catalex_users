@@ -30,23 +30,6 @@
 								<p>You will be able to access Law Browser immediately once your credit card details have been accepted.</p>
 							</div>
 						</div>
-						<div class="row">
-							<label class="col-md-4 control-label">Billing Cycle</label>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="radio-inline">
-										<input type="radio" {{ old('billing_period') === 'monthly' ? 'checked' : '' }} value="monthly" name="billing_period" id="billing-monthly"> Monthly (${{ Config::get('constants.monthly_price') }})<span class="per-user"> per user</span>
-									</label>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label class="radio-inline">
-										<input type="radio" {{ old('billing_period') === 'annually' ? 'checked' : '' }} value="annually" name="billing_period" id="billing-annually"> Annual (${{ Config::get('constants.annual_price') }})<span class="per-user"> per user</span>
-									</label>
-								</div>
-							</div>
-						</div>
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<button type="submit" class="btn btn-primary">

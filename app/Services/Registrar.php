@@ -25,7 +25,6 @@ class Registrar implements RegistrarContract {
 			'email' => 'required|email|max:255|unique:users',
 			'password' => 'required|confirmed|min:6',
 			'business_name' => 'max:255',
-			'billing_period' => 'required|in:monthly,annually',
 			'customer_agreement' => 'accepted',
 		]);
 	}
@@ -40,7 +39,7 @@ class Registrar implements RegistrarContract {
 		$organisation = null;
 
 		$billing = BillingDetail::create([
-			'period' => $data['billing_period'],
+			'period' => 'monthly',
 			'address_id' => null,
 			'dps_billing_token' => Session::get('billing.dps_billing_id'),
 			'expiry_date' => Session::get('billing.date_expiry'),
@@ -72,7 +71,7 @@ class Registrar implements RegistrarContract {
 		}
 
 		// Send out welcome email
-		Mail::sendStyledMail('emails.welcome', ['name' => $user->fullName()], $user->email, $user->fullName(), 'Welcome to CataLex');
+		Mail::sendStyledMail('emails.welcome', ['name' => $user->fullName(), 'email' => $user->email], $user->email, $user->fullName(), 'Welcome to CataLex');
 
 		return $user;
 	}

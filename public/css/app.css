@@ -5865,6 +5865,11 @@ label, .form-label {
 .btn {
   min-width: 170px; }
 
+#app-navbar-collapse {
+  margin-left: 173px; }
+  #app-navbar-collapse .chev-left {
+    left: -306px; }
+
 ul.social-logins {
   list-style: none;
   padding-left: 0; }

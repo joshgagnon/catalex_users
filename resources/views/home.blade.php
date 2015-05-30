@@ -13,7 +13,7 @@
 					@elseif($user->everBilled()/*TODO: && $user->can('editpaymentdetails')*/)
 						<p>You last billing cycle has not completed correctly. Please <a href="#TODO">click here</a> to update your payment details.</p>
 					@else
-						<p>Your trial period has expired. Please <a href="#TODO">click here</a> to confirm your subscription to regain access to Law Browser.</p>
+						<p>Your trial period has expired. Please <a href="{{ action('BillingController@getStart') }}">click here</a> to confirm your subscription to regain access to Law Browser.</p>
 					@endif
 				</div>
 			</div>

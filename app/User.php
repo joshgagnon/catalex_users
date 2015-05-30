@@ -46,6 +46,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->first_name . ' ' . $this->last_name;
 	}
 
+	protected function memberCount() {
+		return 1;
+	}
+
 	public function addRole($role) {
 		if(is_object($role)) {
 			$role = $role->getKey();
