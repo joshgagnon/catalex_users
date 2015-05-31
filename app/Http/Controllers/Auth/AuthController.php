@@ -37,6 +37,7 @@ class AuthController extends Controller {
 
 	use AuthenticatesAndRegistersUsers {
 		postRegister as defaultPostRegister;
+		redirectPath as defaultRedirectPath;
 	}
 
 	/**
@@ -84,6 +85,14 @@ class AuthController extends Controller {
 		}
 
 		return $response;
+	}
+
+	public function redirectPath() {
+		if(!Auth::user()->hasBrowserAccess()) {
+			$this->redirectTo = '/';
+		}
+
+		return $this->defaultRedirectPath();
 	}
 
 	public function postBilling(InitialRegisterRequest $request) {
