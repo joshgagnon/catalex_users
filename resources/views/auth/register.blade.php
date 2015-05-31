@@ -26,7 +26,15 @@
 
 					<div class="row form-group">
 						<div class="col-md-4"></div>
-						<div class="col-md-6"><p class="small">Asterisks (*) denote a required field</p></div>
+						<div class="col-md-6">
+							<p class="small">After your 14 day trial Law Browser is just ${{ Config::get('constants.monthly_price') }} per user per month</p>
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-md-4"></div>
+						<div class="col-md-6">
+							<p class="small">Asterisks (*) denote a required field</p>
+						</div>
 					</div>
 
 					<form class="form-horizontal" role="form" method="POST" action="/auth/billing">
