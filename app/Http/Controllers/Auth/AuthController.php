@@ -22,7 +22,7 @@ use Omnipay\Omnipay;
 
 class AuthController extends Controller {
 
-	protected $redirectTo = '/';
+	protected $redirectTo = '/browser-login';
 
 	/*
 	|--------------------------------------------------------------------------
