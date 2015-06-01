@@ -23,20 +23,12 @@
 							</div>
 						</div>
 					@endif
-
-					<div class="row form-group">
-						<div class="col-md-4"></div>
-						<div class="col-md-6">
-							<p class="small">After your 14 day trial Law Browser is just ${{ Config::get('constants.monthly_price') }} per user per month</p>
-						</div>
-					</div>
 					<div class="row form-group">
 						<div class="col-md-4"></div>
 						<div class="col-md-6">
 							<p class="small">Asterisks (*) denote a required field</p>
 						</div>
 					</div>
-
 					<form class="form-horizontal" role="form" method="POST" action="/auth/billing">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
@@ -107,14 +99,8 @@
 		<div class="col-xs-12 col-md-4">
 			<div class="trial-info">
 				<h2>How the free trial works.</h2>
-				<p>
-					<span class="highlight">Trial length:</span><br>
-					After a 14 day trial period, your account will be disabled and you will be sent an email with a link to confirm your subscription.
-				</p>
-				<p>
-					<span class="highlight">Billing and Credit Card information:</span><br>
-					You will need to enter your credit card details in order to create your account and have access to the free trial. However, no funds will be deducted until you have confirmed your subscription at the end of the free trial.
-				</p>
+				<p>Create an account with CataLex to gain free access to Law Browser for a trial period of 14 days. After that, the access fee is just NZ${{ Config::get('constants.monthly_price') }} per user per month.</p>
+				<p>You will need to enter your credit card details in order to create your account and have access to the free trial. However, we will not deduct any funds unless you elect to proceed with a paid subscription once the trial period is over.</p>
 				<img class="hidden-xs hidden-sm" src="/images/under-the-surface.jpg" alt="Find what's under the surface">
 			</div>
 		</div>
