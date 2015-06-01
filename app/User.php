@@ -50,6 +50,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return 1;
 	}
 
+	protected function billingExempt() {
+		return $this->hasRole('global_admin');
+	}
+
 	public function addRole($role) {
 		if(is_object($role)) {
 			$role = $role->getKey();

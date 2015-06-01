@@ -12,6 +12,8 @@ trait Billable {
 
 	abstract protected function memberCount();
 
+	abstract protected function billingExempt();
+
 	public function inTrial() {
 		$organisation = $this->organisation;
 
@@ -51,7 +53,7 @@ trait Billable {
 	}
 
 	public function hasBrowserAccess() {
-		return $this->inTrial() || $this->isPaid();
+		return $this->billingExempt() || $this->inTrial() || $this->isPaid();
 	}
 
 	public function everBilled() {

@@ -28,4 +28,8 @@ class Organisation extends Model {
 			return $member->active;
 		}));
 	}
+
+	protected function billingExempt() {
+		return $this->id === Config::get('constants.beta_organisation');
+	}
 }
