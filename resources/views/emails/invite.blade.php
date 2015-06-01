@@ -10,12 +10,13 @@
 						<table class="twelve columns">
 							<tr>
 								<td>
-									<h2>Get Started With CataLex</h2>
+									<h2 class="center">Welcome to CataLex</h2>
 									<p>Hi {{ $user->fullName() }},</p>
-									<p>Welcome to CataLex Law Browser!</p>
-									<p>At CataLex, we aim to re-invent law or, more accurately, how the public interacts with it. We believe that by combining technology and innovative thinking, legal services can be more accessible, cost-effective, understandable, and, most importantly, useful to business.</p>
+									<p>{{ $inviter }} has invited you to join the account {{ $user->organisation->name }} holds with CataLex. <a href="{{ url('password/reset/' . $token) }}">Click here</a> to confirm your user account and gain access to <a href="{{ Config::get('constants.law_browser_features') }}">Law Browser</a></p>
 									<p>Your username is: {{ $user->email }}</p>
-									<p><a href="{{ url('password/reset/' . $token) }}">Click here</a> to create your account with CataLex and access Law Browser</p>
+									<p>Best regards</p>
+									<p>The CataLex team</p>
+									<p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
 								</td>
 							</tr>
 						</table>

@@ -10,14 +10,16 @@
 						<table class="twelve columns">
 							<tr>
 								<td>
-									<center>
-										<h2 class="center">Get Started With CataLex</h2>
-										<p>Hi {{ $name }},</p>
-										<p class="center">Welcome to CataLex Law Browser!</p>
-										<p class="center">At CataLex, we aim to re-invent law or, more accurately, how the public interacts with it. We believe that by combining technology and innovative thinking, legal services can be more accessible, cost-effective, understandable, and, most importantly, useful to business.</p>
-										<p>Your username is: {{ $email }}</p>
-										<p class="center">Choose from the links below to get started.</p>
-									</center>
+									<h2 class="center">Welcome to CataLex</h2>
+									<p>Hi {{ $name }},</p>
+									<p>Thanks for signing up with CataLex &mdash; the legal catalyst. You can now <a href="{{ route('browser-login') }}">access Law Browser here</a>.</p>
+									<p>Your username is: {{ $email }}</p>
+									<p>Your free trial has started and will end on {{ $trialEnd }}. At the end of the free trial, we will send you an email asking if you want to continue with a paid subscription to Law Browser. It costs NZ${{ Config::get('constants.monthly_price') }} per user, per month.</p>
+									<p>We will not deduct any fees from your credit card unless you choose to continue with a paid subscription.</p>
+									<p>If you want to invite other people to use Law Browser, you can become an administrator for an organisation. <a href="{{ action('HomeController@index') }}">Click here</a> to get started.</p>
+									<p>Best regards</p>
+									<p>The CataLex team</p>
+									<p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
 								</td>
 							</tr>
 						</table>

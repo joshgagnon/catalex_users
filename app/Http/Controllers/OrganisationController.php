@@ -68,7 +68,7 @@ class OrganisationController extends Controller {
 		// Send out invite to allow user to log in
 		// TODO: Template should say 'you can create password at <x link> or login <here> with linkedIn
 		$response = $this->passwordBroker->sendResetLink(['email' => $data['email']], function($mail) {
-			$mail->subject('You have been invited to use CataLex Law Browser');
+			$mail->subject('Welcome to CataLex');
 		});
 
 		Session::flash('success', 'An invite has been sent to ' . $data['email']);
