@@ -13,9 +13,17 @@
 						<div class="row">
 							<div class="col-md-2"></div>
 							<div class="col-md-8">
-								<p>You will be billed immediately using the credit card provided upon registration of the trial.</p>
+								<p>We will deduct the access fee from the credit card you provided when you created your account with CataLex. The access fee is payable monthly or annually, in advance.</p>
 							</div>
 						</div>
+						@if($user->organisation)
+							<div class="row">
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<p>{{-- TODO: Summarise price for ogranisation --}}</p>
+								</div>
+							</div>
+						@endif
 						<div class="row">
 							<label class="col-md-4 control-label">Billing Cycle</label>
 							<div class="col-md-4">
