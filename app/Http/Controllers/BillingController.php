@@ -42,7 +42,7 @@ class BillingController extends Controller {
 			return redirect()->action('BillingController@getConfirmStart');
 		}
 
-		return redirect()->back()->withErrors(['We were unable to charge you card at this time. Please try again shortly.']);
+		return redirect()->back()->withErrors(['We were unable to charge your card at this time. Please try again shortly.']);
 	}
 
 	public function getConfirmStart() {
