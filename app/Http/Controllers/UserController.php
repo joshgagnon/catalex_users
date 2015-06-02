@@ -2,6 +2,7 @@
 
 use Auth;
 use App\User;
+use App\Role;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserEditRequest;
@@ -82,7 +83,16 @@ class UserController extends Controller {
 		if($user->can('edit_any_user') ||
 		   ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) ||
 		   ($user->can('edit_own_user') && $user->id === $subject->id)) {
-			return view('user.edit', compact('subject'));
+			$roles = [];
+
+			if($user->hasRole('global_admin')) {
+				$roles = ['global_admin' => $subject->hasRole('global_admin'), 'organisation_admin' => $subject->hasRole('organisation_admin')];
+			}
+			elseif($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) {
+				$roles = ['organisation_admin' => $subject->hasRole('organisation_admin')];
+			}
+
+			return view('user.edit', compact('subject', 'roles'));
 		}
 
 		return view('auth.denied');
@@ -114,6 +124,8 @@ class UserController extends Controller {
 		if(strlen($input['new_password'])) {
 			$user->password = bcrypt($input['new_password']);
 		}
+
+		// TODO: Update submitted roles, verifying the authed user is allowed to change them
 
 		$user->save();
 	}
