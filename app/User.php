@@ -59,6 +59,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			$role = $role->getKey();
 		}
 		elseif(is_string($role)) {
+			// Check named roles first to avoid attach collision
+			if($this->hasRole($role)) return;
 			$role = Role::where('name', '=', $role)->pluck('id');
 		}
 

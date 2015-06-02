@@ -125,7 +125,26 @@ class UserController extends Controller {
 			$user->password = bcrypt($input['new_password']);
 		}
 
-		// TODO: Update submitted roles, verifying the authed user is allowed to change them
+		// Update submitted roles, verifying the authed user is allowed to change them
+		$submitter = Auth::user();
+		if(isset($input['global_admin']) &&
+		   $submitter->hasRole('global_admin')) {
+			if(boolval($input['global_admin'])) {
+				$user->addRole('global_admin');
+			}
+			else {
+				$user->removeRole('global_admin');
+			}
+		}
+		if(isset($input['organisation_admin']) &&
+		   ($submitter->hasRole('global_admin') || ($submitter->can('edit_organisation_user') && $submitter->sharesOrganisation($user)))) {
+			if(boolval($input['organisation_admin'])) {
+				$user->addRole('organisation_admin');
+			}
+			else {
+				$user->removeRole('organisation_admin');
+			}
+		}
 
 		$user->save();
 	}
