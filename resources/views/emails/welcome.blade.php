@@ -29,7 +29,7 @@
 		</td>
 	</tr>
 </table>
-<table class="container buttons">
+{{--<table class="container buttons">
 	<tr>
 		<td>
 			<table class="row">
@@ -42,7 +42,7 @@
 									<table class="button btn-orange">
 										<tr>
 											<td>
-												<a href="#{{-- TODO --}}">Tips &amp; Tricks</a>
+												<a href="#{{- TODO -}}">Tips &amp; Tricks</a>
 											</td>
 										</tr>
 									</table>
@@ -78,7 +78,7 @@
 									<table class="button btn-facebook">
 										<tr>
 											<td>
-												<a href="#{{-- TODO --}}">Facebook</a>
+												<a href="#{{- TODO -}}">Facebook</a>
 											</td>
 										</tr>
 									</table>
@@ -92,5 +92,5 @@
 			</table>
 		</td>
 	</tr>
-</table>
+</table>--}}
 @endsection
