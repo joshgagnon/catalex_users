@@ -24,7 +24,7 @@ class Organisation extends Model {
 	}
 
 	protected function memberCount() {
-		return count(array_filter($this->members, function($member) {
+		return count(array_filter($this->members->all(), function($member) {
 			return $member->active;
 		}));
 	}
