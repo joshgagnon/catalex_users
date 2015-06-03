@@ -1,7 +1,9 @@
 <?php namespace App\Models;
 
+use Auth; // TODO: Remove
 use Config;
 use Carbon\Carbon;
+use App\Library\Mail;
 use GuzzleHttp\Client;
 
 trait Billable {
@@ -128,6 +130,10 @@ trait Billable {
 
 		$this->billing_detail->last_billed = Carbon::now();
 		$this->billing_detail->save();
+
+		// TODO: Get actual user when this is run as command instead of from billing start
+		$user = Auth::user();
+		Mail::sendStyledMail('emails.invoice', compact('user'), $user->getEmailForPasswordReset(), $user->fullName(), 'CataLex | Invoice/Receipt');
 
 		return true;
 	}
