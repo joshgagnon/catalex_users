@@ -110,22 +110,26 @@ trait Billable {
 		// Number of users * period to bill for
 		$price = bcmul($periodCost, (string)$this->memberCount(), 2);
 
-		$xmlRequest = view('billing.pxpost', [
-			'postUsername' => env('PXPOST_USERNAME', ''),
-			'postPassword' => env('PXPOST_KEY', ''),
-			'amount' => $price,
-			'dpsBillingId' => $this->billing_detail->dps_billing_token,
-			'id' => $this->billing_detail->id,
-		])->render();
+		if(!env('DISABLE_PAYMENT', false)) {
 
-		$postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
+			$xmlRequest = view('billing.pxpost', [
+				'postUsername' => env('PXPOST_USERNAME', ''),
+				'postPassword' => env('PXPOST_KEY', ''),
+				'amount' => $price,
+				'dpsBillingId' => $this->billing_detail->dps_billing_token,
+				'id' => $this->billing_detail->id,
+			])->render();
 
-		$response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
+			$postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
 
-		$xmlResponse = new \SimpleXMLElement((string)$response->getBody());
+			$response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
 
-		if(!boolval((string)$xmlResponse->Success)) {
-			return false;
+			$xmlResponse = new \SimpleXMLElement((string)$response->getBody());
+
+			if(!boolval((string)$xmlResponse->Success)) {
+				return false;
+			}
+
 		}
 
 		$this->billing_detail->last_billed = Carbon::now();

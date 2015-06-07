@@ -73,7 +73,13 @@ class AuthController extends Controller {
 
 		// Check that we got a valid billing token
 		if(!(Session::has('billing.dps_billing_id') && Session::has('billing.date_expiry'))) {
-			return redirect()->back()->withErrors(['You must verify your credit card before beginning the free trial. It will not be charged until the trial expires.']);
+			if(env('DISABLE_PAYMENT', false)) {
+				Session::put('billing.dps_billing_id', 'xxxxxxxxxxxxxxxx');
+				Session::put('billing.date_expiry', '9999');
+			}
+			else {
+				return redirect()->back()->withErrors(['You must verify your credit card before beginning the free trial. It will not be charged until the trial expires.']);
+			}
 		}
 
 		// Hand over to internal Laravel user setup
@@ -82,6 +88,8 @@ class AuthController extends Controller {
 		if(Auth::check()) {
 			// Success, oauth flow over
 			Session::forget('oauth.register');
+			Session::forget('billing.dps_billing_id');
+			Session::forget('billing.date_expiry');
 		}
 
 		return $response;
