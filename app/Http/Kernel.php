@@ -18,6 +18,7 @@ class Kernel extends HttpKernel {
 		'App\Http\Middleware\LogAccess',
 		'App\Http\Middleware\UserView',
 		'App\Http\Middleware\VerifyCsrfToken',
+		'App\Http\Middleware\TrimInput',
 	];
 
 	/**
