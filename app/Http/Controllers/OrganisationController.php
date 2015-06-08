@@ -59,6 +59,8 @@ class OrganisationController extends Controller {
 		$user->organisation_id = $organisation->id;
 		$user->billing_detail_id = null;
 		$user->save();
+
+		return redirect()->action('OrganisationController@getIndex');
 	}
 
 	public function postInvite(InviteFormRequest $request) {
