@@ -3,11 +3,14 @@
 use Input;
 use Config;
 use App\User;
+use Validator;
 use App\Address;
 use App\AccessLog;
 use App\Organisation;
 use App\BillingDetail;
+use Illuminate\Http\Request;
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\CreateOrganisationRequest;
 use App\Services\InviteBroker as PasswordBroker;
 
 class AdminController extends Controller {
@@ -40,9 +43,13 @@ class AdminController extends Controller {
 	public function getOrganisations() {
 		$showDeleted = Input::has('deleted') && boolval(Input::get('deleted'));
 
-		// TODO: Populate org list
+		$organisationModel = Organisation::orderBy('created_at');
+		if($showDeleted) {
+			$organisationModel = $organisationModel->withTrashed();
+		}
+		$organisations = $organisationModel->paginate(Config::get('constants.items_per_page'));
 
-		return view('admin.organisations', compact('showDeleted'));
+		return view('admin.organisations', compact('showDeleted', 'organisations'));
 	}
 
 	public function getAccessLog() {
@@ -138,5 +145,135 @@ class AdminController extends Controller {
 		}
 
 		return redirect()->action('AdminController@getUsers')->with('success', 'User ' . $newUser->fullName() . ' successfully created.');
+	}
+
+	public function getCreateOrganisation() {
+		return view('admin.create-organisation');
+	}
+
+	public function postCreateOrganisation(CreateOrganisationRequest $request) {
+		$organisation = Organisation::create([
+			'name' => $request->get('organisation_name'),
+			'billing_detail_id' => null,
+			'free' => true,
+		]);
+
+		return redirect()->action('AdminController@getOrganisations')->with('success', 'Organisation "' . $organisation->name . '" successfully created.');
+	}
+
+	public function getEditOrganisation($id, $addMembers=null) {
+		$organisation = Organisation::find($id);
+
+		if(!$organisation) abort(404);
+
+		if($addMembers === 'add-members') return $this->getAddMembers($organisation);
+
+		return view('organisation.edit', compact('organisation'));
+	}
+
+	public function postEditOrganisation(Request $request, $id, $addMembers=null) {
+		$organisation = Organisation::find($id);
+
+		if(!$organisation) abort(404);
+
+		if($addMembers === 'add-members') return $this->postAddMembers($request, $organisation);
+
+		$input = $request->all();
+
+		$organisation->name = $input['name'];
+		$organisation->free = boolval($input['free']);
+		$organisation->save();
+
+		return redirect()->action('AdminController@getOrganisations')->with('success', 'Organisation "' . $organisation->name . '" successfully updated.');
+	}
+
+	private function getAddMembers(Organisation $organisation) {
+		return view('organisation.add-members', compact('organisation'));
+	}
+
+	private function postAddMembers(Request $request, Organisation $organisation) {
+		$total = count($request->get('first_name'));
+
+		$input = $request->all();
+
+		$succeeded = [];
+		$failed = [];
+
+		for($i = 0; $i < $total; $i++) {
+			$validator = Validator::make([
+				'first_name' => $input['first_name'][$i],
+				'last_name' => $input['last_name'][$i],
+				'email' => $input['email'][$i],
+			], [
+				'first_name' => 'required|max:255',
+				'last_name' => 'required|max:255',
+				'email' => 'required|email|max:255|unique:users',
+			]);
+
+			if($validator->fails()) {
+				$failed[] = $input['first_name'][$i] . ' ' . $input['last_name'][$i] . ' <' . $input['email'][$i] . '>';
+				continue;
+			}
+
+			// TODO: Share code with OrganisationController@postInvite
+			// Create a user for the invitee with random password
+			$user = User::create([
+				'first_name' => $input['first_name'][$i],
+				'last_name' => $input['last_name'][$i],
+				'email' => $input['email'][$i],
+				'password' => bcrypt(str_random(40)),
+				'organisation_id' => $organisation->id,
+				'billing_detail_id' => null,
+			]);
+			$user->addRole('registered_user');
+
+			// Send out invite to allow user to log in
+			$this->passwordBroker->sendResetLink(['email' => $user->email], function($mail) {
+				$mail->subject('Welcome to CataLex');
+			});
+
+			$succeeded[] = $user;
+		}
+
+		$message = 'Successfully added ' . count($succeeded) . ' members.';
+		if(count($failed)) {
+			$message .= ' The following members could not be added: ' . implode(', ', $failed);
+		}
+
+		return redirect()->action('AdminController@getEditOrganisation', $organisation->id)->with('success', $message);
+	}
+
+	public function postDeleteOrganisation($id, $confirm=null) {
+		$organisation = Organisation::find($id);
+
+		if(!$organisation) abort(404);
+
+		if($confirm !== 'confirm') {
+			return view('organisation.delete', compact('organisation'));
+		}
+
+		foreach($organisation->members as $member) {
+			$member->delete();
+		}
+
+		$orgName = $organisation->name;
+
+		$organisation->delete();
+
+		return redirect()->action('AdminController@getOrganisations')->with('success', 'Organisation "' . $orgName . '" successfully deleted.');
+	}
+
+	public function postUndeleteOrganisation($id) {
+		$organisation = Organisation::onlyTrashed()->find($id);
+
+		if(!$organisation) abort(404);
+
+		$organisation->restore();
+
+		foreach($organisation->membersWithTrashed as $member) {
+			$member->restore();
+		}
+
+		return redirect()->back()->with('success', 'Organisation "' . $organisation->name . '" and ' . count($organisation->members) . ' members restored.');
 	}
 }

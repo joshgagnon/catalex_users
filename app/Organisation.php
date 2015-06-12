@@ -13,7 +13,7 @@ class Organisation extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['name', 'billing_detail_id'];
+	protected $fillable = ['name', 'billing_detail_id', 'free'];
 
 	public static $rules = [
 		'name' => 'required|max:255',
@@ -23,6 +23,10 @@ class Organisation extends Model {
 		return $this->hasMany('App\User');
 	}
 
+	public function membersWithTrashed() {
+		return $this->hasMany('App\User')->withTrashed();
+	}
+
 	protected function memberCount() {
 		return count(array_filter($this->members->all(), function($member) {
 			return $member->active;
@@ -30,6 +34,7 @@ class Organisation extends Model {
 	}
 
 	protected function billingExempt() {
-		return $this->id === Config::get('constants.beta_organisation');
+		// TODO: Remove beta org code
+		return $this->free || $this->id === Config::get('constants.beta_organisation');
 	}
 }

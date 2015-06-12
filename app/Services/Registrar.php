@@ -52,6 +52,7 @@ class Registrar implements RegistrarContract {
 			$organisation = Organisation::create([
 				'name' => $data['business_name'],
 				'billing_detail_id' => $billing->id,
+				'free' => false,
 			]);
 		}
 

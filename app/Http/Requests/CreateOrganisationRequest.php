@@ -13,6 +13,6 @@ class CreateOrganisationRequest extends FormRequest {
 	}
 
 	public function authorize() {
-		return Auth::check() && !Auth::user()->organisation;
+		return Auth::check() && (!Auth::user()->organisation || Auth::user()->hasRole('global_admin'));
 	}
 }

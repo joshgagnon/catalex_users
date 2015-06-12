@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('title')
+CataLex Law Browser - Create Organisation
+@endsection
+
 @section('content')
 <div class="container">
 	<h2>Create Organisation</h2>

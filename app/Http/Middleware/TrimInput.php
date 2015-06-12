@@ -12,7 +12,12 @@ class TrimInput {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		$request->merge(array_map('trim', $request->all()));
+		$recursiveTrim = function($input) use (&$recursiveTrim) {
+			if(is_array($input)) return array_map($recursiveTrim, $input);
+			return trim($input);
+		};
+
+		$request->merge(array_map($recursiveTrim, $request->all()));
 
 		return $next($request);
 	}
