@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use Config;
 use App\Models\Billable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +34,7 @@ class Organisation extends Model {
 		}));
 	}
 
-	protected function billingExempt() {
+	public function billingExempt() {
 		// TODO: Remove beta org code
 		return $this->free || $this->id === Config::get('constants.beta_organisation');
 	}

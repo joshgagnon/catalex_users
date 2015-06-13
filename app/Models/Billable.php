@@ -14,7 +14,7 @@ trait Billable {
 
 	abstract protected function memberCount();
 
-	abstract protected function billingExempt();
+	abstract public function billingExempt();
 
 	public function inTrial() {
 		$organisation = $this->organisation;
