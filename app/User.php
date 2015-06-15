@@ -50,7 +50,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return 1;
 	}
 
-	protected function billingExempt() {
+	public function billingExempt() {
+		if($this->organisation && $this->organisation->billingExempt()) return true;
+
 		return $this->hasRole('global_admin');
 	}
 
@@ -59,6 +61,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			$role = $role->getKey();
 		}
 		elseif(is_string($role)) {
+			// Check named roles first to avoid attach collision
+			if($this->hasRole($role)) return;
 			$role = Role::where('name', '=', $role)->pluck('id');
 		}
 

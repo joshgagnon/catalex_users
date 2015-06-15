@@ -46,7 +46,7 @@ class SendExpiredTrialEmails extends Command {
 
 		foreach($users as $user) {
 			// Don't send emails to users who have paid already
-			if($user->everBilled()) {
+			if($user->everBilled() || $user->billingExempt()) {
 				continue;
 			}
 

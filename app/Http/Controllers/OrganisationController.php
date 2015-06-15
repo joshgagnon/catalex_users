@@ -6,8 +6,10 @@ use Mail;
 use Config;
 use Session;
 use App\User;
+use App\Organisation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InviteFormRequest;
+use App\Http\Requests\CreateOrganisationRequest;
 use App\Services\InviteBroker as PasswordBroker;
 
 class OrganisationController extends Controller {
@@ -32,8 +34,7 @@ class OrganisationController extends Controller {
 			$organisation = $user->organisation;
 
 			if(!$organisation) {
-				// TODO: Redirect to page offering upgrade to organisation
-				return redirect ('/');
+				return view('organisation.create');
 			}
 
 			return view('organisation.overview', ['organisation' => $organisation]);
@@ -41,6 +42,26 @@ class OrganisationController extends Controller {
 
 		// TODO: Error saying not enough permission
 		return redirect('/');
+	}
+
+	public function postCreate(CreateOrganisationRequest $request) {
+		$user = Auth::user();
+
+		$data = $request->all();
+
+		$organisation = Organisation::create([
+			'name' => $data['organisation_name'],
+			'billing_detail_id' => $user->billing_detail->id,
+			'free' => false,
+		]);
+
+		$user->addRole('organisation_admin');
+
+		$user->organisation_id = $organisation->id;
+		$user->billing_detail_id = null;
+		$user->save();
+
+		return redirect()->action('OrganisationController@getIndex');
 	}
 
 	public function postInvite(InviteFormRequest $request) {

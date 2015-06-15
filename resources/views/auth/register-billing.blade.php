@@ -13,7 +13,9 @@
 						<div class="row">
 							<div class="col-md-2"></div>
 							<div class="col-md-8">
+								<p>We will validate your card with a $1 authorisation charge, which will be refunded automatically in 7 days.</p>
 								<p>Please ensure you click the 'Next' button after successful credit card authorisation.</p>
+								{{-- TODO: Look into way to force redirect without clicking next, dps docs suggest this is possible --}}
 							</div>
 						</div>
 						<div class="row">

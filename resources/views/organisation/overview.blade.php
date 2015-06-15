@@ -1,5 +1,9 @@
 @extends('app')
 
+@section('title')
+CataLex Law Browser - {{ $organisation->name }}
+@endsection
+
 @section('content')
 <div class="container">
 	<h2>{{ $organisation->name }}</h2>
