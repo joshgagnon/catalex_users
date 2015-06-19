@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use Log;
 use Auth; // TODO: Remove
 use Config;
 use Carbon\Carbon;
@@ -12,9 +13,11 @@ trait Billable {
 		return $this->belongsTo('App\BillingDetail');
 	}
 
-	abstract protected function memberCount();
-
 	abstract public function billingExempt();
+
+	abstract public function paymentAmount();
+
+	abstract public function sendInvoices();
 
 	public function inTrial() {
 		$organisation = $this->organisation;
@@ -33,25 +36,9 @@ trait Billable {
 			return $organisation->isPaid();
 		}
 
-		if(!$this->billing_detail || !$this->billing_detail->last_billed) {
-			return false;
-		}
+		if(!$this->paid_until) return false;
 
-		// Give user access even if last billed expires sometime today
-		$now = Carbon::now();
-		$now->hour = 0;
-		$now->minute = 1;
-
-		// TODO: Should we store paid_until instead of last_billed + period
-		$validUntil = $this->billing_detail->last_billed;
-		if($this->billing_detail->period === 'monthly') {
-			$validUntil->addMonth();
-		}
-		else {
-			$validUntil->addYear();
-		}
-
-		return $now->lt($validUntil);
+		return Carbon::now()->lt($this->paid_until->hour(23)->minute(59));
 	}
 
 	public function hasBrowserAccess() {
@@ -65,7 +52,7 @@ trait Billable {
 			return $organisation->everBilled();
 		}
 
-		return $this->billing_detail && $this->billing_detail->last_billed;
+		return $this->billing_detail && $this->paid_until !== null;
 	}
 
 	public function setBillingPeriod($period) {
@@ -85,60 +72,85 @@ trait Billable {
 
 	/**
 	 * Charge the user or organisation based on number of members and billing period. Returns
-	 * true on success, false otherwise.
+	 * true if already up to date or on billing success, false otherwise.
 	 *
 	 * @return bool
 	 */
-	public function charge() {
-		$organisation = $this->organisation;
+	public function rebill() {
+		if($this->billingExempt()) return true;
 
-		if($organisation) {
-			return $organisation->charge();
-		}
+		// Don't do anything for users belonging to an organisation
+		if($this->organisation) return true;
+
+		// Is this already paid for today?
+		if($this->paid_until && Carbon::now()->lt($this->paid_until)) return true;
+
+		$payingUntil = Carbon::now();
 
 		switch($this->billing_detail->period) {
 			case 'monthly':
-				$periodCost = Config::get('constants.monthly_price');
+				$payingUntil->addMonth();
 				break;
 			case 'annually':
-				$periodCost = Config::get('constants.annual_price');
+				$payingUntil->addYear();
 				break;
 			default:
 				throw new Exception('Billing period must be one of "monthly" or "annually"');
 		}
 
-		// Number of users * period to bill for
-		$price = bcmul($periodCost, (string)$this->memberCount(), 2);
-
-		if(!env('DISABLE_PAYMENT', false)) {
-
-			$xmlRequest = view('billing.pxpost', [
-				'postUsername' => env('PXPOST_USERNAME', ''),
-				'postPassword' => env('PXPOST_KEY', ''),
-				'amount' => $price,
-				'dpsBillingId' => $this->billing_detail->dps_billing_token,
-				'id' => $this->billing_detail->id,
-			])->render();
-
-			$postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
-
-			$response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
-
-			$xmlResponse = new \SimpleXMLElement((string)$response->getBody());
-
-			if(!boolval((string)$xmlResponse->Success)) {
-				return false;
-			}
-
+		if(!$this->charge($this->paymentAmount())) {
+			return false;
 		}
 
-		$this->billing_detail->last_billed = Carbon::now();
-		$this->billing_detail->save();
+		$this->paid_until = $payingUntil;
+		$this->save();
 
-		// TODO: Get actual user when this is run as command instead of from billing start
-		$user = Auth::user();
-		Mail::sendStyledMail('emails.invoice', compact('user'), $user->getEmailForPasswordReset(), $user->fullName(), 'CataLex | Invoice/Receipt');
+		// Update all members
+		if($this->members) {
+			foreach($this->members as $member) {
+				$member->paid_until = $payingUntil;
+				$member->save();
+			}
+		}
 
+		// TODO: Line items
+		$this->sendInvoices();
+
+		return true;
+	}
+
+	/**
+	 * Charge the user or organisation $amount NZD. Returns true on success, false otherwise.
+	 *
+	 * @param  string $amount
+	 * @return bool
+	 */
+	private function charge($amount) {
+		if(env('DISABLE_PAYMENT', false)) {
+			Log::info('Simulated charge of $' . $amount . ' to ' . get_class($this) . ' ' . $this->id);
+			return true;
+		}
+
+		$xmlRequest = view('billing.pxpost', [
+			'postUsername' => env('PXPOST_USERNAME', ''),
+			'postPassword' => env('PXPOST_KEY', ''),
+			'amount' => $amount,
+			'dpsBillingId' => $this->billing_detail->dps_billing_token,
+			'id' => $this->billing_detail->id,
+		])->render();
+
+		$postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
+
+		$response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
+
+		$xmlResponse = new \SimpleXMLElement((string)$response->getBody());
+
+		if(!boolval((string)$xmlResponse->Success)) {
+			// TODO: record failure in charge_log
+			return false;
+		}
+
+		// TODO: record success in charge_log
 		return true;
 	}
 }

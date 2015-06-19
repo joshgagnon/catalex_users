@@ -11,7 +11,7 @@
 						<table class="twelve columns">
 							<tr>
 								<td>
-									<p>Hi {{ $user->fullName() }},</p>
+									<p>Hi {{ $name }},</p>
 									<p>Thanks for your payment.  An invoice/receipt for your latest access fee is attached.</p>
 									<p>Best regards</p>
 									<p>The CataLex team</p>

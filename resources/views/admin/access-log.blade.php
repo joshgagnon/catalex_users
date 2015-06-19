@@ -46,7 +46,7 @@
 								@endif
 							</td>
 							<td class="mid-cell">{{ $l->route }}</td>
-							<td class="mid-cell">{{ $l->timestamp->copy()->setTimezone(Config::get('constants.timezone'))->toDateTimeString() }}</td>
+							<td class="mid-cell">{{ $l->timestamp->copy()->toDateTimeString() }}</td>
 						</tr>
 					@endforeach
 				</tbody>

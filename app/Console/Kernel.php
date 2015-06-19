@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'App\Console\Commands\SendExpiredTrialEmails',
+		'App\Console\Commands\ChargeUsers',
 	];
 
 	/**
@@ -22,5 +23,6 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected function schedule(Schedule $schedule) {
 		$schedule->command('emails:trial-expiry')->dailyAt('20:00');
+		$schedule->command('billing:charge-all')->dailyAt('22:00');
 	}
 }

@@ -1,5 +1,8 @@
 <?php namespace App;
 
+use Config;
+use Carbon\Carbon;
+use App\Library\Mail;
 use App\Models\Billable;
 use App\Models\ActiveUser;
 use Illuminate\Auth\Authenticatable;
@@ -34,6 +37,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
+	/**
+	 * The attributes that should be mutated to dates.
+	 *
+	 * @var array
+	 */
+	protected $dates = ['deleted_at', 'paid_until'];
+
 	public function organisation() {
 		return $this->belongsTo('App\Organisation');
 	}
@@ -46,14 +56,53 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->first_name . ' ' . $this->last_name;
 	}
 
-	protected function memberCount() {
-		return 1;
-	}
-
 	public function billingExempt() {
 		if($this->organisation && $this->organisation->billingExempt()) return true;
 
 		return $this->hasRole('global_admin');
+	}
+
+	/**
+	 * Return the charge required to bring this user's paid date up to the target date.
+	 *
+	 * @param  Carbon\Carbon $targetDate
+	 * @return string
+	 */
+	public function prorate($targetDate) {
+		$startDate = $this->paid_until ? $this->paid_until->hour(23)->minute(59) : Carbon::now();
+
+		if($startDate->gte($targetDate)) return '0.00';
+
+		// Use interval, not billing period to determine montly or yearly rate
+		if($startDate->diffInMonths($targetDate) === 0) {
+			$max = Config::get('constants.monthly_price');
+			$perDay = bcdiv($max, '31', 4);
+		}
+		else {
+			$max = Config::get('constants.annual_price');
+			$perDay = bcdiv($max, '365', 4);
+		}
+
+		$total = bcmul($perDay, (string)$startDate->diffInDays($targetDate), 2);
+
+		return bccomp($total, $max) === 1 ? $max : $total;
+	}
+
+	public function paymentAmount() {
+		if(!$this->billing_detail) return '0.00';
+
+		switch($this->billing_detail->period) {
+			case 'monthly':
+				return Config::get('constants.monthly_price');
+			case 'annually':
+				return Config::get('constants.annual_price');
+			default:
+				throw new Exception('Billing period must be one of "monthly" or "annually"');
+		}
+	}
+
+	public function sendInvoices() {
+		Mail::sendStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt');
 	}
 
 	public function addRole($role) {
