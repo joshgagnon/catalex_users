@@ -37,8 +37,7 @@ class BillingController extends Controller {
 
 		$user->setBillingPeriod($period);
 
-		// TODO: Get billing details based on if this is a user or org, calculate totals etc, then send payment token
-		if($user->charge()) {
+		if($user->rebill()) {
 			return redirect()->action('BillingController@getConfirmStart');
 		}
 

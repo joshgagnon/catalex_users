@@ -6,7 +6,7 @@ use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class Mail {
 
-	public static function sendStyledMail($view, $data, $receiverEmail, $receiverName, $subject) {
+	public static function sendStyledMail($view, $data, $receiverEmail, $receiverName, $subject, $attachment=null) {
 		$html = view($view, $data)->render();
 
 		$css = File::get(public_path('/css/email.css'));
@@ -14,8 +14,11 @@ class Mail {
 		$inliner = new CssToInlineStyles($html, $css);
 		$markup = $inliner->convert();
 
-		return LaravelMail::send('emails.echo', ['html' => $markup], function($message) use ($receiverEmail, $receiverName, $subject) {
+		return LaravelMail::send('emails.echo', ['html' => $markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachment) {
 			$message->to($receiverEmail, $receiverName)->subject($subject);
+			if($attachment) {
+				$message->attach($attachment, ['as' => 'invoice.pdf']);
+			}
 		});
 	}
 }

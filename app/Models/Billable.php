@@ -17,7 +17,7 @@ trait Billable {
 
 	abstract public function paymentAmount();
 
-	abstract public function sendInvoices();
+	abstract public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null);
 
 	public function inTrial() {
 		$organisation = $this->organisation;
@@ -90,15 +90,20 @@ trait Billable {
 		switch($this->billing_detail->period) {
 			case 'monthly':
 				$payingUntil->addMonth();
+				$intervalAmount = Config::get('constants.monthly_price');
+				$description = '1 Month';
 				break;
 			case 'annually':
 				$payingUntil->addYear();
+				$intervalAmount = Config::get('constants.annual_price');
+				$description = '1 Year';
 				break;
 			default:
 				throw new Exception('Billing period must be one of "monthly" or "annually"');
 		}
 
-		if(!$this->charge($this->paymentAmount())) {
+		$paymentAmount = $this->paymentAmount();
+		if(!$this->charge($paymentAmount)) {
 			return false;
 		}
 
@@ -113,8 +118,13 @@ trait Billable {
 			}
 		}
 
-		// TODO: Line items
-		$this->sendInvoices();
+		$listItem = [
+			'Subscription to Law Browser &mdash; ' . $description,
+			$this->members ? $this->members->count() : 1,
+			$intervalAmount,
+			$paymentAmount,
+		];
+		$this->sendInvoices('subscription', 1, $listItem); // TODO: Invoice number from charge_log->id
 
 		return true;
 	}

@@ -1,5 +1,6 @@
 /vendor
 /node_modules
+/storage/tmp
 .env
 /config/oauth.php
 *.css.map

@@ -101,10 +101,11 @@ class Organisation extends Model {
 		return true;
 	}
 
-	public function sendInvoices() {
+	public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null) {
+		$orgId = 'CT' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
 		foreach($this->members as $member) {
 			if($member->can('edit_own_organisation')) {
-				$member->sendInvoices();
+				$member->sendInvoices($type, $invoiceNumber, $listItem, $this->name, $orgId);
 			}
 		}
 	}

@@ -101,8 +101,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		}
 	}
 
-	public function sendInvoices() {
-		Mail::sendStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt');
+	public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null) {
+		$name = $this->fullName();
+		$date = Carbon::now()->format('j/m/Y');
+		$accountNumber = $orgId ?: 'CU' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
+
+		$baseName = tempnam(base_path('storage/tmp'), 'invoice');
+		$html = $baseName . '.html';
+		$handle = fopen($html, 'w');
+		fwrite(
+			$handle,
+			view('emails.invoice-attachment', compact('orgName', 'name', 'date', 'type', 'invoiceNumber', 'accountNumber', 'listItem'))->render()
+		);
+		fclose($handle);
+
+		$pdf = $baseName . '.pdf';
+		exec(implode(' ', ['phantomjs', base_path('scripts/pdferize.js'), $html, $pdf]));
+
+		Mail::sendStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt', $pdf);
+
+		unlink($baseName);
+		unlink($html);
+		unlink($pdf);
 	}
 
 	public function addRole($role) {
