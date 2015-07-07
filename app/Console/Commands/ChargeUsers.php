@@ -38,7 +38,9 @@ class ChargeUsers extends Command {
 	 */
 	public function fire() {
 		foreach(User::all() as $user) {
-			$user->rebill();
+			if(!$user->organisation) {
+				$user->rebill();
+			}
 		}
 
 		foreach(Organisation::all() as $organisation) {
