@@ -34,7 +34,7 @@ CataLex Law Browser - Edit Organisation
 								<a href="{{ action('AdminController@getEditOrganisation', [$organisation->id, 'add-members']) }}" class="btn btn-info">Add Users</a>
 							</div>
 						</div>
-						<h4>Billing Status</h4>
+						<!-- <h4>Billing Status</h4>
 						<div class="form-group">
 							<div class="col-xs-12 col-md-12">
 								@if($organisation->billingExempt())
@@ -53,8 +53,8 @@ CataLex Law Browser - Edit Organisation
 									<p><strong>WARNING:</strong> Billing details in an inconsistent state - please contact a developer</p>
 								@endif
 							</div>
-						</div>
-						@if($user->hasRole('global_admin'))
+						</div> -->
+						<!-- @if($user->hasRole('global_admin'))
 							<h4>Flags</h4>
 							<div class="form-group">
 								<div class="col-xs-12 col-md-4">
@@ -64,7 +64,7 @@ CataLex Law Browser - Edit Organisation
 									</div>
 								</div>
 							</div>
-						@endif
+						@endif -->
 						<div class="form-group">
 							<div class="col-xs-12">
 								<button type="submit" class="btn btn-primary">Update</button>

@@ -29,7 +29,8 @@
 							<p class="small">Asterisks (*) denote a required field</p>
 						</div>
 					</div>
-					<form class="form-horizontal" role="form" method="POST" action="/auth/billing">
+                    <!--<form class="form-horizontal" role="form" method="POST" action="/auth/billing"> -->
+					<form class="form-horizontal" role="form" method="POST" action="/auth/register">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
 							<label class="col-md-4 control-label">First Name *</label>
@@ -88,7 +89,7 @@
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<button type="submit" class="btn btn-primary">
-									Continue to Billing
+									Create Account
 								</button>
 							</div>
 						</div>
@@ -98,9 +99,9 @@
 		</div>
 		<div class="col-xs-12 col-md-4">
 			<div class="trial-info">
-				<h2>How the free trial works.</h2>
+				<!-- <h2>How the free trial works.</h2>
 				<p>Create an account with CataLex to gain free access to Law Browser for a trial period of 14 days. After that, the access fee is just NZ${{ Config::get('constants.monthly_price') }} per user per month.</p>
-				<p>You will need to enter your credit card details in order to create your account and have access to the free trial. However, we will not deduct any funds unless you elect to proceed with a paid subscription once the trial period is over.</p>
+				<p>You will need to enter your credit card details in order to create your account and have access to the free trial. However, we will not deduct any funds unless you elect to proceed with a paid subscription once the trial period is over.</p> -->
 				<img class="hidden-xs hidden-sm" src="/images/under-the-surface.jpg" alt="Find what's under the surface">
 			</div>
 		</div>

@@ -19,13 +19,13 @@ class UserCreateRequest extends BaseRequest {
 			'city' => 'max:255',
 			'state' => 'max:255',
 			'organisation_id' => 'required',
-			'billing_period' => 'in:monthly,annually',
+			//'billing_period' => 'in:monthly,annually',
 		];
 
 		if(Request::get('organisation_id') == 0) {
 			$rules['city'] = 'required|' . $rules['city'];
 			$rules['country'] = 'required';
-			$rules['billing_period'] = 'required|' . $rules['billing_period'];
+			//$rules['billing_period'] = 'required|' . $rules['billing_period'];
 		}
 
 		return $rules;

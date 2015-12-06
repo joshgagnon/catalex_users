@@ -11,8 +11,8 @@ class Kernel extends ConsoleKernel {
 	 * @var array
 	 */
 	protected $commands = [
-		'App\Console\Commands\SendExpiredTrialEmails',
-		'App\Console\Commands\ChargeUsers',
+		//'App\Console\Commands\SendExpiredTrialEmails',
+		//'App\Console\Commands\ChargeUsers',
 	];
 
 	/**
@@ -22,7 +22,8 @@ class Kernel extends ConsoleKernel {
 	 * @return void
 	 */
 	protected function schedule(Schedule $schedule) {
-		$schedule->command('emails:trial-expiry')->dailyAt('20:00');
-		$schedule->command('billing:charge-all')->dailyAt('22:00');
+        // removed this tasks
+		//$schedule->command('emails:trial-expiry')->dailyAt('20:00');
+		//$schedule->command('billing:charge-all')->dailyAt('22:00');
 	}
 }

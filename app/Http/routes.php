@@ -23,6 +23,6 @@ Route::controllers([
 	'admin' => 'AdminController',
 	'user' => 'UserController',
 	'organisation' => 'OrganisationController',
-	'billing' => 'BillingController',
+	//'billing' => 'BillingController',
 ]);
 

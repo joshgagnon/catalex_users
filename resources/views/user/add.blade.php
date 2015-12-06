@@ -62,6 +62,7 @@ CataLex Law Browser - Add User
 								</select>
 							</div>
 						</div>
+                        <!--
 						<h4>Billing</h4>
 						<p>Only required with no assigned organisation</p>
 						<div class="row form-group">
@@ -76,6 +77,7 @@ CataLex Law Browser - Add User
 								</label>
 							</div>
 						</div>
+                        -->
 						<div class="row form-group">
 							<div class="col-xs-12">
 								<div class="checkbox">

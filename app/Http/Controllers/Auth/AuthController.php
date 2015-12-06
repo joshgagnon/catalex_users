@@ -56,12 +56,13 @@ class AuthController extends Controller {
 	}
 
 	public function postRegister(Request $request) {
-		if(!Session::has('register.personal')) {
-			return redirect()->action('Auth\AuthController@getRegister')->withErrors(['Session has expired, please try again.']);
-		}
+		//if(!Session::has('register.personal')) {
+		//	return redirect()->action('Auth\AuthController@getRegister')->withErrors(['Session has expired, please try again.']);
+		//}
 
 		// Fold previous step post data into this request
-		$request->replace($request->input() + Session::get('register.personal'));
+        //$request->replace($request->input() + Session::get('register.personal'));
+		$request->replace($request->input());
 
 		// For OAuth registrations, generate a long random password so we can
 		// still use Laravel default auth (ie. for password reset)
@@ -72,6 +73,7 @@ class AuthController extends Controller {
 		}
 
 		// Check that we got a valid billing token
+        /*
 		if(!(Session::has('billing.dps_billing_id') && Session::has('billing.date_expiry'))) {
 			if(env('DISABLE_PAYMENT', false)) {
 				Session::put('billing.dps_billing_id', 'xxxxxxxxxxxxxxxx');
@@ -80,7 +82,7 @@ class AuthController extends Controller {
 			else {
 				return redirect()->back()->withErrors(['You must verify your credit card before beginning the free trial. It will not be charged until the trial expires.']);
 			}
-		}
+		}*/
 
 		// Hand over to internal Laravel user setup
 		$response = $this->defaultPostRegister($request);
@@ -88,8 +90,8 @@ class AuthController extends Controller {
 		if(Auth::check()) {
 			// Success, oauth flow over
 			Session::forget('oauth.register');
-			Session::forget('billing.dps_billing_id');
-			Session::forget('billing.date_expiry');
+			//Session::forget('billing.dps_billing_id');
+			//Session::forget('billing.date_expiry');
 		}
 
 		return $response;

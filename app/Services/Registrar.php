@@ -40,13 +40,14 @@ class Registrar implements RegistrarContract {
 	public function create(array $data) {
 		$organisation = null;
 
+        /*
 		$billing = BillingDetail::create([
 			'period' => 'monthly',
 			'address_id' => null,
 			'dps_billing_token' => Session::get('billing.dps_billing_id'),
 			'expiry_date' => Session::get('billing.date_expiry'),
 			'last_billed' => null,
-		]);
+		]);*/
 
 		if(strlen(trim($data['business_name']))) {
 			$organisation = Organisation::create([
@@ -63,7 +64,7 @@ class Registrar implements RegistrarContract {
 			'password' => bcrypt($data['password']),
 			// User should belong to organisation of be billed directly, not both
 			'organisation_id' => $organisation ? $organisation->id : null,
-			'billing_detail_id' => $organisation ? null : $billing->id,
+			//'billing_detail_id' => $organisation ? null : $billing->id,
 		]);
 
 		// Add basic roles for the user
@@ -78,7 +79,7 @@ class Registrar implements RegistrarContract {
 		Mail::sendStyledMail('emails.welcome', [
 			'name' => $user->fullName(),
 			'email' => $user->email,
-			'trialEnd' => $trialEnd->format('F j'),
+			//'trialEnd' => $trialEnd->format('F j'),
 		], $user->email, $user->fullName(), 'Welcome to CataLex');
 
 		return $user;
