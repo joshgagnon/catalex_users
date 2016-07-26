@@ -4,12 +4,11 @@ use Auth;
 use Config;
 use Session;
 use App\User;
+use Validator;
 use App\Http\Requests\InitialRegisterRequest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 use OAuth\ServiceFactory;
@@ -47,14 +46,75 @@ class AuthController extends Controller {
 	 * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
 	 * @return void
 	 */
-	public function __construct(Guard $auth, Registrar $registrar)
+	public function __construct()
 	{
-		$this->auth = $auth;
-		$this->registrar = $registrar;
 
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
+    public function validator(array $data) {
+        return Validator::make($data, [
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|confirmed|min:6',
+            'business_name' => 'max:255',
+            'customer_agreement' => 'accepted',
+        ]);
+    }
 
+    /**
+     * Create a new user and optionally an organisation for non-invite registrations
+     *
+     * @param  array  $data
+     * @return User
+     */
+    public function create(array $data) {
+        $organisation = null;
+
+        /*
+        $billing = BillingDetail::create([
+            'period' => 'monthly',
+            'address_id' => null,
+            'dps_billing_token' => Session::get('billing.dps_billing_id'),
+            'expiry_date' => Session::get('billing.date_expiry'),
+            'last_billed' => null,
+        ]);*/
+
+        if(strlen(trim($data['business_name']))) {
+            $organisation = Organisation::create([
+                'name' => $data['business_name'],
+                'billing_detail_id' => $billing->id,
+                'free' => false,
+            ]);
+        }
+
+        $user = User::create([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            // User should belong to organisation of be billed directly, not both
+            'organisation_id' => $organisation ? $organisation->id : null,
+            //'billing_detail_id' => $organisation ? null : $billing->id,
+        ]);
+
+        // Add basic roles for the user
+        $user->addRole('registered_user');
+        // And org roles if registering as an organistaion - it's assumed the first user is an admin
+        if($organisation) {
+            $user->addRole('organisation_admin');
+        }
+
+        // Send out welcome email
+        $trialEnd = Carbon::now()->addMinutes(Config::get('constants.trial_length_minutes'));
+        Mail::sendStyledMail('emails.welcome', [
+            'name' => $user->fullName(),
+            'email' => $user->email,
+            //'trialEnd' => $trialEnd->format('F j'),
+        ], $user->email, $user->fullName(), 'Welcome to CataLex');
+
+        return $user;
+    }
 	public function postRegister(Request $request) {
 		//if(!Session::has('register.personal')) {
 		//	return redirect()->action('Auth\AuthController@getRegister')->withErrors(['Session has expired, please try again.']);
