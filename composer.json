@@ -11,7 +11,8 @@
 		"tijsverkoyen/css-to-inline-styles": "~1.5",
 		"doctrine/dbal": "2.5.*",
 		"omnipay/paymentexpress": "~2.0",
-		"guzzlehttp/guzzle": "^6.0"
+		"guzzlehttp/guzzle": "^6.0",
+        "lucadegasperi/oauth2-server-laravel": "5.1.*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

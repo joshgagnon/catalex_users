@@ -26,7 +26,9 @@
         "Illuminate\\Broadcasting\\BroadcastServiceProvider",
         "App\\Providers\\AppServiceProvider",
         "App\\Providers\\EventServiceProvider",
-        "App\\Providers\\RouteServiceProvider"
+        "App\\Providers\\RouteServiceProvider",
+        "LucaDegasperi\\OAuth2Server\\Storage\\FluentStorageServiceProvider",
+        "LucaDegasperi\\OAuth2Server\\OAuth2ServerServiceProvider"
     ],
     "eager": [
         "Illuminate\\Auth\\AuthServiceProvider",
@@ -42,7 +44,9 @@
         "Illuminate\\View\\ViewServiceProvider",
         "App\\Providers\\AppServiceProvider",
         "App\\Providers\\EventServiceProvider",
-        "App\\Providers\\RouteServiceProvider"
+        "App\\Providers\\RouteServiceProvider",
+        "LucaDegasperi\\OAuth2Server\\Storage\\FluentStorageServiceProvider",
+        "LucaDegasperi\\OAuth2Server\\OAuth2ServerServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
