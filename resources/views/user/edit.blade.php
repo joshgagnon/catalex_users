@@ -20,12 +20,8 @@ CataLex Law Browser - Edit User
 						<h4>Personal Details</h4>
 						<div class="form-group">
 							<div class="col-xs-12 col-md-6">
-								<label class="control-label">First Name</label>
-								<input type="text" class="form-control" name="first_name" value="{{ $subject->first_name }}">
-							</div>
-							<div class="col-xs-12 col-md-6">
-								<label class="control-label">Last Name</label>
-								<input type="text" class="form-control" name="last_name" value="{{ $subject->last_name }}">
+								<label class="control-label">Name</label>
+								<input type="text" class="form-control" name="first_name" value="{{ $subject->name }}">
 							</div>
 							<div class="col-xs-12">
 								<label class="control-label">E-Mail Address</label>

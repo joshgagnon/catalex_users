@@ -30,32 +30,28 @@ class TestDataSeeder extends Seeder {
 			'billing_detail_id' => $b1->id
 		]);
 		User::create([
-			'first_name' => 'Test1',
-			'last_name' => 'User1',
+			'name' => 'Test1 User1',
 			'email' => 'test1@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o1->id,
 			'active' => true,
 		]);
 		User::create([
-			'first_name' => 'Test2',
-			'last_name' => 'User2',
+			'name' => 'Test2 User2',
 			'email' => 'test2@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o1->id,
 			'active' => true,
 		]);
 		User::create([
-			'first_name' => 'Test3',
-			'last_name' => 'User3',
+			'name' => 'Test3 User3',
 			'email' => 'test3@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o1->id,
 			'active' => false,
 		]);
 		$u4 = User::create([
-			'first_name' => 'Test4',
-			'last_name' => 'User4',
+			'name' => 'Test4 User4',
 			'email' => 'test4@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o1->id,
@@ -63,8 +59,7 @@ class TestDataSeeder extends Seeder {
 		]);
 		$u4->delete();
 		$u5 = User::create([
-			'first_name' => 'Test5',
-			'last_name' => 'User5',
+			'name' => 'Test5 User5',
 			'email' => 'test5@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o1->id,
@@ -87,32 +82,28 @@ class TestDataSeeder extends Seeder {
 			'billing_detail_id' => $b2->id
 		]);
 		User::create([
-			'first_name' => 'Test6',
-			'last_name' => 'User6',
+			'name' => 'Test6 User6',
 			'email' => 'test6@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o2->id,
 			'active' => true,
 		]);
 		User::create([
-			'first_name' => 'Test7',
-			'last_name' => 'User7',
+			'name' => 'Test7 User7',
 			'email' => 'test7@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o2->id,
 			'active' => true,
 		]);
 		User::create([
-			'first_name' => 'Test8',
-			'last_name' => 'User8',
+			'name' => 'Test8 User8',
 			'email' => 'test8@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o2->id,
 			'active' => false,
 		]);
 		$u9 = User::create([
-			'first_name' => 'Test9',
-			'last_name' => 'User9',
+			'name' => 'Test9 User9',
 			'email' => 'test9@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o2->id,
@@ -120,8 +111,7 @@ class TestDataSeeder extends Seeder {
 		]);
 		$u9->delete();
 		$u10 = User::create([
-			'first_name' => 'Test10',
-			'last_name' => 'User10',
+			'name' => 'Test10 User10',
 			'email' => 'test10@example.com',
 			'password' => bcrypt('password'),
 			'organisation_id' => $o2->id,

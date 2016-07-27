@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['first_name', 'last_name', 'email', 'password', 'organisation_id', 'billing_detail_id'];
+	protected $fillable = ['name', 'email', 'password', 'organisation_id', 'billing_detail_id'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -53,7 +53,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	public function fullName() {
-		return $this->first_name . ' ' . $this->last_name;
+		return  $this->name;
 	}
 
 	public function billingExempt() {

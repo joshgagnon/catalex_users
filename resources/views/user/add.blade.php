@@ -17,12 +17,8 @@ CataLex Law Browser - Add User
 						<h4>Personal Details</h4>
 						<div class="row form-group">
 							<div class="col-xs-12 col-md-6">
-								<label class="control-label">First Name</label>
-								<input type="text" class="form-control" name="first_name" value="{{ old('first_name') }}">
-							</div>
-							<div class="col-xs-12 col-md-6">
-								<label class="control-label">Last Name</label>
-								<input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}">
+								<label class="control-label">Name</label>
+								<input type="text" class="form-control" name="name" value="{{ old('name') }}">
 							</div>
 							<div class="col-xs-12">
 								<label class="control-label">E-Mail Address</label>
