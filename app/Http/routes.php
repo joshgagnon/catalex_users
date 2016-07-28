@@ -11,50 +11,47 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
-Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
-Route::get('/termsofuse', 'LegalController@termsofuse');
-Route::get('/customeragreement', 'LegalController@customeragreement');
-Route::get('/privacypolicy', 'LegalController@privacypolicy');
+Route::group(['middleware' => 'csrf'], function() {
+    Route::get('/', 'HomeController@index');
+    Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
+    Route::get('/termsofuse', 'LegalController@termsofuse');
+    Route::get('/customeragreement', 'LegalController@customeragreement');
+    Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-	'admin' => 'AdminController',
-	'user' => 'UserController',
-	'organisation' => 'OrganisationController',
-	//'billing' => 'BillingController',
-]);
+    Route::controllers([
+    	'auth' => 'Auth\AuthController',
+    	//'billing' => 'BillingController',
+    ]);
+
+    Route::group(['middleware' => 'auth'], function() {
+        Route::controllers([
+            'password' => 'Auth\PasswordController',
+            'admin' => 'AdminController',
+            'user' => 'UserController',
+            'organisation' => 'OrganisationController',
+            //'billing' => 'BillingController',
+        ]);
+    });
+
+
+
+});
+
 
 Route::post('oauth/access_token', function() {
-    // check credentails here
     return Response::json(Authorizer::issueAccessToken());
 });
 
 
-/*
 
-Route::get('private', function()
-{
-    $bridgedRequest  = OAuth2\HttpFoundationBridge\Request::createFromRequest(Request::instance());
-    $bridgedResponse = new OAuth2\HttpFoundationBridge\Response();
-
-    if (App::make('oauth2')->verifyResourceRequest($bridgedRequest, $bridgedResponse)) {
-
-        $token = App::make('oauth2')->getAccessTokenData($bridgedRequest);
-
-        return Response::json(array(
-            'private' => 'stuff',
-            'user_id' => $token['user_id'],
-            'client'  => $token['client_id'],
-            'expires' => $token['expires'],
-        ));
-    }
-    else {
-        return Response::json(array(
-            'error' => 'Unauthorized'
-        ), $bridgedResponse->getStatusCode());
-    }
+Route::group(['prefix'=>'api', 'middleware' => 'oauth'], function() {
+    Route::get('/user', 'UserController@info');
 });
 
-*/
+
+Route::get('login/law-browser', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function() {
+    $params = Authorizer::getAuthCodeRequestParams();
+    $params['user_id'] = Auth::user()->id;
+    $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
+    return Redirect::to($redirectUri);
+}]);

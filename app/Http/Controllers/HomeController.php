@@ -1,9 +1,10 @@
 <?php namespace App\Http\Controllers;
 
 use Auth;
-use Mail; // TODO: Remove
-use File; // TODO: Remove
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
+use DB;
+use League\OAuth2\Server\Entity\ClientEntity;
 
 class HomeController extends Controller {
 
@@ -44,16 +45,13 @@ class HomeController extends Controller {
 		if(!$user->hasBrowserAccess()) {
 			return view('auth.denied');
 		}
-
-		$userId = $user->id;
-		$fullName = $user->fullName();
-		$timestamp = time(); // UTC
-		$admin = $user->hasRole('admin') ? 'true' : 'false';
-		$message = env('BROWSER_LOGIN_URL', null) . $userId . $fullName . $timestamp . $admin;
-
-		$digest = hash_hmac('sha256', $message, env('SSO_SHARED_SECRET', null));
-
-		$redirect = env('BROWSER_LOGIN_URL', null) . '?user_id=' . $userId . '&name=' . $fullName . '&timestamp=' . $timestamp  . '&admin=' . $admin. '&code=' . $digest;
+        $params = Authorizer::getAuthCodeRequestParams();
+        $client =  DB::table('oauth_clients')->where('name', 'Law Browser')->first();
+        $params['client_id'] = $client->id;
+        $params['user_id'] = Auth::user()->id;
+        $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000');
+        $params['response_type'] = 'code';
+        $redirect = '/login/law-browser?' . (http_build_query($params));
 		return redirect($redirect);
 	}
 }

@@ -6,6 +6,8 @@ use App\Role;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserEditRequest;
+use LucaDegasperi\OAuth2Server\Authorizer;
+use Response;
 
 class UserController extends Controller {
 
@@ -15,7 +17,6 @@ class UserController extends Controller {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->middleware('auth');
 	}
 
 	/**
@@ -191,4 +192,13 @@ class UserController extends Controller {
 
 		return view('auth.denied');
 	}
+
+    public function info(Authorizer $authorizer)
+    {
+        $user_id=$authorizer->getResourceOwnerId(); // the token user_id
+        error_log($user_id);
+        $user= User::find($user_id);// get the user data from database
+        error_log($user->name);
+        return $user->toJson();
+    }
 }
