@@ -2,28 +2,71 @@
 
 @import 'bootstrap/bootstrap';
 
-@import '../../../node_modules/catalex_shared/sass/catalex-common';
+$header-height: 100px;
+$header-height-sml: 50px;
 
-// TODO: Move to common?
-#app-navbar-collapse {
-	margin-left: 173px;
-	.chev-left {
-		left: -306px;
-	}
+@import '../../../node_modules/catalex_shared/sass/catalex-common';
+@import '../../../node_modules/catalex_shared/sass/catalex-footer';
+
+body{
+        -webkit-font-smoothing: antialiased;
 }
+
+nav.navbar{
+    height: $header-height-sml;
+    min-height: $header-height-sml;
+
+    @media (min-width: $screen-sm-min) {
+        height: $header-height;
+        min-height: $header-height;
+    }
+    .navbar-toggle{
+        margin: 9px;
+    }
+    a.nav-brand{
+        color: white;
+
+        font-size: 30px;
+        line-height: $header-height-sml;
+        margin-left: 1em;
+        @media (min-width: $screen-sm-min) {
+            font-size: 60px;
+            line-height: $header-height;
+            margin-left:0;
+        }
+        .catalex-brand-1{
+            font-weight: 100;
+        }
+        .catalex-brand-2{
+            font-weight: 500;
+        }
+        a:hover{
+            text-decoration:none;
+        }
+    }
+
+    .navbar-collapse.in li{
+        background-color: $light-red;
+            z-index: 1;
+        & > a {
+            font-size: 1.0em;
+        }
+    }
+}
+
 
 ul.social-logins {
 	list-style: none;
 	padding-left: 0;
 
-	> li {
+	& > li {
 		float: left;
 		margin-right: 8px;
 	}
 }
 
 .small-social {
-	max-height: 1.15em;
+	max-height: 1.5em;
 	vertical-align: top;
 }
 
@@ -90,34 +133,15 @@ form.form-inline .form-group label {
 	width: 100px;
 }
 
-// Sticky footer styles
-$large-footer-height: 160px;
-$small-footer-height: 240px;
+
 html {
 	position: relative;
 	min-height: 100%;
 }
-body {
-	margin-bottom: $small-footer-height;
-	@media (min-width: $screen-sm-min) {
-		margin-bottom: $large-footer-height;
-	}
-}
-.footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: $small-footer-height;
-	@media (min-width: $screen-sm-min) {
-		height: $large-footer-height;
-	}
-	padding-top: 24px;
-	color: $footer-text;
-	background-color: $footer-bg;
-	font-size: 13px;
 
-	.links a {
-		text-transform: uppercase;
-		padding: 0 10px;
-	}
+
+footer{
+    p{
+        margin: 1em 0;
+    }
 }

@@ -46,10 +46,9 @@ class HomeController extends Controller {
 			return view('auth.denied');
 		}
         $params = Authorizer::getAuthCodeRequestParams();
-        $client =  DB::table('oauth_clients')->where('name', 'Law Browser')->first();
+        $client = DB::table('oauth_clients')->where('name', 'Law Browser')->first();
         $params['client_id'] = $client->id;
-        $params['user_id'] = Auth::user()->id;
-        $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000');
+        $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000/login');
         $params['response_type'] = 'code';
         $redirect = '/login/law-browser?' . (http_build_query($params));
 		return redirect($redirect);

@@ -20,12 +20,12 @@ Route::group(['middleware' => 'csrf'], function() {
 
     Route::controllers([
     	'auth' => 'Auth\AuthController',
-    	//'billing' => 'BillingController',
+        'password' => 'Auth\PasswordController',
+        //'billing' => 'BillingController',
     ]);
 
     Route::group(['middleware' => 'auth'], function() {
         Route::controllers([
-            'password' => 'Auth\PasswordController',
             'admin' => 'AdminController',
             'user' => 'UserController',
             'organisation' => 'OrganisationController',
@@ -41,7 +41,6 @@ Route::group(['middleware' => 'csrf'], function() {
 Route::post('oauth/access_token', function() {
     return Response::json(Authorizer::issueAccessToken());
 });
-
 
 
 Route::group(['prefix'=>'api', 'middleware' => 'oauth'], function() {

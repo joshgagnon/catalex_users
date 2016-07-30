@@ -57,9 +57,8 @@ table {
 td {
   word-break: break-word;
   -webkit-hyphens: auto;
-  -moz-hyphens: auto;
   -ms-hyphens: auto;
-      hyphens: auto;
+  hyphens: auto;
   border-collapse: collapse !important; }
 
 table, tr, td {
@@ -715,9 +714,7 @@ table.button td, table.tiny-button td, table.small-button td, table.medium-butto
 
 a {
   color: #d11820; }
-  a:hover,
-  a:focus,
-  a:visited {
+  a:hover, a:focus, a:visited {
     color: #8c1015 !important;
     text-decoration: underline; }
 

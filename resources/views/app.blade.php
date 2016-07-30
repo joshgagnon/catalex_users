@@ -32,17 +32,17 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="pull-left" href="/"><img alt="CataLex" src="/images/law-browser.png"></a>
+				<a class="nav-brand" href="/"><span class="catalex-brand-1">Cata</span><span class="catalex-brand-2">Lex</span></a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="app-navbar-collapse">
-				<img class="chev-left" src="/images/left-chevron.png"/><img class="chev-right" src="/images/right-chevron.png"/>
 				<ul class="nav navbar-nav navbar-right">
 					@if(Auth::guest())
 						<li><a href="{{ action('Auth\AuthController@getLogin') }}">Login</a></li>
 						<li><a href="{{ action('Auth\AuthController@getRegister') }}">Sign Up</a></li>
 					@elseif(isset($user)) {{-- Move View::share(['user'] such that $user is always correctly available here --}}
 						{{-- TODO: Use route helper --}}
+                        <li><a href="/">Services</a></li>
 						@if($user->hasRole('global_admin'))
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
@@ -70,15 +70,17 @@
 	</nav>
 
 	@yield('content')
-
-	<footer class="footer">
-		<div class="container text-center">
-			<p class="copyright">© Copyright {{ date('Y') }} - CataLex Limited. All rights reserved.</p>
-			<p class="links"><a href="/customeragreement">Customer Agreement</a><a href="/privacypolicy">Privacy Policy</a><a href="/termsofuse">Law Browser Terms of Use</a></p>
-			<p>P: C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland, 0620, New Zealand</p>
-			<p>E: <a href="mailto:mail@catalex.nz">mail@catalex.nz</a> &nbsp; M: +64 274 538 552</p>
-		</div>
-	</footer>
+    <footer>
+        <div class="container">
+                <p class="copyright">© Copyright {{ date('Y') }} - CataLex® Limited. All rights reserved.  “CataLex” is a registered trademark of CataLex Limited</p>
+                    <a href="//catalex.nz">Home</a>
+                    <a href="//users.catalex.nz/customeragreement">Customer Agreement</a>
+                    <a href="//users.catalex.nz/privacypolicy">Privacy Policy</a>
+                    <a href="//users.catalex.nz/termsofuse">Terms of Use</a>
+                    <p>C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland, 0620, New Zealand</p>
+            <p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
+        </div>
+    </footer>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>

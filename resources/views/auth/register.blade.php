@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12 col-md-8">
+		<div class="col-xs-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					@if(Session::get('oauth.register', false))
@@ -89,14 +89,6 @@
 						</div>
 					</form>
 				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-md-4">
-			<div class="trial-info">
-				<!-- <h2>How the free trial works.</h2>
-				<p>Create an account with CataLex to gain free access to Law Browser for a trial period of 14 days. After that, the access fee is just NZ${{ Config::get('constants.monthly_price') }} per user per month.</p>
-				<p>You will need to enter your credit card details in order to create your account and have access to the free trial. However, we will not deduct any funds unless you elect to proceed with a paid subscription once the trial period is over.</p> -->
-				<img class="hidden-xs hidden-sm" src="/images/under-the-surface.jpg" alt="Find what's under the surface">
 			</div>
 		</div>
 	</div>
