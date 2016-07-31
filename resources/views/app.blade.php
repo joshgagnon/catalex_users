@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>
 	@section('title')
-		CataLex Law Browser
+		CataLex
 	@show
 	</title>
 

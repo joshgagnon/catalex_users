@@ -45,6 +45,10 @@ trait Billable {
 		return $this->billingExempt() || $this->inTrial() || $this->isPaid();
 	}
 
+    public function hasGoodCompaniesAccess() {
+        return $this->billingExempt() || $this->inTrial() || $this->isPaid();
+    }
+
 	public function everBilled() {
 		$organisation = $this->organisation;
 

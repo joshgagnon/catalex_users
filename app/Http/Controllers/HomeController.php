@@ -47,10 +47,33 @@ class HomeController extends Controller {
 		}
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Law Browser')->first();
+        if(!$client) {
+            return view('auth.denied');
+        }
         $params['client_id'] = $client->id;
         $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000/login');
         $params['response_type'] = 'code';
         $redirect = '/login/law-browser?' . (http_build_query($params));
 		return redirect($redirect);
 	}
+
+    public function getGoodCompaniesLogin() {
+        $user = Auth::user();
+
+        if(!$user->hasGoodCompaniesAccess()) {
+            return view('auth.denied');
+        }
+        $params = Authorizer::getAuthCodeRequestParams();
+        $client = DB::table('oauth_clients')->where('name', 'Good Companies')->first();
+        if(!$client) {
+            return view('auth.denied');
+        }
+        $params['client_id'] = $client->id;
+        $params['redirect_uri'] = env('GOOD_COMPANIES_LOGIN_URL', 'http://localhost:5667/login');
+        $params['response_type'] = 'code';
+        $redirect = '/login/good-companies?' . (http_build_query($params));
+        return redirect($redirect);
+    }
+
 }
+
