@@ -7,10 +7,21 @@ $header-height-sml: 50px;
 
 @import '../../../node_modules/catalex_shared/sass/catalex-common';
 @import '../../../node_modules/catalex_shared/sass/catalex-footer';
+html {
+    position: relative;
+    min-height: 100%;
+}
 
 body{
         -webkit-font-smoothing: antialiased;
 }
+
+footer{
+    p{
+        margin: 1em 0;
+    }
+}
+
 
 nav.navbar{
     height: $header-height-sml;
@@ -29,7 +40,7 @@ nav.navbar{
         font-size: 30px;
         line-height: $header-height-sml;
         margin-left: 1em;
-        @media (min-width: $screen-sm-min) {
+    @media (min-width: $screen-sm-min) {
             font-size: 60px;
             line-height: $header-height;
             margin-left:0;
@@ -50,6 +61,26 @@ nav.navbar{
             z-index: 1;
         & > a {
             font-size: 1.0em;
+        }
+    }
+}
+
+
+.services{
+    .service{
+        text-align: center;
+        .image-button{
+            background-color: $light-red;
+            max-width: 300px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 8px;
+            display:inline-block;
+            margin: 20px 0;
+            img{
+
+                width:100%;
+            }
         }
     }
 }
@@ -134,14 +165,4 @@ form.form-inline .form-group label {
 }
 
 
-html {
-	position: relative;
-	min-height: 100%;
-}
 
-
-footer{
-    p{
-        margin: 1em 0;
-    }
-}

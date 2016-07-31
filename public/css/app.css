@@ -5667,8 +5667,15 @@ body {
     body {
       margin-bottom: 220px; } }
 
+html {
+  position: relative;
+  min-height: 100%; }
+
 body {
   -webkit-font-smoothing: antialiased; }
+
+footer p {
+  margin: 1em 0; }
 
 nav.navbar {
   height: 50px;
@@ -5700,6 +5707,19 @@ nav.navbar {
     z-index: 1; }
     nav.navbar .navbar-collapse.in li > a {
       font-size: 1.0em; }
+
+.services .service {
+  text-align: center; }
+  .services .service .image-button {
+    background-color: #c51b24;
+    max-width: 300px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 20px 0; }
+    .services .service .image-button img {
+      width: 100%; }
 
 ul.social-logins {
   list-style: none;
@@ -5752,12 +5772,5 @@ form.form-inline .form-group label {
 
 .tabular label {
   width: 100px; }
-
-html {
-  position: relative;
-  min-height: 100%; }
-
-footer p {
-  margin: 1em 0; }
 
 /*# sourceMappingURL=app.css.map */
