@@ -118,8 +118,7 @@ class UserController extends Controller {
 	private function updateUser($input) {
 		$user = User::find($input['user_id']);
 
-		$user->first_name = $input['first_name'];
-		$user->last_name = $input['last_name'];
+		$user->name = $input['name'];
 		$user->email = $input['email'];
 
 		if(strlen($input['new_password'])) {

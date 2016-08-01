@@ -25,7 +25,7 @@ Route::group(['middleware' => 'csrf'], function() {
 
     Route::group(['middleware' => 'auth'], function() {
         Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
-        Route::get('/companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin']);
+        Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin']);
         Route::controllers([
             'admin' => 'AdminController',
             'user' => 'UserController',

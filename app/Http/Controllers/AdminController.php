@@ -94,8 +94,7 @@ class AdminController extends Controller {
 		$data = $request->all();
 
 		$userData = [
-			'first_name' => $data['first_name'],
-			'last_name' => $data['last_name'],
+			'name' => $data['name'],
 			'email' => $data['email'],
 			'password' => bcrypt(str_random(40)),
 			'organisation_id' => null,
@@ -192,7 +191,7 @@ class AdminController extends Controller {
 	}
 
 	private function postAddMembers(Request $request, Organisation $organisation) {
-		$total = count($request->get('first_name'));
+		$total = count($request->get('name'));
 
 		$input = $request->all();
 
@@ -201,25 +200,22 @@ class AdminController extends Controller {
 
 		for($i = 0; $i < $total; $i++) {
 			$validator = Validator::make([
-				'first_name' => $input['first_name'][$i],
-				'last_name' => $input['last_name'][$i],
+				'name' => $input['name'][$i],
 				'email' => $input['email'][$i],
 			], [
-				'first_name' => 'required|max:255',
-				'last_name' => 'required|max:255',
+				'name' => 'required|max:255',
 				'email' => 'required|email|max:255|unique:users',
 			]);
 
 			if($validator->fails()) {
-				$failed[] = $input['first_name'][$i] . ' ' . $input['last_name'][$i] . ' <' . $input['email'][$i] . '>';
+				$failed[] = $input['name'][$i] . ' <' . $input['email'][$i] . '>';
 				continue;
 			}
 
 			// TODO: Share code with OrganisationController@postInvite
 			// Create a user for the invitee with random password
 			$user = User::create([
-				'first_name' => $input['first_name'][$i],
-				'last_name' => $input['last_name'][$i],
+				'name' => $input['name'][$i],
 				'email' => $input['email'][$i],
 				'password' => bcrypt(str_random(40)),
 				'organisation_id' => $organisation->id,

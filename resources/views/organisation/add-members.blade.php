@@ -14,12 +14,8 @@ CataLex Law Browser - Add Organisation Members
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 				<div id="first-row" class="invite-row">
 					<div class="form-group">
-						<label for="first_name">First Name</label>
-						<input type="text" class="form-control" id="first_name" name="first_name[]">
-					</div>
-					<div class="form-group">
-						<label for="first_name">Last Name</label>
-						<input type="text" class="form-control" id="last_name" name="last_name[]">
+						<label for="first_name">Name</label>
+						<input type="text" class="form-control" id="first_name" name="name[]">
 					</div>
 					<div class="form-group">
 						<label for="first_name">E-Mail</label>

@@ -11,8 +11,7 @@ class UserCreateRequest extends BaseRequest {
 	 */
 	public function rules() {
 		$rules = [
-			'first_name' => 'required|max:255',
-			'last_name' => 'required|max:255',
+			'name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users',
 			'address_line_1' => 'max:255',
 			'address_line_2' => 'max:255',

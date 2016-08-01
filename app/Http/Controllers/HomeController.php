@@ -69,7 +69,7 @@ class HomeController extends Controller {
             return view('auth.denied');
         }
         $params['client_id'] = $client->id;
-        $params['redirect_uri'] = env('GOOD_COMPANIES_LOGIN_URL', 'http://localhost:5667/login');
+        $params['redirect_uri'] = env('GOOD_COMPANIES_LOGIN_URL', 'http://localhost:5667/auth/catalex/login');
         $params['response_type'] = 'code';
         $redirect = '/login/good-companies?' . (http_build_query($params));
         return redirect($redirect);

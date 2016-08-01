@@ -9,8 +9,7 @@ class InviteFormRequest extends FormRequest {
 	public function rules() {
 		// TODO: Can Laravel validate as array-of-emails?
 		return [
-			'first_name' => 'required|max:255',
-			'last_name' => 'required|max:255',
+			'name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users',
 		];
 	}

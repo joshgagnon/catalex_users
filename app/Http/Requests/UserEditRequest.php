@@ -16,8 +16,7 @@ class UserEditRequest extends BaseRequest {
 		$lastSegment = end((array_values(Request::segments()))); // Extra parens to force array copy
 
 		$rules = [
-			'first_name' => 'required|max:255',
-			'last_name' => 'required|max:255',
+			'name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users,email,',
 			'new_password' => 'confirmed|min:6',
 		];

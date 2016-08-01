@@ -11,8 +11,7 @@ class InitialRegisterRequest extends BaseRequest {
 	 */
 	public function rules() {
 		return [
-			'first_name' => 'required|max:255',
-			'last_name' => 'required|max:255',
+			'name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users',
 			'password' => 'required|confirmed|min:6',
 			'business_name' => 'max:255',

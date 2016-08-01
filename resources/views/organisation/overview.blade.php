@@ -16,12 +16,8 @@ CataLex Law Browser - {{ $organisation->name }}
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<h4>Add users</h4>
 					<div class="form-group">
-						<label for="first_name">First Name</label>
-						<input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}">
-					</div>
-					<div class="form-group">
-						<label for="first_name">Last Name</label>
-						<input type="text" class="form-control" id="last_name" name="last_name" value="{{ old('last_name') }}">
+						<label for="first_name">Name</label>
+						<input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
 					</div>
 					<div class="form-group">
 						<label for="first_name">E-Mail</label>

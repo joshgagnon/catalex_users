@@ -21,7 +21,7 @@ CataLex Law Browser - Edit User
 						<div class="form-group">
 							<div class="col-xs-12 col-md-6">
 								<label class="control-label">Name</label>
-								<input type="text" class="form-control" name="first_name" value="{{ $subject->name }}">
+								<input type="text" class="form-control" name="name" value="{{ $subject->name }}">
 							</div>
 							<div class="col-xs-12">
 								<label class="control-label">E-Mail Address</label>

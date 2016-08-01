@@ -71,8 +71,7 @@ class OrganisationController extends Controller {
 
 		// Create a user for the invitee with random password
 		$user = User::create([
-			'first_name' => $data['first_name'],
-			'last_name' => $data['last_name'],
+			'name' => $data['name'],
 			'email' => $data['email'],
 			'password' => bcrypt(str_random(40)),
 			'organisation_id' => $organisation->id,

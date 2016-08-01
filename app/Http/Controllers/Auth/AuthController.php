@@ -279,7 +279,7 @@ class AuthController extends Controller {
 			}
 			else {
 				Session::put('oauth.register', true);
-				Session::put('oauth.first_name', $name);
+				Session::put('oauth.name', $name);
 				Session::put('oauth.email', $primary);
 				return redirect()->action('Auth\AuthController@getRegister');
 			}
@@ -328,8 +328,7 @@ class AuthController extends Controller {
 			}
 
 			Session::put('oauth.register', true);
-			Session::put('oauth.first_name', $firstName);
-			Session::put('oauth.last_name', $lastName);
+			Session::put('oauth.name', $firstName);
 			Session::put('oauth.email', $email);
 			return redirect()->action('Auth\AuthController@getRegister');
 		}
