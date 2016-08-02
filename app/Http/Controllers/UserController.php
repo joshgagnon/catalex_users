@@ -195,9 +195,7 @@ class UserController extends Controller {
     public function info(Authorizer $authorizer)
     {
         $user_id=$authorizer->getResourceOwnerId(); // the token user_id
-        error_log($user_id);
         $user= User::find($user_id);// get the user data from database
-        error_log($user->name);
         return $user->toJson();
     }
 }
