@@ -3,6 +3,7 @@
 use Auth;
 use Config;
 use Session;
+use App\Library\Mail;
 use App\User;
 use Validator;
 use App\Http\Requests\InitialRegisterRequest;
@@ -21,7 +22,7 @@ use Omnipay\Omnipay;
 
 class AuthController extends Controller {
 
-	protected $redirectTo = '/browser-login';
+	protected $redirectTo = '/';
 
 	/*
 	|--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ class AuthController extends Controller {
 
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
+
     public function validator(array $data) {
         return Validator::make($data, [
             'name' => 'required|max:255',
