@@ -1,11 +1,12 @@
 <?php namespace App\Models;
 
 use Log;
-use Auth; // TODO: Remove
 use Config;
+use App\ChargeLog;
 use Carbon\Carbon;
 use App\Library\Mail;
 use GuzzleHttp\Client;
+use App\Library\Billing;
 
 trait Billable {
 
@@ -83,8 +84,11 @@ trait Billable {
 	public function rebill() {
 		if($this->billingExempt()) return true;
 
-		// Don't do anything for users belonging to an organisation
-		if($this->organisation) return true;
+		// Delegate rebilling to organisation if present
+		if($this->organisation) {
+			return $this->organisation->rebill();
+		}
+
 
 		// Is this already paid for today?
 		if($this->paid_until && Carbon::now()->lt($this->paid_until)) return true;
@@ -140,8 +144,20 @@ trait Billable {
 	 * @return bool
 	 */
 	private function charge($amount) {
+		$log = new ChargeLog([
+			'success' => false,
+			'user_id' => $this instanceof \App\User ? $this->id : null,
+			'organisation_id' => $this instanceof \App\Organisation ? $this->id : null,
+			'total_amount' => $amount,
+			'gst' => Billing::includingGst($amount),
+		]);
+
 		if(env('DISABLE_PAYMENT', false)) {
 			Log::info('Simulated charge of $' . $amount . ' to ' . get_class($this) . ' ' . $this->id);
+
+			$log->success = true;
+			$log->save();
+
 			return true;
 		}
 
@@ -160,11 +176,15 @@ trait Billable {
 		$xmlResponse = new \SimpleXMLElement((string)$response->getBody());
 
 		if(!boolval((string)$xmlResponse->Success)) {
-			// TODO: record failure in charge_log
+			$log->success = false;
+			$log->save();
+
 			return false;
 		}
 
-		// TODO: record success in charge_log
+		$log->success = true;
+		$log->save();
+
 		return true;
 	}
 }

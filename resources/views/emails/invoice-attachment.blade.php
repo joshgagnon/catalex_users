@@ -124,7 +124,7 @@
 		<div class="half right b">GST Component</div>
 		<div class="half">
 			<div class="row">
-				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">{{ bcmul($type === 'subscription' ? $listItem[3] : $listItem[1], '0.13043478260869565217', 2) }}</div>
+				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">{{ App\Library\Billing::includingGst($type === 'subscription' ? $listItem[3] : $listItem[1]) }}</div>
 			</div>
 		</div>
 	</div>
