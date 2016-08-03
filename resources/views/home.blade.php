@@ -21,7 +21,7 @@
                         <div class="col-md-6 service">
 
                         @if($user->hasGoodCompaniesAccess())
-                            <p><a href="{{ route('good-companies-login') }}"><span class="image-button"><img src="/images/good-company-lg.png"/></span><br/>Go to Good Companies</a></p>
+                            <p><a href="{{ route('good-companies-login') }}"><span class="image-button"><img src="/images/good-company-lg.png"/></span><br/>Go to Good Companies (In Development)</a></p>
                         @elseif($user->everBilled()/*TODO: && $user->can('editpaymentdetails')*/)
                             <p>You last billing cycle has not completed correctly. Please <a href="#TODO">click here</a> to update your payment details.</p>
                         @else
