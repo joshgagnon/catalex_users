@@ -43,11 +43,11 @@ trait Billable {
 	}
 
 	public function hasBrowserAccess() {
-		return $this->billingExempt() || $this->inTrial() || $this->isPaid();
+		return true; ///$this->billingExempt() || $this->inTrial() || $this->isPaid();
 	}
 
     public function hasGoodCompaniesAccess() {
-        return $this->billingExempt() || $this->inTrial() || $this->isPaid();
+        return true; //$this->billingExempt() || $this->inTrial() || $this->isPaid();
     }
 
 	public function everBilled() {
