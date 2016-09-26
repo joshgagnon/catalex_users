@@ -12,7 +12,7 @@
                                 <td>
                                     <h2 class="center">Companies Imported</h2>
                                     <p>Hi {{ $name }}</p>
-                                    <p>Your bulk import of {{ $companyCount }} companies has finished.  You can view them <a href={{ $link }}>here</a>.</p>
+                                    <p>Good Companies as successfully bulk imported <strong>{{ $successCount }}</strong> of <strong>{{ $totalCount }}</strong> companies.  You can view them <a href={{ $link }}>here</a>.</p>
                                     <p>Best regards</p>
                                     <p>The CataLex team</p>
                                     <p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>

@@ -26,10 +26,10 @@ class MailController extends Controller
             ->where('id', $request->input('client_id'))
             ->where('secret', $request->input('client_secret'))
             ->first();
+
         if(!$client) {
             return view('auth.denied');
         }
-
         Mail::sendStyledMail($request->input('template'),  json_decode($request->input('data', '{}'), true), $request->input('email', ''), $request->input('name', ''), $request->input('subject', ''));
 
         return Response::json(['message' => 'mail sent']);

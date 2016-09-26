@@ -1,5 +1,6 @@
 <?php namespace App\Library;
 
+use Log;
 use File;
 use Mail as LaravelMail;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
@@ -13,7 +14,7 @@ class Mail {
 
 		$inliner = new CssToInlineStyles($html, $css);
 		$markup = $inliner->convert();
-
+        Log::info('Sending email to' . $receiverEmail);
 		return LaravelMail::send('emails.echo', ['html' => $markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachment) {
 			$message->to($receiverEmail, $receiverName)->subject($subject);
 			if($attachment) {
