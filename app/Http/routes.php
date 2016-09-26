@@ -62,3 +62,6 @@ Route::get('login/good-companies', ['middleware' => ['check-authorization-params
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
     return Redirect::to($redirectUri);
 }]);
+
+Route::post('mail/send', 'MailController@send');
+Route::post('mail/view', 'MailController@view');

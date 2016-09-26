@@ -21,4 +21,15 @@ class Mail {
 			}
 		});
 	}
+
+    public static function render($view, $data, $receiverEmail, $receiverName, $subject, $attachment=null) {
+        $html = view($view, $data)->render();
+
+        $css = File::get(public_path('/css/email.css'));
+
+        $inliner = new CssToInlineStyles($html, $css);
+        $markup = $inliner->convert();
+        return $markup;
+    }
+
 }
