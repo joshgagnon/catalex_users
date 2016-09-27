@@ -5,6 +5,7 @@ use Config;
 use Session;
 use App\Library\Mail;
 use App\User;
+use App\Organisation;
 use Validator;
 use App\Http\Requests\InitialRegisterRequest;
 use Carbon\Carbon;
@@ -84,8 +85,8 @@ class AuthController extends Controller {
         if(strlen(trim($data['business_name']))) {
             $organisation = Organisation::create([
                 'name' => $data['business_name'],
-                'billing_detail_id' => $billing->id,
-                'free' => false,
+                //'billing_detail_id' => $billing->id,
+                'free' => true,
             ]);
         }
 
