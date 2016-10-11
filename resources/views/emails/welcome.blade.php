@@ -12,7 +12,7 @@
 								<td>
 									<h2 class="center">Welcome to CataLex</h2>
 									<p>Hi {{ $name }},</p>
-									<p>Thanks for signing up with CataLex &mdash; the legal catalyst. You can now <a href="{{ route('browser-login') }}">save and load sessions with Law Browser here</a>, and as well try out our new service <a href="{{ route('goodcompanies-login') }}">Good Companies (in development)</a>.</p>
+									<p>Thanks for signing up with CataLex &mdash; the legal catalyst. You can now <a href="{{ route('browser-login') }}">save and load sessions with Law Browser here</a>, and as well try out our new service <a href="{{ route('good-companies-login') }}">Good Companies (in development)</a>.</p>
 									<p>Your username is: {{ $email }}</p>
 									<p>Remember to login in if you wish to save your sessions.</p>
 									<p>If you want to invite other people to use Law Browser, you can become an administrator for an organisation. <a href="{{ action('HomeController@index') }}">Click here</a> to get started.</p>
