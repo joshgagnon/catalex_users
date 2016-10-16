@@ -31,7 +31,7 @@ class AdminController extends Controller {
 	public function getUsers() {
 		$showDeleted = Input::has('deleted') && boolval(Input::get('deleted'));
 
-		$userModel = User::withInactive()->orderBy('created_at');
+		$userModel = User::withInactive()->orderBy('name');
 		if($showDeleted) {
 			$userModel = $userModel->withTrashed();
 		}

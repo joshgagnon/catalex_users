@@ -3,7 +3,8 @@
 	<table class="table table-condensed user-list">
 		<thead>
 			<tr>
-				<th>Name</th>
+                <th>Name</th>
+				<th>Email</th>
 				<th class="small-cell">Details</th>
 				<th class="small-cell">Active</th>
 				@if($user->can($editPermission))
@@ -14,7 +15,8 @@
 		<tbody>
 			@foreach($users as $u)
 				<tr{!! $u->deleted_at ? ' class="deleted"' : '' !!}>
-					<td>{{ $u->fullName() }}</td>
+                    <td>{{ $u->fullName() }}</td>
+					<td>{{ $u->email }}</td>
 					<td class="small-cell">
 						@if($user->can($editPermission))
 							<a href="{{ action('UserController@getEdit', $u->id) }}">Edit</a>
