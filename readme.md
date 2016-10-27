@@ -99,5 +99,4 @@ TODO
 
 artisan task to:
 
-insert oauth_clients (id, secret, name)
-and into oauth_auth_endpoints (client_id, endpoint) (for a list of endpoints)
+insert oauth_clients (id, secret, name) and into oauth_auth_endpoints (client_id, endpoint) (for a list of endpoints)
