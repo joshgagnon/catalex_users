@@ -46,6 +46,10 @@ trait Billable {
 		return true; ///$this->billingExempt() || $this->inTrial() || $this->isPaid();
 	}
 
+	public function hasSignAccess() {
+		return true;
+	}
+
     public function hasGoodCompaniesAccess() {
         return true; //$this->billingExempt() || $this->inTrial() || $this->isPaid();
     }

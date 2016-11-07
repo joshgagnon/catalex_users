@@ -51,7 +51,7 @@ class OrganisationController extends Controller {
 
 		$organisation = Organisation::create([
 			'name' => $data['organisation_name'],
-			'billing_detail_id' => $user->billing_detail->id,
+			'billing_detail_id' => $user->billing_detail ? $user->billing_detail->id : null,
 			'free' => false,
 		]);
 

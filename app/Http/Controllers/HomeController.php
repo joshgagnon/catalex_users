@@ -39,12 +39,12 @@ class HomeController extends Controller {
 		return view('home');
 	}
 
-	public function getBrowserLogin() {
-		$user = Auth::user();
+    public function getBrowserLogin() {
+        $user = Auth::user();
 
-		if(!$user->hasBrowserAccess()) {
-			return view('auth.denied');
-		}
+        if(!$user->hasBrowserAccess()) {
+            return view('auth.denied');
+        }
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Law Browser')->first();
         if(!$client) {
@@ -54,8 +54,28 @@ class HomeController extends Controller {
         $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000/login');
         $params['response_type'] = 'code';
         $redirect = '/login/law-browser?' . (http_build_query($params));
-		return redirect($redirect);
-	}
+        return redirect($redirect);
+    }
+
+    public function getSignLogin() {
+        $user = Auth::user();
+
+        if(!$user->hasSignAccess()) {
+            return view('auth.denied');
+        }
+        $params = Authorizer::getAuthCodeRequestParams();
+        $client = DB::table('oauth_clients')->where('name', 'Sign')->first();
+
+        if (!$client) {
+            return view('auth.denied');
+        }
+
+        $params['client_id'] = $client->id;
+        $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000/login');
+        $params['response_type'] = 'code';
+        $redirect = '/login/sign?' . (http_build_query($params));
+        return redirect($redirect);
+    }
 
     public function getGoodCompaniesLogin() {
         $user = Auth::user();
