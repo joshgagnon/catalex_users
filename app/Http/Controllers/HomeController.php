@@ -60,9 +60,11 @@ class HomeController extends Controller {
     public function getSignLogin() {
         $user = Auth::user();
 
+
         if(!$user->hasSignAccess()) {
             return view('auth.denied');
         }
+
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Sign')->first();
 
@@ -71,7 +73,7 @@ class HomeController extends Controller {
         }
 
         $params['client_id'] = $client->id;
-        $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000/login');
+        $params['redirect_uri'] = env('SIGN_LOGIN_URL', 'http://localhost:3000/login');
         $params['response_type'] = 'code';
         $redirect = '/login/sign?' . (http_build_query($params));
         return redirect($redirect);
