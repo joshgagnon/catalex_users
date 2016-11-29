@@ -5741,10 +5741,16 @@ ul.social-logins {
 #tab-individual .per-user {
   display: none; }
 
+.legal-doc ol > p {
+  margin-left: -45px; }
+
 .legal-doc ol ol {
-  list-style: lower-alpha; }
-  .legal-doc ol ol ol {
-    list-style: lower-roman; }
+  margin-top: 15px; }
+
+.legal-doc ol .list-style-lettered {
+  list-style-type: upper-alpha; }
+  .legal-doc ol .list-style-lettered .list-style-lowercase {
+    list-style-type: lower-alpha; }
 
 .inside-panel {
   background-color: #f9f9f9; }
