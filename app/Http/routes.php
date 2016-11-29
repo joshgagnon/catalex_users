@@ -14,7 +14,6 @@
 Route::group(['middleware' => 'csrf'], function() {
     Route::get('/', 'HomeController@index');
     Route::get('/termsofuse', 'LegalController@termsofuse');
-    Route::get('/customeragreement', 'LegalController@customeragreement');
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
     Route::controllers([

@@ -20,16 +20,6 @@ class LegalController extends Controller {
 	}
 
 		/**
-	 * Show the customer agreement
-	 *
-	 * @return Response
-	 */
-	public function customeragreement()
-	{
-		return view('customeragreement');
-	}
-
-		/**
 	 * Show the terms
 	 *
 	 * @return Response

@@ -117,7 +117,8 @@ ul.social-logins {
 .legal-doc ol {
     > p {
         // If we nest a <p> in an <ol> move it to the left a little, so it is seen to not be a list item
-        // This is technically not valid HTML, but it is the easiest way to solve the problem
+        // This is technically not valid HTML, but it is the easiest way to solve the problem or list number
+        // continuing after a separate paragraph
         margin-left: -45px;
     }
 
