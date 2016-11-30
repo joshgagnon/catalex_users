@@ -4,3 +4,4 @@
 .env
 /config/oauth.php
 *.css.map
+*.DS_Store
