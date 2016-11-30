@@ -30,7 +30,7 @@ class MailController extends Controller
         if(!$client) {
             return view('auth.denied');
         }
-        Mail::sendStyledMail($request->input('template'),  json_decode($request->input('data', '{}'), true), $request->input('email', ''), $request->input('name', ''), $request->input('subject', ''));
+        Mail::queueStyledMail($request->input('template'),  json_decode($request->input('data', '{}'), true), $request->input('email', ''), $request->input('name', ''), $request->input('subject', ''));
 
         return Response::json(['message' => 'mail sent']);
     }

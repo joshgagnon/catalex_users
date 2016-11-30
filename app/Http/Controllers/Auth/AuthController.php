@@ -108,7 +108,7 @@ class AuthController extends Controller {
 
         // Send out welcome email
         $trialEnd = Carbon::now()->addMinutes(Config::get('constants.trial_length_minutes'));
-        Mail::sendStyledMail('emails.welcome', [
+        Mail::queueStyledMail('emails.welcome', [
             'name' => $user->fullName(),
             'email' => $user->email,
             //'trialEnd' => $trialEnd->format('F j'),

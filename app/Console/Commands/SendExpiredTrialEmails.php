@@ -55,7 +55,7 @@ class SendExpiredTrialEmails extends Command {
 				continue;
 			}
 
-			Mail::sendStyledMail('emails.trial-expired', ['user' => $user], $user->email, $user->fullName(), 'CataLex | Trial Period Over');
+			Mail::queueStyledMail('emails.trial-expired', ['user' => $user], $user->email, $user->fullName(), 'CataLex | Trial Period Over');
 		}
 
 		foreach($users as $user) {
