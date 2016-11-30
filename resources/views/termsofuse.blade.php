@@ -466,7 +466,7 @@
         <ol>
             <li>
                 <strong>Good Faith Negotiations</strong>
-                <p>Good faith negotiations:  Before taking any court action, the parties must use best efforts to resolve any dispute under, or in connection with, the Terms through good faith negotiations.</p>
+                <p>Before taking any court action, the parties must use best efforts to resolve any dispute under, or in connection with, the Terms through good faith negotiations.</p>
             </li>
             <li>
                 <strong>Obligations Continue</strong>
