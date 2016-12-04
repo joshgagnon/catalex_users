@@ -1,4 +1,6 @@
-<?php namespace App\Console;
+<?php
+
+namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -13,6 +15,8 @@ class Kernel extends ConsoleKernel {
 	protected $commands = [
 		//'App\Console\Commands\SendExpiredTrialEmails',
 		//'App\Console\Commands\ChargeUsers',
+		'App\Console\Commands\AddOAuthClient',
+		'App\Console\Commands\AddOAuthClientEndpoint',
 	];
 
 	/**

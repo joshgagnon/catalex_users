@@ -74,7 +74,6 @@
         <div class="container">
                 <p class="copyright">© Copyright {{ date('Y') }} - CataLex® Limited. All rights reserved.  “CataLex” is a registered trademark of CataLex Limited</p>
                     <a href="//catalex.nz">Home</a>
-                    <a href="//users.catalex.nz/customeragreement">Customer Agreement</a>
                     <a href="//users.catalex.nz/privacypolicy">Privacy Policy</a>
                     <a href="//users.catalex.nz/termsofuse">Terms of Use</a>
                     <p>C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland, 0620, New Zealand</p>
