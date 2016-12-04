@@ -20,7 +20,7 @@ Route::group(['middleware' => 'csrf'], function() {
     Route::controllers([
         'auth' => 'Auth\AuthController',
         'password' => 'Auth\PasswordController',
-        //'billing' => 'BillingController',
+        'billing' => 'BillingController',
     ]);
 
     Route::group(['middleware' => 'auth'], function() {
@@ -30,7 +30,7 @@ Route::group(['middleware' => 'csrf'], function() {
             'admin' => 'AdminController',
             'user' => 'UserController',
             'organisation' => 'OrganisationController',
-            //'billing' => 'BillingController',
+            'billing' => 'BillingController',
         ]);
     });
 });
