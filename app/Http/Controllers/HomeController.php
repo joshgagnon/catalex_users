@@ -28,16 +28,16 @@ class HomeController extends Controller {
 	{
 		$this->middleware('auth');
 	}
-
-	/**
-	 * Show the application dashboard to the user.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		return view('home');
-	}
+    
+    /**
+     * Show the application dashboard to the user.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        return view('home');
+    }
 
     public function getBrowserLogin() {
         $user = Auth::user();

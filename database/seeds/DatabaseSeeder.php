@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder {
 		Model::unguard();
 
 		$this->call('RolePermissionSeeder');
+		$this->call('ServiceSeeder');
 	}
 }

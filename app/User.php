@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use App\Service;
 
 
 
@@ -53,6 +54,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function roles() {
 		return $this->belongsToMany('App\Role');
 	}
+
+    /**
+     * Services this user is registered to
+     */
+    public function services()
+    {
+        return $this->belongsToMany(Service::class)->withTimestamps();
+    }
 
 	public function fullName() {
 		return  $this->name;
@@ -218,6 +227,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$this->{$this->getDeletedAtColumn()} = $time = $this->freshTimestamp();
 
 		$query->update(array($this->getDeletedAtColumn() => $this->fromDateTime($time)));
+	}
+
+	/**
+	 * Check if this user or their organisation has billing details setup
+	 */
+	public function hasBillingDetail()
+	{
+		if ($user->billing_detail()->get()) {
+			return true;
+		}
+
+		return $user->organisation()->count() && $user->organisation()->first()->billing_detail()->count();
 	}
 
 	/**
