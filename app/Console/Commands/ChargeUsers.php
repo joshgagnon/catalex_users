@@ -6,64 +6,38 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ChargeUsers extends Command {
+class ChargeUsers extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'billing:charge-all';
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'billing:charge-all';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Attempt to rebill anyone with due subscriptions or outstanding pro-rata members.';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Attempt to rebill anyone with due subscriptions or outstanding pro-rata members.';
+    /**
+     * Attempt to rebill anyone with due subscriptions or outstanding pro-rata members.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        foreach(User::all() as $user) {
+            if(!$user->organisation) {
+                $user->rebill();
+            }
+        }
 
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
-
-	/**
-	 * Attempt to rebill anyone with due subscriptions or outstanding pro-rata members.
-	 *
-	 * @return mixed
-	 */
-	public function fire() {
-		foreach(User::all() as $user) {
-			if(!$user->organisation) {
-				$user->rebill();
-			}
-		}
-
-		foreach(Organisation::all() as $organisation) {
-			$organisation->billProrataMembers();
-			$organisation->rebill();
-		}
-	}
-
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments() {
-		return [];
-	}
-
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions() {
-		return [];
-	}
+        foreach(Organisation::all() as $organisation) {
+            $organisation->billProrataMembers();
+            $organisation->rebill();
+        }
+    }
 }

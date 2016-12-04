@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\BillingItemPayment;
 
 class ChargeLog extends Model {
 
@@ -16,7 +17,7 @@ class ChargeLog extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['success', 'user_id', 'organisation_id', 'total_amount', 'gst'];
+	protected $fillable = ['success', 'pending', 'user_id', 'organisation_id', 'total_amount', 'gst'];
 
 	/**
 	 * Don't use updated_at timestamp for this model.
@@ -34,5 +35,10 @@ class ChargeLog extends Model {
 
 	public function organisation() {
 		return $this->belongsTo('App\Organisation');
+	}
+
+	public function billingItemPayments()
+	{
+		return $this->hasMany(BillingItemPayment::class);
 	}
 }

@@ -20,11 +20,17 @@ class BillingDetailController extends Controller
 
     public function store()
     {
-
+        $user = Auth::user();
+        
+        if ($user->hasBillingDetail()) {
+            return redirect()->back()->withErrors(['You or your organisation already have billing setup']);
+        }
+        
+        
     }
 
     public function edit()
     {
-
+        
     }
 }

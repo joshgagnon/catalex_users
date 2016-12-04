@@ -1,4 +1,6 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Config;
 use Carbon\Carbon;
@@ -11,9 +13,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
 use App\Service;
-
-
+use App\BillingItem;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -54,14 +56,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function roles() {
 		return $this->belongsToMany('App\Role');
 	}
-
-    /**
-     * Services this user is registered to
-     */
-    public function services()
-    {
-        return $this->belongsToMany(Service::class)->withTimestamps();
-    }
 
 	public function fullName() {
 		return  $this->name;
