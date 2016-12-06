@@ -111,7 +111,7 @@ trait Billable {
         }
 
         if(!in_array($period, ['monthly', 'annually'])) {
-            throw new Exception('Billing period must be one of "monthly" or "annually"');
+            throw new \Exception('Billing period must be one of "monthly" or "annually"');
         }
 
         $this->billing_detail->period = $period;
@@ -235,7 +235,7 @@ trait Billable {
                 $payingUntil->addYear();
                 break;
             default:
-                throw new Exception('Billing period must be one of "monthly" or "annually"');
+                throw new \Exception('Billing period must be one of "monthly" or "annually"');
         }
 
         return $payingUntil;

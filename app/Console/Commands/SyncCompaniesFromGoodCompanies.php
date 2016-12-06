@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use GuzzleHttp\Client;
 use App\BillingItem;
 use App\Service;
+use App\User;
+use Log;
 
 class SyncCompaniesFromGoodCompanies extends Command
 {
@@ -21,7 +23,7 @@ class SyncCompaniesFromGoodCompanies extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Sync billing items with companies in Good Companies';
     
     /**
      * Execute the console command.
@@ -30,16 +32,16 @@ class SyncCompaniesFromGoodCompanies extends Command
      */
     public function handle()
     {
-        \Log::info('');
-        \Log::info('-------------------------------');
-        \Log::info('-- Running sync of GC companies');
-        \Log::info('');
+        Log::info('');
+        Log::info('-------------------------------');
+        Log::info('-- Running sync of GC companies');
+        Log::info('');
 
         // Get the Good Companies service and check we actually got a result
         $service = Service::where('name', '=', 'Good Companies')->first();
 
         if (!$service) {
-            throw new Exception('Service \'Good Companies\' does not exist in Services');
+            throw new \Exception('Service \'Good Companies\' does not exist in Services');
         }
 
         // Hit the Good Companies API and get a list of all companies
@@ -52,6 +54,11 @@ class SyncCompaniesFromGoodCompanies extends Command
 
         // Make sure every company from the response is either 
         foreach ($companies as $company) {
+            // Check the companies user ID is valid
+            if (!User::where('id', '=', $company->userId)->exists()) {
+                throw new \Exception('User with id \'' . $company->userId . '\' does not exist');
+            }
+
             // This is the JSON data that should be stored for the company
             $companyJsonData = json_encode(['company_name' => $company->companyName]);
 
@@ -71,21 +78,13 @@ class SyncCompaniesFromGoodCompanies extends Command
                 $billingItem->service_id = $service->id;
                 $billingItem->save();
 
-                \Log::info('Created billing item for ' . $company->companyName . ' during Good Companies gc_company sync');
+                Log::info('Created billing item for ' . $company->companyName . ' during Good Companies gc_company sync');
             } else {
                 // Billing item exists; make sure it is up-to-date
-                $hasChanged = false;
-
-                if ($billingItem->json_data != $companyJsonData) {
+                if ($billingItem->json_data != $companyJsonData || $billingItem->active != $company->active) {
                     $billingItem->json_data = $companyJsonData;
-                    $hasChanged = true;
-                }
-                if ($billingItem->active != $company->active) {
                     $billingItem->active = $company->active;
-                    $hasChanged = true;
-                }
 
-                if ($hasChanged) {
                     $billingItem->save();
                 }
             }

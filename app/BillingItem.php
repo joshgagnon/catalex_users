@@ -9,6 +9,12 @@ use \Carbon\Carbon;
 
 class BillingItem extends Model
 {
+    const ITEM_TYPE_GC_COMPANY = 'gc_company';
+    
+    private $itemTypes = [
+        self::ITEM_TYPE_GC_COMPANY
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -43,6 +49,20 @@ class BillingItem extends Model
                           ->whereRaw('billing_item_payments.billing_item_id = billing_items.id')
                           ->where('paid_until', '>=', Carbon::tomorrow());
                 });
+    }
+
+    public function scopeItemType($query, string $type)
+    {
+        if (!in_array($type, $this->itemTypes)) {
+            throw new Exception('Unknown item type ' . $type);
+        }
+
+        return $query->where('item_type', '=', $type);
+    }
+
+    public static function forTypeAndId(string $type, int $itemId)
+    {
+        return self::itemType($type)->where('item_id', '=', $itemId)->first();
     }
 
     /**

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Auth;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Auth;
 use App\Service;
 
 class ServiceUserController extends Controller
@@ -20,7 +20,7 @@ class ServiceUserController extends Controller
     {
         $user = Auth::user();
         $services = Service::get();
-        $userServices = $user->services()->select('id')->get();
+        $userServices = $user->services()->select('services.id')->get();
 
         foreach ($services as $service) {
             $service->userHasService = $userServices->contains($service->id);
@@ -37,7 +37,7 @@ class ServiceUserController extends Controller
         // Get the user
         $user = Auth::user();
 
-        $servicesRequiringBilling = Service::whereIn('id', $ids)->where('billing_info_required', true)->count();
+        $servicesRequiringBilling = Service::whereIn('id', $ids)->where('is_paid_service', true)->count();
 
         if ($servicesRequiringBilling > 0 && !$user->hasBillingDetail()) {
             return redirect()->route('billing.confirmBilling');

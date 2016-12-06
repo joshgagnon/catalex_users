@@ -3,6 +3,7 @@
 namespace App\Library;
 
 use App\BillingDetail;
+use GuzzleHttp\Client;
 use Log;
 
 class PXPay {
@@ -17,7 +18,7 @@ class PXPay {
         $billingDetails = $billable->billing_detail()->first();
 
         if (!$billingDetails) {
-            throw new Exception('Billable must have billing details set before requesting payment')
+            throw new \Exception('Billable must have billing details set before requesting payment')
         }
 
         $xmlRequest = view('billing.pxpost', [
