@@ -13,6 +13,6 @@ class ServiceSeeder extends Seeder
     public function run()
     {
         Service::create(['name' => 'Law Browser']);
-        Service::create(['name' => 'Good Companies', 'billing_info_required' => true]);
+        Service::create(['name' => 'Good Companies', 'is_paid_service' => true]);
     }
 }
