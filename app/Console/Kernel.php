@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel {
 		//'App\Console\Commands\ChargeUsers',
 		'App\Console\Commands\AddOAuthClient',
 		'App\Console\Commands\AddOAuthClientEndpoint',
+		'App\Console\Commands\SyncCompaniesFromGoodCompanies',
 	];
 
 	/**
