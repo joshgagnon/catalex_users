@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>CataLex Law Browser - Temporarily Unavailable</title>
+	<title>CataLex - Temporarily Unavailable</title>
 	{{-- TODO: <link rel="shortcut icon" type="image/png" href="/favicon.png" /> --}}
 	<link href="/css/app.css" rel="stylesheet">
 	<link href='//brick.a.ssl.fastly.net/Ubuntu:400,400i,500,700' rel='stylesheet' type='text/css'>
@@ -12,13 +12,7 @@
 <body>
 	<nav class="navbar navbar-default">
 		<div class="container">
-			<div class="navbar-header">
-				<a class="pull-left" href="#"><img alt="CataLex" src="/images/law-browser.png"></a>
-			</div>
-
 			<div class="collapse navbar-collapse" id="app-navbar-collapse">
-				<img class="chev-left" src="/images/left-chevron.png"/><img class="chev-right" src="/images/right-chevron.png"/>
-				<ul class="nav navbar-nav navbar-right"></ul>
 			</div>
 		</div>
 	</nav>
