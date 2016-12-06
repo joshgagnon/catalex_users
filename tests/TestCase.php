@@ -1,6 +1,8 @@
 <?php
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase {
+class TestCase extends Illuminate\Foundation\Testing\TestCase
+{
+	protected $runMigrations = true;
 
 	/**
 	 * Creates the application.
@@ -11,11 +13,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 	{
 		$app = require __DIR__.'/../bootstrap/app.php';
 
-		$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+		$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-		$app['Illuminate\Contracts\Console\Kernel']->call('migrate:refresh', ['--seeder' => 'TestSeeder']);
+		if ($this->runMigrations) {
+			$app['Illuminate\Contracts\Console\Kernel']->call('migrate:refresh', ['--seeder' => 'TestSeeder']);
+		}
 
 		return $app;
 	}
-
 }
+

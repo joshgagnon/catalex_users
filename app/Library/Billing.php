@@ -1,6 +1,10 @@
-<?php namespace App\Library;
+<?php
 
-class Billing {
+namespace App\Library;
+
+class Billing
+{
+    const DECIMAL_PLACES = 2;
 
 	/**
 	 * Calculate the included GST component given an inclusive total. Works with string
@@ -9,8 +13,13 @@ class Billing {
 	 * @param  string $totalAmount
 	 * @return string
 	 */
-	public static function includingGst($totalAmount) {
-		return bcmul($totalAmount, '0.13043478260869565217', 2);
+	public static function includingGst($totalAmount)
+    {
+        // IRD recommended way of calculating GST: (total amount x 3) / 23
+        $totalAmountTimesThree = bcmul((string) $totalAmount, '3', 2);
+        $totalGst = bcdiv($totalAmountTimesThree, '23', 2);
+
+        return self::formatDollars($totalGst);
 	}
 
 	/**
@@ -18,9 +27,12 @@ class Billing {
 	 */
     public static function centsToDollars($cents)
     {
-        $centsInDollar = 100;
-        $decimalPlaces = 2;
+        $dollars = bcdiv($cents, 100, 2);
+        return self::formatDollars($dollars);
+    }
 
-        return number_format(($cents / $centsInDollar), $decimalPlaces);
+    public static function formatDollars($dollars)
+    {
+        return number_format($dollars, self::DECIMAL_PLACES);
     }
 }
