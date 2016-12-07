@@ -31,6 +31,9 @@ class Billing
         return self::formatDollars($dollars);
     }
 
+    /**
+     * Format dollars with commas and the correct decimal places
+     */
     public static function formatDollars($dollars)
     {
         return number_format($dollars, self::DECIMAL_PLACES);

@@ -32,10 +32,10 @@ class SyncCompaniesFromGoodCompanies extends Command
      */
     public function handle()
     {
-        Log::info('');
-        Log::info('-------------------------------');
-        Log::info('-- Running sync of GC companies');
-        Log::info('');
+        $this->log('');
+        $this->log('-------------------------------');
+        $this->log('-- Running sync of GC companies');
+        $this->log('');
 
         // Get the Good Companies service and check we actually got a result
         $service = Service::where('name', '=', 'Good Companies')->first();
@@ -44,13 +44,8 @@ class SyncCompaniesFromGoodCompanies extends Command
             throw new \Exception('Service \'Good Companies\' does not exist in Services');
         }
 
-        // Hit the Good Companies API and get a list of all companies
-        $guzzleClient = new Client(['base_uri' => env('GC_BASE_URI')]);
-        $response = $guzzleClient->request('POST', 'api/admin/billing', ['body' => 'key=' . env('GC_ADMIN_KEY')]);
-
-        // Get the response content and decode it
-        $responseContent = $response->getBody()->getContents();
-        $companies = json_decode($responseContent);
+        // Get a list of all companies
+        $companies = $this->getCompanies();
 
         // Make sure every company from the response is either 
         foreach ($companies as $company) {
@@ -78,7 +73,7 @@ class SyncCompaniesFromGoodCompanies extends Command
                 $billingItem->service_id = $service->id;
                 $billingItem->save();
 
-                Log::info('Created billing item for ' . $company->companyName . ' during Good Companies gc_company sync');
+                $this->log('Created billing item for ' . $company->companyName . ' during Good Companies gc_company sync');
             } else {
                 // Billing item exists; make sure it is up-to-date
                 if ($billingItem->json_data != $companyJsonData || $billingItem->active != $company->active) {
@@ -89,5 +84,29 @@ class SyncCompaniesFromGoodCompanies extends Command
                 }
             }
         }
+    }
+
+    /**
+     * Extracted to separate method as we may want to override how logging is done during testing
+     */
+    protected function log($details)
+    {
+        Log::info($details);
+    }
+
+    /**
+     * Get a list of all companies in GC
+     */
+    protected function getCompanies()
+    {
+        // Hit the Good Companies API and get a list of all companies
+        $guzzleClient = new Client(['base_uri' => env('GC_BASE_URI')]);
+        $response = $guzzleClient->request('POST', 'api/admin/billing', ['body' => 'key=' . env('GC_ADMIN_KEY')]);
+
+        // Get the response content. Decode and return it
+        $responseContent = $response->getBody()->getContents();
+        $companies = json_decode($responseContent);
+
+        return $companies;
     }
 }

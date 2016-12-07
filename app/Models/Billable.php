@@ -63,16 +63,19 @@ trait Billable {
         return Carbon::now()->lt($this->paid_until->hour(23)->minute(59));
     }
 
-    public function hasBrowserAccess() {
+    public function hasBrowserAccess()
+    {
         return true; ///$this->billingExempt() || $this->inTrial() || $this->isPaid();
     }
 
-    public function hasSignAccess() {
+    public function hasSignAccess()
+    {
         return true;
     }
 
-    public function hasGoodCompaniesAccess() {
-        return true; //$this->billingExempt() || $this->inTrial() || $this->isPaid();
+    public function hasGoodCompaniesAccess()
+    {
+        return true;
     }
 
     public function hasAccess(Service $service)
@@ -223,7 +226,7 @@ trait Billable {
         return $success;
     }
 
-    public function calculatePayingUntil($period)
+    private function calculatePayingUntil($period)
     {
         $payingUntil = Carbon::now();
 
@@ -329,7 +332,7 @@ trait Billable {
 
         $xmlResponse = new \SimpleXMLElement((string)$response->getBody());
 
-        if(!boolval((string)$xmlResponse->Success)) {
+        if (!boolval((string)$xmlResponse->Success)) {
             $log->success = false;
             $log->save();
 

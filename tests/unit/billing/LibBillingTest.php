@@ -92,6 +92,37 @@ class LibBillingTest extends TestCase
      */
     public function formatDollars()
     {
-        
+        $dollars = 1;
+
+        $actual = Billing::formatDollars($dollars);
+        $expected = '1.00';
+
+        $this->assertEquals($actual, $expected);
+    }
+
+    /**
+     * @test
+     */
+    public function formatDollars_roundsUpCorrectly()
+    {
+        $dollars = 99.995;
+
+        $actual = Billing::formatDollars($dollars);
+        $expected = '100.00';
+
+        $this->assertEquals($actual, $expected);
+    }
+
+    /**
+     * @test
+     */
+    public function formatDollars_roundsDownCorrectly()
+    {
+        $dollars = 99.993;
+
+        $actual = Billing::formatDollars($dollars);
+        $expected = '99.99';
+
+        $this->assertEquals($actual, $expected);
     }
 }
