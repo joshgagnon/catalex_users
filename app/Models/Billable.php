@@ -24,7 +24,7 @@ trait Billable {
      */
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'service_registrations')->withPivot('price_in_cents', 'period', 'access_level')->withTimestamps();
+        return $this->belongsToMany(Service::class, 'service_registrations')->withPivot('price_in_cents', 'access_level')->withTimestamps();
     }
 
     /**

@@ -131,10 +131,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	public function addRole($role) {
-		if(is_object($role)) {
+		if (is_object($role)) {
 			$role = $role->getKey();
 		}
-		elseif(is_string($role)) {
+		elseif (is_string($role)) {
 			// Check named roles first to avoid attach collision
 			if($this->hasRole($role)) return;
 			$role = Role::where('name', '=', $role)->pluck('id');

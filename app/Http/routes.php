@@ -26,15 +26,21 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
         Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin']);
         Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin']);
+
+        Route::get('my-services', 'ServiceUserController@index')->name('user-services.index');
+        Route::post('my-services', 'ServiceUserController@update')->name('user-services.update');
+
+        Route::get('billing/store-card', 'BillingController@storeCard')->name('billing.store-card');
+        Route::get('billing/register-card', 'BillingController@createCard')->name('billing.create-card');
+
+        Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
+
         Route::controllers([
             'admin' => 'AdminController',
             'user' => 'UserController',
             'organisation' => 'OrganisationController',
             'billing' => 'BillingController',
         ]);
-
-        Route::get('my-services', 'ServiceUserController@index')->name('user-services.index');
-        Route::post('my-services', 'ServiceUserController@update')->name('user-services.update');
     });
 });
 

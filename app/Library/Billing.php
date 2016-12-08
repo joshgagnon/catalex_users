@@ -5,6 +5,7 @@ namespace App\Library;
 class Billing
 {
     const DECIMAL_PLACES = 2;
+    const DAYS_IN_TRIAL_PERIOD = 14;
 
 	/**
 	 * Calculate the included GST component given an inclusive total. Works with string
