@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'is_paid_service'];
 
     public function users()
     {

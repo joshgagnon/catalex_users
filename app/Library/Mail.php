@@ -5,8 +5,8 @@ use File;
 use Mail as LaravelMail;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
-class Mail {
-
+class Mail
+{
     public static function queueStyledMail($view, $data, $receiverEmail, $receiverName, $subject, $attachment=null) {
         $html = view($view, $data)->render();
 

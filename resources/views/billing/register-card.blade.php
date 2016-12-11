@@ -8,11 +8,14 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     @include('components.messages')
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('user.profile') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('billing.finish-create-card') }}">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
+                                @if (!empty($message))
+                                <p>{{ $message }}</p>
+                                @endif
                                 <p>We will validate your card with a $1 authorisation charge, which will be refunded automatically in 7 days.</p>
                                 <p>Please ensure you click the 'Next' button after successful credit card authorisation.</p>
                                 {{-- TODO: Look into way to force redirect without clicking next, dps docs suggest this is possible --}}

@@ -7,7 +7,8 @@ use GuzzleHttp\Client;
 use Log;
 use Omnipay\Omnipay;
 
-class PXPay {
+class PXPay
+{
     const CURRENCY_NZD = 'NZD';
 
     public static function requestPayment($billable, $totalDollars) {

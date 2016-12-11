@@ -224,18 +224,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	/**
-	 * Check if this user or their organisation has billing details setup
-	 */
-	public function hasBillingDetail()
-	{
-		if ($user->billing_detail()->get()) {
-			return true;
-		}
-
-		return $user->organisation()->count() && $user->organisation()->first()->billing_detail()->count();
-	}
-
-	/**
 	 * Make this user active.
 	 *
 	 * @return void

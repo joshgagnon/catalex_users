@@ -57,8 +57,13 @@ class BillingController extends Controller
         return view('billing.subscription-success');
     }
 
-    public function createCard()
+    public function createCard(Request $request)
     {
+        // Make sure we have sent the user here (they aren't just hitting the route)
+        if (!$request->session()->has('redirect_route_name')) {
+            abort(403, 'Forbidden');
+        }
+
         // Create a new payment gayway request to get iframe url to show
         $gateway = PXPay::getGateway();
 
@@ -72,9 +77,25 @@ class BillingController extends Controller
             return redirect()->back()->withErrors(['An error occurred contacting the payment gateway, please try again.']);
         }
 
+        $message = $request->session()->pull('register_card_message');
+
         return view('billing.register-card')->with([
             'gatewayURL' => $response->getRedirectUrl(),
+            'message' => $message,
         ]);
+    }
+
+    public function finishCreateCard(Request $request)
+    {
+        // Make sure we have sent the user here (they aren't just hitting the route)
+        if (!$request->session()->has('redirect_route_name')) {
+            abort(403, 'Forbidden');
+        }
+
+        $routeName = $request->session()->pull('redirect_route_name');
+        $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
+
+        return redirect()->route($routeName, $data);
     }
 
     public function storeCard(Request $request)
