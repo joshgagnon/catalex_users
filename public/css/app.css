@@ -8095,5 +8095,23 @@ form.form-inline .form-group label {
     color: #c51b24; }
   .service h4 {
     font-size: 30px; }
+  .service .disabled-service * {
+    color: #555555; }
+
+.service-well {
+  background-color: white;
+  cursor: pointer; }
+  .service-well h2 {
+    margin-top: 0; }
+  .service-well .row {
+    display: table;
+    margin: 0;
+    width: 100%; }
+  .service-well .col-xs-2, .service-well .col-xs-10 {
+    display: table-cell;
+    float: none; }
+  .service-well .col-xs-2 {
+    text-align: center;
+    vertical-align: middle; }
 
 /*# sourceMappingURL=app.css.map */

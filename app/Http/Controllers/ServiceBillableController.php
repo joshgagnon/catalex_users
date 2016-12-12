@@ -20,7 +20,7 @@ class ServiceBillableController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $services = Service::get();
+        $services = Service::orderBy('is_paid_service', 'desc')->get();
         $userServices = $user->services()->select('services.id')->get();
 
         foreach ($services as $service) {

@@ -21,7 +21,7 @@ sudo -u $1 composer update
 
 sudo -u $1 npm update
 
-sudo -u $1 gulp
+sudo -u $1 gulp --production
 
 sudo -u $1 php artisan migrate
 

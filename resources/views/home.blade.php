@@ -7,11 +7,7 @@
 
 
                     <div class="services container">
-                    <div class="row">
-                        <div class="col-xs-12 text-center">
-                            <h3>Welcome to CataLex</h3>
-                        </div>
-                    </div>
+
                      <div class="row">
                         <div class="col-md-6">
                             <div class="service">
@@ -32,6 +28,7 @@
 
                         <div class="col-md-6">
                             <div class="service">
+                            @if ($user->hasGoodCompaniesAccess())
                             <a href="{{ route('good-companies-login') }}">
                                  <i class="fa fa-briefcase"></i>
                                 <h4>Good Companies</h4>
@@ -39,6 +36,18 @@
                                     Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.
                                 </p>
                                  </a>
+                            @else
+                            <a href="{{ route('user-services.index') }}" class="disabled-service">
+                                 <i class="fa fa-briefcase"></i>
+                                <h4>Good Companies</h4>
+                                <p>
+                                    Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.
+                                </p>
+                                <p>Click here to subscribe</p>
+                                 </a>
+
+
+                            @endif
                             </div>
                         </div>
 

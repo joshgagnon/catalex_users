@@ -141,8 +141,11 @@ trait Billable {
         if ($dateOfBilling === null) {
             $dateOfBilling = Carbon::today();
         }
-
-        $billingDay = $this->billing_detail()->first()->billing_day;
+        $billing = $this->billing_detail()->first();
+        if (!$billing) {
+            return false;
+        }
+        $billingDay = $billing->billing_day;
         $daysThisMonth = date('t');
 
         // If the billing day for this user/organisation doesn't exist this month, make their billing
