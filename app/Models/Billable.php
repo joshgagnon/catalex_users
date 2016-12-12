@@ -89,6 +89,10 @@ trait Billable {
     {
         $billablesService = $this->services()->where('service_id', $service->id)->first();
 
+        if($this->roles && $this->hasRole('global_admin')){
+            return true;
+        }
+
         // If this billable entity is registered for this service, check their service level
         if ($billablesService != null) {
             return $billablesService->pivot->access_level == 'full_access';
