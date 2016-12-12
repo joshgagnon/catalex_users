@@ -179,10 +179,6 @@ trait Billable {
 
         $billingDetails = $this->billing_detail()->first();
 
-        if (!$billingDetails) {
-            throw new \Exception('Registration to paid service requires billing details to be setup');
-        }
-
         $services = Service::where('is_paid_service', true)->get();
         $payingUntil = $this->calculatePayingUntil($billingDetails->period);
         $centsDue = 0;
@@ -190,6 +186,10 @@ trait Billable {
         foreach ($services as $service) {
             $priceInCents = $this->getPriceForService($service, $billingDetails);
             $billingItems = $this->getAllDueBillingItems($service);
+
+            if (!$billingDetails) {
+                throw new \Exception('Registration to paid service requires billing details to be setup');
+            }
 
             foreach ($billingItems as $item) {
                 $itemPayment = new BillingItemPayment();
