@@ -44,26 +44,6 @@ class BillableTraitBillMethodTest extends TestCase
         ]);
     }
 
-    private function createBillingDetails($period=null, $billingDay=null)
-    {
-        return BillingDetail::create([
-            'period' => $period ? : 'annually',
-            'billing_day' => $billingDay ? : Carbon::today()->day,
-        ]);
-    }
-
-    private function createBillingItem($data)
-    {
-        return BillingItem::create([
-            'user_id' => $data['user_id'],
-            'service_id' => $data['service_id'],
-            'item_id' => $data['item_id'],
-            'item_type' => array_key_exists('item_type', $data) ? $data['item_type'] : 'gc_company',
-            'json_data' => array_key_exists('json_data', $data) ? $data['json_data'] : '{}',
-            'active' => array_key_exists('active', $data) ? $data['active'] : true,
-        ]);
-    }
-
     private function massCreateBillingItems($userId, $serviceId, $numberOfItems)
     {
         $billingItems = [];
@@ -134,7 +114,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_monthly()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails('monthly');
+        $billingDetails = $this->createBillingDetails(['period' => 'monthly']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -183,7 +163,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_monthly_noBillingItems()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails('monthly');
+        $billingDetails = $this->createBillingDetails(['period' => 'monthly']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -233,7 +213,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_monthly_twoBillingItems()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails('monthly');
+        $billingDetails = $this->createBillingDetails(['period' => 'monthly']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -288,7 +268,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_monthly_lotsOfBillingItems()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails('monthly');
+        $billingDetails = $this->createBillingDetails(['period' => 'monthly']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -358,7 +338,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_organisation_oneUser_lotsOfItems()
     {
         // Create the organisation
-        $billingDetails = $this->createBillingDetails('monthly');
+        $billingDetails = $this->createBillingDetails(['period' => 'monthly']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
         // Create a few users
