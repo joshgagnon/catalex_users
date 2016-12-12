@@ -15,7 +15,8 @@ use App\BillingDetail;
 
 trait Billable {
 
-    public function billing_detail() {
+    public function billing_detail()
+    {
         return $this->belongsTo(BillingDetail::class);
     }
 
@@ -41,7 +42,10 @@ trait Billable {
 
     abstract public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null);
 
-    public function inTrial() {
+    abstract protected function getAllDueBillingItems($service);
+
+    public function inTrial()
+    {
         $organisation = $this->organisation;
 
         if ($organisation) {
@@ -51,14 +55,17 @@ trait Billable {
         return $this->created_at->diffInMinutes(Carbon::now()) < Config::get('constants.trial_length_minutes');
     }
 
-    public function isPaid() {
+    public function isPaid()
+    {
         $organisation = $this->organisation;
 
-        if($organisation) {
+        if ($organisation) {
             return $organisation->isPaid();
         }
 
-        if(!$this->paid_until) return false;
+        if (!$this->paid_until) {
+            return false;
+        }
 
         return Carbon::now()->lt($this->paid_until->hour(23)->minute(59));
     }
@@ -96,7 +103,8 @@ trait Billable {
         return false;
     }
 
-    public function everBilled() {
+    public function everBilled()
+    {
         $organisation = $this->organisation;
 
         if ($organisation) {
@@ -106,7 +114,8 @@ trait Billable {
         return $this->billing_detail && $this->paid_until !== null;
     }
 
-    public function setBillingPeriod($period) {
+    public function setBillingPeriod($period)
+    {
         $organisation = $this->organisation;
 
         if ($organisation) {
@@ -168,52 +177,53 @@ trait Billable {
             'organisation_id' => $this instanceof Organisation ? $this->id : null,
         ]);
 
+        $billingDetails = $this->billing_detail()->first();
+
+        if (!$billingDetails) {
+            throw new \Exception('Registration to paid service requires billing details to be setup');
+        }
+
         // Bill for all of this billable entity's services
         $services = $this->services()->where('is_paid_service', true)->get();
         $centsDue = 0;
 
         foreach ($services as $service) {
+            // We use the billing period and the price from the registration record for all billing items
+            // to keep billing consistent
             $registrationRecord = $this->services()->where('service_id', $service->id)->first();
+            $priceInCents = $this->getPriceForService($service, $registrationRecord, $billingDetails);
+            $billingItems = $this->getAllDueBillingItems($service);
 
-            if (!$registrationRecord->pivot->period) {
-                throw new \Exception('Registration to paid service requires billing period. Billing period must be either "monthly" or "annually.');
-            }
-
-            if (!$registrationRecord->pivot->price_in_cents) {
-                throw new \Exception('Registration to paid service requires billing price in cents.');
-            }
-
-            $itemsDue = $this->billingItems()->where('service_id', $service->id)->dueForPayment()->get();
-            $payingUntil = $this->calculatePayingUntil($registrationRecord->pivot->period);
-
-            foreach ($itemsDue as $item) {
+            foreach ($billingItems as $item) {
                 $itemPayment = new BillingItemPayment();
-                $itemPayment->paid_until = $payingUntil;
+                $itemPayment->paid_until = $this->calculatePayingUntil($billingDetails->period);
                 $itemPayment->billing_item_id = $item->id;
                 $itemPayment->charge_log_id = $chargeLog->id;
 
                 $itemPayment->save();
             }
 
-            $centsDue += $registrationRecord->pivot->price_in_cents * count($itemsDue);
+            $centsDue += $priceInCents * count($billingItems);
         }
 
+        // Request the payment
         $totalDollarsDue = Billing::centsToDollars($centsDue);
-        $success = PXPay::requestPayment($this, $totalDollarsDue);
+        $success = $this->requestPayment($totalDollarsDue);
+        
+        // Update the charge log
+        $gst = Billing::includingGst($totalDollarsDue);
+        $chargeLog->update(['pending' => false, 'success' => $success, 'total_amount' => $totalDollarsDue, 'gst' => $gst]);
 
-        $chargeLog->pending = false;
-        $chargeLog->succes = $success;
-        $chargeLog->amount = $totalDollarsDue;
-        $chargeLog->gst = Billing::includingGst($totalDollarsDue);
-        $chargeLog->save();
-
-        // Set all item payments 'paid until' to the last payment (or today if there hasn't been a previous payment)
+        // Above we optimistically set the paid until dates to the paying until date
+        // if the payment fails we need to undo that
         if (!$success) {
+            // Set all item payments 'paid until' to the last payment (or today if there hasn't been a previous payment)
             $itemPayments = $chargeLog->billingItemPayments()->get();
 
             foreach ($itemPayments as $item) {
-                $previousPayment = BillingItemPayment::where('billing_item_id', '=', $item->billing_item_id)
-                                                     ->where('charge_log_id', '!=', $item->charge_log_id)
+                $previousPayment = BillingItemPayment::join('charge_logs', 'charge_log_id', '=', 'charge_log.id')
+                                                     ->where('billing_item_id', '=', $item->billing_item_id)
+                                                     ->where('charge_logs.success', '=', true)
                                                      ->orderBy('paid_until', 'desc')
                                                      ->first();
 
@@ -224,6 +234,30 @@ trait Billable {
 
         // Return whether payment was successful or not
         return $success;
+    }
+
+    private function getPriceForService($service, $registrationRecord, $billingDetails)
+    {
+        $priceInCents = $registrationRecord->pivot->price_in_cents;
+
+        if (!$priceInCents) {
+            if ($service->name == 'Good Companies') {
+                if ($billingDetails->period == 'monthly') {
+                    $priceInCents = Config::get('constants.gc_monthly_price_in_cents');
+                } else {
+                    $priceInCents = Config::get('constants.gc_yearly_price_in_cents');
+                }
+            } else {
+                throw new \Exception('Unknown default price for service');
+            }
+        }
+
+        return $priceInCents;
+    }
+
+    protected function requestPayment($totalDollarsDue)
+    {
+        return PXPay::requestPayment($this, $totalDollarsDue);
     }
 
     private function calculatePayingUntil($period)
@@ -242,106 +276,5 @@ trait Billable {
         }
 
         return $payingUntil;
-    }
-
-    /**
-     * Charge the user or organisation based on number of members and billing period. Returns
-     * true if already up to date or on billing success, false otherwise.
-     *
-     * @return bool
-     */
-    public function rebill() {
-        if ($this->billingExempt()) {
-            return true;
-        }
-
-        // Delegate rebilling to organisation if present
-        if($this->organisation) {
-            return $this->organisation->rebill();
-        }
-
-        // Is this already paid for today?
-        if ($this->paid_until && Carbon::now()->lt($this->paid_until)) {
-            return true;
-        }
-
-        $payingUntil = $this->calculatePayingUntilCarbon($this->billing_detail->period);
-
-        $paymentAmount = $this->paymentAmount();
-        if(!$this->charge($paymentAmount)) {
-            return false;
-        }
-
-        $this->paid_until = $payingUntil;
-        $this->save();
-
-        // Update all members
-        if($this->members) {
-            foreach($this->members as $member) {
-                $member->paid_until = $payingUntil;
-                $member->save();
-            }
-        }
-
-        $listItem = [
-            'Subscription to Law Browser &mdash; ' . $description,
-            $this->members ? $this->members->count() : 1,
-            $intervalAmount,
-            $paymentAmount,
-        ];
-        $this->sendInvoices('subscription', 1, $listItem); // TODO: Invoice number from charge_log->id
-
-        return true;
-    }
-
-    /**
-     * Charge the user or organisation $amount NZD. Returns true on success, false otherwise.
-     *
-     * @param  string $amount
-     * @return bool
-     */
-    private function charge($amount) {
-        $log = new ChargeLog([
-            'success' => false,
-            'user_id' => $this instanceof \App\User ? $this->id : null,
-            'organisation_id' => $this instanceof \App\Organisation ? $this->id : null,
-            'total_amount' => $amount,
-            'gst' => Billing::includingGst($amount),
-        ]);
-
-        if(env('DISABLE_PAYMENT', false)) {
-            Log::info('Simulated charge of $' . $amount . ' to ' . get_class($this) . ' ' . $this->id);
-
-            $log->success = true;
-            $log->save();
-
-            return true;
-        }
-
-        $xmlRequest = view('billing.pxpost', [
-            'postUsername' => env('PXPOST_USERNAME', ''),
-            'postPassword' => env('PXPOST_KEY', ''),
-            'amount' => $amount,
-            'dpsBillingId' => $this->billing_detail->dps_billing_token,
-            'id' => $this->billing_detail->id,
-        ])->render();
-
-        $postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
-
-        $response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
-
-        $xmlResponse = new \SimpleXMLElement((string)$response->getBody());
-
-        if (!boolval((string)$xmlResponse->Success)) {
-            $log->success = false;
-            $log->save();
-
-            return false;
-        }
-
-        $log->success = true;
-        $log->save();
-
-        return true;
     }
 }

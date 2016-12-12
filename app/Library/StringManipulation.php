@@ -4,6 +4,12 @@ namespace App\Library;
 
 class StringManipulation
 {
+    /**
+     * Take a collection of words and put them in to a list that can be displayed in text.
+     *
+     * Examples:
+     * One item: one | Two items: one and two | Three items: one, two, and three
+     */
     public static function buildCommaList(\Illuminate\Database\Eloquent\Collection $collection)
     {
         $commaList = '';

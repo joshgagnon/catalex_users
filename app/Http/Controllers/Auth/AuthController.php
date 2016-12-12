@@ -73,15 +73,6 @@ class AuthController extends Controller {
     public function create(array $data) {
         $organisation = null;
 
-        /*
-        $billing = BillingDetail::create([
-            'period' => 'monthly',
-            'address_id' => null,
-            'dps_billing_token' => Session::get('billing.dps_billing_id'),
-            'expiry_date' => Session::get('billing.date_expiry'),
-            'last_billed' => null,
-        ]);*/
-
         if(strlen(trim($data['business_name']))) {
             $organisation = Organisation::create([
                 'name' => $data['business_name'],
@@ -111,15 +102,24 @@ class AuthController extends Controller {
         Mail::queueStyledMail('emails.welcome', [
             'name' => $user->fullName(),
             'email' => $user->email,
-            //'trialEnd' => $trialEnd->format('F j'),
         ], $user->email, $user->fullName(), 'Welcome to CataLex');
 
         return $user;
     }
-    public function postRegister(Request $request) {
-        //if(!Session::has('register.personal')) {
-        //  return redirect()->action('Auth\AuthController@getRegister')->withErrors(['Session has expired, please try again.']);
-        //}
+
+    public function getRegister(Request $request)
+    {
+        // Grab the query string and pass it along to the view
+        // The view will want this to include in the post
+        $queryParams = $request->query();
+        $queryString = http_build_query($queryParams);
+
+        return view('auth.register')->with(['queryString' => $queryString]);
+    }
+
+    public function postRegister(Request $request)
+    {
+        $registerToGoodCompanies = $request->query()['gc'] == true;
 
         // Fold previous step post data into this request
         //$request->replace($request->input() + Session::get('register.personal'));
@@ -133,26 +133,12 @@ class AuthController extends Controller {
             $request->replace($input + ['password' => $password, 'password_confirmation' => $password]);
         }
 
-        // Check that we got a valid billing token
-        /*
-        if(!(Session::has('billing.dps_billing_id') && Session::has('billing.date_expiry'))) {
-            if(env('DISABLE_PAYMENT', false)) {
-                Session::put('billing.dps_billing_id', 'xxxxxxxxxxxxxxxx');
-                Session::put('billing.date_expiry', '9999');
-            }
-            else {
-                return redirect()->back()->withErrors(['You must verify your credit card before beginning the free trial. It will not be charged until the trial expires.']);
-            }
-        }*/
-
         // Hand over to internal Laravel user setup
         $response = $this->defaultPostRegister($request);
 
         if (Auth::check()) {
             // Success, oauth flow over
             Session::forget('oauth.register');
-            //Session::forget('billing.dps_billing_id');
-            //Session::forget('billing.date_expiry');
         }
 
         return $response;
@@ -220,7 +206,7 @@ class AuthController extends Controller {
                 $emails[] = $emailDetails;
             }
 
-            if(count($emails) && ($user = User::whereIn('email', $emails)->first())) {
+            if (count($emails) && ($user = User::whereIn('email', $emails)->first())) {
                 Auth::login($user);
                 return redirect()->action('HomeController@index');
             }

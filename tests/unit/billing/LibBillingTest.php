@@ -69,7 +69,7 @@ class LibBillingTest extends TestCase
         $cents = 87543487289;
 
         $actual = Billing::centsToDollars($cents);
-        $expected = Billing::formatDollars(875434872.89);
+        $expected = '875434872.89';
 
         $this->assertEquals($actual, $expected);
     }

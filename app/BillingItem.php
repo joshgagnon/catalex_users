@@ -47,7 +47,8 @@ class BillingItem extends Model
                     $query->select(\DB::raw(1))
                           ->from('billing_item_payments')
                           ->whereRaw('billing_item_payments.billing_item_id = billing_items.id')
-                          ->where('paid_until', '>=', Carbon::tomorrow());
+                          ->where('paid_until', '>=', Carbon::tomorrow())
+                          ->where('active', '=', 'true');
                 });
     }
 

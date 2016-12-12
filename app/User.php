@@ -245,5 +245,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$this->save();
 	}
 
-
+	protected function getAllDueBillingItems($service)
+	{
+		return $service->billingItems()
+                       ->where('user_id', '=', $this->id)
+                       ->dueForPayment()
+                       ->get();
+	}
 }

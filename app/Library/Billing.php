@@ -29,7 +29,7 @@ class Billing
     public static function centsToDollars($cents)
     {
         $dollars = bcdiv($cents, 100, 2);
-        return self::formatDollars($dollars);
+        return number_format($dollars, self::DECIMAL_PLACES, null, '');
     }
 
     /**

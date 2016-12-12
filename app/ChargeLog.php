@@ -12,6 +12,17 @@ class ChargeLog extends Model {
 	 */
 	const CREATED_AT = 'timestamp';
 
+	// We don't have an updated timestamp, so turn off timestamps and manually set the created at timestamp below
+	public $timestamps = false;
+
+	public static function boot()
+    {
+		// manually set the created at timestamp below
+	    static::creating( function ($model) {
+	        $model->setCreatedAt($model->freshTimestamp());
+	    });
+	}
+
 	/**
 	 * The attributes that are mass assignable.
 	 *

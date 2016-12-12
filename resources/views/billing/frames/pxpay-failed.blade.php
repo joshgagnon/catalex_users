@@ -1,4 +1,4 @@
-@extends('auth.frames.wrapper')
+@extends('billing.frames.wrapper')
 
 @section('content')
 <body class="inside-panel">
