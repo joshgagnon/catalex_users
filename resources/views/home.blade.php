@@ -37,7 +37,7 @@
                                 </p>
                                  </a>
                             @else
-                            <a href="{{ route('user-services.index') }}" class="disabled-service">
+                            <a href="{{ route('user-services.index', array(urlencode('Good Companies') => 1)) }}" class="disabled-service">
                                  <i class="fa fa-briefcase"></i>
                                 <h4>Good Companies</h4>
                                 <p>

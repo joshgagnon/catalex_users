@@ -16,6 +16,10 @@ CataLex Law Browser - Edit Services
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
 
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+
                         <div class="form-group">
                             @foreach($services as $service)
                                 <div class="service-well well ">
@@ -26,7 +30,7 @@ CataLex Law Browser - Edit Services
                                             type="checkbox"
                                             value="{{ $service->id }}"
                                             name="services[{{ $service->id }}]"
-                                            {{ $service->userHasService || !$service->is_paid_service ? 'checked' : '' }}
+                                            {{ $service->userHasService || !$service->is_paid_service || isset($_GET[urlencode($service->name)]) ? 'checked' : '' }}
                                             {{ !$service->is_paid_service ? 'disabled' : '' }}>
 
                                     </label>
@@ -45,7 +49,7 @@ CataLex Law Browser - Edit Services
                                     @if($service->name == 'Law Browser')
                                         <div class="col-xs-10">
                                             <h2>
-                                                     <i class="fa fa-search"></i>
+                                            <i class="fa fa-search"></i>
 
 
                                             {{ $service->name }}
