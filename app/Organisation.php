@@ -110,7 +110,7 @@ class Organisation extends Model {
 		}
 	}
 
-	protected function getAllDueBillingItems($service)
+	public function getAllDueBillingItems($service)
 	{
 		// Get due billing items for this organisation
 		$billingItems = $service->billingItems()
@@ -128,7 +128,7 @@ class Organisation extends Model {
                                            ->dueForPayment()
                                            ->get();
             
-            $billingItems->merge($membersBillingItems);
+            $billingItems = $billingItems->merge($membersBillingItems);
         }
 
         // Return all due billing item for both this organisation and it's members

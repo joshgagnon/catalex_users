@@ -29,14 +29,18 @@ class ChargeUsers extends Command
      */
     public function handle()
     {
+        // Bill all users without an organisation
         foreach (User::all() as $user) {
-            if (!$user->organisation_id) {
+            if (!$user->organisation_id && $user->isBillingDay()) {
                 $user->bill();
             }
         }
 
+        // Bill all organisations
         foreach (Organisation::all() as $organisation) {
-            $organisation->bill();
+            if ($organisation->isBillingDay()) {
+                $organisation->bill();
+            }
         }
     }
 }

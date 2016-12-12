@@ -30,16 +30,6 @@ class ChargeLog extends Model {
 	 */
 	protected $fillable = ['success', 'pending', 'user_id', 'organisation_id', 'total_amount', 'gst'];
 
-	/**
-	 * Don't use updated_at timestamp for this model.
-	 *
-	 * @param  mixed  $value
-	 * @return void
-	 */
-	public function setUpdatedAt($value) {
-		// Nothing to do
-	}
-
 	public function user() {
 		return $this->belongsTo('App\User');
 	}

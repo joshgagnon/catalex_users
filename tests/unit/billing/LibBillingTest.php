@@ -58,7 +58,7 @@ class LibBillingTest extends TestCase
         $actual = Billing::centsToDollars($cents);
         $expected = Billing::formatDollars(1);
 
-        $this->assertEquals($actual, $expected);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -71,7 +71,7 @@ class LibBillingTest extends TestCase
         $actual = Billing::centsToDollars($cents);
         $expected = '875434872.89';
 
-        $this->assertEquals($actual, $expected);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -84,7 +84,7 @@ class LibBillingTest extends TestCase
         $actual = Billing::centsToDollars($cents);
         $expected = Billing::formatDollars(0);
 
-        $this->assertEquals($actual, $expected);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -97,7 +97,7 @@ class LibBillingTest extends TestCase
         $actual = Billing::formatDollars($dollars);
         $expected = '1.00';
 
-        $this->assertEquals($actual, $expected);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -110,7 +110,7 @@ class LibBillingTest extends TestCase
         $actual = Billing::formatDollars($dollars);
         $expected = '100.00';
 
-        $this->assertEquals($actual, $expected);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -123,6 +123,6 @@ class LibBillingTest extends TestCase
         $actual = Billing::formatDollars($dollars);
         $expected = '99.99';
 
-        $this->assertEquals($actual, $expected);
+        $this->assertEquals($expected, $actual);
     }
 }

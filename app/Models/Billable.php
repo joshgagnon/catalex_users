@@ -94,7 +94,7 @@ trait Billable {
             return $billablesService->pivot->access_level == 'full_access';
         }
 
-        // If this billable entity has an organisation, fallback to the organisations access level
+        // If this billable entity has an organisation, fallback to the organisation's access level
         if ($this->organisation) {
             return $this->organisation->hasAccess($service);
         }
@@ -183,20 +183,17 @@ trait Billable {
             throw new \Exception('Registration to paid service requires billing details to be setup');
         }
 
-        // Bill for all of this billable entity's services
-        $services = $this->services()->where('is_paid_service', true)->get();
+        $services = Service::where('is_paid_service', true)->get();
+        $payingUntil = $this->calculatePayingUntil($billingDetails->period);
         $centsDue = 0;
 
         foreach ($services as $service) {
-            // We use the billing period and the price from the registration record for all billing items
-            // to keep billing consistent
-            $registrationRecord = $this->services()->where('service_id', $service->id)->first();
-            $priceInCents = $this->getPriceForService($service, $registrationRecord, $billingDetails);
+            $priceInCents = $this->getPriceForService($service, $billingDetails);
             $billingItems = $this->getAllDueBillingItems($service);
 
             foreach ($billingItems as $item) {
                 $itemPayment = new BillingItemPayment();
-                $itemPayment->paid_until = $this->calculatePayingUntil($billingDetails->period);
+                $itemPayment->paid_until = $payingUntil;
                 $itemPayment->billing_item_id = $item->id;
                 $itemPayment->charge_log_id = $chargeLog->id;
 
@@ -236,19 +233,22 @@ trait Billable {
         return $success;
     }
 
-    private function getPriceForService($service, $registrationRecord, $billingDetails)
+    private function getPriceForService($service, $billingDetails)
     {
-        $priceInCents = $registrationRecord->pivot->price_in_cents;
+        // If this billable entity has is directly registered with the service see if it has a specified price
+        // There are times where this billable entity wont have a registration record. This is when an organisation
+        // isn't registered to a service, but one of it's users is
+        $registrationRecord = $this->services()->where('service_id', $service->id)->first();
+        $priceInCents = $registrationRecord ? $registrationRecord->pivot->price_in_cents : null;
 
         if (!$priceInCents) {
-            if ($service->name == 'Good Companies') {
-                if ($billingDetails->period == 'monthly') {
-                    $priceInCents = Config::get('constants.gc_monthly_price_in_cents');
-                } else {
-                    $priceInCents = Config::get('constants.gc_yearly_price_in_cents');
-                }
-            } else {
-                throw new \Exception('Unknown default price for service');
+            switch ($service->name) {
+                case 'Good Companies':
+                    $constantName = $billingDetails->period == 'monthly' ? 'constants.gc_monthly_price_in_cents' : 'constants.gc_yearly_price_in_cents';
+                    $priceInCents = Config::get($constantName);
+                    break;
+                default:
+                    throw new \Exception('Unknown default price for service');
             }
         }
 
