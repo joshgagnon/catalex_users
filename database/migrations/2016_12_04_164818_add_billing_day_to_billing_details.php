@@ -13,7 +13,7 @@ class AddBillingDayToBillingDetails extends Migration
     public function up()
     {
         Schema::table('billing_details', function (Blueprint $table) {
-            $table->integer('billing_day')->unsigned();
+            $table->integer('billing_day')->unsigned()->default(1);
         });
     }
 
