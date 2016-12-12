@@ -72,7 +72,7 @@ trait Billable {
 
     public function hasBrowserAccess()
     {
-        return true; ///$this->billingExempt() || $this->inTrial() || $this->isPaid();
+        return true;
     }
 
     public function hasSignAccess()
@@ -82,13 +82,13 @@ trait Billable {
 
     public function hasGoodCompaniesAccess()
     {
-        return true;
+        return $this->hasAccess(Service::where('name', 'Good Companies')->first());
     }
 
     public function hasAccess(Service $service)
     {
         $billablesService = $this->services()->where('service_id', $service->id)->first();
-        
+
         // If this billable entity is registered for this service, check their service level
         if ($billablesService != null) {
             return $billablesService->pivot->access_level == 'full_access';
@@ -206,7 +206,7 @@ trait Billable {
         // Request the payment
         $totalDollarsDue = Billing::centsToDollars($centsDue);
         $success = $this->requestPayment($totalDollarsDue);
-        
+
         // Update the charge log
         $gst = Billing::includingGst($totalDollarsDue);
         $chargeLog->update(['pending' => false, 'success' => $success, 'total_amount' => $totalDollarsDue, 'gst' => $gst]);

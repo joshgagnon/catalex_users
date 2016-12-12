@@ -2,11 +2,15 @@
 
 @import 'bootstrap/bootstrap';
 
+
 $header-height: 100px;
 $header-height-sml: 50px;
 
 @import '../../../node_modules/catalex_shared/sass/catalex-common';
 @import '../../../node_modules/catalex_shared/sass/catalex-footer';
+
+@import '../../../node_modules/font-awesome/scss/font-awesome';
+
 html {
     position: relative;
     min-height: 100%;
@@ -66,24 +70,6 @@ nav.navbar{
 }
 
 
-.services{
-    .service{
-        text-align: center;
-        .image-button{
-            background-color: $light-red;
-            max-width: 300px;
-            width: 100%;
-            padding: 20px;
-            border-radius: 8px;
-            display:inline-block;
-            margin: 20px 0;
-            img{
-
-                width:100%;
-            }
-        }
-    }
-}
 
 
 ul.social-logins {
@@ -174,6 +160,39 @@ form.form-inline .form-group label {
 
 .tabular label {
 	width: 100px;
+}
+
+
+
+.service{
+    color: $light-red;
+    padding:40px;
+    text-align: center;
+    h3{
+        margin-bottom:0px;
+    }
+    p{
+        margin-top: 0;
+    }
+    .fa{
+        font-size:4em;
+
+    }
+     transition: all 500ms ease-out;
+    &:hover{
+          transform: scale(1.1, 1.1);
+    }
+    a:hover{
+         text-decoration: none;
+          color: $deep-red;
+    }
+    * {
+        text-decoration: none;
+        color: $light-red;
+    }
+    h4{
+        font-size: 30px;
+    }
 }
 
 
