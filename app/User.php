@@ -106,7 +106,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		}
 	}
 
-	public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null) {
+	public function sendInvoices($type, $invoiceNumber, $listItems, $totalAmount, $gst, $orgName=null, $orgId=null) {
 		$name = $this->fullName();
 		$date = Carbon::now()->format('j/m/Y');
 		$accountNumber = $orgId ?: 'CU' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
@@ -116,7 +116,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$handle = fopen($html, 'w');
 		fwrite(
 			$handle,
-			view('emails.invoice-attachment', compact('orgName', 'name', 'date', 'type', 'invoiceNumber', 'accountNumber', 'listItem'))->render()
+			view('emails.invoice-attachment', compact('orgName', 'name', 'date', 'type', 'invoiceNumber', 'totalAmount', 'gst', 'accountNumber', 'listItems'))->render()
 		);
 		fclose($handle);
 
@@ -125,9 +125,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 		Mail::queueStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt', $pdf);
 
-		unlink($baseName);
-		unlink($html);
-		unlink($pdf);
+		//unlink($baseName);
+		//unlink($html);
+		//unlink($pdf);
 	}
 
 	public function addRole($role) {

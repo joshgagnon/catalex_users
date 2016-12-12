@@ -40,7 +40,7 @@ trait Billable {
 
     abstract public function paymentAmount();
 
-    abstract public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null);
+    abstract public function sendInvoices($type, $invoiceNumber, $totalAmount, $gst, $listItem, $orgName=null, $orgId=null);
 
     abstract protected function getAllDueBillingItems($service);
 
@@ -165,11 +165,6 @@ trait Billable {
             return true;
         }
 
-        // Delegate billing to organisation if present
-        if ($this->organisation) {
-            return $this->organisation->bill();
-        }
-
         $chargeLog = ChargeLog::create([
             'success' => false,
             'pending' => true,
@@ -187,6 +182,7 @@ trait Billable {
         $payingUntil = $this->calculatePayingUntil($billingDetails->period);
         $centsDue = 0;
 
+        $billingSummary = [];
         foreach ($services as $service) {
             $priceInCents = $this->getPriceForService($service, $billingDetails);
             $billingItems = $this->getAllDueBillingItems($service);
@@ -198,8 +194,8 @@ trait Billable {
                 $itemPayment->charge_log_id = $chargeLog->id;
 
                 $itemPayment->save();
+                $billingSummary[] = ['description' =>  json_decode($item->json_data)['company_name'], 'paidUntil' => $payingUntil->format('j M Y'), 'amount' => Billing::centsToDollars($priceInCents)];
             }
-
             $centsDue += $priceInCents * count($billingItems);
         }
 
@@ -228,7 +224,9 @@ trait Billable {
                 $item->save();
             }
         }
-
+        else{
+            $this->sendInvoices('subscription', $chargeLog->id, $billingSummary, $totalDollarsDue, $gst);
+        }
         // Return whether payment was successful or not
         return $success;
     }
