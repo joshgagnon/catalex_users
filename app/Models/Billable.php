@@ -144,6 +144,7 @@ trait Billable {
 
         $billingDay = $this->billing_detail()->first()->billing_day;
         $daysThisMonth = date('t');
+        $daysThisMonth = $dateOfBilling->format('t');
 
         // If the billing day for this user/organisation doesn't exist this month, make their billing
         // day the last day in this month

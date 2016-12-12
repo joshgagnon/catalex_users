@@ -13,8 +13,8 @@
         <testsuite name="Application Test Suite">
             <directory>./tests/</directory>
         </testsuite>
-        <testsuite name="unit">
-            <directory>./tests/unit/</directory>
+        <testsuite name="billing">
+            <directory>./tests/billing/</directory>
         </testsuite>
         <testsuite name="commands">
             <directory>./tests/commands/</directory>
