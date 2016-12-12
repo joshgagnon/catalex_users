@@ -10,7 +10,7 @@ use \Carbon\Carbon;
 class BillingItem extends Model
 {
     const ITEM_TYPE_GC_COMPANY = 'gc_company';
-    
+
     private $itemTypes = [
         self::ITEM_TYPE_GC_COMPANY
     ];

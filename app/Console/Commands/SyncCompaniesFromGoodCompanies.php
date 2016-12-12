@@ -24,7 +24,7 @@ class SyncCompaniesFromGoodCompanies extends Command
      * @var string
      */
     protected $description = 'Sync billing items with companies in Good Companies';
-    
+
     /**
      * Execute the console command.
      *
@@ -47,7 +47,7 @@ class SyncCompaniesFromGoodCompanies extends Command
         // Get a list of all companies
         $companies = $this->getCompanies();
 
-        // Make sure every company from the response is either 
+        // Make sure every company from the response is either
         foreach ($companies as $company) {
             // Check the companies user ID is valid
             if (!User::where('id', '=', $company->userId)->exists()) {
@@ -101,8 +101,8 @@ class SyncCompaniesFromGoodCompanies extends Command
     {
         // Hit the Good Companies API and get a list of all companies
         $guzzleClient = new Client(['base_uri' => env('GC_BASE_URI')]);
-        $response = $guzzleClient->request('POST', 'api/admin/billing', ['body' => 'key=' . env('GC_ADMIN_KEY')]);
 
+        $response = $guzzleClient->request('POST', 'api/admin/billing', ['form_params' => ['key' => env('GC_ADMIN_KEY')]]);
         // Get the response content. Decode and return it
         $responseContent = $response->getBody()->getContents();
         $companies = json_decode($responseContent);
