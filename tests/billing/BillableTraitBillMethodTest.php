@@ -30,7 +30,7 @@ class Organisation extends \App\Organisation
     }
 }
 
-class BillableTraitTest extends TestCase
+class BillableTraitBillMethodTest extends TestCase
 {
     use DatabaseTransactions;
 
