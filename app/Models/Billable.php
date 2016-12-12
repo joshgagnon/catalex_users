@@ -198,7 +198,7 @@ trait Billable {
                 $itemPayment->charge_log_id = $chargeLog->id;
 
                 $itemPayment->save();
-                $billingSummary[] = ['description' =>  json_decode($item->json_data)['company_name'], 'paidUntil' => $payingUntil->format('j M Y'), 'amount' => Billing::centsToDollars($priceInCents)];
+                $billingSummary[] = ['description' =>  json_decode($item->json_data, true)['company_name'], 'paidUntil' => $payingUntil->format('j M Y'), 'amount' => Billing::centsToDollars($priceInCents)];
             }
             $centsDue += $priceInCents * count($billingItems);
         }
