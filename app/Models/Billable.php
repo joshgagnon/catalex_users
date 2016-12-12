@@ -72,7 +72,7 @@ trait Billable {
 
     public function hasBrowserAccess()
     {
-        return true; ///$this->billingExempt() || $this->inTrial() || $this->isPaid();
+        return true;
     }
 
     public function hasSignAccess()
@@ -82,7 +82,7 @@ trait Billable {
 
     public function hasGoodCompaniesAccess()
     {
-        return true;
+        return $this->hasAccess(Service::where('name', 'Good Companies')->first());
     }
 
     public function hasAccess(Service $service)
