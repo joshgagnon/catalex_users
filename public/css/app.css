@@ -5793,6 +5793,7 @@ body {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
+  -webkit-filter: none;
   filter: none; }
 
 .fa-stack {
