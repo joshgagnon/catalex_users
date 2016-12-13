@@ -12,7 +12,7 @@
 
 	{{-- TODO: <link rel="shortcut icon" type="image/png" href="/favicon.png" /> --}}
 
-	<link href="/css/app.css" rel="stylesheet">
+	<link href="{{ elixir('css/app.css') }}" rel="stylesheet">
 
 	{{-- Fonts --}}
 	<link href='//brick.a.ssl.fastly.net/Ubuntu:400,400i,500,700' rel='stylesheet' type='text/css'>
