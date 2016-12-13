@@ -63,7 +63,6 @@ class BillingController extends Controller
         if (!$request->session()->has('redirect_route_name')) {
             abort(403, 'Forbidden');
         }
-
         // Create a new payment gayway request to get iframe url to show
         $gateway = PXPay::getGateway();
 

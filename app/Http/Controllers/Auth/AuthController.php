@@ -119,7 +119,7 @@ class AuthController extends Controller {
 
     public function postRegister(Request $request)
     {
-        $registerToGoodCompanies = $request->query()['gc'] == true;
+        #$registerToGoodCompanies = $request->query()['gc'] == true;
 
         // Fold previous step post data into this request
         //$request->replace($request->input() + Session::get('register.personal'));

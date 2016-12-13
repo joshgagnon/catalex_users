@@ -18,8 +18,7 @@ Route::group(['middleware' => 'csrf'], function() {
 
     Route::controllers([
         'auth' => 'Auth\AuthController',
-        'password' => 'Auth\PasswordController',
-        // 'billing' => 'BillingController',
+        'password' => 'Auth\PasswordController'
     ]);
 
     Route::group(['middleware' => 'auth'], function() {
