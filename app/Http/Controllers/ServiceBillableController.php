@@ -52,8 +52,6 @@ class ServiceBillableController extends Controller
 
         $servicesRequiringBilling = Service::whereIn('id', $newServiceIds)->where('is_paid_service', true)->get();
 
-        // dd($servicesRequiringBilling);
-
         // Check the user has billing setup (if they need billing setup)
         if ($servicesRequiringBilling->count() > 0 && !$billableEntity->billing_detail()->exists()) {
             $paidServicesCommalist = StringManipulation::buildCommaList($servicesRequiringBilling->pluck('name'));
@@ -69,7 +67,7 @@ class ServiceBillableController extends Controller
         // Sync the new services
         $billableEntity->services()->sync($newServiceIds);
 
-        // Return the user to the edit services page
-        return redirect()->route('user-services.index');
+        // Return the user to the home (services) page
+        return redirect()->route('index');
     }
 }
