@@ -9,39 +9,12 @@ class BillableTrait_isBillingDayMethodTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private function createBillingDetails($overrides=[])
-    {
-        $defaults = [
-            'period' => 'annually',
-            'billing_day' => 1,
-        ];
-
-        $billingData = array_merge($defaults, $overrides);
-
-        return BillingDetail::create($billingData);
-    }
-
-    private function createUser($overrides=[])
-    {
-        $defaults = [
-            'name' => 'User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password'),
-            'active' => true,
-            'billing_detail_id' => null,
-        ];
-
-        $userData = array_merge($defaults, $overrides);
-
-        return User::create($userData);
-    }
-
     /**
      * @test
      */
     public function isBillingDay()
     {
-        $billingDetails = $this->createBillingDetails(['period' => 'monthly');
+        $billingDetails = $this->createBillingDetails(['billing_day' => Carbon::today()->day]);
         $user = $this->createUser(['billing_detail_id' => $billingDetails->id]);
 
         $actual = $user->isBillingDay(Carbon::now());
@@ -55,7 +28,7 @@ class BillableTrait_isBillingDayMethodTest extends TestCase
      */
     public function isBillingDay_notBillingDay()
     {
-        $billingDetails = $this->createBillingDetails('monthly',  Carbon::parse('-1 day')->day);
+        $billingDetails = $this->createBillingDetails(['billing_day' => Carbon::parse('-1 day')->day]);
         $user = $this->createUser(['billing_detail_id' => $billingDetails->id]);
 
         $actual = $user->isBillingDay(Carbon::now());
@@ -69,7 +42,7 @@ class BillableTrait_isBillingDayMethodTest extends TestCase
      */
     public function isBillingDay_lastDayOfMonth()
     {
-        $billingDetails = $this->createBillingDetails('monthly',  31);
+        $billingDetails = $this->createBillingDetails(['billing_day' => 31]);
         $user = $this->createUser(['billing_detail_id' => $billingDetails->id]);
 
         $actual = $user->isBillingDay(Carbon::parse('last day of July'));
@@ -83,7 +56,7 @@ class BillableTrait_isBillingDayMethodTest extends TestCase
      */
     public function isBillingDay_lastDayOfMonth_isBeforeBillingDay()
     {
-        $billingDetails = $this->createBillingDetails('monthly',  31);
+        $billingDetails = $this->createBillingDetails(['billing_day' => 31]);
         $user = $this->createUser(['billing_detail_id' => $billingDetails->id]);
 
         $actual = $user->isBillingDay(Carbon::parse('last day of September'));
@@ -97,7 +70,7 @@ class BillableTrait_isBillingDayMethodTest extends TestCase
      */
     public function isBillingDay_lastDayOfMonth_isBeforeBillingDay_28DayMonth()
     {
-        $billingDetails = $this->createBillingDetails(null, 31);
+        $billingDetails = $this->createBillingDetails(['period' => 'annually', 'billing_day' => 31]);
         $user = $this->createUser(['billing_detail_id' => $billingDetails->id]);
 
         $actual = $user->isBillingDay(Carbon::parse('last day of February 2015'));

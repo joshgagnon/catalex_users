@@ -11,7 +11,8 @@ class PXPay
 {
     const CURRENCY_NZD = 'NZD';
 
-    public static function requestPayment($billable, $totalDollars) {
+    public function requestPayment($billable, $totalDollars) {
+        // If billing is disabled, log and leave
         if (env('DISABLE_PAYMENT', false)) {
             $billableType = $billable instanceof User ? 'User' : 'Organisation';
             Log::info('Simulated charge of $' . $totalDollars . ' to type: ' . $billableType . ', id: ' . $billable->id);
@@ -19,6 +20,7 @@ class PXPay
             return true;
         }
 
+        // If the billing amount is nothing, don't bother billing
         if ($totalDollars == '0.00') {
             return true;
         }
@@ -31,39 +33,55 @@ class PXPay
             throw new \Exception('Billable must have billing details set before requesting payment');
         }
 
-        // Build the XML to send to PXPost
+        // Build the XML and send the request
         $xmlRequest = $this->buildPaymentRequestXML($totalDollars, $billingDetails);
-
-        // Send the request to the PXPost API
-        $postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
-        $response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
-        $xmlResponse = new \SimpleXMLElement((string)$response->getBody());
-
-        // Check if the payment request was successful
-        $success = boolval((string)$xmlResponse->Success);
+        $success = $this->sendPaymentRequest($xmlRequest);
 
         // Return the successfulness
         return $success;
     }
 
-    private function buildPaymentRequestXML($totalDollars, $billingDetails)
+    protected function sendPaymentRequest($xmlRequest)
     {
-        $xmlRequest = view('billing.pxpost', [
-            'postUsername' => env('PXPOST_USERNAME'),
-            'postPassword' => env('PXPOST_KEY'),
+        $postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
+        $response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
+        $xmlResponse = new \SimpleXMLElement((string)$response->getBody());
+
+        $success = boolval((string)$xmlResponse->Success);
+
+        return $success;
+    }
+
+    protected function buildPaymentRequestXML($totalDollars, $billingDetails)
+    {
+        $username = env('PXPOST_USERNAME');
+        $key = env('PXPOST_KEY');
+
+        if (!$username || !$key) {
+            throw new \Exception('PXPost username and password are required. Please check they are setup in the .env file.');
+        }
+
+        return view('billing.pxpost', [
+            'postUsername' => $username,
+            'postPassword' => $key,
             'amount' => $totalDollars,
             'dpsBillingId' => $billingDetails->dps_billing_token,
             'id' => $billingDetails->id,
         ])->render();
-
-        return $xmlRequest;
     }
 
     public static function getGateway()
     {
+        $username = env('PXPAY_USERNAME');
+        $key = env('PXPAY_KEY');
+
+        if (!$username || !$key) {
+            throw new \Exception('PXPay username and password are required. Please check they are setup in the .env file.');
+        }
+
         $gateway = Omnipay::create('PaymentExpress_PxPay');
-        $gateway->setUsername(env('PXPAY_USERNAME'));
-        $gateway->setPassword(env('PXPAY_KEY'));
+        $gateway->setUsername($username);
+        $gateway->setPassword($key);
 
         return $gateway;
     }

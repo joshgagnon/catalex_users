@@ -1,5 +1,8 @@
 <?php
 
+use App\BillingDetail;
+use App\User;
+
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     protected $runMigrations = true;
@@ -22,6 +25,33 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
 
         return $app;
+    }
+
+    protected function createUser($overrides=[])
+    {
+        $defaults = [
+            'name' => 'User',
+            'email' => 'user@example.com',
+            'password' => bcrypt('password'),
+            'active' => true,
+            'billing_detail_id' => null,
+        ];
+
+        $userData = array_merge($defaults, $overrides);
+
+        return User::create($userData);
+    }
+
+    protected function createBillingDetails($overrides=[])
+    {
+        $defaults = [
+            'period' => 'monthly',
+            'billing_day' => 1,
+        ];
+
+        $billingData = array_merge($defaults, $overrides);
+
+        return BillingDetail::create($billingData);
     }
 }
 
