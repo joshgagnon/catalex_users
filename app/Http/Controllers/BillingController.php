@@ -76,11 +76,8 @@ class BillingController extends Controller
             return redirect()->back()->withErrors(['An error occurred contacting the payment gateway, please try again.']);
         }
 
-        $message = $request->session()->pull('register_card_message');
-
         return view('billing.register-card')->with([
             'gatewayURL' => $response->getRedirectUrl(),
-            'message' => $message,
         ]);
     }
 

@@ -12,7 +12,7 @@
 */
 
 Route::group(['middleware' => 'csrf'], function() {
-    Route::get('/', 'HomeController@index');
+    Route::get('/', 'HomeController@index')->name('index');
     Route::get('/termsofuse', 'LegalController@termsofuse');
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
 

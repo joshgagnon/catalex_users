@@ -54,10 +54,6 @@ class ServiceBillableController extends Controller
 
         // Check the user has billing setup (if they need billing setup)
         if ($servicesRequiringBilling->count() > 0 && !$billableEntity->billing_detail()->exists()) {
-            $paidServicesCommalist = StringManipulation::buildCommaList($servicesRequiringBilling->pluck('name'));
-            $message = 'The following services are paid services and require you to have a registered card: ' . $paidServicesCommalist . '.';
-
-            $request->session()->put('register_card_message', $message);
             $request->session()->put('redirect_route_name', 'user-services.return-from-billing');
             $request->session()->put('redirect_data', ['services_json' => json_encode($newServiceIds)]);
 
@@ -67,7 +63,7 @@ class ServiceBillableController extends Controller
         // Sync the new services
         $billableEntity->services()->sync($newServiceIds);
 
-        // Return the user to the edit services page
-        return redirect()->route('user-services.index');
+        // Return the user to the home (services) page
+        return redirect()->route('index');
     }
 }
