@@ -16,11 +16,26 @@ CataLex Law Browser - Edit Services
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
 
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
+
+
 
                         <div class="form-group">
+
+                            <div class="billing-period well ">
+                                <div class="row">
+                                <h4><strong>Billing Period</strong></h4>
+                                    <div class="col-md-6">
+                                    <label><input type="radio" name="period" value="monthly"  {{ $user->billingDetails && $user->billingDetails->billing_period == 'monthly' ? 'checked' : '' }} />Monthly</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <label><input type="radio" name="period" value="annually"  {{ $user->billingDetails && $user->billingDetails->billing_period == 'annually' ? 'checked' : '' }}/>Annually</label>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
                             @foreach($services as $service)
                                 <div class="service-well well ">
                                 <div class="row">
@@ -43,7 +58,7 @@ CataLex Law Browser - Edit Services
                                             </h2>
                                         <div>
                                         <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
-                                        <p>Click <a href="https://catalex.nz/good-companies.html" target="_blank">here</a> to see features and pricing.</p>
+                                        <p>Good Companies costs just <strong>$12 annually</strong> or <strong>$1.50 monthly</strong>, per company.  Click <a href="https://catalex.nz/good-companies.html" target="_blank">here</a> to see features.</p>
                                     @endif
 
                                     @if($service->name == 'Law Browser')
@@ -93,7 +108,7 @@ CataLex Law Browser - Edit Services
                         </div>
 
                         <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary">Save My Changes</button>
                         </div>
                     </form>
                 </div>
