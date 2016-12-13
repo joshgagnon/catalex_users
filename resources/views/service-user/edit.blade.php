@@ -20,22 +20,6 @@ CataLex Law Browser - Edit Services
 
 
                         <div class="form-group">
-
-                            <div class="billing-period well ">
-                                <div class="row">
-                                <h4><strong>Billing Period</strong></h4>
-                                    <div class="col-md-6">
-                                    <label><input type="radio" name="period" value="monthly"  {{ $user->billingDetails && $user->billingDetails->billing_period == 'monthly' ? 'checked' : '' }} />Monthly</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                    <label><input type="radio" name="period" value="annually"  {{ $user->billingDetails && $user->billingDetails->billing_period == 'annually' ? 'checked' : '' }}/>Annually</label>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
                             @foreach($services as $service)
                                 <div class="service-well well ">
                                 <div class="row">
