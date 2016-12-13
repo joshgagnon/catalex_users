@@ -12,11 +12,9 @@ require('laravel-elixir-webpack');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss')
-        .sass('email.scss')
-        .webpack('app.js')
-        .copy(
-           'node_modules/font-awesome/fonts',
-           'public/fonts'
-        )
+    mix.sass('app.scss');
+    mix.sass('email.scss');
+    mix.version('css/app.css');
+    mix.webpack('app.js');
+    mix.copy('node_modules/font-awesome/fonts', 'public/build/fonts');
 });

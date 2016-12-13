@@ -30,23 +30,17 @@
                             <div class="service">
                             @if ($user->hasGoodCompaniesAccess())
                             <a href="{{ route('good-companies-login') }}">
-                                 <i class="fa fa-briefcase"></i>
+                                <i class="fa fa-briefcase"></i>
                                 <h4>Good Companies</h4>
-                                <p>
-                                    Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.
-                                </p>
-                                 </a>
+                                <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
+                            </a>
                             @else
                             <a href="{{ route('user-services.index', array(urlencode('Good Companies') => 1)) }}" class="disabled-service">
-                                 <i class="fa fa-briefcase"></i>
+                                <i class="fa fa-briefcase"></i>
                                 <h4>Good Companies</h4>
-                                <p>
-                                    Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.
-                                </p>
-                                <p>Click here to subscribe</p>
-                                 </a>
-
-
+                                <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
+                                <p>Click here to for features and pricing.</p>
+                            </a>
                             @endif
                             </div>
                         </div>
