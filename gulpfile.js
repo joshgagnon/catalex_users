@@ -16,5 +16,6 @@ elixir(function(mix) {
     mix.sass('email.scss');
     mix.version('css/app.css');
     mix.webpack('app.js');
-    mix.copy('node_modules/font-awesome/fonts', 'public/build/fonts');
+    mix.copy('node_modules/font-awesome/fonts', 'public/fonts');
+    mix.copy('public/fonts', 'public/build/fonts');
 });
