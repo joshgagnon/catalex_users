@@ -13,7 +13,7 @@ class PXPay extends \App\Library\PXPay
 
     protected function sendPaymentRequest($xmlRequest)
     {
-        $paymentRequestSent = true;
+        $this->paymentRequestSent = true;
         return true; // Don't make payment request
     }
 }

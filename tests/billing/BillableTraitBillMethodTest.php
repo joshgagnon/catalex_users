@@ -44,6 +44,18 @@ class BillableTraitBillMethodTest extends TestCase
         ]);
     }
 
+    private function createBillingItem($data)
+    {
+        return BillingItem::create([
+            'user_id' => $data['user_id'],
+            'service_id' => $data['service_id'],
+            'item_id' => $data['item_id'],
+            'item_type' => array_key_exists('item_type', $data) ? $data['item_type'] : 'gc_company',
+            'json_data' => array_key_exists('json_data', $data) ? $data['json_data'] : '{\"company_name\": \"test\"}',
+            'active' => array_key_exists('active', $data) ? $data['active'] : true,
+        ]);
+    }
+
     private function massCreateBillingItems($userId, $serviceId, $numberOfItems)
     {
         $billingItems = [];
@@ -88,7 +100,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_annually()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails();
+        $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -96,7 +108,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing item
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{}', 'active' => true]);
+        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
 
         // Bill the user
         $user->bill();
@@ -122,7 +134,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing item
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{}', 'active' => true]);
+        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
 
         // Bill the user
         $user->bill();
@@ -140,7 +152,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_annually_noBillingItems()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails();
+        $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -186,7 +198,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_annually_twoBillingItems()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails();
+        $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -194,8 +206,8 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing items
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{}', 'active' => true]);
-        $billingItem2 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 2, 'item_type' => 'gc_company', 'json_data' => '{}', 'active' => true]);
+        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+        $billingItem2 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 2, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
 
         // Bill the user
         $user->bill();
@@ -221,8 +233,8 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing items
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{}', 'active' => true]);
-        $billingItem2 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 2, 'item_type' => 'gc_company', 'json_data' => '{}', 'active' => true]);
+        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+        $billingItem2 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 2, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
 
         // Bill the user
         $user->bill();
@@ -240,7 +252,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_user_annually_lotsOfBillingItems()
     {
         // Create a user
-        $billingDetails = $this->createBillingDetails();
+        $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $user = User::create(['name' => 'User 1', 'email' => 'user1@example.com', 'password' => bcrypt('password'), 'active' => true, 'billing_detail_id' => $billingDetails->id]);
 
         // Create a service and attach it to the user
@@ -296,7 +308,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_organisation_oneUser_oneItem()
     {
         // Create the organisation
-        $billingDetails = $this->createBillingDetails();
+        $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
         // Create a few users
@@ -318,7 +330,7 @@ class BillableTraitBillMethodTest extends TestCase
             'service_id' => $service->id,
             'item_id' => 1,
             'item_type' => 'gc_company',
-            'json_data' => '{}',
+            'json_data' => '{\"company_name\":\"test\"}',
             'active' => true,
         ]);
 
@@ -374,7 +386,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_organisation_multipleUsers_oneItemPerUser()
     {
         // Create the organisation
-        $billingDetails = $this->createBillingDetails();
+        $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
         // Create a few users
@@ -392,7 +404,7 @@ class BillableTraitBillMethodTest extends TestCase
                 'service_id' => $service->id,
                 'item_id' => $index,
                 'item_type' => 'gc_company',
-                'json_data' => '{}',
+                'json_data' => '{\"company_name\":\"test\"}',
                 'active' => true,
             ]);
         }
@@ -413,7 +425,7 @@ class BillableTraitBillMethodTest extends TestCase
     public function bill_organisation_multipleUsers_multipleItemsPerUser()
     {
         // Create the organisation
-        $billingDetails = $this->createBillingDetails();
+        $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
         // Create a few users
