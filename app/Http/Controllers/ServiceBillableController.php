@@ -53,7 +53,7 @@ class ServiceBillableController extends Controller
         $servicesRequiringBilling = Service::whereIn('id', $newServiceIds)->where('is_paid_service', true)->get();
 
         // Check the user has billing setup (if they need billing setup)
-        if ($servicesRequiringBilling->count() > 0 && !$billableEntity->billing_detail()->exists()) {
+        if (!$billableEntity->free && $servicesRequiringBilling->count() > 0 && !$billableEntity->billing_detail()->exists()) {
             $request->session()->put('redirect_route_name', 'user-services.return-from-billing');
             $request->session()->put('redirect_data', ['services_json' => json_encode($newServiceIds)]);
 

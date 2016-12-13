@@ -39,23 +39,6 @@ class Registrar implements RegistrarContract {
 	public function create(array $data) {
 		$organisation = null;
 
-        /*
-		$billing = BillingDetail::create([
-			'period' => 'monthly',
-			'address_id' => null,
-			'dps_billing_token' => Session::get('billing.dps_billing_id'),
-			'expiry_date' => Session::get('billing.date_expiry'),
-			'last_billed' => null,
-		]);*/
-
-		if(strlen(trim($data['business_name']))) {
-			$organisation = Organisation::create([
-				'name' => $data['business_name'],
-				'billing_detail_id' => $billing->id,
-				'free' => false,
-			]);
-		}
-
 		$user = User::create([
 			'name' => $data['name'],
 			'email' => $data['email'],

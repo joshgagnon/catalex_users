@@ -109,8 +109,6 @@ class BillingController extends Controller
         $billableEntity = $billableEntity->organisation_id ? $billableEntity->organisation()->first() : $billableEntity;
         $billingDetails = $billableEntity->billing_detail()->first();
 
-        // TODO: create registered service relationship
-
         $billingToken = (string)$responseData->DpsBillingId;
         $expiryDate = (string)$responseData->DateExpiry;
 

@@ -126,7 +126,7 @@ trait Billable {
             return $organisation->setBillingPeriod($period);
         }
 
-        if(!in_array($period, ['monthly', 'annually'])) {
+        if (!in_array($period, ['monthly', 'annually'])) {
             throw new \Exception('Billing period must be one of "monthly" or "annually"');
         }
 
@@ -142,15 +142,12 @@ trait Billable {
      */
     public function isBillingDay($dateOfBilling=null)
     {
-        if ($dateOfBilling === null) {
-            $dateOfBilling = Carbon::today();
-        }
+        $dateOfBilling = $dateOfBilling ? : Carbon::today();
         $billing = $this->billing_detail()->first();
         if (!$billing) {
             return false;
         }
         $billingDay = $billing->billing_day;
-        $daysThisMonth = date('t');
         $daysThisMonth = $dateOfBilling->format('t');
 
         // If the billing day for this user/organisation doesn't exist this month, make their billing
