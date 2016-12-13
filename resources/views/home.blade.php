@@ -27,20 +27,24 @@
 
 
                         <div class="col-md-6">
-                            <div class="service">
                             @if ($user->hasGoodCompaniesAccess())
+                            <div class="service">
                             <a href="{{ route('good-companies-login') }}">
                                 <i class="fa fa-briefcase"></i>
                                 <h4>Good Companies</h4>
                                 <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
                             </a>
                             @else
-                            <a href="{{ route('user-services.index', array(urlencode('Good Companies') => 1)) }}" class="disabled-service">
-                                <i class="fa fa-briefcase"></i>
-                                <h4>Good Companies</h4>
-                                <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
-                                <p>Click here to for features and pricing.</p>
-                            </a>
+                            <div class="disabled-service">
+                                <div class="">
+                                    <i class="fa fa-briefcase"></i>
+                                    <h4>Good Companies</h4>
+                                    <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
+                                </div>
+                            <p><a href="{{ route('user-services.index', array(urlencode('Good Companies') => 1)) }}">Click here to subscribe</a></p>
+                            <p><a href="https://catalex.nz/good-companies.html" target="_blank">
+                                Click here for features and pricing
+                            </a></p>
                             @endif
                             </div>
                         </div>

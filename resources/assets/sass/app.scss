@@ -164,7 +164,7 @@ form.form-inline .form-group label {
 
 
 
-.service{
+.service, .disabled-service{
     color: $light-red;
     padding:40px;
     text-align: center;
@@ -178,22 +178,28 @@ form.form-inline .form-group label {
         font-size:4em;
 
     }
+    h4{
+        font-size: 30px;
+    }
      transition: all 500ms ease-out;
+}
+
+
+.service {
+    * {
+        text-decoration: none;
+        color: $light-red;
+    }
     &:hover{
           transform: scale(1.1, 1.1);
     }
     a:hover{
          text-decoration: none;
-          color: $deep-red;
+        color: $deep-red;
     }
+}
+.disabled-service{
     * {
-        text-decoration: none;
-        color: $light-red;
-    }
-    h4{
-        font-size: 30px;
-    }
-    .disabled-service *{
         color: $gray;
     }
 }

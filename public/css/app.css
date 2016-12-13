@@ -8074,29 +8074,33 @@ form.form-inline .form-group label {
 .tabular label {
   width: 100px; }
 
-.service {
+.service, .disabled-service {
   color: #c51b24;
   padding: 40px;
   text-align: center;
   transition: all 500ms ease-out; }
-  .service h3 {
+  .service h3, .disabled-service h3 {
     margin-bottom: 0px; }
-  .service p {
+  .service p, .disabled-service p {
     margin-top: 0; }
-  .service .fa {
+  .service .fa, .disabled-service .fa {
     font-size: 4em; }
-  .service:hover {
-    transform: scale(1.1, 1.1); }
-  .service a:hover {
-    text-decoration: none;
-    color: #a6171d; }
-  .service * {
-    text-decoration: none;
-    color: #c51b24; }
-  .service h4 {
+  .service h4, .disabled-service h4 {
     font-size: 30px; }
-  .service .disabled-service * {
-    color: #555555; }
+
+.service * {
+  text-decoration: none;
+  color: #c51b24; }
+
+.service:hover {
+  transform: scale(1.1, 1.1); }
+
+.service a:hover {
+  text-decoration: none;
+  color: #a6171d; }
+
+.disabled-service * {
+  color: #555555; }
 
 .service-well, .billing-period {
   background-color: white;
