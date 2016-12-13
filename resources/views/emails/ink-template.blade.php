@@ -41,7 +41,6 @@
 													<td>
 														<center>
 															<p class="center">You are recieving this message because you have recently signed up with CataLex. If this was not you, please <a href="#">click here.</a></p>
-															<p class="center">C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland, 0620, New Zealand</p>
 															<p class="center"><a href="#">UNSUBSCRIBE</a> &nbsp;|&nbsp; <a href="#">UPDATE SUBSCRIPTION PREFERENCES</a></p>
 														</center>
 													</td>
