@@ -13,6 +13,12 @@
         <testsuite name="Application Test Suite">
             <directory>./tests/</directory>
         </testsuite>
+        <testsuite name="billing">
+            <directory>./tests/billing/</directory>
+        </testsuite>
+        <testsuite name="commands">
+            <directory>./tests/commands/</directory>
+        </testsuite>
     </testsuites>
     <php>
         <env name="APP_ENV" value="testing"/>

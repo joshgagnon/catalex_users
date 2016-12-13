@@ -12,9 +12,19 @@ class BillingDetail extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['period', 'address_id', 'dps_billing_token', 'expiry_date'];
+	protected $fillable = ['period', 'address_id', 'dps_billing_token', 'expiry_date', 'billing_day'];
 
 	public function address() {
 		return $this->belongsTo('App\Address');
+	}
+
+	public function users()
+	{
+		return $this->hasMany(User::class);
+	}
+
+	public function organisations()
+	{
+		return $this->hasMany(Organisation::class);
 	}
 }

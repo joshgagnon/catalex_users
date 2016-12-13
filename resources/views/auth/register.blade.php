@@ -30,7 +30,7 @@
 						</div>
 					</div>
                     <!--<form class="form-horizontal" role="form" method="POST" action="/auth/billing"> -->
-					<form class="form-horizontal" role="form" method="POST" action="/auth/register">
+					<form class="form-horizontal" role="form" method="POST" action="{{ '/auth/register?' . $queryString }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
 							<label class="col-md-4 control-label">Name *</label>

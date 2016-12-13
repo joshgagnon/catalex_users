@@ -1,9 +1,12 @@
 <?php
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\User;
 use App\Organisation;
 
-class UserTest extends TestCase {
+class UserTest extends TestCase
+{
+    use DatabaseTransactions;
 
 	/**
 	 * Test that users and organisation members returns correct set of users for combinations

@@ -8,7 +8,7 @@ CataLex Law Browser - Edit User
 <div class="container">
 	<h2>Edit {{ $subject->fullName() }}</h2>
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-md-9">
 			<div class="panel panel-default">
 				<div class="panel-body">
 					@include('components.messages')
@@ -17,7 +17,9 @@ CataLex Law Browser - Edit User
 						<input type="hidden" name="user_id" value="{{ $subject->id }}">
 						{{-- Prevent autocomplete from trying to fill new_password --}}
 						<input type="text" style="display:none"><input type="password" style="display:none">
+
 						<h4>Personal Details</h4>
+						
 						<div class="form-group">
 							<div class="col-xs-12 col-md-6">
 								<label class="control-label">Name</label>
@@ -58,6 +60,16 @@ CataLex Law Browser - Edit User
 							</div>
 						</div>
 					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h4>More</h4>
+					<ul>
+						<li><a href="{{ route('user-services.index') }}">Edit My Services</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>

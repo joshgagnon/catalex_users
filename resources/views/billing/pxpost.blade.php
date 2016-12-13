@@ -6,5 +6,5 @@
 	<InputCurrency>NZD</InputCurrency>
 	<TxnType>Purchase</TxnType>
 	<DpsBillingId>{{ $dpsBillingId }}</DpsBillingId>
-	<MerchantReference>CataLex Subscription - ID {{ $id }}</MerchantReference>
+	<MerchantReference>CataLex Ltd - ID {{ $id }}</MerchantReference>
 </Txn>

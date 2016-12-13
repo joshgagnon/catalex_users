@@ -8,6 +8,6 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 class ResetBroker extends PasswordBroker {
 
 	public function emailResetLink(CanResetPasswordContract $user, $token, Closure $callback = null) {
-		return Mail::sendStyledMail('emails.reset-password', compact('token', 'user'), $user->getEmailForPasswordReset(), $user->fullName(), 'CataLex Password Reset');
+		return Mail::queueStyledMail('emails.reset-password', compact('token', 'user'), $user->getEmailForPasswordReset(), $user->fullName(), 'CataLex Password Reset');
 	}
 }

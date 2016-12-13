@@ -1,37 +1,86 @@
 @extends('app')
 
 @section('content')
-<div class="container">
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="panel panel-default">
-				<div class="panel-heading">CataLex Home</div>
-				<div class="panel-body">
-					<p>Welcome to CataLex.</p>
-                    <div class="row services">
-                        <div class="col-md-6 service">
-    					@if($user->hasBrowserAccess())
-    						<a href="{{ route('browser-login') }}"><span class="image-button"><img src="/images/law-browser.png" /></span><br/>Go to Law Browser</a></p>
-    					@elseif($user->everBilled()/*TODO: && $user->can('editpaymentdetails')*/)
-    						<p>You last billing cycle has not completed correctly. Please <a href="#TODO">click here</a> to update your payment details.</p>
-    					@else
-    						<p>Your trial period has expired. Please <a href="{{ action('BillingController@getStart') }}">click here</a> to confirm your subscription to regain access to Law Browser.</p>
-    					@endif
-                        </div>
-                        <div class="col-md-6 service">
 
-                        @if($user->hasGoodCompaniesAccess())
-                            <p><a href="{{ route('good-companies-login') }}"><span class="image-button"><img src="/images/good-company-lg.png"/></span><br/>Go to Good Companies (In Development)</a></p>
-                        @elseif($user->everBilled()/*TODO: && $user->can('editpaymentdetails')*/)
-                            <p>You last billing cycle has not completed correctly. Please <a href="#TODO">click here</a> to update your payment details.</p>
-                        @else
-                            <p>Your trial period has expired. Please <a href="{{ action('BillingController@getStart') }}">click here</a> to confirm your subscription to regain access to Good Companies.</p>
-                        @endif
+
+
+
+
+                    <div class="services container">
+
+                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="service">
+                            <a href="{{ route('browser-login') }}">
+                                 <i class="fa fa-search"></i>
+                                <h4>Law Browser</h4>
+                                <p>
+                                    Find law faster and easier than ever before.  Definition
+                                    recognition, automatic cross-references, side-by-side
+                                    browsing, and more!
+                                </p>
+                                 </a>
+                            </div>
                         </div>
+
+
+
+
+                        <div class="col-md-6">
+                            <div class="service">
+                            @if ($user->hasGoodCompaniesAccess())
+                            <a href="{{ route('good-companies-login') }}">
+                                 <i class="fa fa-briefcase"></i>
+                                <h4>Good Companies</h4>
+                                <p>
+                                    Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.
+                                </p>
+                                 </a>
+                            @else
+                            <a href="{{ route('user-services.index', array(urlencode('Good Companies') => 1)) }}" class="disabled-service">
+                                 <i class="fa fa-briefcase"></i>
+                                <h4>Good Companies</h4>
+                                <p>
+                                    Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.
+                                </p>
+                                <p>Click here to subscribe</p>
+                                 </a>
+
+
+                            @endif
+                            </div>
+                        </div>
+
                     </div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="service">
+                            <a href="http://workingdays.catalex.nz/">
+                                 <i class="fa fa-calendar"></i>
+                                <h4>Working Days</h4>
+                                <p>
+                                    Calculates legal deadlines based on common definitions of “working day”. 
+                                </p>
+                                 </a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="service">
+                            <a href="https://concat.catalex.nz/">
+                                 <i class="fa fa-copy"></i>
+                                <h4>ConCat</h4>
+                                <p>
+                                    Concatenates (combines) PDF documents quickly and securely.
+                                </p>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    </div>
+
 @endsection

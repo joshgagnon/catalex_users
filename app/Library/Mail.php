@@ -5,23 +5,23 @@ use File;
 use Mail as LaravelMail;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
-class Mail {
+class Mail
+{
+    public static function queueStyledMail($view, $data, $receiverEmail, $receiverName, $subject, $attachment=null) {
+        $html = view($view, $data)->render();
 
-	public static function sendStyledMail($view, $data, $receiverEmail, $receiverName, $subject, $attachment=null) {
-		$html = view($view, $data)->render();
+        $css = File::get(public_path('/css/email.css'));
 
-		$css = File::get(public_path('/css/email.css'));
-
-		$inliner = new CssToInlineStyles($html, $css);
-		$markup = $inliner->convert();
+        $inliner = new CssToInlineStyles($html, $css);
+        $markup = $inliner->convert();
         Log::info('Sending email to' . $receiverEmail);
-		return LaravelMail::send('emails.echo', ['html' => $markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachment) {
-			$message->to($receiverEmail, $receiverName)->subject($subject);
-			if($attachment) {
-				$message->attach($attachment, ['as' => 'invoice.pdf']);
-			}
-		});
-	}
+        return LaravelMail::queue('emails.echo', ['html' => $markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachment) {
+            $message->to($receiverEmail, $receiverName)->subject($subject);
+            if($attachment) {
+                $message->attach($attachment, ['as' => 'invoice.pdf']);
+            }
+        });
+    }
 
     public static function render($view, $data, $receiverEmail, $receiverName, $subject, $attachment=null) {
         $html = view($view, $data)->render();

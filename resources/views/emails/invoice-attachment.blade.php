@@ -50,7 +50,7 @@
 </head>
 <body>
 	<div><img src="../../public/images/logo-colourx2.png"></div>
-	<h1>Invoice/Receipt</h1>
+	<h1>Invoice/Receipt for CataLex Good Companies</h1>
 	<div class="row">
 		<div class="half">
 			<div>{{ $orgName or '' }}</div>
@@ -74,49 +74,32 @@
 		</div>
 	</div>
 	@if($type === 'subscription')
-		<div class="row b">
-			<div class="half">Description</div>
-			<div class="half">
-				<div class="row">
-					<div class="third right">Users</div>
-					<div class="third right">Unit Price</div>
-					<div class="third right">Total</div>
-				</div>
-			</div>
-		</div>
+        <div class="row b">
+            <div class="half">Description</div>
+            <div class="half">
+                <div class="row">
+                    <div class="third right">Paid Until</div>
+                    <div class="third right">Price</div>
+                </div>
+            </div>
+        </div>
+        @foreach($listItems as $listItem)
 		<div class="row">
-			<div class="half">{{ $listItem[0] }}</div>
+			<div class="half">{{ $listItem['description'] }}</div>
 			<div class="half">
 				<div class="row">
-					<div class="third right">{{ $listItem[1] }}</div>
-					<div class="third right">{{ $listItem[2] }}</div>
-					<div class="third right">{{ $listItem[3] }}</div>
+                    <div class="third right">{{ $listItem['paidUntil'] }}</div>
+					<div class="third right">${{ $listItem['amount'] }}</div>
 				</div>
 			</div>
 		</div>
-	@elseif($type === 'prorated')
-		<div class="row b">
-			<div class="half">Description</div>
-			<div class="half">
-				<div class="row">
-					<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">Total</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="half">{{ $listItem[0] }}</div>
-			<div class="half">
-				<div class="row">
-					<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">{{ $listItem[1] }}</div>
-				</div>
-			</div>
-		</div>
+        @endforeach
 	@endif
 	<div class="row">
 		<div class="half right b">Total Due</div>
 		<div class="half">
 			<div class="row">
-				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">{{ $type === 'subscription' ? $listItem[3] : $listItem[1] }}</div>
+				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">${{  $totalAmount }}</div>
 			</div>
 		</div>
 	</div>
@@ -124,7 +107,7 @@
 		<div class="half right b">GST Component</div>
 		<div class="half">
 			<div class="row">
-				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">{{ App\Library\Billing::includingGst($type === 'subscription' ? $listItem[3] : $listItem[1]) }}</div>
+				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">${{ $gst }}</div>
 			</div>
 		</div>
 	</div>

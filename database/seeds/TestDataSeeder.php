@@ -23,7 +23,8 @@ class TestDataSeeder extends Seeder {
 		]);
 		$b1 = BillingDetail::create([
 			'period' => 'monthly',
-			'address_id' => $a1->id
+			'address_id' => $a1->id,
+			'billing_day' => 3,
 		]);
 		$o1 = Organisation::create([
 			'name' => 'Organisation 1',
@@ -75,7 +76,8 @@ class TestDataSeeder extends Seeder {
 		]);
 		$b2 = BillingDetail::create([
 			'period' => 'monthly',
-			'address_id' => $a2->id
+			'address_id' => $a2->id,
+			'billing_day' => 9,
 		]);
 		$o2 = Organisation::create([
 			'name' => 'Organisation 2',

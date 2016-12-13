@@ -1,4 +1,6 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Config;
 use Carbon\Carbon;
@@ -12,7 +14,8 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-
+use App\Service;
+use App\BillingItem;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -103,7 +106,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		}
 	}
 
-	public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null) {
+	public function sendInvoices($type, $invoiceNumber, $listItems, $totalAmount, $gst, $orgName=null, $orgId=null) {
 		$name = $this->fullName();
 		$date = Carbon::now()->format('j/m/Y');
 		$accountNumber = $orgId ?: 'CU' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
@@ -113,25 +116,25 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$handle = fopen($html, 'w');
 		fwrite(
 			$handle,
-			view('emails.invoice-attachment', compact('orgName', 'name', 'date', 'type', 'invoiceNumber', 'accountNumber', 'listItem'))->render()
+			view('emails.invoice-attachment', compact('orgName', 'name', 'date', 'type', 'invoiceNumber', 'totalAmount', 'gst', 'accountNumber', 'listItems'))->render()
 		);
 		fclose($handle);
 
 		$pdf = $baseName . '.pdf';
 		exec(implode(' ', ['phantomjs', base_path('scripts/pdferize.js'), $html, $pdf]));
 
-		Mail::sendStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt', $pdf);
+		Mail::queueStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt', $pdf);
 
-		unlink($baseName);
-		unlink($html);
-		unlink($pdf);
+		//unlink($baseName);
+		//unlink($html);
+		//unlink($pdf);
 	}
 
 	public function addRole($role) {
-		if(is_object($role)) {
+		if (is_object($role)) {
 			$role = $role->getKey();
 		}
-		elseif(is_string($role)) {
+		elseif (is_string($role)) {
 			// Check named roles first to avoid attach collision
 			if($this->hasRole($role)) return;
 			$role = Role::where('name', '=', $role)->pluck('id');
@@ -242,5 +245,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		$this->save();
 	}
 
-
+	protected function getAllDueBillingItems($service)
+	{
+		return $service->billingItems()
+                       ->where('user_id', '=', $this->id)
+                       ->dueForPayment()
+                       ->get();
+	}
 }

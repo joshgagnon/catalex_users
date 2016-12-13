@@ -101,12 +101,37 @@ class Organisation extends Model {
 		return true;
 	}
 
-	public function sendInvoices($type, $invoiceNumber, $listItem, $orgName=null, $orgId=null) {
+	public function sendInvoices($type, $invoiceNumber, $listItems, $totalAmount, $gst,  $orgName=null, $orgId=null) {
 		$orgId = 'CT' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
 		foreach($this->members as $member) {
 			if($member->can('edit_own_organisation')) {
-				$member->sendInvoices($type, $invoiceNumber, $listItem, $this->name, $orgId);
+				$member->sendInvoices($type, $invoiceNumber,  $listItems, $totalAmount, $gst,$this->name, $orgId);
 			}
 		}
+	}
+
+	public function getAllDueBillingItems($service)
+	{
+		// Get due billing items for this organisation
+		$billingItems = $service->billingItems()
+                                ->where('organisation_id', '=', $this->id)
+                                ->dueForPayment()
+                                ->get();
+
+        // Get  due billing items for members of this organisation
+        $members = $this->members()->get();
+
+        if ($members->count() > 0) {
+            $userIds = $members->pluck('id')->toArray();
+            $membersBillingItems = $service->billingItems()
+                                           ->whereIn('user_id', $userIds)
+                                           ->dueForPayment()
+                                           ->get();
+
+            $billingItems = $billingItems->merge($membersBillingItems);
+        }
+
+        // Return all due billing item for both this organisation and it's members
+        return $billingItems;
 	}
 }

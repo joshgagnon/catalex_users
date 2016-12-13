@@ -26,8 +26,8 @@ class DropNames extends Migration
     public function down()
     {
         Schema::table('users', function ($table) {
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->default('unknown_first_name');
+            $table->string('last_name')->default('unknown_last_name');
         });        //
     }
 }
