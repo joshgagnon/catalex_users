@@ -36,7 +36,7 @@ class ServiceBillableController extends Controller
     public function update(Request $request)
     {
         // Get the services the user has set and turn it into an array of keys (the keys are the service ids)
-        $newServiceIds = [];
+        $newServiceIds;
 
         if ($request->services) {
             $data = !empty($request->services) ? $request->services : [];
