@@ -18,5 +18,6 @@ elixir(function(mix) {
 
     mix.copy('node_modules/font-awesome/fonts', 'public/fonts');
     mix.copy('public/fonts', 'public/build/fonts');
+    mix.copy('node_modules/catalex_shared/images/favicon.png', 'public/favicon.png');
     mix.version(['css/app.css', 'js/app.js']);;
 });

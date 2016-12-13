@@ -13,8 +13,8 @@ class UserEditRequest extends BaseRequest {
 	 * @return array
 	 */
 	public function rules() {
-		$lastSegment = end((array_values(Request::segments()))); // Extra parens to force array copy
-
+		$segments = array_values(Request::segments()); // Extra parens to force array copy
+        $lastSegment = end($segments);
 		$rules = [
 			'name' => 'required|max:255',
 			'email' => 'required|email|max:255|unique:users,email,',
