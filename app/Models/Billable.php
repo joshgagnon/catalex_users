@@ -55,21 +55,6 @@ trait Billable {
         return $this->created_at->diffInMinutes(Carbon::now()) < Config::get('constants.trial_length_minutes');
     }
 
-    public function isPaid()
-    {
-        $organisation = $this->organisation;
-
-        if ($organisation) {
-            return $organisation->isPaid();
-        }
-
-        if (!$this->paid_until) {
-            return false;
-        }
-
-        return Carbon::now()->lt($this->paid_until->hour(23)->minute(59));
-    }
-
     public function hasBrowserAccess()
     {
         return true;
