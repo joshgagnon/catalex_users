@@ -76,11 +76,19 @@ class BillingController extends Controller
             return redirect()->back()->withErrors(['An error occurred contacting the payment gateway, please try again.']);
         }
 
-        $message = $request->session()->pull('register_card_message');
+        $billingPeriod = null;
+
+        $user = Auth::user();
+
+        if ($user->organisation && $user->organisation->billing_detail) {
+            $billingDetail = $user->organisation->billing_detail->period;
+        } else if ($user->billing_detail) {
+            $billingPeriod = $user->billing_detail->period;
+        }
 
         return view('billing.register-card')->with([
             'gatewayURL' => $response->getRedirectUrl(),
-            'message' => $message,
+            'billingPeriod' => $billingPeriod,
         ]);
     }
 
@@ -90,6 +98,19 @@ class BillingController extends Controller
         if (!$request->session()->has('redirect_route_name')) {
             abort(403, 'Forbidden');
         }
+
+        if (!$request->period) {
+            return redirect()->back()->withErrors('Billing Period is required');
+        }
+
+        $user = Auth::user();
+        $billableEntity = $user->organisation ? $user->organisation : $user;
+
+        if (!$billableEntity->billing_detail) {
+            return redirect()->back()->withErrors('Error with card setup, please try again');
+        }
+
+        $billableEntity->update(['period' => $request->period]);
 
         $routeName = $request->session()->pull('redirect_route_name');
         $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
@@ -111,8 +132,6 @@ class BillingController extends Controller
         $billableEntity = Auth::user();
         $billableEntity = $billableEntity->organisation_id ? $billableEntity->organisation()->first() : $billableEntity;
         $billingDetails = $billableEntity->billing_detail()->first();
-
-        // TODO: create registered service relationship
 
         $billingToken = (string)$responseData->DpsBillingId;
         $expiryDate = (string)$responseData->DateExpiry;

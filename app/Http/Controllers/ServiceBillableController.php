@@ -36,7 +36,7 @@ class ServiceBillableController extends Controller
     public function update(Request $request)
     {
         // Get the services the user has set and turn it into an array of keys (the keys are the service ids)
-        $newServiceIds = [];
+        $newServiceIds;
 
         if ($request->services) {
             $data = !empty($request->services) ? $request->services : [];
@@ -53,11 +53,7 @@ class ServiceBillableController extends Controller
         $servicesRequiringBilling = Service::whereIn('id', $newServiceIds)->where('is_paid_service', true)->get();
 
         // Check the user has billing setup (if they need billing setup)
-        if ($servicesRequiringBilling->count() > 0 && !$billableEntity->billing_detail()->exists()) {
-            $paidServicesCommalist = StringManipulation::buildCommaList($servicesRequiringBilling->pluck('name'));
-            $message = 'The following services are paid services and require you to have a registered card: ' . $paidServicesCommalist . '.';
-
-            $request->session()->put('register_card_message', $message);
+        if (!$billableEntity->free && $servicesRequiringBilling->count() > 0 && !$billableEntity->billing_detail()->exists()) {
             $request->session()->put('redirect_route_name', 'user-services.return-from-billing');
             $request->session()->put('redirect_data', ['services_json' => json_encode($newServiceIds)]);
 

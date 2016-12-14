@@ -59,18 +59,6 @@
 							</div>
 						@endif
 						<div class="form-group">
-							<div class="col-md-4"></div>
-							<div class="col-md-6">
-								<p class="small">Optionally enter a name to create an administrator's account for your organisation. Once your organisation is signed up with CataLex, you can add as many users as you like.</p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-4 control-label">Organisation Name</label>
-							<div class="col-md-6">
-								<input type="text" class="form-control" name="business_name" value="{{ old('business_name') }}">
-							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-md-4 control-label">*</label>
 							<div class="col-md-6">
 								<div class="checkbox">

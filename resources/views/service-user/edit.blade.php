@@ -16,9 +16,8 @@ CataLex Law Browser - Edit Services
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
 
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
+
+
 
                         <div class="form-group">
                             @foreach($services as $service)
@@ -43,7 +42,7 @@ CataLex Law Browser - Edit Services
                                             </h2>
                                         <div>
                                         <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
-                                        <p>Click <a href="https://catalex.nz/good-companies.html" target="_blank">here</a> to see features and pricing.</p>
+                                        <p>Good Companies costs just <strong>$12 annually</strong> or <strong>$1.50 monthly</strong>, per company.  Click <a href="https://catalex.nz/good-companies.html" target="_blank">here</a> to see features.</p>
                                     @endif
 
                                     @if($service->name == 'Law Browser')
@@ -93,7 +92,7 @@ CataLex Law Browser - Edit Services
                         </div>
 
                         <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary">Save My Changes</button>
                         </div>
                     </form>
                 </div>
