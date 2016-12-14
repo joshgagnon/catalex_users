@@ -23,7 +23,7 @@ class BillingController extends Controller
         $user = Auth::user();
 
         // Don't allow non-admin members of an org to try to pay
-        if($user && $user->organisation && !$user->can('edit_own_organisation')) {
+        if ($user && $user->organisation && !$user->can('edit_own_organisation')) {
             abort(403, 'Forbidden');
         }
     }
@@ -74,7 +74,6 @@ class BillingController extends Controller
         }
 
         $billableEntity = Auth::user()->getBillableEntity();
-
         $billableEntity->billing_detail()->update(['period' => $request->period]);
 
         return redirect()->route('billing.edit')->withSuccess('Billing period updated.');
@@ -82,7 +81,12 @@ class BillingController extends Controller
 
     public function delete()
     {
+        $billableEntity = Auth::user()->getBillableEntity();
 
+        $billableEntity->billing_detail()->delete();
+        $billableEntity->update(['billing_detail_id' => null]);
+
+        return redirect()->route('billing.edit')->withSuccess('Card deleted');
     }
 
     public function selectPeriod(Request $request)
@@ -111,6 +115,13 @@ class BillingController extends Controller
 
     public function createCard(Request $request)
     {
+        $billableEntity = Auth::user()->getBillableEntity();
+
+        // Don't allow non-admin members of an org to try to pay
+        if ($billableEntity->billing_detail_id) {
+            return redirect()->route('billing.edit')->withErrors('You already have a card setup, please remove it to add a new one.');
+        }
+
         // Create a new payment gayway request to get iframe url to show
         $gateway = PXPay::getGateway();
 

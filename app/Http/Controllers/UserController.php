@@ -28,7 +28,16 @@ class UserController extends Controller {
 		$user = Auth::user();
 
 		if($user->can('edit_own_user')) {
-			return view('user.edit', ['subject' => $user]);
+			$editServicesAndBilling = true;
+
+			if ($user && $user->organisation && !$user->can('edit_own_organisation')) {
+				$editServicesAndBilling = false;
+	        }
+
+			return view('user.edit')->with([
+				'subject' => $user,
+				'editServicesAndBilling' => $editServicesAndBilling,
+			]);
 		}
 		elseif ($user->can('view_own_user')) {
 			return view('user.view', ['subject' => $user]);

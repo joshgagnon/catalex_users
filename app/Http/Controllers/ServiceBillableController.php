@@ -13,6 +13,22 @@ use App\Service;
 class ServiceBillableController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth');
+
+        $user = Auth::user();
+
+        // Don't allow non-admin members of an org to try to pay
+        if($user && $user->organisation && !$user->can('edit_own_organisation')) {
+            abort(403, 'Forbidden');
+        }
+    }
+    
+    /**
      * Allow the user to select the services they want to be registered to.
      *
      * @return Response

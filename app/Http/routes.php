@@ -41,6 +41,7 @@ Route::group(['middleware' => 'csrf'], function() {
          */
         Route::get('billing/edit', 'BillingController@edit')->name('billing.edit');
         Route::post('billing/edit', 'BillingController@update')->name('billing.update');
+        Route::delete('billing/delete', 'BillingController@delete')->name('billing.delete');
 
         Route::get('billing/select-period', 'BillingController@selectPeriod')->name('billing.select-period');
         Route::post('billing/move-to-create-card', 'BillingController@moveToCreateCard')->name('billing.move-to-create-card');
