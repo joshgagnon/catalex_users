@@ -33,17 +33,19 @@ CataLex - Edit Billing Details
 
                                 <p>Your billing day is the {!! Helper::ordinal($billingDetails->billing_day) !!} day of the month.</p>
                                 <div class="form-group">
-                                    <div class="col-xs-6">
+                                 <div class="row">
+                                    <div class="col-xs-3 ">
                                             <label>
                                                 <input type="radio" name="period" value="monthly"  {{ $billingDetails->period == 'monthly' ? 'checked' : '' }} />
                                                 Monthly
                                             </label>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-3">
                                             <label>
                                                 <input type="radio" name="period" value="annually" {{ $billingDetails->period == 'annually' ? 'checked' : '' }}/>
                                                 Annually
                                             </label>
+                                        </div>
                                         </div>
                                 </div>
 
