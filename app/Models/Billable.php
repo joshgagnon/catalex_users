@@ -93,15 +93,17 @@ trait Billable {
             return true;
         }
 
+
+        if($billablesService && $billablesService->is_paid_service && !$this->billing_detail()->first()){
+            return false;
+        }
         // If this billable entity is registered for this service, check their service level
         if ($billablesService != null) {
             return $billablesService->pivot->access_level == 'full_access';
         }
 
 
-        if($billablesService && $billablesService->is_paid_service && !$this->billing_detail()->first()){
-            return false;
-        }
+
 
 
 

@@ -61,7 +61,11 @@
 	    });
 	
 	
-
+	
+	
+	window.submitCCForm = function() {
+	    $('form.payment-form').submit();
+	}
 
 /***/ }
 /******/ ]);
