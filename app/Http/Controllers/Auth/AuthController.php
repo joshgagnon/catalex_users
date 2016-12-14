@@ -119,11 +119,15 @@ class AuthController extends Controller {
 
     public function postRegister(Request $request)
     {
-        #$registerToGoodCompanies = $request->query()['gc'] == true;
+        $registerToGoodCompanies = $request->has('gc');
 
         // Fold previous step post data into this request
         //$request->replace($request->input() + Session::get('register.personal'));
         $request->replace($request->input());
+
+        if($registerToGoodCompanies){
+            $this->redirectTo = route('user-services.index', array(urlencode('Good Companies') => 1));
+        }
 
         // For OAuth registrations, generate a long random password so we can
         // still use Laravel default auth (ie. for password reset)
@@ -145,10 +149,6 @@ class AuthController extends Controller {
     }
 
     public function redirectPath() {
-        if(!Auth::user()->hasBrowserAccess()) {
-            $this->redirectTo = '/';
-        }
-
         return $this->defaultRedirectPath();
     }
 
