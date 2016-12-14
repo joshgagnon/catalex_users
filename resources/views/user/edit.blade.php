@@ -63,6 +63,7 @@ CataLex Law Browser - Edit User
 				</div>
 			</div>
 		</div>
+		@if ($editServicesAndBilling)
 		<div class="col-md-3">
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -74,6 +75,7 @@ CataLex Law Browser - Edit User
 				</div>
 			</div>
 		</div>
+		@endif
 	</div>
 </div>
 @endsection

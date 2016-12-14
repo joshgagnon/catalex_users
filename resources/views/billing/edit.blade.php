@@ -18,9 +18,14 @@ CataLex - Edit Billing Details
                     <h4>Card</h4>
 
                     <div class="row">
-                        <div class="col-xs-12">
-                            <a href="#">-&nbsp;&nbsp;Remove Card</a>
-                        </div>
+                        <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <div class="col-xs-12">
+                                <!-- <a href="#">-&nbsp;&nbsp;Remove Card</a> -->
+                                <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="row">
@@ -62,7 +67,7 @@ CataLex - Edit Billing Details
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <a href="#">+&nbsp;&nbsp;Add Card</a>
+                            <a href="{{ route('billing.register-card') }}">+&nbsp;&nbsp;Add Card</a>
                         </div>
                     </div>
 
