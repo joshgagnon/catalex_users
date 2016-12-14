@@ -89,30 +89,6 @@ class BillingController extends Controller
         return redirect()->route('billing.edit')->withSuccess('Card deleted');
     }
 
-    public function selectPeriod(Request $request)
-    {
-        if (!$request->session()->has('billing_initial_setup')) {
-            abort(403, 'Forbidden');
-        }
-
-        return view('billing.select-period');
-    }
-
-    public function moveToCreateCard(Request $request)
-    {
-        if (!$request->session()->has('billing_initial_setup')) {
-            abort(403, 'Forbidden');
-        }
-
-        if (empty($request->period) && $request->period != 'monthly' && $request->period != 'annually') {
-            return redirect()->back()->withErrors('Billing period must be either monthly or annually.');
-        }
-
-        $request->session()->put('billing_period', $request->period);
-
-        return redirect()->route('billing.register-card');
-    }
-
     public function createCard(Request $request)
     {
         $billableEntity = Auth::user()->getBillableEntity();
@@ -149,8 +125,12 @@ class BillingController extends Controller
             return redirect()->back()->withErrors('Error with card setup, please try again');
         }
 
-        // No longer in the billing setup process, so remove this item from the session
-        $request->session()->forget('billing_initial_setup');
+        if (empty($request->period) && $request->period != 'monthly' && $request->period != 'annually') {
+            return redirect()->back()->withErrors('Billing period must be either monthly or annually.');
+        }
+
+        $billableEntity = Auth::user()->getBillableEntity();
+        $billableEntity->billing_detail()->update(['period' => $request->period]);
 
         if ($request->session()->has('redirect_route_name')) {
             $routeName = $request->session()->pull('redirect_route_name');
