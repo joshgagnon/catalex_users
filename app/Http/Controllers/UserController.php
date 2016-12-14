@@ -101,8 +101,8 @@ class UserController extends Controller {
 			elseif($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) {
 				$roles = ['organisation_admin' => $subject->hasRole('organisation_admin')];
 			}
-
-			return view('user.edit', compact('subject', 'roles'));
+            $editServicesAndBilling = false;
+			return view('user.edit', compact('subject', 'roles', 'editServicesAndBilling'));
 		}
 
 		return view('auth.denied');

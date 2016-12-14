@@ -16,7 +16,9 @@ CataLex Law Browser - Edit Services
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
 
-
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Update My Subscriptions</button>
+                        </div>
 
 
                         <div class="form-group">
@@ -92,7 +94,7 @@ CataLex Law Browser - Edit Services
                         </div>
 
                         <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Save My Changes</button>
+                          <button type="submit" class="btn btn-primary">Update My Subscriptions</button>
                         </div>
                     </form>
                 </div>

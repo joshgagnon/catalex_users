@@ -63,7 +63,7 @@ CataLex - Edit Billing Details
 
                     @else
 
-                    <h4>Card</h4>
+                    <h4>Payments</h4>
 
                     <div class="form-group">
                         <div class="col-xs-12">
