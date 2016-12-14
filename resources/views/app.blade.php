@@ -76,7 +76,6 @@
                     <a href="//catalex.nz">Home</a>
                     <a href="//users.catalex.nz/privacypolicy">Privacy Policy</a>
                     <a href="//users.catalex.nz/termsofuse">Terms of Use</a>
-                    <p>C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland, 0620, New Zealand</p>
             <p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
         </div>
     </footer>
