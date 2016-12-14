@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Library\StringManipulation;
 use App\Service;
+use App\Library\Mail;
 
 class ServiceBillableController extends Controller
 {
@@ -79,6 +80,12 @@ class ServiceBillableController extends Controller
 
         // Sync the new services
         $billableEntity->services()->sync($newServiceIds);
+
+        $goodCompanies = Service::where('name', 'Good Companies')->first();
+
+        if ($goodCompanies && in_array($goodCompanies->id, $newServiceIds)) {
+            Mail::queueStyledMail('emails.subscription', ['name' => $user->name], $user->email, $user->fullName(), 'Thanks for subscribing to Good Companies');
+        }
 
         if ($request->session()->has('redirect_route_name')) {
             return redirect()->route($request->session()->pull('redirect_route_name'));
