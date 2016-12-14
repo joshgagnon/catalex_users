@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-CataLex - Edit Billing Details
+CataLex - Select Billing Period
 @endsection
 
 @section('content')
