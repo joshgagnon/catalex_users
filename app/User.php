@@ -255,6 +255,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function getBillableEntity()
 	{
-		return $this->organisation ? $this->organisation : $user;
+		return $this->organisation ? $this->organisation : $this;
 	}
 }

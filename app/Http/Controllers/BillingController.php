@@ -69,11 +69,7 @@ class BillingController extends Controller
 
     public function update(Request $request)
     {
-        if (empty($request->period)) {
-            return redirect()->back()->withErrors('Billing period required.');
-        }
-
-        if ($request->period != 'monthly' && $request->period != 'annually') {
+        if (empty($request->period) && $request->period != 'monthly' && $request->period != 'annually') {
             return redirect()->back()->withErrors('Billing period must be either monthly or annually.');
         }
 
@@ -89,12 +85,32 @@ class BillingController extends Controller
 
     }
 
-    public function createCard(Request $request)
+    public function selectPeriod(Request $request)
     {
-        // Make sure we have sent the user here (they aren't just hitting the route)
-        if (!$request->session()->has('redirect_route_name')) {
+        if (!$request->session()->has('billing_initial_setup')) {
             abort(403, 'Forbidden');
         }
+
+        return view('billing.select-period');
+    }
+
+    public function moveToCreateCard(Request $request)
+    {
+        if (!$request->session()->has('billing_initial_setup')) {
+            abort(403, 'Forbidden');
+        }
+
+        if (empty($request->period) && $request->period != 'monthly' && $request->period != 'annually') {
+            return redirect()->back()->withErrors('Billing period must be either monthly or annually.');
+        }
+
+        $request->session()->put('billing_period', $request->period);
+
+        return redirect()->route('billing.register-card');
+    }
+
+    public function createCard(Request $request)
+    {
         // Create a new payment gayway request to get iframe url to show
         $gateway = PXPay::getGateway();
 
@@ -115,11 +131,6 @@ class BillingController extends Controller
 
     public function finishCreateCard(Request $request)
     {
-        // Make sure we have sent the user here (they aren't just hitting the route)
-        if (!$request->session()->has('redirect_route_name')) {
-            abort(403, 'Forbidden');
-        }
-
         $user = Auth::user();
         $billableEntity = $user->organisation ? $user->organisation : $user;
 
@@ -127,10 +138,17 @@ class BillingController extends Controller
             return redirect()->back()->withErrors('Error with card setup, please try again');
         }
 
-        $routeName = $request->session()->pull('redirect_route_name');
-        $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
+        // No longer in the billing setup process, so remove this item from the session
+        $request->session()->forget('billing_initial_setup');
 
-        return redirect()->route($routeName, $data);
+        if ($request->session()->has('redirect_route_name')) {
+            $routeName = $request->session()->pull('redirect_route_name');
+            $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
+
+            return redirect()->route($routeName, $data);
+        }
+
+        return redirect()->route('billing.edit')->withSuccess('Card successfully added');
     }
 
     public function storeCard(Request $request)
@@ -152,10 +170,12 @@ class BillingController extends Controller
         $expiryDate = (string)$responseData->DateExpiry;
 
         if (!$billingDetails) {
+            $billingPeriod = $request->session()->has('billing_period') ? $request->session()->pull('billing_period') : 'monthly'; // Default: monthly
+
             // This user or organisation hasn't already got billing details setup; create there billing details
             $billingDetails = new BillingDetail();
 
-            $billingDetails->period = 'monthly'; // Default to monthly payments
+            $billingDetails->period = $billingPeriod;
             $billingDetails->billing_day = Carbon::today()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day;
             $billingDetails->dps_billing_token = $billingToken;
             $billingDetails->expiry_date = $expiryDate;

@@ -54,14 +54,19 @@ class ServiceBillableController extends Controller
 
         // Check the user has billing setup (if they need billing setup)
         if (!$billableEntity->free && $servicesRequiringBilling->count() > 0 && !$billableEntity->billing_detail()->exists()) {
+            $request->session()->put('billing_initial_setup', true);
             $request->session()->put('redirect_route_name', 'user-services.return-from-billing');
             $request->session()->put('redirect_data', ['services_json' => json_encode($newServiceIds)]);
 
-            return redirect()->route('billing.register-card');
+            return redirect()->route('billing.select-period');
         }
 
         // Sync the new services
         $billableEntity->services()->sync($newServiceIds);
+
+        if ($request->session()->has('redirect_route_name')) {
+            return redirect()->route($request->session()->pull('redirect_route_name'));
+        }
 
         // Return the user to the home (services) page
         return redirect()->route('index');

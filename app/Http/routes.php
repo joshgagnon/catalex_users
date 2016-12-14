@@ -22,22 +22,41 @@ Route::group(['middleware' => 'csrf'], function() {
     ]);
 
     Route::group(['middleware' => 'auth'], function() {
+        /**
+         * SSO routes
+         */
         Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
         Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin']);
         Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin']);
 
+        /**
+         * Services routes
+         */
         Route::get('my-services', 'ServiceBillableController@index')->name('user-services.index');
         Route::post('my-services', 'ServiceBillableController@update')->name('user-services.update');
         Route::get('my-services/return-from-billing', 'ServiceBillableController@update')->name('user-services.return-from-billing');
 
+        /**
+         * Billing Routes
+         */
         Route::get('billing/edit', 'BillingController@edit')->name('billing.edit');
         Route::post('billing/edit', 'BillingController@update')->name('billing.update');
+
+        Route::get('billing/select-period', 'BillingController@selectPeriod')->name('billing.select-period');
+        Route::post('billing/move-to-create-card', 'BillingController@moveToCreateCard')->name('billing.move-to-create-card');
+        
         Route::get('billing/store-card', 'BillingController@storeCard')->name('billing.store-card');
         Route::get('billing/register-card', 'BillingController@createCard')->name('billing.register-card');
         Route::post('billing/register-card', 'BillingController@finishCreateCard')->name('billing.finish-create-card');
 
+        /**
+         * User routes
+         */
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
+        /**
+         * Controllers
+         */
         Route::controllers([
             'admin' => 'AdminController',
             'user' => 'UserController',
