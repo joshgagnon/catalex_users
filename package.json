@@ -1,4 +1,7 @@
 {
+  "scripts": {
+        "build-dev": "gulp && gulp watch"
+    },
   "devDependencies": {
     "catalex_shared": "git+https://github.com/joshgagnon/catalex_shared.git#40f8b0f",
     "gulp": "3.9.1",

@@ -13,11 +13,10 @@ require('laravel-elixir-webpack');
 
 elixir(function(mix) {
     mix.sass('app.scss')
-    mix.sass('email.scss');
-    mix.webpack('app.js');
-
-    mix.copy('node_modules/font-awesome/fonts', 'public/fonts');
-    mix.copy('public/fonts', 'public/build/fonts');
-    mix.copy('node_modules/catalex_shared/images/favicon.png', 'public/favicon.png');
-    mix.version(['css/app.css', 'js/app.js']);;
+    .sass('email.scss')
+    .webpack('app.js')
+    .copy('node_modules/font-awesome/fonts', 'public/fonts')
+    .copy('public/fonts', 'public/build/fonts')
+    .copy('node_modules/catalex_shared/images/favicon.png', 'public/favicon.png')
+    .version(['css/app.css', 'js/app.js'])
 });

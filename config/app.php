@@ -199,7 +199,7 @@ return [
 		'Html'      => 'Illuminate\Html\HtmlFacade',
 		'Form'      => 'Illuminate\Html\FormFacade',
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
-
+        'Helper' => App\Helpers\Helper::class
 	],
 
 ];
