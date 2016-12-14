@@ -98,6 +98,10 @@ trait Billable {
             return $billablesService->pivot->access_level == 'full_access';
         }
 
+        if($billablesService->is_paid_service && !$this->billing_detail()->first()){
+            return false;
+        }
+
         // If this billable entity has an organisation, fallback to the organisation's access level
         if ($this->organisation) {
             return $this->organisation->hasAccess($service);

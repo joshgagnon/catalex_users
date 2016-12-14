@@ -67,7 +67,7 @@ CataLex - Edit Billing Details
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <a href="{{ route('billing.register-card') }}">+&nbsp;&nbsp;Add Card</a>
+                            <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
                         </div>
                     </div>
 
