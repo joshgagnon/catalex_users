@@ -62,35 +62,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	}
 
 	public function billingExempt() {
-		if($this->organisation && $this->organisation->billingExempt()) return true;
+		if ($this->free) {
+			return true;
+		}
+
+		if ($this->organisation && $this->organisation->billingExempt()) {
+			return true;
+		}
 
 		return $this->hasRole('global_admin');
-	}
-
-	/**
-	 * Return the charge required to bring this user's paid date up to the target date.
-	 *
-	 * @param  Carbon\Carbon $targetDate
-	 * @return string
-	 */
-	public function prorate($targetDate) {
-		$startDate = $this->paid_until ? $this->paid_until->hour(23)->minute(59) : Carbon::now();
-
-		if($startDate->gte($targetDate)) return '0.00';
-
-		// Use interval, not billing period to determine montly or yearly rate
-		if($startDate->diffInMonths($targetDate) === 0) {
-			$max = Config::get('constants.monthly_price');
-			$perDay = bcdiv($max, '31', 4);
-		}
-		else {
-			$max = Config::get('constants.annual_price');
-			$perDay = bcdiv($max, '365', 4);
-		}
-
-		$total = bcmul($perDay, (string)$startDate->diffInDays($targetDate), 2);
-
-		return bccomp($total, $max) === 1 ? $max : $total;
 	}
 
 	public function paymentAmount() {

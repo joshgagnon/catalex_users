@@ -34,37 +34,6 @@ CataLex Law Browser - Edit Organisation
 								<a href="{{ action('AdminController@getEditOrganisation', [$organisation->id, 'add-members']) }}" class="btn btn-info">Add Users</a>
 							</div>
 						</div>
-						<!-- <h4>Billing Status</h4>
-						<div class="form-group">
-							<div class="col-xs-12 col-md-12">
-								@if($organisation->billingExempt())
-									<p>Exempt from billing</p>
-								@elseif($organisation->inTrial())
-									<p>In trial period</p>
-								@elseif(!$organisation->everBilled())
-									<p>Trial period expired, awaiting subscription confirmation</p>
-								@elseif($organisation->isPaid())
-									@if($organisation->owedAmount() !== '0.00')
-										<p>Payment of {{ $organisation->owedAmount() }} due immediately</p>
-									@else
-										<p>Up to date - next payment of {{ $organisation->paymentAmount() }} due on {{ $organisation->paid_until->format('j M Y') }}</p>
-									@endif
-								@else
-									<p><strong>WARNING:</strong> Billing details in an inconsistent state - please contact a developer</p>
-								@endif
-							</div>
-						</div> -->
-						<!-- @if($user->hasRole('global_admin'))
-							<h4>Flags</h4>
-							<div class="form-group">
-								<div class="col-xs-12 col-md-4">
-									<div class="checkbox">
-										<input type="hidden" value="0" name="free">
-										<label><input type="checkbox" value="1" name="free" {{ $organisation->free ? 'checked' : '' }}> Free (non-billable) Organisation</label>
-									</div>
-								</div>
-							</div>
-						@endif -->
 						<div class="form-group">
 							<div class="col-xs-12">
 								<button type="submit" class="btn btn-primary">Update</button>
