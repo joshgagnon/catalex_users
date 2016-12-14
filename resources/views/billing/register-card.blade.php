@@ -29,26 +29,6 @@
                             </div>
                         </div>
 
-                        <div class="billing-period well ">
-                            <div class="row">
-                                <h4><strong>Billing Period</strong></h4>
-                                <div class="col-sm-6">
-                                    <label>
-                                        <input type="radio" name="period" value="monthly"  {{ $billingPeriod && $billingPeriod == 'monthly' ? 'checked' : '' }} />
-                                        Monthly
-                                    </label>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>
-                                        <input type="radio" name="period" value="annually"  {{ !$billingPeriod || ($billingPeriod && $billingPeriod != 'annually') ? 'checked' : '' }}/>
-                                        Annually
-                                    </label>
-                                </div>
-
-                            </div>
-
-                        </div>
-
                         <div class="row">
                             <div class="col-xs-12">
 

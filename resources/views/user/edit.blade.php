@@ -69,6 +69,7 @@ CataLex Law Browser - Edit User
 					<h4>More</h4>
 					<ul>
 						<li><a href="{{ route('user-services.index') }}">Edit My Services</a></li>
+						<li><a href="{{ route('billing.edit') }}">Edit Billing Details</a></li>
 					</ul>
 				</div>
 			</div>

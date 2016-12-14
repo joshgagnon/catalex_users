@@ -30,6 +30,8 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::post('my-services', 'ServiceBillableController@update')->name('user-services.update');
         Route::get('my-services/return-from-billing', 'ServiceBillableController@update')->name('user-services.return-from-billing');
 
+        Route::get('billing/edit', 'BillingController@edit')->name('billing.edit');
+        Route::post('billing/edit', 'BillingController@update')->name('billing.update');
         Route::get('billing/store-card', 'BillingController@storeCard')->name('billing.store-card');
         Route::get('billing/register-card', 'BillingController@createCard')->name('billing.register-card');
         Route::post('billing/register-card', 'BillingController@finishCreateCard')->name('billing.finish-create-card');

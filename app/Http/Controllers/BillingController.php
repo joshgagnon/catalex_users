@@ -57,6 +57,38 @@ class BillingController extends Controller
         return view('billing.subscription-success');
     }
 
+    public function edit()
+    {
+        // Get the user (or their organisation's) billing details
+        $user = Auth::user();
+        $billableEntity = $user->organisation ? $user->organisation : $user;
+        $billingDetails = $billableEntity->billing_detail()->first();
+
+        return view('billing.edit')->with(['billingDetails' => $billingDetails]);
+    }
+
+    public function update(Request $request)
+    {
+        if (empty($request->period)) {
+            return redirect()->back()->withErrors('Billing period required.');
+        }
+
+        if ($request->period != 'monthly' && $request->period != 'annually') {
+            return redirect()->back()->withErrors('Billing period must be either monthly or annually.');
+        }
+
+        $billableEntity = Auth::user()->getBillableEntity();
+
+        $billableEntity->billing_detail()->update(['period' => $request->period]);
+
+        return redirect()->route('billing.edit')->withSuccess('Billing period updated.');
+    }
+
+    public function delete()
+    {
+
+    }
+
     public function createCard(Request $request)
     {
         // Make sure we have sent the user here (they aren't just hitting the route)
@@ -76,19 +108,8 @@ class BillingController extends Controller
             return redirect()->back()->withErrors(['An error occurred contacting the payment gateway, please try again.']);
         }
 
-        $billingPeriod = null;
-
-        $user = Auth::user();
-
-        if ($user->organisation && $user->organisation->billing_detail) {
-            $billingDetail = $user->organisation->billing_detail->period;
-        } else if ($user->billing_detail) {
-            $billingPeriod = $user->billing_detail->period;
-        }
-
         return view('billing.register-card')->with([
-            'gatewayURL' => $response->getRedirectUrl(),
-            'billingPeriod' => $billingPeriod,
+            'gatewayURL' => $response->getRedirectUrl()
         ]);
     }
 
@@ -99,18 +120,12 @@ class BillingController extends Controller
             abort(403, 'Forbidden');
         }
 
-        if (!$request->period) {
-            return redirect()->back()->withErrors('Billing Period is required');
-        }
-
         $user = Auth::user();
         $billableEntity = $user->organisation ? $user->organisation : $user;
 
         if (!$billableEntity->billing_detail) {
             return redirect()->back()->withErrors('Error with card setup, please try again');
         }
-
-        $billableEntity->update(['period' => $request->period]);
 
         $routeName = $request->session()->pull('redirect_route_name');
         $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
@@ -140,7 +155,7 @@ class BillingController extends Controller
             // This user or organisation hasn't already got billing details setup; create there billing details
             $billingDetails = new BillingDetail();
 
-            $billingDetails->period = 'annually'; // Default to annual payments
+            $billingDetails->period = 'monthly'; // Default to monthly payments
             $billingDetails->billing_day = Carbon::today()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day;
             $billingDetails->dps_billing_token = $billingToken;
             $billingDetails->expiry_date = $expiryDate;

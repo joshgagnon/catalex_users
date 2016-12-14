@@ -2,7 +2,7 @@
 
 @section('content')
 
-
+    @include('components.messages')
 
 
 
