@@ -69,6 +69,10 @@ Restart the nginx and php services to load the new configurations
 
 To perform the initial deployment on a live server, clone the https://github.com/joshgagnon/catalex_utils.git repo. Edit the variables at the top of the install\_users.sh script then run it as root.
 
+#### OAuth
+
+Currently the only OAuth provider setup is LinkedIn. For LinkedIn OAuth to work, it's ket and secret need to be entered into a new file `config/oauth.php`. Use `config/oauth.example.php` as an example.
+
 ### Updating Live
 
 Live installations can be updated with the following command:
