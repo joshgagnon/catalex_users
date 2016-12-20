@@ -23,6 +23,10 @@ sudo -u $1 npm update
 
 sudo -u $1 node_modules/.bin/gulp --production
 
+sudo -u $1 php artisan clear-compiled
+
+sudo -u $1 composer dump-autoload
+
 sudo -u $1 php artisan migrate
 
 sudo -u $1 php artisan optimize
