@@ -31,6 +31,7 @@ CataLex Law Browser - Edit User
 							</div>
 						</div>
 						@if(isset($roles) && count($roles))
+							<hr />
 							<h4>User Roles</h4>
 							<div class="form-group">
 								@foreach($roles as $roleName => $roleActive)
@@ -43,6 +44,21 @@ CataLex Law Browser - Edit User
 								@endforeach
 							</div>
 						@endif
+						@if($user->hasRole('global_admin'))
+							<hr />
+							<h4>Billing Options</h4>
+							<div class="form-group">
+								<div class="col-xs-12 col-md-4">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="1" name="free" {{ $subject->free ? 'checked' : '' }}>
+											Free User
+										</label>
+									</div>
+								</div>
+							</div>
+						@endif
+						<hr />
 						<h4>Change Password</h4>
 						<div class="form-group">
 							<div class="col-md-6">
