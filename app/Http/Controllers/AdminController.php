@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use Auth;
 use Input;
 use Config;
 use App\User;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\CreateOrganisationRequest;
 use App\Services\InviteBroker as PasswordBroker;
+
 
 class AdminController extends Controller {
 
@@ -272,4 +274,14 @@ class AdminController extends Controller {
 
 		return redirect()->back()->with('success', 'Organisation "' . $organisation->name . '" and ' . count($organisation->members) . ' members restored.');
 	}
+
+    public function getBecomeUser($id) {
+        $user = User::find($id);
+        if($user->hasRole('global_admin')){
+            abort(403, 'Forbidden');
+        }
+        Auth::login($user);
+        return redirect('/');
+    }
+
 }
