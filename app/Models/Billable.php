@@ -81,12 +81,15 @@ trait Billable
 
     public function hasAccess(Service $service)
     {
-        $billablesService = $this->services()->where('service_id', $service->id)->first();
-
-        if($this->roles && $this->hasRole('global_admin')){
+        if ($this->roles && $this->hasRole('global_admin')) {
             return true;
         }
 
+        if ($this->free) {
+            return true;
+        }
+
+        $billablesService = $this->services()->where('service_id', $service->id)->first();
 
         if($billablesService && $billablesService->is_paid_service && !$this->billing_detail()->first()){
             return false;
@@ -95,11 +98,6 @@ trait Billable
         if ($billablesService != null) {
             return $billablesService->pivot->access_level == 'full_access';
         }
-
-
-
-
-
 
         // If this billable entity has an organisation, fallback to the organisation's access level
         if ($this->organisation) {

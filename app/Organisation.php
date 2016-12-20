@@ -16,7 +16,7 @@ class Organisation extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'billing_detail_id', 'free'];
+    protected $fillable = ['name', 'billing_detail_id'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -39,7 +39,7 @@ class Organisation extends Model
 
     public function billingExempt() {
         // TODO: Remove beta org code
-        return $this->free || $this->id === Config::get('constants.beta_organisation');
+        return $this->id === Config::get('constants.beta_organisation');
     }
 
     public function owedAmount() {
@@ -57,8 +57,6 @@ class Organisation extends Model
     }
 
     public function paymentAmount() {
-        if($this->free) return '0.00';
-
         switch($this->billing_detail->period) {
             case 'monthly':
                 $periodCost = Config::get('constants.monthly_price');

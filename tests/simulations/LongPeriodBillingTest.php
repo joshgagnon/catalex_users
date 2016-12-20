@@ -423,4 +423,93 @@ class LongPeriodBillingTest extends TestCase
         $expectedTotal = self::PART_YEARS_IN_SIMULATION * self::YEARLY_PRICE * $numberOfCompanies;
         $this->assertEquals($expectedTotal, $totalAmountBilled);
     }
+
+    /**
+     * @test
+     */
+    public function monthlyBilling_oneUser_userIdFree_oneCompany()
+    {
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $billingDetails = $this->createBillingDetails();
+        $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id, 'free' => true]);
+        $user->services()->attach(Service::where('name', 'Good Companies')->first());
+
+        $fakeCompanies = [
+            ['userId' => $user->id, 'companyId' => 72773, 'active' => true, 'companyName' => 'Johnny Mate']
+        ];
+
+        $totalAmountBilled = 0;
+
+        while (Carbon::now()->lt($dayAfterSimulation)) {
+            // Create the sync command object, hand it our fake companies, and run it
+            $syncCommand = new SyncCommand();
+            $syncCommand->fakeCompanies = $fakeCompanies;
+            $syncCommand->handle();
+
+            if ($user->shouldBill()) {
+                $user->bill();
+
+                $this->assertEquals($user->paymentLastRequested, Carbon::today());
+                $this->assertEquals($user->amountRequested, self::MONTHLY_PRICE);
+
+                $totalAmountBilled += $user->amountRequested;
+            }
+
+            // Increment the day
+            Carbon::setTestNow(Carbon::today()->addDays(1));
+        }
+
+        // Check no charge logs were created
+        $numberOfChargeLogs = $user->chargeLogs()->count();
+        $this->assertEquals(0, $numberOfChargeLogs);
+
+        //heck nothing was charged
+        $expectedTotal = 0;
+        $this->assertEquals($expectedTotal, $totalAmountBilled);
+    }
+
+    /**
+     * @test
+     */
+    public function monthlyBilling_oneUser_userIsFree_noCompanies()
+    {
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $billingDetails = $this->createBillingDetails();
+        $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id, 'free' => true]);
+        $user->services()->attach(Service::where('name', 'Good Companies')->first());
+
+        $fakeCompanies = [];
+
+        $lastBilled = null;
+        $totalAmountBilled = 0;
+
+        while (Carbon::now()->lt($dayAfterSimulation)) {
+            // Create the sync command object, hand it our fake companies, and run it
+            $syncCommand = new SyncCommand();
+            $syncCommand->fakeCompanies = $fakeCompanies;
+            $syncCommand->handle();
+
+            if ($user->shouldBill()) {
+                $user->bill();
+
+                $lastBilled = Carbon::today();
+
+                $this->assertEquals($user->paymentLastRequested, $lastBilled);
+                $this->assertEquals($user->amountRequested, 0);
+
+                $totalAmountBilled += $user->amountRequested;
+            }
+
+            // Increment the day
+            Carbon::setTestNow(Carbon::today()->addDays(1));
+        }
+
+        // Check no charge logs were created
+        $numberOfChargeLogs = $user->chargeLogs()->count();
+        $this->assertEquals(0, $numberOfChargeLogs);
+
+        // Check the user was not charged
+        $expectedTotal = 0;
+        $this->assertEquals($expectedTotal, $totalAmountBilled);
+    }
 }

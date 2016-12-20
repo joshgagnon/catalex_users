@@ -257,6 +257,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function shouldBill()
 	{
 		return !$this->organisation_id
+               && !$this->free
 			   && $this->billing_detail_id
 			   && $this->isBillingDay()
 			   && $this->needsBilled();
