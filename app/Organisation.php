@@ -1,12 +1,14 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Config;
 use App\Models\Billable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Organisation extends Model {
-
+class Organisation extends Model
+{
     use SoftDeletes, Billable;
 
     /**
@@ -71,40 +73,10 @@ class Organisation extends Model {
         return bcmul($periodCost, (string)$this->members->count(), 2);
     }
 
-    /**
-     * Charge the organisation for newly added members, prorated until the next billing cycle date.
-     *
-     * @return bool
-     */
-    public function billProrataMembers() {
-        if($this->billingExempt()) return true;
-
-        $amount = $this->owedAmount();
-
-        if($amount === '0.00') return true;
-
-        if(!$this->charge($amount)) {
-            return false;
-        }
-
-        // Update all members
-        if($this->members) {
-            foreach($this->members as $member) {
-                $member->paid_until = $this->paid_until;
-                $member->save();
-            }
-        }
-
-        // TODO: Line items
-        $this->sendInvoices();
-
-        return true;
-    }
-
     public function sendInvoices($type, $invoiceNumber, $listItems, $totalAmount, $gst,  $orgName=null, $orgId=null) {
         $orgId = 'CT' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
-        foreach($this->members as $member) {
-            if($member->can('edit_own_organisation')) {
+        foreach ($this->members as $member) {
+            if ($member->can('edit_own_organisation')) {
                 $member->sendInvoices($type, $invoiceNumber,  $listItems, $totalAmount, $gst,$this->name, $orgId);
             }
         }

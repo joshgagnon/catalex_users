@@ -7,6 +7,9 @@
 				<th>Email</th>
 				<th class="small-cell">Details</th>
 				<th class="small-cell">Active</th>
+				@if($user->hasRole('global_admin'))
+					<th class="small-cell">Free</th>
+				@endif
 				@if($user->can($editPermission))
 					<th class="small-cell">Delete</th>
 				@endif
@@ -31,6 +34,13 @@
 							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 						@endif
 					</td>
+					@if($user->hasRole('global_admin'))
+					<td class="small-cell">
+						@if($u->free)
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						@endif
+					</td>
+					@endif
 					@if($user->can($editPermission))
 						<td class="small-cell">
 							@if(!$u->deleted_at)

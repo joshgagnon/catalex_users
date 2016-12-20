@@ -27,7 +27,7 @@ class UserController extends Controller {
 	public function getProfile() {
 		$user = Auth::user();
 
-		if($user->can('edit_own_user')) {
+		if ($user->can('edit_own_user')) {
 			$editServicesAndBilling = true;
 
 			if ($user && $user->organisation && !$user->can('edit_own_organisation')) {
@@ -38,8 +38,7 @@ class UserController extends Controller {
 				'subject' => $user,
 				'editServicesAndBilling' => $editServicesAndBilling,
 			]);
-		}
-		elseif ($user->can('view_own_user')) {
+		} elseif ($user->can('view_own_user')) {
 			return view('user.view', ['subject' => $user]);
 		}
 
@@ -85,22 +84,24 @@ class UserController extends Controller {
 	 */
 	public function getEdit($subjectId) {
 		$user = Auth::user();
-
 		$subject = User::find($subjectId);
 
-		if(!$subject) return view('auth.denied');
+		if (!$subject) {
+			return view('auth.denied');
+		}
 
-		if($user->can('edit_any_user') ||
+		if ($user->can('edit_any_user') ||
 		   ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) ||
 		   ($user->can('edit_own_user') && $user->id === $subject->id)) {
 			$roles = [];
+			$free = null;
 
-			if($user->hasRole('global_admin')) {
+			if ($user->hasRole('global_admin')) {
 				$roles = ['global_admin' => $subject->hasRole('global_admin'), 'organisation_admin' => $subject->hasRole('organisation_admin')];
-			}
-			elseif($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) {
+			} elseif ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) {
 				$roles = ['organisation_admin' => $subject->hasRole('organisation_admin')];
 			}
+
             $editServicesAndBilling = false;
 			return view('user.edit', compact('subject', 'roles', 'editServicesAndBilling'));
 		}
@@ -129,6 +130,11 @@ class UserController extends Controller {
 
 		$user->name = $input['name'];
 		$user->email = $input['email'];
+
+		if (Auth::user()->hasRole('global_admin')) {
+			$input['free'] = empty($input['free']) ? false : $input['free'];
+			$user->free = $input['free'] == true;
+		}
 
 		if(strlen($input['new_password'])) {
 			$user->password = bcrypt($input['new_password']);
