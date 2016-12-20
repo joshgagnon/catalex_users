@@ -13,11 +13,16 @@ use App\BillingItem;
 use App\BillingItemPayment;
 use App\BillingDetail;
 
-trait Billable {
-
+trait Billable
+{
     public function billing_detail()
     {
         return $this->belongsTo(BillingDetail::class);
+    }
+
+    public function chargeLogs()
+    {
+        return $this->hasMany(ChargeLog::class);
     }
 
     /**
@@ -35,6 +40,10 @@ trait Billable {
     {
         return $this->hasMany(BillingItem::class);
     }
+
+    abstract public function billableType();
+
+    abstract public function shouldBill();
 
     abstract public function billingExempt();
 
@@ -169,6 +178,19 @@ trait Billable {
         return $dateOfBilling->day == $billingDay;
     }
 
+    public function needsBilled()
+    {
+        $services = Service::where('is_paid_service', true)->get();
+        $totalBillingItems = 0;
+
+        foreach ($services as $service) {
+            $billingItems = $this->getAllDueBillingItems($service);
+            $totalBillingItems += count($billingItems);
+        }
+
+        return $totalBillingItems > 0;
+    }
+
     /**
      * Bill a user or organisation, for all billing items that are due for payment
      */
@@ -182,15 +204,16 @@ trait Billable {
         $chargeLog = ChargeLog::create([
             'success' => false,
             'pending' => true,
-            'user_id' => $this instanceof User ? $this->id : null,
-            'organisation_id' => $this instanceof Organisation ? $this->id : null,
+            'user_id' => $this->billableType() == 'user' ? $this->id : null,
+            'organisation_id' => $this->billableType() == 'organisation' ? $this->id : null,
         ]);
 
         $billingDetails = $this->billing_detail()->first();
 
-        $services = Service::where('is_paid_service', true)->get();
         $payingUntil = $this->calculatePayingUntil($billingDetails->period);
         $centsDue = 0;
+
+        $services = Service::where('is_paid_service', true)->get();
 
         $billingSummary = [];
         foreach ($services as $service) {
@@ -237,10 +260,10 @@ trait Billable {
                 $item->paid_until = $previousPayment ? $previousPayment->paid_until : Carbon::today();
                 $item->save();
             }
-        }
-        else{
+        } else if ($totalDollarsDue > 0) {
             $this->sendInvoices('subscription', $chargeLog->id, $billingSummary, $totalDollarsDue, $gst);
         }
+
         // Return whether payment was successful or not
         return $success;
     }
@@ -279,7 +302,7 @@ trait Billable {
 
          switch ($period) {
             case 'monthly':
-                $payingUntil->addMonth();
+                $payingUntil->addMonthsNoOverflow(1);
                 break;
             case 'annually':
                 $payingUntil->addYear();

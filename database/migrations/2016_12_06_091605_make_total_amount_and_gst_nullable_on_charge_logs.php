@@ -26,8 +26,7 @@ class MakeTotalAmountAndGstNullableOnChargeLogs extends Migration
     public function down()
     {
         Schema::table('charge_logs', function (Blueprint $table) {
-            $table->string('total_amount', 16)->nullable(false)->change();
-            $table->string('gst', 16)->nullable(false)->change();
+            // Not a reversible migration
         });
     }
 }

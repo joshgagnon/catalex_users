@@ -1,7 +1,7 @@
 <?php
 
 use App\BillingDetail;
-use App\User;
+use Tests\Stub\User;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {

@@ -257,4 +257,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	{
 		return $this->organisation ? $this->organisation : $this;
 	}
+
+	public function billableType()
+	{
+		return 'user';
+	}
+
+	public function shouldBill()
+	{
+		return !$this->organisation_id
+			   && $this->billing_detail_id
+			   && $this->isBillingDay()
+			   && $this->needsBilled();
+	}
 }
