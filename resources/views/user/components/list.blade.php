@@ -13,6 +13,9 @@
 				@if($user->can($editPermission))
 					<th class="small-cell">Delete</th>
 				@endif
+                @if($user->can($editPermission))
+                    <th class="small-cell">Login As</th>
+                @endif
 			</tr>
 		</thead>
 		<tbody>
@@ -56,6 +59,14 @@
 							@endif
 						</td>
 					@endif
+
+                        <td class="small-cell">
+                    @if($user->can($editPermission) && !$u->hasRole('global_admin'))
+                            <a href="{{ action('AdminController@getBecomeUser', $u->id) }}" class="btn btn-info btn-xs">Login</a>
+                    @endif
+                        </td>
+
+
 				</tr>
 			@endforeach
 		</tbody>
