@@ -117,7 +117,7 @@ class UserController extends Controller {
 	public function postEdit(UserEditRequest $request, $subjectId) {
 		$this->updateUser($request->input());
 
-		return redirect()->action('UserController@getView', [$subjectId]);
+		return redirect()->action('UserController@getEdit', [$subjectId]);
 	}
 
 	/**
