@@ -73,7 +73,7 @@
     <footer>
         <div class="container">
                 <p class="copyright">© Copyright {{ date('Y') }} - CataLex® Limited. All rights reserved.  “CataLex” is a registered trademark of CataLex Limited</p>
-                    <a href="/">Home</a>
+                    <a href="/">Account</a>
                     <a href="//catalex.nz">catalex.nz</a>
                     <a href="//users.catalex.nz/privacypolicy">Privacy Policy</a>
                     <a href="//users.catalex.nz/termsofuse">Terms of Use</a>

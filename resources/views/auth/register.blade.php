@@ -63,7 +63,7 @@
 							<div class="col-md-6">
 								<div class="checkbox">
 									<label>
-										<input type="checkbox" id="customer_agreement" name="customer_agreement"> I accept the <a href="/termsofuse">Terms of Use</a>
+										<input type="checkbox" id="customer_agreement" name="customer_agreement"> I accept the <a href="/termsofuse" target="_blank">Terms of Use</a>
 									</label>
 								</div>
 							</div>
