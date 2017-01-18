@@ -99,3 +99,4 @@ Route::get('login/good-companies', ['middleware' => ['check-authorization-params
 
 Route::post('mail/send', 'MailController@send');
 Route::post('mail/view', 'MailController@view');
+Route::post('mail/send-documents', 'MailController@sendDocuments');

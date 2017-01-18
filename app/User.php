@@ -107,7 +107,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $pdf = $baseName . '.pdf';
         exec(implode(' ', ['phantomjs', base_path('scripts/pdferize.js'), $html, $pdf]));
 
-        Mail::queueStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt', $pdf);
+        $mailAttachments = [
+            ['path' => $pdf, 'name' => 'Invoice.pdf']
+        ];
+
+        Mail::queueStyledMail('emails.invoice', ['name' => $this->fullName()], $this->getEmailForPasswordReset(), $this->fullName(), 'CataLex | Invoice/Receipt', $mailAttachments);
 
         //unlink($baseName);
         //unlink($html);
