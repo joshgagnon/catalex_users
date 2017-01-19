@@ -1,5 +1,7 @@
 # CataLex User Management Portal
 
+[![Build Status](https://travis-ci.org/joshgagnon/catalex_users.svg?branch=master)](https://travis-ci.org/joshgagnon/catalex_users)
+
 This app provides users, organisations and global admins an interface to manage their own (and others) user and billing details. It also provides login support for the Law Browser.
 
 ## Deployment
