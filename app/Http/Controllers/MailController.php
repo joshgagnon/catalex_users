@@ -70,7 +70,7 @@ class MailController extends Controller
         }
 
         foreach ($recipients as $recipient) {
-            Mail::mailThree($template, $data, $recipient->email, $recipient->name, $subject, $attachments);
+            Mail::queueStyledMail($template, $data, $recipient->email, $recipient->name, $subject, $attachments);
         }
 
         return Response::json(['message' => 'mail queued']);
