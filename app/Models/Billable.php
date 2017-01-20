@@ -276,7 +276,9 @@ trait Billable
     protected function requestPayment($totalDollarsDue)
     {
         $pxPay = new PXPay();
-        return $pxPay->requestPayment($this, $totalDollarsDue);
+        $success = $pxPay->requestPayment($this, $totalDollarsDue);
+
+        return $success;
     }
 
     private function calculatePayingUntil($period)
