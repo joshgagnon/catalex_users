@@ -2,8 +2,9 @@
 
 use Log;
 use File;
+use Queue;
 use Mail as LaravelMail;
-use App\Jobs\SendMail;
+use App\Jobs\SendEmail;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class Mail
@@ -28,19 +29,7 @@ class Mail
     {
         $markup = self::buildView($view, $data);
 
-        \Queue::push(function($job) use ($markup, $receiverEmail, $receiverName, $subject, $attachments) {
-
-            LaravelMail::send('emails.echo', ['html' => $markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachments) {
-                $message->to($receiverEmail, $receiverName);
-                $message->subject($subject);
-
-                if ($attachments) {
-                    foreach ($attachments as $attachment) {
-                        $message->attach($attachment['path'], ['as' => $attachment['name']]);
-                    }
-                }
-            });
-        });
+        Queue::push(new SendEmail($markup, $receiverEmail, $receiverName, $subject, $attachments));
 
         Log::info("Mail [$subject] QUEUED to $receiverEmail");
     }
