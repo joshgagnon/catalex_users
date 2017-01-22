@@ -25,11 +25,11 @@ class Mail
         return $markup;
     }
 
-    public static function queueStyledMail($view, $data, $receiverEmail, $receiverName, $subject, $attachments=null)
+    public static function queueStyledMail($view, $data, $receiverEmail, $receiverName, $subject, $attachments=null, $senderName=null, $senderEmail=null)
     {
         $markup = self::buildView($view, $data);
 
-        Queue::push(new SendEmail($markup, $receiverEmail, $receiverName, $subject, $attachments));
+        Queue::push(new SendEmail($markup, $receiverEmail, $receiverName, $subject, $attachments, $senderName, $senderEmail));
 
         Log::info("Mail [$subject] QUEUED to $receiverEmail");
     }

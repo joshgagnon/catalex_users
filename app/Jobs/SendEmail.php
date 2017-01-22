@@ -18,19 +18,23 @@ class SendEmail extends Job implements SelfHandling, ShouldQueue
     protected $receiverName;
     protected $subject;
     protected $attachments;
+    protected $senderName;
+    protected $senderEmail;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($markup, $receiverEmail, $receiverName, $subject, $attachments)
+    public function __construct($markup, $receiverEmail, $receiverName, $subject, $attachments, $senderName, $senderEmail)
     {
         $this->markup = $markup;
         $this->receiverEmail = $receiverEmail;
         $this->receiverName = $receiverName;
         $this->subject = $subject;
         $this->attachments = $attachments;
+        $this->senderName = $senderName;
+        $this->senderEmail = $senderEmail;
     }
 
     /**
@@ -44,10 +48,16 @@ class SendEmail extends Job implements SelfHandling, ShouldQueue
         $receiverName = $this->receiverName;
         $subject = $this->subject;
         $attachments = $this->attachments;
+        $senderName = $this->senderName;
+        $senderEmail = $this->senderEmail;
 
-        $mailer->send('emails.echo', ['html' => $this->markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachments) {
+        $mailer->send('emails.echo', ['html' => $this->markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachments, $senderName, $senderEmail) {
             $message->to($receiverEmail, $receiverName);
             $message->subject($subject);
+            
+            if ($senderName && $senderEmail) {
+                $message->replyTo($senderEmail, $senderName);
+            }
 
             if ($attachments) {
                 foreach ($attachments as $attachment) {

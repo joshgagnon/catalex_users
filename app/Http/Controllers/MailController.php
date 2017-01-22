@@ -55,8 +55,9 @@ class MailController extends Controller
         $template = $request->input('template');
         $recipients = json_decode($request->input('recipients'));
         $subject = $request->input('subject');
-        $data = json_decode($request->input('data', '{}'), true);
         $files = $request->files->all();
+        $senderName = $request->input('sender_name');
+        $senderEmail = $request->input('sender_email');
 
         $attachments = [];
 
@@ -70,7 +71,8 @@ class MailController extends Controller
         }
 
         foreach ($recipients as $recipient) {
-            Mail::queueStyledMail($template, $data, $recipient->email, $recipient->name, $subject, $attachments);
+            $data = ['recipientName' => $recipient->name, 'senderName' => $senderName];
+            Mail::queueStyledMail($template, $data, $recipient->email, $recipient->name, $subject, $attachments, $senderName, $senderEmail);
         }
 
         return Response::json(['message' => 'mail queued']);

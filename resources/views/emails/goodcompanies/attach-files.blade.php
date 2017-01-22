@@ -11,8 +11,8 @@
                             <tr>
                                 <td>
                                     <h2 class="center">Attached Documents</h2>
-                                    <p>Hi</p>
-                                    <p>Attached are some documents from Good Companies.</p>
+                                    <p>Hi {{ $recipientName }}</p>
+                                    <p>Attached are some documents from {{ $senderName }}.</p>
                                     <p>Best regards</p>
                                     <p>The CataLex team</p>
                                     <p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
