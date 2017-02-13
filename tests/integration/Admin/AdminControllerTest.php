@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
+Use App\Role;
+
 class AdminControllerTest extends TestCase
 {
     use DatabaseTransactions;
@@ -12,7 +14,7 @@ class AdminControllerTest extends TestCase
     public function adminCreateUser()
     {
         $adminUser = $this->createUser();
-        $adminUser->addRole(1);
+        $adminUser->addRole(Role::where('name', '=', 'global_admin')->first());
 
         Auth::loginUsingId($adminUser->id);
 
