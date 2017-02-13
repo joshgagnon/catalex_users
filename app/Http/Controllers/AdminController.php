@@ -86,8 +86,8 @@ class AdminController extends Controller {
 	}
 
 	public function getAddUser() {
-		$organisations = Organisation::all()->lists('name', 'id');
-		$organisations = [0 => 'None'] + $organisations;
+		$organisations = Organisation::get()->pluck('name', 'id')->toArray();
+		$organisations = array_merge([0 => 'None'], $organisations);
 
 		return view('user.add', compact('organisations'));
 	}
@@ -123,7 +123,7 @@ class AdminController extends Controller {
 			]);
 
 			$billing = BillingDetail::create([
-				'period' => $data['billing_period'],
+				'period' => !empty($data['billing_period']) ? $data['billing_period'] : 'monthly',
 				'address_id' => $address->id,
 			]);
 
@@ -131,17 +131,11 @@ class AdminController extends Controller {
 		}
 
 		$newUser = User::create($userData);
-
-		if($orgId && $orgId == Config::get('constants.beta_organisation')) {
-			$user->addRole('beta_tester');
-		}
-		else {
-			$user->addRole('registered_user');
-		}
+        $newUser->addRole('registered_user');
 
 		if($request->has('send_invite')) {
 			$this->passwordBroker->sendResetLink(['email' => $newUser->email], function($mail) {
-				$mail->subject('You have been invited to use CataLex Law Browser');
+				$mail->subject('You have been invited to CataLex');
 			});
 		}
 
