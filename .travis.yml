@@ -3,6 +3,9 @@ language: php
 php:
   - 7.0
 
+services:
+  - redis-server
+
 before_script:
   - cp .env.travis .env
   - psql -c 'create database catalex_users_test;' -U postgres
