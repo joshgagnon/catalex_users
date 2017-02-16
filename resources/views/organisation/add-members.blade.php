@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-CataLex Law Browser - Add Organisation Members
+CataLex - Add Organisation Members
 @endsection
 
 @section('content')

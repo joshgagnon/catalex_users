@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-CataLex Law Browser - Delete Organisation
+CataLex - Delete Organisation
 @endsection
 
 @section('content')

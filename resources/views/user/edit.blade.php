@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-CataLex Law Browser - Edit User
+CataLex - Edit User
 @endsection
 
 @section('content')
