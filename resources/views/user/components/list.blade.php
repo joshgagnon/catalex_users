@@ -9,6 +9,7 @@
 				<th class="small-cell">Active</th>
 				@if($user->hasRole('global_admin'))
 					<th class="small-cell">Free</th>
+					<th class="small-cell">Has Billing</th>
 				@endif
 				@if($user->can($editPermission))
 					<th class="small-cell">Delete</th>
@@ -40,6 +41,11 @@
 					@if($user->hasRole('global_admin'))
 					<td class="small-cell">
 						@if($u->free)
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						@endif
+					</td>
+					<td class="small-cell">
+						@if($u->billing_detail_id)
 							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 						@endif
 					</td>
