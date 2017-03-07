@@ -50,37 +50,35 @@ class SyncCompaniesFromGoodCompanies extends Command
         // Make sure every company from the response is either
         foreach ($companies as $company) {
             // Check the companies user ID is valid
-            if (!User::where('id', '=', $company->userId)->exists()) {
-                throw new \Exception('User with id \'' . $company->userId . '\' does not exist');
-            }
+            if (User::where('id', '=', $company->userId)->exists()) {
+                // This is the JSON data that should be stored for the company
+                $companyJsonData = json_encode(['company_name' => $company->companyName]);
 
-            // This is the JSON data that should be stored for the company
-            $companyJsonData = json_encode(['company_name' => $company->companyName]);
+                // Get the billing item associated with this company
+                $billingItem = BillingItem::forTypeAndId(BillingItem::ITEM_TYPE_GC_COMPANY, $company->companyId);
 
-            // Get the billing item associated with this company
-            $billingItem = BillingItem::forTypeAndId(BillingItem::ITEM_TYPE_GC_COMPANY, $company->companyId);
+                if (!$billingItem) {
+                    // If the billing item does not exist
+                    $billingItem = new BillingItem([
+                        'item_id' => $company->companyId,
+                        'item_type' => BillingItem::ITEM_TYPE_GC_COMPANY,
+                        'json_data' => $companyJsonData,
+                        'active' => $company->active,
+                    ]);
 
-            if (!$billingItem) {
-                // If the billing item does not exist
-                $billingItem = new BillingItem([
-                    'item_id' => $company->companyId,
-                    'item_type' => BillingItem::ITEM_TYPE_GC_COMPANY,
-                    'json_data' => $companyJsonData,
-                    'active' => $company->active,
-                ]);
-
-                $billingItem->user_id = $company->userId;
-                $billingItem->service_id = $service->id;
-                $billingItem->save();
-
-                $this->log('Created billing item for ' . $company->companyName . ' during Good Companies gc_company sync');
-            } else {
-                // Billing item exists; make sure it is up-to-date
-                if ($billingItem->json_data != $companyJsonData || $billingItem->active != $company->active) {
-                    $billingItem->json_data = $companyJsonData;
-                    $billingItem->active = $company->active;
-
+                    $billingItem->user_id = $company->userId;
+                    $billingItem->service_id = $service->id;
                     $billingItem->save();
+
+                    $this->log('Created billing item for ' . $company->companyName . ' during Good Companies gc_company sync');
+                } else {
+                    // Billing item exists; make sure it is up-to-date
+                    if ($billingItem->json_data != $companyJsonData || $billingItem->active != $company->active) {
+                        $billingItem->json_data = $companyJsonData;
+                        $billingItem->active = $company->active;
+
+                        $billingItem->save();
+                    }
                 }
             }
         }
