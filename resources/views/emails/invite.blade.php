@@ -12,7 +12,10 @@
 								<td>
 									<h2 class="center">Welcome to CataLex</h2>
 									<p>Hi {{ $user->fullName() }},</p>
-									<p>{{ $inviter }} has invited you to join the account {{ $user->organisation->name }} holds with CataLex. <a href="{{ url('password/reset/' . $token) }}">Click here</a> to confirm your user account and gain access to <a href="{{ Config::get('constants.law_browser_features') }}">Law Browser</a></p>
+									<p>
+										{{ $inviter }} has invited you to join CataLex.
+										<a href="{{ url('password/reset/' . $token) }}">Click here</a> to confirm your user account and gain access.
+									</p>
 									<p>Your username is: {{ $user->email }}</p>
 									<p>Best regards</p>
 									<p>The CataLex team</p>

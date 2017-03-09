@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-CataLex Law Browser - Create Organisation
+CataLex - Create Organisation
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@ CataLex Law Browser - Create Organisation
 	<div class="row">
 		<div class="col-xs-12">
 			@include('components.messages')
-			<p>Creating an organisation will allow you to invite team members and manage their Law Browser subscription. Simply choose an organisation name and click 'Create'.</p>
+			<p>Creating an organisation will allow you to invite team members and manage their CataLex subscription. Simply choose an organisation name and click 'Create'.</p>
 			<form class="form-inline" role="form" method="POST" action="{{ action('OrganisationController@postCreate') }}">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 				<div class="form-group">

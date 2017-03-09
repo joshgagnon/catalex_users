@@ -1,4 +1,4 @@
-@extends('emails.ink-template')
+@extends('emails.layouts.non-member')
 
 @section('content')
 <table class="container main">
@@ -10,9 +10,8 @@
                         <table class="twelve columns">
                             <tr>
                                 <td>
-                                    <h2 class="center">Attached Documents</h2>
                                     <p>Hi {{ $recipientName }}</p>
-                                    <p>Attached are some documents from {{ $senderName }}.</p>
+                                    <p>Please find attached the following document that {{ $senderName }} has prepared in Good Companies</p>
                                     <p>Best regards</p>
                                     <p>The CataLex team</p>
                                     <p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>

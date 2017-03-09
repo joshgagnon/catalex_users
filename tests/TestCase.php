@@ -5,6 +5,8 @@ use Tests\Stub\User;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
+    protected $baseUrl = 'http://localhost';
+
     protected $runMigrations = true;
     protected $seeder = 'TestSeeder';
 

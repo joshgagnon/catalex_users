@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-CataLex Law Browser - {{ $organisation->name }}
+CataLex - {{ $organisation->name }}
 @endsection
 
 @section('content')
