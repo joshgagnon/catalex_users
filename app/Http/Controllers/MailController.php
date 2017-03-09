@@ -58,7 +58,7 @@ class MailController extends Controller
         $files = $request->files->all();
         $senderName = $request->input('sender_name');
         $senderEmail = $request->input('sender_email');
-
+        \Log::info($files);
         $attachments = [];
 
         foreach ($files as $file) {

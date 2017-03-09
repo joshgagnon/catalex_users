@@ -211,6 +211,7 @@ class UserController extends Controller {
     {
         $user_id=$authorizer->getResourceOwnerId(); // the token user_id
         $user= User::find($user_id);// get the user data from database
-        return $user->toJson();
+        $user->load('organisation.members');
+        return $user->toJSON();
     }
 }
