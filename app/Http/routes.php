@@ -21,6 +21,8 @@ Route::group(['middleware' => 'csrf'], function() {
         'password' => 'Auth\PasswordController'
     ]);
 
+    // Route::get('/auth/first-login', 'Auth\PasswordController@getFirstLogin');
+
     Route::group(['middleware' => 'auth'], function() {
         /**
          * SSO routes

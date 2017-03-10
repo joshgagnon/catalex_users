@@ -266,4 +266,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			   && $this->isBillingDay()
 			   && $this->needsBilled();
 	}
+
+    public function accessLogs()
+    {
+        return $this->hasMany(AccessLog::class);
+    }
+
+    public function firstLoginToken()
+    {
+        return $this->hasOne(FirstLoginToken::class);
+    }
 }
