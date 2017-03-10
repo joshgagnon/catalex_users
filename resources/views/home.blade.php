@@ -2,7 +2,9 @@
 
 @section('content')
 
-    @include('components.messages')
+    <div class="container">
+        @include('components.messages')
+    </div>
 
 
 
