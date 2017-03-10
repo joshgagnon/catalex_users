@@ -13,8 +13,12 @@
 									<h2 class="center">Welcome to CataLex</h2>
 									<p>Hi {{ $user->fullName() }},</p>
 									<p>
-										{{ $inviter }} has invited you to join CataLex.
-										<a href="{{ url('password/reset/' . $token) }}">Click here</a> to confirm your user account and gain access.
+										@if ($inviter)
+											{{ $inviter }} has invited you to join CataLex.
+										@else
+											You have been invite to join CataLex.
+										@endif
+										<a href="{{ url('password/first-login/' . $token) }}">Click here</a> to confirm your user account and gain access.
 									</p>
 									<p>Your username is: {{ $user->email }}</p>
 									<p>Best regards</p>

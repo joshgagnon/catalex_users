@@ -35,15 +35,6 @@ class AppServiceProvider extends ServiceProvider {
 			return new \Illuminate\Auth\EloquentUserProvider($this->app->make('Illuminate\Contracts\Hashing\Hasher'), $this->app['config']['auth.model']);
 		});
 
-		$this->app->bind('App\Services\InviteBroker', function() {
-			return new \App\Services\InviteBroker(
-				$this->app->make('Illuminate\Auth\Passwords\TokenRepositoryInterface'),
-				$this->app->make('Illuminate\Contracts\Auth\UserProvider'),
-				$this->app->make('Illuminate\Contracts\Mail\Mailer'),
-				'emails.invite'
-			);
-		});
-
 		$this->app->bind('App\Services\ResetBroker', function() {
 			return new \App\Services\ResetBroker(
 				$this->app->make('Illuminate\Auth\Passwords\TokenRepositoryInterface'),

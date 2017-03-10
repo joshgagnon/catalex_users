@@ -8,6 +8,7 @@ use Auth;
 use App\User;
 use App\FirstLoginToken;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Library\Invite;
 
 class PasswordController extends Controller
 {
@@ -56,17 +57,10 @@ class PasswordController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
-        // Get the user. Make sure both the user's email and the token exist and match
-        $user = null;
-        $tokenInstance = FirstLoginToken::where('token', '=', $request->token)->first();
+        // Get the user for this token
+        $user = Invite::getUser($request->token, $request->email);
 
-        if ($tokenInstance) {
-            $user = User::where('id', '=', $tokenInstance->user_id)
-                        ->where('email', '=', $request->email)
-                        ->first();
-        }
-
-        // Check we found a user. No user means either the email or token didn't exist or match
+        // Check we found a user
         if (!$user) {
             return redirect()->back()
                              ->withInput($request->only('email'))
