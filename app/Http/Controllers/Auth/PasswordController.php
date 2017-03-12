@@ -52,9 +52,12 @@ class PasswordController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $userOrganisation = $user->organisation;
+
         return view('auth.first-login')->with([
             'token' => $token,
             'user' => $user,
+            'userOrganisation' => $userOrganisation
         ]);
     }
 

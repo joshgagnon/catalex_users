@@ -5,8 +5,22 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Set Password</div>
                 <div class="panel-body">
+
+                    <div class="text-center">
+                        <h3>Welcome {{ $user->fullName() }}</h3>
+
+                        @if ($userOrganisation)
+                            <p>You have been invited to join <strong>{{ $userOrganisation->name }}</strong>.</p>
+                        @else
+                            <p>You have been invited to join CataLex.</p>
+                        @endif
+
+                        <p>Please set a password below to get started.</p>
+                    </div>
+
+                    <hr />
+
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
