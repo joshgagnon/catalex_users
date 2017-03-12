@@ -64,4 +64,8 @@ return [
 		'expire' => 1440,
 	],
 
+	'first_login' => [
+		'expire' => 2628000, // 30 days
+	],
+
 ];

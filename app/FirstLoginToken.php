@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Config;
+use Carbon\Carbon;
 
 class FirstLoginToken extends Model
 {
@@ -23,5 +24,13 @@ class FirstLoginToken extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeValid($query)
+    {
+        $tokenValidFor = config('auth.first_login.expire');
+        $minValidDate = Carbon::now()->subSeconds($tokenValidFor);
+
+        return $query->where('created_at', '>', $minValidDate);
     }
 }
