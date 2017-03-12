@@ -39,13 +39,23 @@ class PasswordController extends Controller
         $this->middleware('guest');
     }
 
-    public function getFirstLogin($token = null)
+    public function getFirstLogin(Request $request, $token = null)
     {
         if (!$token) {
             throw new NotFoundHttpException();
         }
 
-        return view('auth.first-login')->with(['token' => $token]);
+        // Get the user
+        $user = Invite::getUser($token);
+
+        if (!$user) {
+            throw new NotFoundHttpException();
+        }
+
+        return view('auth.first-login')->with([
+            'token' => $token,
+            'user' => $user,
+        ]);
     }
 
     public function postFirstLogin(Request $request)
@@ -53,18 +63,15 @@ class PasswordController extends Controller
         // Validate
         $this->validate($request, [
             'token' => 'required',
-            'email' => 'required|email',
             'password' => 'required|confirmed|min:6',
         ]);
 
         // Get the user for this token
-        $user = Invite::getUser($request->token, $request->email);
+        $user = Invite::getUser($request->token);
 
         // Check we found a user
         if (!$user) {
-            return redirect()->back()
-                             ->withInput($request->only('email'))
-                             ->with('errors', collect('Invalid Email or Token'));
+            return redirect()->back()->with('errors', collect('Invalid token'));
         }
 
         // Change the user's password

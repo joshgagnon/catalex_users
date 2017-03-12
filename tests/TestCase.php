@@ -2,6 +2,7 @@
 
 use App\BillingDetail;
 use Tests\Stub\User;
+use App\Organisation;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
@@ -54,6 +55,21 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $billingData = array_merge($defaults, $overrides);
 
         return BillingDetail::create($billingData);
+    }
+
+    protected function createOrganisation($overrides=[], $orgAdmin)
+    {
+        $defaults = ['name' => 'Test Org'];
+        $orgData = array_merge($defaults, $overrides);
+        
+        $organisation = Organisation::create($orgData);
+
+        $orgAdmin->organisation_id = $organisation->id;
+        $orgAdmin->save();
+
+        $orgAdmin->addRole('organisation_admin');
+
+        return $organisation;
     }
 }
 
