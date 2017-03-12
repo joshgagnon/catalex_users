@@ -88,6 +88,10 @@ trait Billable
         if ($this->free) {
             return true;
         }
+        // If this billable entity has an organisation, fallback to the organisation's access level
+        if ($this->organisation) {
+            return $this->organisation->hasAccess($service);
+        }
 
         $billablesService = $this->services()->where('service_id', $service->id)->first();
 
@@ -99,10 +103,6 @@ trait Billable
             return $billablesService->pivot->access_level == 'full_access';
         }
 
-        // If this billable entity has an organisation, fallback to the organisation's access level
-        if ($this->organisation) {
-            return $this->organisation->hasAccess($service);
-        }
 
         // If not registered for the service and not belonging to an organisation: this billable entity has no access
         return false;
