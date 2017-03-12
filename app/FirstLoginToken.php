@@ -28,9 +28,15 @@ class FirstLoginToken extends Model
 
     public function scopeValid($query)
     {
-        $tokenValidFor = config('auth.first_login.expire');
-        $minValidDate = Carbon::now()->subSeconds($tokenValidFor);
+        return $query;
 
-        return $query->where('created_at', '>', $minValidDate);
+        // TODO: Add expiry to tokens
+        // This means we need a page to tell people if their token has expired and
+        // a way to create another token (probably by the org admins)
+
+        // $tokenValidFor = config('auth.first_login.expire');
+        // $minValidDate = Carbon::now()->subSeconds($tokenValidFor);
+
+        // return $query->where('created_at', '>', $minValidDate);
     }
 }
