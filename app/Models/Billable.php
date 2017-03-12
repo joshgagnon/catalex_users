@@ -88,7 +88,6 @@ trait Billable
         if ($this->free) {
             return true;
         }
-
         // If this billable entity has an organisation, fallback to the organisation's access level
         if ($this->organisation) {
             return $this->organisation->hasAccess($service);
