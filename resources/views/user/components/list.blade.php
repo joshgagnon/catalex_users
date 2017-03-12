@@ -14,7 +14,7 @@
                 @if($user->can($editPermission))
                     <th class="small-cell">Delete</th>
                 @endif
-                @if($user->can($editPermission))
+                @if($user->hasRole('global_admin'))
                     <th class="small-cell">Login As</th>
                 @endif
             </tr>
@@ -25,6 +25,8 @@
                     <td>
                         @if($user->hasRole('global_admin'))
                             <span data-toggle="popover" data-html="true" data-trigger="hover" data-content="<b>Created at:</b> <br/> {{ Carbon\Carbon::parse($u->created_at)->format('d F, Y - g:i a') }}">{{ $u->fullName() }}</span>
+                        @else
+                            {{ $u->fullName() }}
                         @endif
                     </td>
                     <td>{{ $u->email }}</td>
@@ -70,11 +72,11 @@
                         </td>
                     @endif
 
+                    @if($u->hasRole('global_admin'))
                         <td class="small-cell">
-                    @if($user->can($editPermission) && !$u->hasRole('global_admin'))
                             <a href="{{ action('AdminController@getBecomeUser', $u->id) }}" class="btn btn-info btn-xs">Login</a>
-                    @endif
                         </td>
+                    @endif
 
 
                 </tr>

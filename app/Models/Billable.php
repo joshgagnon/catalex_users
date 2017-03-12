@@ -89,19 +89,20 @@ trait Billable
             return true;
         }
 
-        $billablesService = $this->services()->where('service_id', $service->id)->first();
-
-        if($billablesService && $billablesService->is_paid_service && !$this->billing_detail()->first()){
-            return false;
-        }
-        // If this billable entity is registered for this service, check their service level
-        if ($billablesService != null) {
-            return $billablesService->pivot->access_level == 'full_access';
-        }
-
         // If this billable entity has an organisation, fallback to the organisation's access level
         if ($this->organisation) {
             return $this->organisation->hasAccess($service);
+        }
+
+        $billablesService = $this->services()->where('service_id', $service->id)->first();
+
+        if($billablesService && $billablesService->is_paid_service && !$this->billing_detail()->first()) {
+            return false;
+        }
+
+        // If this billable entity is registered for this service, check their service level
+        if ($billablesService != null) {
+            return $billablesService->pivot->access_level == 'full_access';
         }
 
         // If not registered for the service and not belonging to an organisation: this billable entity has no access
