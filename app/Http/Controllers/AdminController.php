@@ -153,7 +153,7 @@ class AdminController extends Controller
 
         if($addMembers === 'add-members') return $this->getAddMembers($organisation);
 
-        return view('organisation.edit', compact('organisation'));
+        return view('organisation.admin-edit', compact('organisation'));
     }
 
     public function postEditOrganisation(Request $request, $id, $addMembers=null) {
