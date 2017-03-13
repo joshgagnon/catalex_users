@@ -72,7 +72,7 @@
                         </td>
                     @endif
 
-                    @if($u->hasRole('global_admin'))
+                    @if($user->hasRole('global_admin'))
                         <td class="small-cell">
                             <a href="{{ action('AdminController@getBecomeUser', $u->id) }}" class="btn btn-info btn-xs">Login</a>
                         </td>
