@@ -74,4 +74,24 @@ class PXPayTest extends TestCase
         $this->assertTrue($success);
         $this->assertTrue($pxPay->paymentRequestSent);
     }
+
+    /**
+     * @test
+     */
+    public function requestPaymentForUserWithoutBillingDetails()
+    {
+        if (env('DISABLE_PAYMENT')) {
+            throw new \Exception('Payment must be enabled to run payment tests.');
+        }
+
+        $totalDollars = '413.27';
+
+        $user = $this->createUser();
+
+        $pxPay = new PXPay();
+        $success = $pxPay->requestPayment($user, $totalDollars);
+
+        $this->assertFalse($success);
+        $this->assertFalse($pxPay->paymentRequestSent);
+    }
 }

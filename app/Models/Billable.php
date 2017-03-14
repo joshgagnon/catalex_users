@@ -184,6 +184,14 @@ trait Billable
             return true;
         }
 
+        $billingDetails = $this->billing_detail()->first();
+        $services = Service::where('is_paid_service', true)->get();
+
+        // Check if they have any services that require billing
+        if ($services->count() == 0) {
+            return true;
+        }
+
         $chargeLog = ChargeLog::create([
             'success' => false,
             'pending' => true,
@@ -191,21 +199,21 @@ trait Billable
             'organisation_id' => $this->billableType() == 'organisation' ? $this->id : null,
         ]);
 
-        $billingDetails = $this->billing_detail()->first();
+        // Check the user has billing setup
+        if (!$billingDetails) {
+            $billableType = $this instanceof User ? 'user' : 'organisation';
+            Log::error('Tried to bill ' . $billableType . ' with id ' . $this->id . ', but failed because they have no billing details');
+
+            return false;
+        }
 
         $payingUntil = $this->calculatePayingUntil($billingDetails->period);
         $centsDue = 0;
 
-        $services = Service::where('is_paid_service', true)->get();
-
         $billingSummary = [];
         foreach ($services as $service) {
-            $priceInCents = $this->getPriceForService($service, $billingDetails);
+            $priceInCents = $this->getPriceForService($service, $billingDetails->period);
             $billingItems = $this->getAllDueBillingItems($service);
-
-            if (!$billingDetails) {
-                throw new \Exception('Registration to paid service requires billing details to be setup');
-            }
 
             foreach ($billingItems as $item) {
                 $itemPayment = new BillingItemPayment();
@@ -251,7 +259,7 @@ trait Billable
         return $success;
     }
 
-    private function getPriceForService($service, $billingDetails)
+    private function getPriceForService($service, $billingPeriod)
     {
         // If this billable entity has is directly registered with the service see if it has a specified price
         // There are times where this billable entity wont have a registration record. This is when an organisation
@@ -262,7 +270,7 @@ trait Billable
         if (!$priceInCents) {
             switch ($service->name) {
                 case 'Good Companies':
-                    $constantName = $billingDetails->period == 'monthly' ? 'constants.gc_monthly_price_in_cents' : 'constants.gc_yearly_price_in_cents';
+                    $constantName = $billingPeriod == 'monthly' ? 'constants.gc_monthly_price_in_cents' : 'constants.gc_yearly_price_in_cents';
                     $priceInCents = Config::get($constantName);
                     break;
                 default:

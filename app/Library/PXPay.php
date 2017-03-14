@@ -28,9 +28,13 @@ class PXPay
         // Get the user or organisation's billing details
         $billingDetails = $billable->billing_detail()->first();
 
-        // No billing detail = something has gone terribly wrong
+        // Check the user has billing details
         if (!$billingDetails) {
-            throw new \Exception('Billable must have billing details set before requesting payment');
+            $billableType = $billable instanceof User ? 'user' : 'organisation';
+            Log::error('Tried to bill ' . $billableType . ' with id ' . $billable->id . ', but failed because they have no billing details');
+            
+            // Failed
+            return false;
         }
 
         // Build the XML and send the request

@@ -102,6 +102,29 @@ class BillableTraitBillMethodTest extends TestCase
     /**
      * @test
      */
+    public function bill_user_without_billing_details()
+    {
+        // Create a user
+        $user = $this->createUser();
+
+        // Create a service and attach it to the user
+        $service = $this->createService('Good Companies');
+        $user->services()->attach($service);
+
+        // Create a billing item
+        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+
+        // Bill the user
+        $billingResult = $user->bill();
+        $this->assertFalse($billingResult);
+
+        // Check the user wasn't billed
+        $this->assertNull($user->totalDollarsDue);
+    }
+
+    /**
+     * @test
+     */
     public function bill_user_annually()
     {
         // Create a user
