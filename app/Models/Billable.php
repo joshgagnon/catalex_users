@@ -242,7 +242,7 @@ trait Billable
             $itemPayments = $chargeLog->billingItemPayments()->get();
 
             foreach ($itemPayments as $item) {
-                $previousPayment = BillingItemPayment::join('charge_logs', 'charge_log_id', '=', 'charge_log.id')
+                $previousPayment = BillingItemPayment::join('charge_logs', 'charge_log_id', '=', 'charge_logs.id')
                                                      ->where('billing_item_id', '=', $item->billing_item_id)
                                                      ->where('charge_logs.success', '=', true)
                                                      ->orderBy('paid_until', 'desc')
