@@ -49,9 +49,20 @@ class PXPay
     {
         $postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
         $response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
-        $xmlResponse = new \SimpleXMLElement((string)$response->getBody());
+        $responseBody = $response->getBody();
+        $xmlResponse = new \SimpleXMLElement((string)$responseBody);
 
         $success = boolval((string)$xmlResponse->Success);
+
+        // If not successful, log the response
+        if (!$success) {
+            Log::error('');
+            Log::error('-----------');
+            Log::error('Failed PXPOST request. Response below.');
+            Log::error($responseBody);
+            Log::error('-----------');
+            Log::error('');
+        }
 
         return $success;
     }
