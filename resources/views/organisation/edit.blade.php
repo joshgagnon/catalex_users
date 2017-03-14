@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('title')
-CataLex - Edit Organisation
+    CataLex - Edit Organisation
 @endsection
 
 @section('content')
@@ -12,9 +12,12 @@ CataLex - Edit Organisation
             <div class="panel panel-default">
                 <div class="panel-body">
                     @include('components.messages')
-                    <form method="POST" role="form" class="form-horizontal">
+                    <form method="POST" role="form" class="form-horizontal" action="{{ action('OrganisationController@update', $organisation->id) }}">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="_method" value="PUT">
+
                         <h4>Details</h4>
+                        
                         <div class="form-group">
                             <div class="col-xs-12 col-md-12">
                                 <label class="control-label">Name</label>

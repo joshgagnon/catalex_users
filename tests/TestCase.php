@@ -57,12 +57,16 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return BillingDetail::create($billingData);
     }
 
-    protected function createOrganisation($overrides=[], $orgAdmin)
+    protected function createOrganisation($overrides=[], $orgAdmin=null)
     {
         $defaults = ['name' => 'Test Org'];
         $orgData = array_merge($defaults, $overrides);
         
         $organisation = Organisation::create($orgData);
+
+        if (!$orgAdmin) {
+            $orgAdmin = $this->createUser();
+        }
 
         $orgAdmin->organisation_id = $organisation->id;
         $orgAdmin->save();

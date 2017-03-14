@@ -63,7 +63,6 @@ class PasswordController extends Controller
 
     public function postFirstLogin(Request $request)
     {
-        // Validate
         $this->validate($request, [
             'token' => 'required',
             'password' => 'required|confirmed|min:6',

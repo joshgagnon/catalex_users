@@ -55,6 +55,12 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**
+         * Organisations
+         */
+        Route::get('organisation/{organisation}/edit', 'OrganisationController@edit');
+        Route::put('organisation/{organisation}', 'OrganisationController@update');
+
+        /**
          * Controllers
          */
         Route::controllers([

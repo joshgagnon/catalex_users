@@ -7,6 +7,7 @@ use Config;
 use Session;
 use App\User;
 use App\Organisation;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InviteFormRequest;
 use App\Http\Requests\CreateOrganisationRequest;
@@ -21,13 +22,16 @@ class OrganisationController extends Controller
         $user = Auth::user();
 
         if($user->can('view_own_organisation')) {
-            $organisation = $user->organisation;
+            $organisation = $user->organisation()->first();
 
             if(!$organisation) {
                 return view('organisation.create');
             }
 
-            return view('organisation.overview', ['organisation' => $organisation]);
+            return view('organisation.overview')->with([
+                'organisation' => $organisation,
+                'canEditOrganisation' => $this->canEditOrganisation($organisation, $user),
+            ]);
         }
 
         // TODO: Error saying not enough permission
@@ -79,5 +83,55 @@ class OrganisationController extends Controller
 
         Session::flash('success', 'An invite has been sent to ' . $data['email']);
         return redirect()->back();
+    }
+
+    public function edit(Organisation $organisation)
+    {
+        $user = Auth::user();
+        if (!$this->canEditOrganisation($organisation, $user)) {
+            abort(403, 'Forbidden');
+        }
+
+        return view('organisation.edit')->with([
+            'organisation' => $organisation,
+        ]);
+    }
+
+    public function update(Request $request, Organisation $organisation)
+    {
+        dd('what?');
+
+        $user = Auth::user();
+        if (!$this->canEditOrganisation($organisation, $user)) {
+            dd('what?');
+            abort(403, 'Forbidden');
+        }
+
+        dd('what?2');
+
+        $this->validate($request, [
+            'name' => 'required|max:255'
+        ]);
+
+        $organisation->name = $request->name;
+        $organisation->save();
+
+        return redirect('/organisation')->with('status', 'Organisation name updated');
+    }
+
+    private function canEditOrganisation(Organisation $organisation, User $user)
+    {
+        // Can edit any organisation
+        if ($user->can('edit_any_organisation')) {
+            return true;
+        }
+
+        // Can edit own organisation
+        if ($user->can('edit_own_organisation')) {
+            // True if the user is in the given organisation
+            return $user->organisation_id == $organisation->id;
+        }
+        
+        return false;
     }
 }
