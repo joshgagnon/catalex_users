@@ -276,4 +276,18 @@ class AuthController extends Controller {
             return redirect($linkedIn->getAuthorizationUri()->getAbsoluteUri());
         }
     }
+
+    /**
+     * Override logout to remove the session value we use for impersonation
+     */
+    public function getLogout(Request $request)
+    {
+        // Forget the admin_id (id there is one)
+        $request->session()->forget('admin_id');
+
+        // Logout
+        Auth::logout();
+
+        return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
+    }
 }

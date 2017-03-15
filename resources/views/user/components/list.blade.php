@@ -75,7 +75,7 @@
                     @if($user->hasRole('global_admin'))
                         <td class="small-cell">
                             @if (!$u->hasRole('global_admin'))
-                                <a href="{{ action('AdminController@getBecomeUser', $u->id) }}" class="btn btn-info btn-xs">Login</a>
+                                <a href="{{ url('impersonation', $u->id) }}" class="btn btn-info btn-xs">Login</a>
                             @endif
                         </td>
                     @endif

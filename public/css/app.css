@@ -8122,4 +8122,12 @@ form.form-inline .form-group label {
 .billing-period {
   text-align: center; }
 
+.impersonation-banner {
+  height: 50px;
+  line-height: 50px;
+  background: #222222;
+  color: white; }
+  .impersonation-banner .btn {
+    margin: 8px 0; }
+
 /*# sourceMappingURL=app.css.map */

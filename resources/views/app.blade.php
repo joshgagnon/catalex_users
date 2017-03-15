@@ -23,6 +23,23 @@
     <![endif]-->
 </head>
 <body>
+    @if (Session::has('admin_id'))
+        <div class="impersonation-banner">
+            <div class="container"> 
+                <span class="pull-left">
+                    You are currently impersonating <strong>{{ $user->fullName() }}</strong>.
+                </span>
+
+                <form action="{{ url('impersonation') }}" method="POST" id="return-to-admin-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                    <button type="submit" class="btn btn-primary btn-sm pull-right">Return to Admin</button>
+                </form>
+            </div>
+        </div>
+    @endif
+
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
@@ -60,7 +77,13 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ action('UserController@getProfile') }}">My Profile</a></li>
-                                <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
+                                
+                                @if (Session::has('admin_id'))
+                                    <li><a href="#" onclick="document.getElementById('return-to-admin-form').submit()">Return to Admin</a></li>
+                                    <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
+                                @else
+                                    <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
+                                @endif
                             </ul>
                         </li>
                     @endif

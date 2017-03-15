@@ -233,5 +233,14 @@ form.form-inline .form-group label {
     text-align:center;
 }
 
+.impersonation-banner {
+    height: 50px;
+    line-height: 50px;
+    background: $gray-darker;
+    color: white;
 
+    .btn {
+        margin: 8px 0;
+    }
+}
 

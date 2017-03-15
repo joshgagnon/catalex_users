@@ -55,6 +55,12 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**
+         * Admin Routes
+         */
+        Route::get('impersonation/{user}', 'ImpersonationController@startImpersonation');
+        Route::delete('impersonation', 'ImpersonationController@endImpersonation');
+
+        /**
          * Controllers
          */
         Route::controllers([
