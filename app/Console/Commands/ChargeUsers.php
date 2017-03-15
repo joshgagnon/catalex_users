@@ -38,7 +38,7 @@ class ChargeUsers extends Command
 
         // Bill all organisations
         foreach (Organisation::all() as $organisation) {
-            if ($user->shouldBill()) {
+            if ($organisation->shouldBill()) {
                 $organisation->bill();
             }
         }

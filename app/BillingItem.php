@@ -43,13 +43,19 @@ class BillingItem extends Model
 
     public function scopeDueForPayment($query)
     {
-        return $query->whereNotExists(function ($query) {
+        // Check it hasn't been paid past tomorrow
+        $query->whereNotExists(function ($query) {
                     $query->select(\DB::raw(1))
                           ->from('billing_item_payments')
                           ->whereRaw('billing_item_payments.billing_item_id = billing_items.id')
                           ->where('paid_until', '>=', Carbon::tomorrow())
-                          ->where('active', '=', 'true');
+                          ->where('active', true);
                 });
+
+        // Check it is active
+        $query->where('billing_items.active', true);
+
+        return $query;
     }
 
     public function scopeItemType($query, string $type)

@@ -28,9 +28,13 @@ class PXPay
         // Get the user or organisation's billing details
         $billingDetails = $billable->billing_detail()->first();
 
-        // No billing detail = something has gone terribly wrong
+        // Check the user has billing details
         if (!$billingDetails) {
-            throw new \Exception('Billable must have billing details set before requesting payment');
+            $billableType = $billable instanceof User ? 'user' : 'organisation';
+            Log::error('Tried to bill ' . $billableType . ' with id ' . $billable->id . ', but failed because they have no billing details');
+            
+            // Failed
+            return false;
         }
 
         // Build the XML and send the request
@@ -45,9 +49,20 @@ class PXPay
     {
         $postClient = new Client(['base_uri' => 'https://sec.paymentexpress.com']);
         $response = $postClient->post('pxpost.aspx', ['body' => $xmlRequest]);
-        $xmlResponse = new \SimpleXMLElement((string)$response->getBody());
+        $responseBody = $response->getBody();
+        $xmlResponse = new \SimpleXMLElement((string)$responseBody);
 
         $success = boolval((string)$xmlResponse->Success);
+
+        // If not successful, log the response
+        if (!$success) {
+            Log::error('');
+            Log::error('-----------');
+            Log::error('Failed PXPOST request. Response below.');
+            Log::error($responseBody);
+            Log::error('-----------');
+            Log::error('');
+        }
 
         return $success;
     }

@@ -5646,7 +5646,6 @@ div.chev-right {
   background-repeat: no-repeat; }
 
 footer {
-  height: 150px;
   background-color: #231f20;
   color: #756f6f;
   position: absolute;
@@ -5654,7 +5653,8 @@ footer {
   right: 0;
   bottom: 0;
   text-align: center;
-  font-size: 0.8em; }
+  font-size: 0.8em;
+  overflow-y: hidden; }
   footer a {
     color: #c51b24;
     margin: 0 10px; }
@@ -5662,10 +5662,10 @@ footer {
     background-color: #231f20; }
 
 body {
-  margin-bottom: 150px; }
-  @media (min-width: 480px) {
+  margin-bottom: 130px; }
+  @media (min-width: 768px) {
     body {
-      margin-bottom: 220px; } }
+      margin-bottom: 110px; } }
 
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
