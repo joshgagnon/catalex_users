@@ -80,7 +80,6 @@
                                 
                                 @if (Session::has('admin_id'))
                                     <li><a href="#" onclick="document.getElementById('return-to-admin-form').submit()">Return to Admin</a></li>
-                                    <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
                                 @else
                                     <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
                                 @endif
