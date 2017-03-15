@@ -116,4 +116,9 @@ class Organisation extends Model
                && $this->billing_detail_id
                && $this->needsBilled();
     }
+
+    public function hasBillingSetup()
+    {
+        return $this->billing_detail()->exists();
+    }
 }

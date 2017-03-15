@@ -51,7 +51,7 @@
                         @endif
                     </td>
                     <td class="small-cell">
-                        @if($u->billing_detail_id)
+                        @if($u->hasBillingSetup())
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         @endif
                     </td>

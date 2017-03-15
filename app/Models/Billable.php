@@ -53,6 +53,8 @@ trait Billable
 
     abstract protected function getAllDueBillingItems($service);
 
+    abstract public function hasBillingSetup();
+
     public function inTrial()
     {
         $organisation = $this->organisation;
