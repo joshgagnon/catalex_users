@@ -2,7 +2,6 @@
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Role;
-use Auth;
 
 class ImpersonationControllerTest extends TestCase
 {
