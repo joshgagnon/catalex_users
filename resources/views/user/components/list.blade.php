@@ -75,7 +75,10 @@
                     @if($user->hasRole('global_admin'))
                         <td class="small-cell">
                             @if (!$u->hasRole('global_admin'))
-                                <a href="{{ url('impersonation', $u->id) }}" class="btn btn-info btn-xs">Login</a>
+                                <form action="{{ url('impersonation', $u->id) }}" method="post">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-info btn-xs">Login</button>
+                                </form>
                             @endif
                         </td>
                     @endif

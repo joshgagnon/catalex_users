@@ -57,7 +57,7 @@ Route::group(['middleware' => 'csrf'], function() {
         /**
          * Admin Routes
          */
-        Route::get('impersonation/{user}', 'ImpersonationController@startImpersonation');
+        Route::post('impersonation/{user}', 'ImpersonationController@startImpersonation');
         Route::delete('impersonation', 'ImpersonationController@endImpersonation');
 
         /**
