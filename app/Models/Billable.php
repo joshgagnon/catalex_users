@@ -49,7 +49,7 @@ trait Billable
 
     abstract public function paymentAmount();
 
-    abstract public function sendInvoices($type, $invoiceNumber, $totalAmount, $gst, $listItem, $orgName=null, $orgId=null);
+    abstract public function sendInvoices($invoiceNumber, $totalAmount, $gst, $listItem, $orgName=null, $orgId=null);
 
     abstract protected function getAllDueBillingItems($service);
 
