@@ -1,14 +1,13 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use Auth;
-
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Library\PXPay;
 use App\Library\Billing;
 use App\BillingDetail;
-use App\User;
-use App\Organisation;
 
 class BillingController extends Controller
 {
@@ -26,6 +25,24 @@ class BillingController extends Controller
         if ($user && $user->organisation && !$user->can('edit_own_organisation')) {
             abort(403, 'Forbidden');
         }
+    }
+
+    public function index(Request $request)
+    {
+        $billable = $request->user();
+        $billableType = 'user';
+
+        if ($billable->organisation) {
+            $billable = $billable->organisation;
+            $billableType = 'organisation';
+        }
+
+        $chargeLogs = $billable->chargeLogs()->get();
+
+        return view('billing.index')->with([
+            'chargeLogs' => $chargeLogs,
+            $billableType => $billable,
+        ]);
     }
 
     public function getStart(Request $request)

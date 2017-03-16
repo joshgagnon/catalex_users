@@ -77,6 +77,10 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ action('UserController@getProfile') }}">My Profile</a></li>
+
+                                @if($user->can('edit_own_organisation'))
+                                    <li><a href="{{ url('billing') }}">Billing</a></li>
+                                @endif
                                 
                                 @if (Session::has('admin_id'))
                                     <li><a href="#" onclick="document.getElementById('return-to-admin-form').submit()">Return to Admin</a></li>

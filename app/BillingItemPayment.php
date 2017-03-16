@@ -13,7 +13,9 @@ class BillingItemPayment extends Model
      *
      * @var array
      */
-    protected $fillable = ['paid_until'];
+    protected $fillable = ['paid_until', 'amount', 'gst'];
+
+    protected $dates = ['paid_until'];
 
     /**
      * The item this payment was made for

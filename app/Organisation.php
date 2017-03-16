@@ -71,11 +71,16 @@ class Organisation extends Model
         return bcmul($periodCost, (string)$this->members->count(), 2);
     }
 
-    public function sendInvoices($type, $invoiceNumber, $listItems, $totalAmount, $gst,  $orgName=null, $orgId=null) {
+    public function accountNumber()
+    {
+        return 'CT' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
+    }
+
+    public function sendInvoices($invoiceNumber, $listItems, $totalAmount, $gst,  $orgName=null, $orgId=null) {
         $orgId = 'CT' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
         foreach ($this->members as $member) {
             if ($member->can('edit_own_organisation')) {
-                $member->sendInvoices($type, $invoiceNumber,  $listItems, $totalAmount, $gst,$this->name, $orgId);
+                $member->sendInvoices($invoiceNumber,  $listItems, $totalAmount, $gst,$this->name, $orgId);
             }
         }
     }

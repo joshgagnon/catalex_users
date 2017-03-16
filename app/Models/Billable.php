@@ -55,6 +55,8 @@ trait Billable
 
     abstract public function hasBillingSetup();
 
+    abstract public function accountNumber();
+
     public function inTrial()
     {
         $organisation = $this->organisation;
@@ -222,9 +224,16 @@ trait Billable
                 $itemPayment->paid_until = $payingUntil;
                 $itemPayment->billing_item_id = $item->id;
                 $itemPayment->charge_log_id = $chargeLog->id;
+                $itemPayment->amount = Billing::centsToDollars($priceInCents);
+                $itemPayment->gst= Billing::includingGst($priceInCents);
 
                 $itemPayment->save();
-                $billingSummary[] = ['description' =>  json_decode($item->json_data, true)['company_name'], 'paidUntil' => $payingUntil->format('j M Y'), 'amount' => Billing::centsToDollars($priceInCents)];
+
+                $billingSummary[] = [
+                    'description' =>  json_decode($item->json_data, true)['company_name'],
+                    'paidUntil' => $itemPayment->paid_until->format('j M Y'),
+                    'amount' => $itemPayment->amount,
+                ];
             }
             $centsDue += $priceInCents * count($billingItems);
         }
@@ -254,7 +263,7 @@ trait Billable
                 $item->save();
             }
         } else if ($totalDollarsDue > 0) {
-            $this->sendInvoices('subscription', $chargeLog->id, $billingSummary, $totalDollarsDue, $gst);
+            $this->sendInvoices($chargeLog->type, $chargeLog->id, $billingSummary, $totalDollarsDue, $gst);
         }
 
         // Return whether payment was successful or not

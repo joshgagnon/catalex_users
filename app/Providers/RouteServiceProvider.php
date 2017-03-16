@@ -1,5 +1,7 @@
 <?php namespace App\Providers;
 
+use App\ChargeLog;
+use App\User;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -24,7 +26,8 @@ class RouteServiceProvider extends ServiceProvider {
 	{
 		parent::boot($router);
 
-		$router->model('user', 'App\User');
+        $router->model('user', User::class);
+        $router->model('invoice', ChargeLog::class);
 	}
 
 	/**

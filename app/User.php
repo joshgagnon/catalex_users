@@ -99,7 +99,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    public function sendInvoices($type, $invoiceNumber, $listItems, $totalAmount, $gst, $orgName=null, $orgId=null) {
+    public function accountNumber()
+    {
+        return 'CU' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
+    }
+
+    public function sendInvoices($invoiceNumber, $listItems, $totalAmount, $gst, $orgName=null, $orgId=null) {
         $name = $this->fullName();
         $date = Carbon::now()->format('j/m/Y');
         $accountNumber = $orgId ?: 'CU' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
@@ -109,7 +114,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $handle = fopen($html, 'w');
         fwrite(
             $handle,
-            view('emails.invoice-attachment', compact('orgName', 'name', 'date', 'type', 'invoiceNumber', 'totalAmount', 'gst', 'accountNumber', 'listItems'))->render()
+            view('emails.invoice-attachment', compact('orgName', 'name', 'date', 'invoiceNumber', 'totalAmount', 'gst', 'accountNumber', 'listItems'))->render()
         );
         fclose($handle);
 
