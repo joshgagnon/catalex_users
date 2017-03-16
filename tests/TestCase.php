@@ -57,6 +57,17 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return BillingDetail::create($billingData);
     }
 
+    protected function createUserWithBilling($userOverrides=[], $billingOverrides=[])
+    {
+        $billingDetail = $this->createBillingDetails($billingOverrides);
+
+        $userData = array_merge(['billing_detail_id' => $billingDetail->id], $userOverrides);
+
+        $user = $this->createUser($userData);
+
+        return $user;
+    }
+
     protected function createOrganisation($overrides=[], $orgAdmin)
     {
         $defaults = ['name' => 'Test Org'];

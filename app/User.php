@@ -101,6 +101,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function accountNumber()
     {
+        if ($this->organisation_id) {
+            return $this->organisation()->accountNumber();
+        }
+
         return 'CU' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
     }
 
