@@ -9,7 +9,7 @@ class User extends \App\User
     public $paymentLastRequested;
     public $amountRequested;
 
-    public function sendInvoices($type, $invoiceNumber, $listItems, $totalAmount, $gst, $orgName=null, $orgId=null)
+    public function sendInvoices($invoiceNumber, $listItems, $totalAmount, $gst, $orgName=null, $orgId=null)
     {
         // Do nothing
     }
