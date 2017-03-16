@@ -82,7 +82,7 @@
 			</div>
 		</div>
 	</div>
-	@if($type === 'subscription')
+	@if($listItem)
         <div class="row b">
             <div class="half">Description</div>
             <div class="half">
