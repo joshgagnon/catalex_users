@@ -42,6 +42,6 @@ class ImpersonationControllerTest extends TestCase
         $this->press('Return to Admin')
             ->seePageIs('/admin/users')
             ->see('Logged out of')
-            ->assertEquals($admin->id, Auth::id());;
+            ->assertEquals($admin->id, Auth::id());
     }
 }
