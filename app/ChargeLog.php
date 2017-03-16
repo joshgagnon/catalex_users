@@ -82,6 +82,25 @@ class ChargeLog extends Model
         return $invoice->render();
     }
 
+    /**
+     * Generate an invoice from this charge log
+     *
+     * @param null $recipientName
+     * @return string
+     */
+    public function generateInvoice($recipientName=null)
+    {
+        $invoiceHtml = $this->renderInvoice($recipientName);
+        $pdfPath = PhantomJS::htmlToPdf($invoiceHtml);
+
+        return $pdfPath;
+    }
+
+    /**
+     * Email this charge log as an invoice to all people who should receive it
+     *
+     * @return array
+     */
     public function sendInvoices()
     {
         // Get the users to send the invoice to
@@ -90,8 +109,7 @@ class ChargeLog extends Model
         // Send all users a copy of the invoice
         foreach ($users as $user) {
             // Create a PDF version of the invoice - needs to be recreated for each user because the recipient name changes
-            $invoiceHtml = $this->renderInvoice($user->fullName());
-            $pdfPath = PhantomJS::htmlToPdf($invoiceHtml);
+            $pdfPath = $this->generateInvoice($user->fullName());
 
             // Queue the invoice to be sent to the current user
             Mail::queueStyledMail('emails.invoice', ['name' => $user->fullName()], $user->email, $user->fullName(), 'CataLex | Invoice/Receipt', [['path' => $pdfPath, 'name' => 'Invoice.pdf']]);

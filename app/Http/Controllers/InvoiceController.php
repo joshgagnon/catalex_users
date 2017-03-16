@@ -3,17 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\ChargeLog;
-use App\Library\StringManipulation;
+use App\User;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class InvoiceController extends Controller
 {
-    public function render(ChargeLog $chargeLog)
+    public function render(Request $request, ChargeLog $chargeLog)
     {
+        if (!$this->canViewInvoice($chargeLog, $request->user())) {
+            abort(403, 'Forbidden');
+        }
+
         return $chargeLog->renderInvoice();
+    }
+
+    public function download(Request $request, ChargeLog $chargeLog)
+    {
+        if (!$this->canViewInvoice($chargeLog, $request->user())) {
+            abort(403, 'Forbidden');
+        }
+
+        $invoicePath = $chargeLog->generateInvoice();
+        return response()->download($invoicePath, 'Invoice.pdf', ['Content-Type: application/pdf']);
     }
 
     public function resend(Request $request, ChargeLog $chargeLog)
@@ -25,5 +36,25 @@ class InvoiceController extends Controller
         $users = $chargeLog->sendInvoices();
 
         return redirect()->back()->withSuccess('Invoice ' . $chargeLog->timestamp->format('j M Y') . ' queued to be resent to ' . sizeof($users) . ' user(s)');
+
+    }
+
+    private function canViewInvoice(ChargeLog $chargeLog, User $user)
+    {
+        if ($user->hasRole('global_admin')) {
+            return true;
+        }
+
+        // Is this user's charge log
+        if ($chargeLog->user_id) {
+            return $chargeLog->user_id === $user->id;
+        }
+
+        // Is an organisation's charge log and user is allowed to edit their org
+        if ($chargeLog->organisation_id === $user->organisation_id) {
+            return $user->can('edit_own_organisation');
+        }
+
+        return false;
     }
 }

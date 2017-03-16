@@ -35,15 +35,16 @@
 		h1 {
 			font-size: 1.5em;
 		}
-		.b {
+		.bold {
 			font-weight: bold;
 		}
+        .footer-wrapper {
+            page-break-inside: avoid;
+        }
 		.footer {
-			position: absolute;
-			bottom: 0;
 			width: 100%;
-			height: 55px;
 			font-size: 15px;
+            display: inline-block;
 		}
 		.footer label {
 			display: inline-block;
@@ -68,10 +69,10 @@
 		<div class="half">
 			<div class="row">
 				<div class="half">
-					<div class="b">Date:</div>
-					<div class="b">Invoice #:</div>
-					<div class="b">Account #:</div>
-					<div class="b">GST #:</div>
+					<div class="bold">Date:</div>
+					<div class="bold">Invoice #:</div>
+					<div class="bold">Account #:</div>
+					<div class="bold">GST #:</div>
 				</div>
 				<div class="half">
 					<div>{{ $date }}</div>
@@ -84,7 +85,9 @@
 	</div>
 
 	@if($listItems)
-        <div class="row b">
+        <br />
+
+        <div class="row bold">
             <div class="half">Description</div>
             <div class="half">
                 <div class="row">
@@ -111,9 +114,11 @@
 			</div>
 		</div>
         @endforeach
+
+        <hr />
 	@endif
 	<div class="row">
-		<div class="half right b">Total Due</div>
+		<div class="half right bold">Total Due</div>
 		<div class="half">
 			<div class="row">
 				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">${{  $totalAmount }}</div>
@@ -121,19 +126,25 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="half right b">GST Component</div>
+		<div class="half right bold">GST Component</div>
 		<div class="half">
 			<div class="row">
 				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">${{ $gst }}</div>
 			</div>
 		</div>
 	</div>
-	<div class="b">Paid by way of credit card deduction on {{ $date }}</div>
-	<div class="footer">
-		<div><label>Supplier:</label>CataLex Limited (NZCN 5311842)</div>
-		<div><label>Website:</label><a href="https://www.catalex.nz">www.catalex.nz</a></div>
-		<div><label>Address:</label>C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland 0620</div>
-		<div><label>Email:</label><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></div>
+
+    <hr />
+    <br />
+
+	<div class="footer-wrapper">
+		<div class="bold">Paid by way of credit card deduction on {{ $date }}</div>
+		<div class="footer">
+			<div><label>Supplier:</label>CataLex Limited (NZCN 5311842)</div>
+			<div><label>Website:</label><a href="https://www.catalex.nz">www.catalex.nz</a></div>
+			<div><label>Address:</label>C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland 0620</div>
+			<div><label>Email:</label><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></div>
+		</div>
 	</div>
 </body>
 </html>

@@ -47,6 +47,7 @@ Route::group(['middleware' => 'csrf'], function() {
 
         Route::get('billing', 'BillingController@index')->name('billing');
         Route::get('billing/invoices/{invoice}', 'InvoiceController@render')->name('invoices.view');
+        Route::get('billing/invoices/{invoice}/download', 'InvoiceController@download')->name('invoices.download');
         Route::post('billing/invoices/{invoice}/resend', 'InvoiceController@resend')->name('invoices.resend');
         
         Route::get('billing/store-card', 'BillingController@storeCard')->name('billing.store-card');
