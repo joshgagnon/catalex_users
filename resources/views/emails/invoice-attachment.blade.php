@@ -82,13 +82,14 @@
 			</div>
 		</div>
 	</div>
-	@if($listItem)
+
+	@if($listItems)
         <div class="row b">
             <div class="half">Description</div>
             <div class="half">
                 <div class="row">
-                    <div class="third right">Paid Until</div>
-                    <div class="third right">Price</div>
+                    <div class="half right">Paid Until</div>
+                    <div class="half right">Price</div>
                 </div>
             </div>
         </div>
@@ -97,8 +98,15 @@
 			<div class="half">{{ $listItem['description'] }}</div>
 			<div class="half">
 				<div class="row">
-                    <div class="third right">{{ $listItem['paidUntil'] }}</div>
-					<div class="third right">${{ $listItem['amount'] }}</div>
+                    <div class="half right">{{ $listItem['paidUntil'] }}</div>
+
+					<div class="half right">
+						@if ($listItem['amount'])
+							${{ $listItem['amount'] }}
+						@else
+							unrecorded
+						@endif
+					</div>
 				</div>
 			</div>
 		</div>

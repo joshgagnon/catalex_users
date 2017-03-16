@@ -11,18 +11,14 @@
         <h2>
             Billing Overview |
 
-            @if ($user)
-                {{ $user->fullName() }}
-            @else
+            @if ($organisation)
                 {{ $organisation->name }}
+            @else
+                {{ $user->fullName() }}
             @endif
         </h2>
 
         <h3>Past Invoices</h3>
-
-        <pre>
-            {!! $chargeLogs !!}
-        </pre>
 
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             @foreach ($chargeLogs as $chargeLog)
@@ -70,6 +66,16 @@
                                 <dt>Date</dt>
                                 <dd>{{ $chargeLog->timestamp->format('j M Y') }}</dd>
                             </dl>
+
+                            <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-info pull-left" target="_blank">View Invoice</a>
+
+
+                            @if ($user->hasRole('global_admin'))
+                                <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post" class="pull-left">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-danger" style="margin-left: 4px;">Resend Invoice</button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -46,7 +46,8 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::delete('billing/delete', 'BillingController@delete')->name('billing.delete');
 
         Route::get('billing', 'BillingController@index')->name('billing');
-        Route::get('billing/invoices/{invoice}', 'InvoiceController@render')->name('billing');
+        Route::get('billing/invoices/{invoice}', 'InvoiceController@render')->name('invoices.view');
+        Route::post('billing/invoices/{invoice}/resend', 'InvoiceController@resend')->name('invoices.resend');
         
         Route::get('billing/store-card', 'BillingController@storeCard')->name('billing.store-card');
         Route::get('billing/register-card', 'BillingController@createCard')->name('billing.register-card');

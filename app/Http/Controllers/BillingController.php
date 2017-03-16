@@ -29,19 +29,13 @@ class BillingController extends Controller
 
     public function index(Request $request)
     {
-        $billable = $request->user();
-        $billableType = 'user';
-
-        if ($billable->organisation) {
-            $billable = $billable->organisation;
-            $billableType = 'organisation';
-        }
-
+        $organisation = $request->user()->organisation ? : null;
+        $billable = $organisation ? : $request->user();
         $chargeLogs = $billable->chargeLogs()->get();
 
         return view('billing.index')->with([
             'chargeLogs' => $chargeLogs,
-            $billableType => $billable,
+            'organisation' => $organisation,
         ]);
     }
 

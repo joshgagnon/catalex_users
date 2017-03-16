@@ -126,4 +126,22 @@ class Organisation extends Model
     {
         return $this->billing_detail()->exists();
     }
+
+    /**
+     * Get a list of all users who should be sent an invoice
+     *
+     * @return mixed
+     */
+    public function invoiceableUsers()
+    {
+        $invoiceableUsers = [];
+
+        foreach ($this->members as $member) {
+            if ($member->can('edit_own_organisation')) {
+                $invoiceableUsers[] = $member;
+            }
+        }
+
+        return $invoiceableUsers;
+    }
 }

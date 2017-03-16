@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
@@ -54,7 +53,7 @@ class SendEmail extends Job implements SelfHandling, ShouldQueue
         $mailer->send('emails.echo', ['html' => $this->markup], function($message) use ($receiverEmail, $receiverName, $subject, $attachments, $senderName, $senderEmail) {
             $message->to($receiverEmail, $receiverName);
             $message->subject($subject);
-            
+
             if ($senderName && $senderEmail) {
                 $message->replyTo($senderEmail, $senderName);
             }

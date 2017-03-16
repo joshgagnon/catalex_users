@@ -1,41 +1,46 @@
-<?php namespace App;
+<?php
 
+namespace App;
+
+use App\Library\Mail;
+use App\Library\PhantomJS;
 use Illuminate\Database\Eloquent\Model;
-use App\Library\Billing;
 
 class ChargeLog extends Model
 {
-	const CREATED_AT = 'timestamp';
+    const CREATED_AT = 'timestamp';
 
-	// We don't have an updated timestamp, so turn off timestamps and manually set the created at timestamp below
-	public $timestamps = false;
+    // We don't have an updated timestamp, so turn off timestamps and manually set the created at timestamp below
+    public $timestamps = false;
 
     protected $fillable = ['success', 'pending', 'user_id', 'organisation_id', 'total_amount', 'gst'];
 
-	protected $dates = ['timestamp'];
+    protected $dates = ['timestamp'];
 
-	public static function boot()
+    public static function boot()
     {
-		// manually set the created at timestamp below
-	    static::creating( function ($model) {
-	        $model->setCreatedAt($model->freshTimestamp());
-	    });
-	}
+        // manually set the created at timestamp below
+        static::creating(function ($model) {
+            $model->setCreatedAt($model->freshTimestamp());
+        });
+    }
 
-	public function user() {
-		return $this->belongsTo('App\User');
-	}
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 
-	public function organisation() {
-		return $this->belongsTo('App\Organisation');
-	}
+    public function organisation()
+    {
+        return $this->belongsTo('App\Organisation');
+    }
 
-	public function billingItemPayments()
-	{
-		return $this->hasMany(BillingItemPayment::class);
-	}
+    public function billingItemPayments()
+    {
+        return $this->hasMany(BillingItemPayment::class);
+    }
 
-	public function itemSummary()
+    public function itemSummary()
     {
         $billingSummary = [];
 
@@ -43,23 +48,29 @@ class ChargeLog extends Model
 
         foreach ($billingItems as $item) {
             $billingSummary[] = [
-                'description' =>  json_decode($item->billingItem->json_data, true)['company_name'],
+                'description' => json_decode($item->billingItem->json_data, true)['company_name'],
                 'paidUntil' => $item->paid_until->format('j M Y'),
-                'amount' => $item->amount ? Billing::centsToDollars($item->amount) : null,
+                'amount' => $item->amount ?: null,
             ];
         }
 
         return $billingSummary;
     }
 
-    public function renderInvoice($recipientName=null)
+    /**
+     * Render the invoice for a charge log as HTML
+     *
+     * @param null $recipientName
+     * @return string
+     */
+    public function renderInvoice($recipientName = null)
     {
         $organisation = $this->organisation;
         $accountNumber = $organisation ? $organisation->accountNumber() : $this->user->accountNumber();
 
         $invoice = view('emails.invoice-attachment')->with([
             'orgName' => $organisation ? $organisation->name : null,
-            'name' => $recipientName ? : 'CataLex User',
+            'name' => $recipientName ?: 'CataLex User',
             'date' => $this->timestamp->format('j/m/Y'),
             'invoiceNumber' => $this->id,
             'totalAmount' => $this->total_amount,
@@ -69,5 +80,23 @@ class ChargeLog extends Model
         ]);
 
         return $invoice->render();
+    }
+
+    public function sendInvoices()
+    {
+        // Get the users to send the invoice to
+        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [ $this->user ];
+
+        // Send all users a copy of the invoice
+        foreach ($users as $user) {
+            // Create a PDF version of the invoice - needs to be recreated for each user because the recipient name changes
+            $invoiceHtml = $this->renderInvoice($user->fullName());
+            $pdfPath = PhantomJS::htmlToPdf($invoiceHtml);
+
+            // Queue the invoice to be sent to the current user
+            Mail::queueStyledMail('emails.invoice', ['name' => $user->fullName()], $user->email, $user->fullName(), 'CataLex | Invoice/Receipt', [['path' => $pdfPath, 'name' => 'Invoice.pdf']]);
+        }
+
+        return $users;
     }
 }
