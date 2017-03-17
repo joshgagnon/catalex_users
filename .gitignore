@@ -5,7 +5,6 @@
 /config/oauth.php
 *.css.map
 *.DS_Store
-/public/build
 .idea
 public/build
 public/css
