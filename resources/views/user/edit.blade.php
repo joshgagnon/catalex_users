@@ -13,10 +13,14 @@ CataLex - Edit User
 			@if($user->hasRole('global_admin'))
 				<div class="panel panel-default">
 					<div class="panel-body">
-						@if ($subject->organisation)
+						@if ($subject->organisation && $subject->organisation->billing_detail_id)
 							<a href="{{ url('admin/billing', $subject->organisation->billing_detail_id)  }}" class="btn btn-info">View Billing</a>
-						@else
+						@elseif ($subject->billing_detail_id)
 							<a href="{{ url('admin/billing', $subject->billing_detail_id)  }}" class="btn btn-info">View Billing</a>
+						@elseif ($subject->hasRole('global_admin'))
+							<div class="text-center">
+								No admin controls for this user.
+							</div>
 						@endif
 
 						@if (!$subject->hasRole('global_admin'))
