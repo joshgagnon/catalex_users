@@ -11,10 +11,10 @@
         <h2>
             Billing Overview |
 
-            @if ($organisation)
+            @if (!empty($organisation))
                 {{ $organisation->name }}
             @else
-                {{ $user->fullName() }}
+                {{ $subject->fullName() }}
             @endif
         </h2>
 

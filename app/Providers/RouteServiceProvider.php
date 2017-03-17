@@ -1,5 +1,6 @@
 <?php namespace App\Providers;
 
+use App\BillingDetail;
 use App\ChargeLog;
 use App\User;
 use Illuminate\Routing\Router;
@@ -28,6 +29,7 @@ class RouteServiceProvider extends ServiceProvider {
 
         $router->model('user', User::class);
         $router->model('invoice', ChargeLog::class);
+        $router->model('billingDetail', BillingDetail::class);
 	}
 
 	/**

@@ -7,11 +7,32 @@ CataLex - Edit User
 @section('content')
 <div class="container">
 	<h2>Edit {{ $subject->fullName() }}</h2>
+
 	<div class="row">
 		<div class="col-md-9">
+			@if($user->hasRole('global_admin'))
+				<div class="panel panel-default">
+					<div class="panel-body">
+						@if ($subject->organisation)
+							<a href="{{ url('admin/billing', $subject->organisation->billing_detail_id)  }}" class="btn btn-info">View Billing</a>
+						@else
+							<a href="{{ url('admin/billing', $subject->billing_detail_id)  }}" class="btn btn-info">View Billing</a>
+						@endif
+
+						@if (!$subject->hasRole('global_admin'))
+							<form action="{{ url('impersonation', $subject->id) }}" method="post" style="display: inline-block;">
+								<input type="hidden" name="_token" value="{{ csrf_token() }}">
+								<button type="submit" class="btn btn-info">Login As {{ $subject->name }}</button>
+							</form>
+						@endif
+					</div>
+				</div>
+			@endif
+
 			<div class="panel panel-default">
 				<div class="panel-body">
 					@include('components.messages')
+
 					<form method="POST" role="form" class="form-horizontal">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<input type="hidden" name="user_id" value="{{ $subject->id }}">
@@ -80,17 +101,17 @@ CataLex - Edit User
 			</div>
 		</div>
 		@if ($editServicesAndBilling)
-		<div class="col-md-3">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h4>More</h4>
-					<ul>
-						<li><a href="{{ route('user-services.index') }}">Edit My Services</a></li>
-						<li><a href="{{ route('billing.edit') }}">Edit Billing Details</a></li>
-					</ul>
+			<div class="col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h4>More</h4>
+						<ul>
+							<li><a href="{{ route('user-services.index') }}">Edit My Services</a></li>
+							<li><a href="{{ route('billing.edit') }}">Edit Billing Details</a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
 		@endif
 	</div>
 </div>

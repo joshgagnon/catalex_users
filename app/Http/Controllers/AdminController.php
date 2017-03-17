@@ -255,4 +255,28 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Organisation "' . $organisation->name . '" and ' . count($organisation->members) . ' members restored.');
     }
+
+    public function billingOverview(BillingDetail $billingDetail)
+    {
+        $billable = null;
+        $billableKeyName = null;
+
+        if ($billingDetail->users()->first()) {
+            $billable = $billingDetail->users()->first();
+            $billableKeyName = 'subject';
+        }
+        else {
+            $billable = $billingDetail->organisations()->first();
+            $billableKeyName = 'organisation';
+        }
+
+        $chargeLogs = $billable->chargeLogs()->get();
+
+        return view('billing.index')->with([
+            'chargeLogs' => $chargeLogs,
+            $billableKeyName => $billable,
+        ]);
+
+        return view('billing.index');
+    }
 }

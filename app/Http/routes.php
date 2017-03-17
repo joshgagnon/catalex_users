@@ -65,6 +65,8 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::post('impersonation/{user}', 'ImpersonationController@startImpersonation');
         Route::delete('impersonation', 'ImpersonationController@endImpersonation');
 
+        Route::get('admin/billing/{billingDetail}', 'AdminController@billingOverview');
+
         /**
          * Controllers
          */
