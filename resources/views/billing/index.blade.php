@@ -21,7 +21,7 @@
         <h3>Past Invoices</h3>
 
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-            @foreach ($chargeLogs as $chargeLog)
+            @forelse ($chargeLogs as $index => $chargeLog)
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="{{ 'heading' . $chargeLog->id }}">
                         <h5 class="panel-title">
@@ -54,7 +54,7 @@
                             </a>
                         </h5>
                     </div>
-                    <div id="{{ 'collapse' . $chargeLog->id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="{{ 'heading' . $chargeLog->id }}">
+                    <div id="{{ 'collapse' . $chargeLog->id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="{{ 'heading' . $chargeLog->id }}">
                         <div class="panel-body">
                             <dl>
                                 <dt>Amount</dt>
@@ -81,7 +81,11 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="well text-center">
+                    No invoices yet.
+                </div>
+            @endforelse
         </div>
     </div>
 @endsection
