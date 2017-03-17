@@ -18,7 +18,12 @@ class InvoiceController extends Controller
             abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
-        return $chargeLog->renderInvoice();
+        $recipientName = null;
+        if (!$request->user()->hasRole('global_admin')) {
+            $recipientName = $request->user()->fullName();
+        }
+
+        return $chargeLog->renderInvoice($recipientName);
     }
 
     public function download(Request $request, ChargeLog $chargeLog)
@@ -31,7 +36,12 @@ class InvoiceController extends Controller
             abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
-        $invoicePath = $chargeLog->generateInvoice();
+        $recipientName = null;
+        if (!$request->user()->hasRole('global_admin')) {
+            $recipientName = $request->user()->fullName();
+        }
+
+        $invoicePath = $chargeLog->generateInvoice($recipientName);
         return response()->download($invoicePath, 'Invoice.pdf', ['Content-Type: application/pdf']);
     }
 
