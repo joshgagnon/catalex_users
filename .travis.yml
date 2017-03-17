@@ -11,8 +11,6 @@ before_script:
   - psql -c 'create database catalex_users_test;' -U postgres
   - composer self-update
   - composer install --no-interaction
-  - npm install
-  - gulp
 
 script:
   - vendor/bin/phpunit
