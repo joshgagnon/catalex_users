@@ -7,8 +7,23 @@ CataLex - Edit Organisation
 @section('content')
 <div class="container">
 	<h2>Edit {{ $organisation->name }}</h2>
+
 	<div class="row">
 		<div class="col-xs-12">
+			@if($user->hasRole('global_admin'))
+				<div class="panel panel-default">
+					<div class="panel-body">
+						@if ($organisation->billing_detail_id)
+							<a href="{{ url('admin/billing', $organisation->billing_detail_id)  }}" class="btn btn-info">View Billing</a>
+						@else
+							<div class="text-center">
+								No admin controls for this user.
+							</div>
+						@endif
+					</div>
+				</div>
+			@endif
+
 			<div class="panel panel-default">
 				<div class="panel-body">
 					@include('components.messages')
