@@ -67,17 +67,19 @@
                                 <dd>{{ $chargeLog->timestamp->format('j M Y') }}</dd>
                             </dl>
 
-                            <div>
-                                <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-info" target="_blank">View Invoice</a>
-                                <a href="{{ route('invoices.download', $chargeLog->id) }}" class="btn btn-info">Download Invoice</a>
+                            @if ($chargeLog->success)
+                                <div>
+                                    <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-info" target="_blank">View Invoice</a>
+                                    <a href="{{ route('invoices.download', $chargeLog->id) }}" class="btn btn-info">Download Invoice</a>
 
-                                @if ($user->hasRole('global_admin'))
-                                    <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post" style="display: inline-block;">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <button type="submit" class="btn btn-danger">Resend Invoice</button>
-                                    </form>
-                                @endif
-                            </div>
+                                    @if ($user->hasRole('global_admin'))
+                                        <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="btn btn-danger">Resend Invoice</button>
+                                        </form>
+                                    @endif
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
