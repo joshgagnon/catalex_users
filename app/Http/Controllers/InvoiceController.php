@@ -14,6 +14,10 @@ class InvoiceController extends Controller
             abort(403, 'Forbidden');
         }
 
+        if (!$chargeLog->success || $chargeLog->pending) {
+            abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
+        }
+
         return $chargeLog->renderInvoice();
     }
 
@@ -21,6 +25,10 @@ class InvoiceController extends Controller
     {
         if (!$this->canViewInvoice($chargeLog, $request->user())) {
             abort(403, 'Forbidden');
+        }
+
+        if (!$chargeLog->success || $chargeLog->pending) {
+            abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
         $invoicePath = $chargeLog->generateInvoice();
@@ -31,6 +39,10 @@ class InvoiceController extends Controller
     {
         if (!$request->user()->hasRole('global_admin')) {
             abort(403, 'Forbidden');
+        }
+
+        if (!$chargeLog->success || $chargeLog->pending) {
+            abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
         $users = $chargeLog->sendInvoices();
