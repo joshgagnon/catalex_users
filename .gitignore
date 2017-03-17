@@ -6,6 +6,3 @@
 *.css.map
 *.DS_Store
 .idea
-public/build
-public/css
-public/js
