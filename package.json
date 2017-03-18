@@ -6,7 +6,7 @@
     "catalex_shared": "git+https://github.com/joshgagnon/catalex_shared.git#40f8b0f",
     "gulp": "3.9.1",
     "gulp-sass": "2.3.2",
-    "laravel-elixir": "*",`
+    "laravel-elixir": "*",
     "laravel-elixir-webpack": "^1.0.1"
   },
   "dependencies": {
