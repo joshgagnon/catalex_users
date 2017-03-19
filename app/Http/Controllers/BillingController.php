@@ -38,9 +38,11 @@ class BillingController extends Controller
         }
 
         $chargeLogs = $billable->chargeLogs()->get();
+        $billingItems = $billable->billingItems()->active()->with('service')->orderBy('billing_items.service_id', 'ASC')->get();
 
         return view('billing.index')->with([
             'chargeLogs' => $chargeLogs,
+            'billingItems' => $billingItems,
             $billableKeyName => $billable,
         ]);
     }

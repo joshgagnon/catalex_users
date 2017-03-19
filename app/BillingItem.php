@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\BillingItemPayment;
-use App\User;
 use \Carbon\Carbon;
 
 class BillingItem extends Model
@@ -72,11 +70,21 @@ class BillingItem extends Model
         return self::itemType($type)->where('item_id', '=', $itemId)->first();
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('billing_items.active', true);
+    }
+
     /**
      * Payments made for this billing item
      */
     public function payments()
     {
         return $this->hasMany(BillingItemPayment::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
     }
 }

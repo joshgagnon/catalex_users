@@ -18,6 +18,29 @@
             @endif
         </h2>
 
+        <h3>Billing Items</h3>
+
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>Service</th>
+                <th>Name</th>
+                <th>Created Date</th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach ($billingItems as $billingItem)
+                    <tr>
+                        <td>
+                            {{ $billingItem->service->name }}
+                        </td>
+                        <td>{{ json_decode($billingItem->json_data)->company_name }}</td>
+                        <td>{{ $billingItem->created_at->format('j M Y')  }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
         <h3>Past Invoices</h3>
 
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
