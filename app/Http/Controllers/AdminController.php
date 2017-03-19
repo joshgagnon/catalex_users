@@ -166,7 +166,6 @@ class AdminController extends Controller
         $input = $request->all();
 
         $organisation->name = $input['name'];
-        $organisation->free = boolval($request->input('free', false));
         $organisation->save();
 
         return redirect()->action('AdminController@getOrganisations')->with('success', 'Organisation "' . $organisation->name . '" successfully updated.');
