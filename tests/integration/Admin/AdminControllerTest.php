@@ -30,4 +30,32 @@ class AdminControllerTest extends TestCase
         $this->seePageIs('/admin/users')
             ->see('User Johnny successfully created.');
     }
+
+    /**
+     * @test
+     */
+    public function admin_can_edit_organisation()
+    {
+
+        $adminUser = $this->createUser();
+        $adminUser->addRole(Role::where('name', '=', 'global_admin')->first());
+
+        $originalName = 'Pre edit name';
+        $editedName = 'Post edit name';
+
+        $orgAdmin = $this->createUser(['email' => 'orgadmin@me.com']);
+        $org = $this->createOrganisation(['name' => $originalName], $orgAdmin);
+
+        Auth::loginUsingId($adminUser->id);
+
+        $this->visit(url('/admin/edit-organisation', $org->id))
+            ->see($originalName)
+            ->type($editedName, 'name')
+            ->press('Update')
+            ->see('Organisation "' . $editedName . '" successfully updated.');
+
+        $org = $org->fresh();
+
+        $this->assertEquals($editedName, $org->name);
+    }
 }

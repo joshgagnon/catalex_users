@@ -44,28 +44,8 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(1);
+	(function webpackMissingModule() { throw new Error("Cannot find module \"/Users/Josh/code/users/resources/assets/build//js/app-c2809bd6c8.js\""); }());
 
-
-/***/ },
-/* 1 */
-/***/ function(module, exports) {
-
-	$('.service-well')
-	    .on('click', 'input, a', function(e){
-	        e.stopPropagation();
-	        return true;
-	    })
-	    .on('click', function(e){
-	        $(this).find('input').click();
-	    });
-	
-	
-	
-	
-	window.submitCCForm = function() {
-	    $('form.payment-form').submit();
-	}
 
 /***/ }
 /******/ ]);
