@@ -263,7 +263,7 @@ trait Billable
                 $item->save();
             }
         } else if ($totalDollarsDue > 0) {
-            $this->sendInvoices($chargeLog->type, $chargeLog->id, $billingSummary, $totalDollarsDue, $gst);
+            $chargeLog->sendInvoices();
         }
 
         // Return whether payment was successful or not
