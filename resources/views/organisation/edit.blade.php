@@ -17,7 +17,7 @@ CataLex - Edit Organisation
 							<a href="{{ url('admin/billing', $organisation->billing_detail_id)  }}" class="btn btn-info">View Billing</a>
 						@else
 							<div class="text-center">
-								No admin controls for this user.
+								No admin controls for this organisation.
 							</div>
 						@endif
 					</div>
