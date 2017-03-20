@@ -37,7 +37,7 @@ class BillingController extends Controller
             $billableKeyName = 'organisation';
         }
 
-        $chargeLogs = $billable->chargeLogs()->get();
+        $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
         $billingItems = $billable->billingItems()->active()->with('service')->orderBy('billing_items.service_id', 'ASC')->get();
 
         return view('billing.index')->with([
