@@ -25,16 +25,22 @@
             <tr>
                 <th>Service</th>
                 <th>Name</th>
+                <th>Owner</th>
                 <th>Created Date</th>
             </tr>
             </thead>
             <tbody>
                 @foreach ($billingItems as $billingItem)
                     <tr>
-                        <td>
-                            {{ $billingItem->service->name }}
-                        </td>
+                        <td>{{ $billingItem->service->name }}</td>
                         <td>{{ json_decode($billingItem->json_data)->company_name }}</td>
+                        <td>
+                            @if ($billingItem->user)
+                                {{ $billingItem->user->fullName() }}
+                            @else
+                                {{ $billingItem->organisation->name }}
+                            @endif
+                        </td>
                         <td>{{ $billingItem->created_at->format('j M Y')  }}</td>
                     </tr>
                 @endforeach

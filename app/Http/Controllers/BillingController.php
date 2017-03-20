@@ -38,7 +38,7 @@ class BillingController extends Controller
         }
 
         $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
-        $billingItems = $billable->billingItems()->active()->with('service')->orderBy('billing_items.service_id', 'ASC')->get();
+        $billingItems = $billable->billingItems()->active()->with('service')->with('user')->with('organisation')->orderBy('billing_items.service_id', 'ASC')->get();
 
         return view('billing.index')->with([
             'chargeLogs' => $chargeLogs,
