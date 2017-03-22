@@ -71,7 +71,19 @@ Restart the nginx and php services to load the new configurations
 
 To perform the initial deployment on a live server, clone the https://github.com/joshgagnon/catalex_utils.git repo. Edit the variables at the top of the install\_users.sh script then run it as root.
 
-#### OAuth
+### OAuth
+
+#### OAuth for logging into other CataLex services
+
+For each service that needs to authenticate with CataLex, add a client and an endpoint for that client (example below).
+
+The `--name="whatever"` is important—we match on it to find the right oauth_client record. For Good Companies the name is "Good Companies", for Law Browser the name is "Law Browser", and for sign the name is "Sign".  
+
+`php artisan oauth:add-client --client_id=gc --secret=gc --name="Good Companies"`
+
+`php artisan oauth:add-endpoint --client_id=gc --endpoint=http://localhost:5667/auth/catalex/login`
+
+#### OAuth for logging into CataLex Users
 
 Currently the only OAuth provider setup is LinkedIn. For LinkedIn OAuth to work, it's ket and secret need to be entered into a new file `config/oauth.php`. Use `config/oauth.example.php` as an example.
 
