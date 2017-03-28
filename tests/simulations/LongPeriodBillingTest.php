@@ -38,7 +38,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function monthlyBilling_oneUser_oneCompany()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails();
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -85,7 +85,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function monthlyBilling_oneUser_tenCompanies()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails();
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -122,7 +122,7 @@ class LongPeriodBillingTest extends TestCase
         $this->assertEquals(self::MONTHS_IN_SIMULATION, $numberOfChargeLogs);
 
         // Check the total amount billed is what we think it should be (number of months * monthly price * number of companies)
-        $expectedTotal = self::MONTHS_IN_SIMULATION * self::MONTHLY_PRICE * $numberOfCompanies;;
+        $expectedTotal = self::MONTHS_IN_SIMULATION * self::MONTHLY_PRICE * $numberOfCompanies;
         $this->assertEquals($expectedTotal, $totalAmountBilled);
     }
 
@@ -131,7 +131,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function monthlyBilling_oneUser_noCompanies()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails();
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -176,7 +176,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function monthlyBilling_oneUser_oneCompany_billingDayIs31st()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails(['billing_day' => 31]);
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -224,7 +224,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function yearlyBilling_oneUser_oneCompany()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -276,7 +276,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function yearlyBilling_oneUser_tenCompanies()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -327,7 +327,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function yearlyBilling_oneUser_noCompanies()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -378,7 +378,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function yearlyBilling_oneUser_billingDayIs31st()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails(['period' => 'annually', 'billing_day' => 31]);
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -429,7 +429,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function monthlyBilling_oneUser_userIdFree_oneCompany()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails();
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id, 'free' => true]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
@@ -473,7 +473,7 @@ class LongPeriodBillingTest extends TestCase
      */
     public function monthlyBilling_oneUser_userIsFree_noCompanies()
     {
-        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION)->addDays(1);
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails();
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id, 'free' => true]);
         $user->services()->attach(Service::where('name', 'Good Companies')->first());
