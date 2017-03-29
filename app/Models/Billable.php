@@ -68,6 +68,28 @@ trait Billable
         return $this->created_at->diffInMinutes(Carbon::now()) < Config::get('constants.trial_length_minutes');
     }
 
+    public function subscriptionUpToDate()
+    {
+        if ($this->organisation) {
+            return $this->organisation->subscriptionUpToDate();
+        }
+
+        // Get the latest charge log
+        $chargeLog = $this->chargeLogs()->orderBy('timestamp', 'DESC')->first();
+
+        // If there is no charge log, then the user hasn't been billed - so they are up-to-date
+        if (!$chargeLog) {
+            return true;
+        }
+
+        // Charge log was successful or is still pending = supscription is up-to-date
+        if ($chargeLog->success || $chargeLog->pending) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function hasBrowserAccess()
     {
         return true;

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserEditRequest;
 use LucaDegasperi\OAuth2Server\Authorizer;
 use Response;
+use App\Library\UserSummariser;
 
 class UserController extends Controller {
 
@@ -209,9 +210,11 @@ class UserController extends Controller {
 
     public function info(Authorizer $authorizer)
     {
-        $user_id=$authorizer->getResourceOwnerId(); // the token user_id
-        $user= User::find($user_id);// get the user data from database
-        $user->load('organisation.members');
-        return $user->toJSON();
+        $user_id = $authorizer->getResourceOwnerId(); // the token user_id
+        $user = User::find($user_id); // get the user data from database
+
+        $userSummary = (new UserSummariser($user))->summarise();
+
+        return $userSummary;
     }
 }

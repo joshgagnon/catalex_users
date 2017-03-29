@@ -1,6 +1,7 @@
 <?php
 
 use App\BillingDetail;
+use App\Role;
 use Tests\Stub\User;
 use App\Organisation;
 
@@ -42,7 +43,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         $userData = array_merge($defaults, $overrides);
 
-        return User::create($userData);
+        $user = User::create($userData);
+
+        // Add the registered user role
+        $registeredRole = Role::where('name', 'registered_user')->first();
+        $user->addRole($registeredRole);
+
+        return $user;
     }
 
     protected function createBillingDetails($overrides=[])
