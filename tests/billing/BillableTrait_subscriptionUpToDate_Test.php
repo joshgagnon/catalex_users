@@ -28,14 +28,7 @@ class BillableTrait_subscriptionUpToDate_Test extends TestCase
         // Create user and login
         $user = $this->createUserWithBilling();
 
-        // Create some billing items and bill the user to create a charge log
-        $gcService = Service::where('name', 'Good Companies')->first();
-
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 3, 'json_data' => json_encode(['company_name' => 'test company 3']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-
-        $user->bill();
+        $this->createChargeLogs($user);
 
         $subscriptionUpToDate = $user->subscriptionUpToDate();
         $this->assertTrue($subscriptionUpToDate);
@@ -49,14 +42,7 @@ class BillableTrait_subscriptionUpToDate_Test extends TestCase
         // Create user and login
         $user = $this->createUserWithBilling();
 
-        // Create some billing items and bill the user to create a charge log
-        $gcService = Service::where('name', 'Good Companies')->first();
-
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 3, 'json_data' => json_encode(['company_name' => 'test company 3']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-
-        $user->bill();
+        $this->createChargeLogs($user);
 
         // Change the charge log to pending
         $user->chargeLogs()->first()->update(['success' => false, 'pending' => true]); // when a charge log is pending, it is not yet sucessful, therefore: set success to false
@@ -73,14 +59,7 @@ class BillableTrait_subscriptionUpToDate_Test extends TestCase
         // Create user and login
         $user = $this->createUserWithBilling();
 
-        // Create some billing items and bill the user to create a charge log
-        $gcService = Service::where('name', 'Good Companies')->first();
-
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 3, 'json_data' => json_encode(['company_name' => 'test company 3']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-
-        $user->bill();
+        $this->createChargeLogs($user);
 
         // Change the charge log to failed
         $user->chargeLogs()->first()->update(['success' => false]);
@@ -94,22 +73,10 @@ class BillableTrait_subscriptionUpToDate_Test extends TestCase
      */
     public function multipleCharges_useMostRecentCharge()
     {
-
         // Create user and login
         $user = $this->createUserWithBilling();
 
-        // Create some billing items and bill the user to create a charge log
-        $gcService = Service::where('name', 'Good Companies')->first();
-
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-        BillingItem::create(['user_id' => $user->id, 'item_id' => 3, 'json_data' => json_encode(['company_name' => 'test company 3']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
-
-        // Bill the user twice to create two charge logs
-        $user->bill();
-        Carbon::setTestNow(Carbon::now()->addMonths(1));
-        $user->bill();
-
+        $this->createChargeLogs($user, 2);
 
         // Test when oldest charge is successful, but most recent failed
         $user->chargeLogs()->orderBy('timestamp', 'DESC')->get()->all()[0]->update(['success' => false]);
@@ -124,5 +91,21 @@ class BillableTrait_subscriptionUpToDate_Test extends TestCase
 
         $subscriptionUpToDate = $user->subscriptionUpToDate();
         $this->assertTrue($subscriptionUpToDate);
+    }
+
+    private function createChargeLogs($user, $numberToCreate=1)
+    {
+        // Create some billing items and bill the user to create a charge log
+        $gcService = Service::where('name', 'Good Companies')->first();
+
+        BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
+        BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
+        BillingItem::create(['user_id' => $user->id, 'item_id' => 3, 'json_data' => json_encode(['company_name' => 'test company 3']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
+
+        // Bill the user to create charge logs
+        foreach (range(1, $numberToCreate) as $index) {
+            $user->bill();
+            Carbon::setTestNow(Carbon::now()->addMonths(1));
+        }
     }
 }
