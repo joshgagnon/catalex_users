@@ -1,0 +1,13 @@
+.alert {
+    .alert-heading {
+        margin-top: 15px;
+    }
+
+    .btn {
+        margin-top: 15px;
+    }
+
+    @media (max-width: 767px) {
+        text-align: center;
+    }
+}

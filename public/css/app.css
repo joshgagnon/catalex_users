@@ -7974,6 +7974,16 @@ body {
   overflow: visible;
   clip: auto; }
 
+.alert .alert-heading {
+  margin-top: 15px; }
+
+.alert .btn {
+  margin-top: 15px; }
+
+@media (max-width: 767px) {
+  .alert {
+    text-align: center; } }
+
 html {
   position: relative;
   min-height: 100%; }
@@ -8098,7 +8108,7 @@ form.form-inline .form-group label {
   text-decoration: none;
   color: #a6171d; }
 
-.disabled-service * {
+.disabled-service *:not(.dont-gray) {
   color: #555555; }
 
 .service-well, .billing-period {

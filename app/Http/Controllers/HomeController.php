@@ -29,14 +29,13 @@ class HomeController extends Controller {
 		$this->middleware('auth');
 	}
 
-    /**
-     * Show the application dashboard to the user.
-     *
-     * @return Response
-     */
     public function index()
     {
-        return view('home');
+        $subscriptionUpToDate = Auth::user()->subscriptionUpToDate();
+
+        return view('home')->with([
+            'subscriptionUpToDate' => $subscriptionUpToDate,
+        ]);
     }
 
     public function getBrowserLogin() {
