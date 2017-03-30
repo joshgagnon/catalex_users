@@ -5,6 +5,7 @@ use App\BillingItemPayment;
 use App\ChargeLog;
 use App\Library\Billing;
 use App\Role;
+use App\Service;
 use App\User;
 use App\Organisation;
 use App\BillingItem;
@@ -38,12 +39,13 @@ class DevelopmentSeeder extends Seeder
         $johnny = $this->createUser(['name' => 'Johnny Bouy', 'email' => 'johnny@bouy.com']);
         $org = $this->createOrganisationWithBilling($johnny, ['name' => 'Johnny Bouy\'s Adventure Group']);
 
+        // Add the GC service to this org
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $org->services()->save($gcService);
+
         // Create two more users for the above org
         $this->createUser(['name' => 'Matt Johnson', 'email' => 'matt@johnson.com', 'organisation_id' => $org->id]);
         $jess = $this->createUser(['name' => 'Jess Walker', 'email' => 'jess@walker.com', 'organisation_id' => $org->id]);
-
-
-        $gcService = App\Service::where('name', 'Good Companies')->first();
 
         $billingItems = [
             BillingItem::create(['item_type' => 'gc_company', 'service_id' => $gcService->id, 'item_id' => 1, 'user_id' => $johnny->id, 'json_data' => json_encode(['company_name' => 'Pacific Testing Limited'])]),
@@ -55,19 +57,23 @@ class DevelopmentSeeder extends Seeder
         $this->billOrgForDate($org, $billingItems, $billingDay->copy()->subMonths(3));
         $this->billOrgForDate($org, $billingItems, $billingDay->copy()->subMonths(2));
         $this->billOrgForDate($org, $billingItems, $billingDay->copy()->subMonths(1));
+
+        // Setup GC oauth
+        Artisan::call('oauth:add-client', ['--client_id' => 'gc', '--secret' => 'gc', '--name' => 'Good Companies']);
+        Artisan::call('oauth:add-endpoint', ['--client_id' => 'gc', '--endpoint' => 'http://localhost:5667/auth/catalex/login']);
     }
 
     private function billOrgForDate($org, $billingItems, $date)
     {
+        $originalTime = Carbon::now();
+
+        Carbon::setTestNow($date);
+
         $centsPerItem = 150;
         $totalAmount = Billing::centsToDollars(sizeof($billingItems) * $centsPerItem);
-        $chargeLog = ChargeLog::create(['organisation_id' => $org->id, 'success' => true, 'total_amount' => $totalAmount, 'gst' => Billing::includingGst($totalAmount), 'timestamp' => $date, 'pending' => false]);
+        ChargeLog::create(['organisation_id' => $org->id, 'success' => true, 'total_amount' => $totalAmount, 'gst' => Billing::includingGst($totalAmount), 'timestamp' => $date, 'pending' => false]);
 
-
-        $paidUntil = $date->addMonth(1);
-        foreach ($billingItems as $item) {
-            $this->createBillingItemPayment($paidUntil, $item->id, $chargeLog->id, Billing::centsToDollars($centsPerItem));
-        }
+        Carbon::setTestNow($originalTime);
     }
 
     private function createBillingItemPayment($paidUntil, $billingItemId, $chargeLogId, $amount)
