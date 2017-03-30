@@ -284,6 +284,8 @@ trait Billable
                 $item->paid_until = $previousPayment ? $previousPayment->paid_until : Carbon::today();
                 $item->save();
             }
+
+            $chargeLog->sendFailedNotice();
         } else if ($totalDollarsDue > 0) {
             $chargeLog->sendInvoices();
         }
