@@ -26,7 +26,7 @@ return [
 	|
 	*/
 
-	'url' => 'https://users.catalex.nz',
+	'url' => env('APP_URL', 'https://users.catalex.nz'),
 
 	/*
 	|--------------------------------------------------------------------------
