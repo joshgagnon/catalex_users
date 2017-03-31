@@ -81,7 +81,12 @@ class BillingController extends Controller
         $billableEntity = $user->organisation ? $user->organisation : $user;
         $billingDetails = $billableEntity->billing_detail()->first();
 
-        return view('billing.edit')->with(['billingDetails' => $billingDetails]);
+        $subscriptionUpToDate = $user->subscriptionUpToDate();
+
+        return view('billing.edit')->with([
+            'billingDetails' => $billingDetails,
+            'subscriptionUpToDate' => $subscriptionUpToDate
+        ]);
     }
 
     public function update(Request $request)

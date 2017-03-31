@@ -6,6 +6,16 @@ CataLex - Edit Billing Details
 
 @section('content')
 <div class="container">
+
+    @if (!$subscriptionUpToDate)
+        <div class="alert alert-danger">
+            <h3 class="alert-heading">Your last bill failed.</h3>
+
+            <p>Please click below to update your billing details below, before you can access your paid services.</p>
+            <p>Once you add your new card, we will retry the failed bill and you will be able to access your paid CataLex services.</p>
+        </div>
+    @endif
+
     <h2>Edit Billing Details</h2>
     <div class="row">
         <div class="col-xs-12">
@@ -27,6 +37,8 @@ CataLex - Edit Billing Details
                             </div>
                         </form>
                     </div>
+
+                    <hr />
 
                     <div class="row">
                         <div class="col-xs-12">
