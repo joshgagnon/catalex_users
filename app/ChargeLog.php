@@ -40,6 +40,19 @@ class ChargeLog extends Model
         return $this->hasMany(BillingItemPayment::class);
     }
 
+    public function status()
+    {
+        if ($this->pending) {
+            return 'pending';
+        }
+
+        if ($this->success) {
+            return 'successful';
+        }
+
+        return 'failed';
+    }
+
     public function itemSummary()
     {
         $billingSummary = [];
@@ -116,5 +129,27 @@ class ChargeLog extends Model
         }
 
         return $users;
+    }
+
+    /**
+     * Send failed billing notice all users responsible for this charge log
+     *
+     * @return bool
+     */
+    public function sendFailedNotice()
+    {
+        if ($this->status() !== 'failed') {
+            return false;
+        }
+
+        // Get the users responsible for this charge log
+        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [ $this->user ];
+
+        // Send all users a notice that the bill failed
+        foreach ($users as $user) {
+            Mail::queueStyledMail('emails.billing-failed', ['name' => $user->fullName()], $user->email, $user->fullName(), 'CataLex | Bill Failed');
+        }
+
+        return true;
     }
 }
