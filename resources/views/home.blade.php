@@ -9,10 +9,15 @@
 @if (!$subscriptionUpToDate)
     <div class="container">
         <div class="alert alert-danger">
-            <h3 class="alert-heading">Your last bill failed.</h3>
-            <p>Please click below to update your billing details, before you can access your paid services.</p>
 
-            <a href="{{ route('billing.edit') }}" class="btn btn-danger">Update Billing</a>
+            @if ($user->can('edit_own_organisation') || !$user->organisation)
+                <h3 class="alert-heading">Your last bill failed.</h3>
+                <p>Please click below to update your billing details, before you can access your paid services.</p>
+
+                <a href="{{ route('billing.edit') }}" class="btn btn-danger">Update Billing</a>
+            @else
+                You are unable to access some services at the moment. Please contact one of your organisation's administrators to regain access.
+            @endif
         </div>
     </div>
 @endif
@@ -50,8 +55,12 @@
                             <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
                         </a>
 
-                        <p class="dont-gray">Your last bill failed. Please click below to update your billing details, before you can access Good Companies.</p>
-                        <a class="dont-gray btn btn-danger" href="{{ route('billing.edit') }}">Update Billing</a>
+                        @if ($user->can('edit_own_organisation') || !$user->organisation)
+                            <p class="dont-gray">Your last bill failed. Please click below to update your billing details, before you can access Good Companies.</p>
+                            <a class="dont-gray btn btn-danger" href="{{ route('billing.edit') }}">Update Billing</a>
+                        @else
+                            <p class="dont-gray">You are unable to access Good Companies at the moment. Please contact one of your organisation's administrators to regain access.</p>
+                        @endif
                     </div>
                 @endif
             @else
