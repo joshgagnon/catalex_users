@@ -38,6 +38,8 @@ class LongPeriodBillingTest extends TestCase
      */
     public function monthlyBilling_oneUser_oneCompany()
     {
+        Carbon::setTestNow(Carbon::parse('25 March 2017'));
+        
         $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
         $billingDetails = $this->createBillingDetails();
         $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
