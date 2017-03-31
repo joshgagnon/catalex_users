@@ -84,7 +84,7 @@ class ChargeLog extends Model
         $invoice = view('emails.invoice-attachment')->with([
             'orgName' => $organisation ? $organisation->name : null,
             'name' => $recipientName ?: 'CataLex User',
-            'date' => $this->timestamp->format('j/m/Y'),
+            'date' => $this->timestamp->format('d/m/Y'),
             'invoiceNumber' => $this->id,
             'totalAmount' => $this->total_amount,
             'gst' => $this->gst,
