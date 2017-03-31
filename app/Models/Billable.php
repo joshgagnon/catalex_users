@@ -210,7 +210,7 @@ trait Billable
             return true;
         }
 
-        $billingDetails = $this->billing_detail()->first();
+        // Get the user's services
         $services = Service::where('is_paid_service', true)->get();
 
         // Check if they have any services that require billing
@@ -226,7 +226,11 @@ trait Billable
         ]);
 
         // Check the user has billing setup
+        $billingDetails = $this->billing_detail()->first();
+
         if (!$billingDetails) {
+            $chargeLog->update(['pending' => false, 'success' => false]);
+
             $billableType = $this instanceof User ? 'user' : 'organisation';
             Log::error('Tried to bill ' . $billableType . ' with id ' . $this->id . ', but failed because they have no billing details');
 

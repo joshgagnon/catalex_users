@@ -204,6 +204,11 @@ class BillingController extends Controller
             $billingDetails->save();
         }
 
+        // In both cases, try billing again
+        if (!$billableEntity->free && $billableEntity->needsBilled()) {
+            $billableEntity->bill();
+        }
+
         return view('billing.frames.pxpay-success');
     }
 }
