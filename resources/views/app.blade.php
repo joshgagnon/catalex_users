@@ -15,7 +15,7 @@
     <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
 
     {{-- Fonts --}}
-    <link href='//brick.a.ssl.fastly.net/Ubuntu:400,400i,500,700' rel='stylesheet' type='text/css'>
+    <link href='//brick.a.ssl.fastly.net/Ubuntu:300,400,400i,500,700' rel='stylesheet' type='text/css'>
 
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -25,7 +25,7 @@
 <body>
     @if (Session::has('admin_id'))
         <div class="impersonation-banner">
-            <div class="container"> 
+            <div class="container">
                 <span class="pull-left">
                     You are currently impersonating <strong>{{ $user->fullName() }}</strong>.
                 </span>
@@ -81,7 +81,7 @@
                                 @if($user->can('edit_own_organisation'))
                                     <li><a href="{{ url('billing') }}">Billing</a></li>
                                 @endif
-                                
+
                                 @if (Session::has('admin_id'))
                                     <li><a href="#" onclick="document.getElementById('return-to-admin-form').submit()">Return to Admin</a></li>
                                 @else
@@ -113,7 +113,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            $('[data-toggle="popover"]').popover({ trigger: 'hover' }); 
+            $('[data-toggle="popover"]').popover({ trigger: 'hover' });
         });
     </script>
 </body>

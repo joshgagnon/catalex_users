@@ -23,13 +23,14 @@ Route::group(['middleware' => 'csrf'], function() {
 
     // Route::get('/auth/first-login', 'Auth\PasswordController@getFirstLogin');
 
+    Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
+
     Route::group(['middleware' => 'auth'], function() {
         /**
          * SSO routes
          */
         Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
         Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin']);
-        Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin']);
 
         /**
          * Services routes
@@ -49,7 +50,7 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('billing/invoices/{invoice}', 'InvoiceController@render')->name('invoices.view');
         Route::get('billing/invoices/{invoice}/download', 'InvoiceController@download')->name('invoices.download');
         Route::post('billing/invoices/{invoice}/resend', 'InvoiceController@resend')->name('invoices.resend');
-        
+
         Route::get('billing/store-card', 'BillingController@storeCard')->name('billing.store-card');
         Route::get('billing/register-card', 'BillingController@createCard')->name('billing.register-card');
         Route::post('billing/register-card', 'BillingController@finishCreateCard')->name('billing.finish-create-card');

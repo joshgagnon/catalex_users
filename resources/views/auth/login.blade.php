@@ -3,9 +3,13 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">Login</div>
+		<div class="col-sm-6 col-sm-offset-3">
+            @if(Request::query('product') == 'gc')
+                <div class="login-heading">Login to Good Companies</div>
+            @else
+                <div class="login-heading">Login to CataLex</div>
+            @endif
+            <div class="panel panel-default login">
 				<div class="panel-body">
 					@if(count($errors))
 						<div class="alert alert-danger">
@@ -21,11 +25,11 @@
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
 						<div class="form-group">
-							<label class="col-md-4 control-label">Login with</label>
+							<label class="col-md-4 control-label">Sign in with</label>
 							<div class="col-md-6">
 								<ul class="social-logins">
 									{{-- TODO: Other auth methods <li><a href="/auth/github">Github</a></li> --}}
-									<li><a href="/auth/linkedin"><img alt="LinkedIn" src="/images/social-login/linkedin.png"></a></li>
+									<li><a href="/auth/linkedin" class="linkedin"><img alt="LinkedIn" src="/images/social-login/Logo-White-21px-R.png"></a></li>
 								</ul>
 							</div>
 						</div>
@@ -34,40 +38,37 @@
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">E-Mail Address</label>
-							<div class="col-md-6">
+							<div class="col-md-8">
 								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">Password</label>
-							<div class="col-md-6">
+							<div class="col-md-8">
 								<input type="password" class="form-control" name="password">
+                                    <a class="form-label forgot-password" href="/password/email">Forgot Your Password?</a>
 							</div>
 						</div>
 
 						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" name="remember"> Remember Me
-									</label>
-								</div>
-							</div>
-						</div>
+							<div class="col-md-8 col-md-offset-4">
+                                <div class="checkbox remember-me">
+                                    <label>
+                                        <input type="checkbox" name="remember"> Remember Me
+                                    </label>
+                                </div>
 
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<button type="submit" class="btn btn-primary" style="margin-right: 15px;">
+								<button type="submit" class="btn btn-primary" >
 									Login
 								</button>
 
-								<a class="form-label" href="/password/email">Forgot Your Password?</a>
+
 							</div>
 						</div>
 
 						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4 form-label">
+							<div class="col-md-6 col-md-offset-4 form-label sign-up">
 								Not yet a member? <a href="/auth/register">Sign up here</a>
 							</div>
 						</div>

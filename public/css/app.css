@@ -5793,6 +5793,7 @@ body {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
+  -webkit-filter: none;
   filter: none; }
 
 .fa-stack {
@@ -8021,6 +8022,12 @@ ul.social-logins {
   ul.social-logins > li {
     float: left;
     margin-right: 8px; }
+  ul.social-logins .linkedin {
+    background-color: #0077B5;
+    display: block;
+    padding: 4px 8px;
+    border-radius: 2px;
+    line-height: 21px; }
 
 .small-social {
   max-height: 1.5em;
@@ -8129,5 +8136,28 @@ form.form-inline .form-group label {
   color: white; }
   .impersonation-banner .btn {
     margin: 8px 0; }
+
+.login-heading {
+  font-size: 30px;
+  margin-bottom: 36px;
+  margin-top: 10px;
+  font-weight: 300;
+  text-align: center; }
+
+.panel.login {
+  padding: 16px 0; }
+  .panel.login label {
+    font-weight: normal; }
+  .panel.login .forgot-password {
+    font-size: 0.8em; }
+  .panel.login .remember-me {
+    float: left; }
+    .panel.login .remember-me input {
+      margin-top: 6px; }
+  .panel.login button[type="submit"] {
+    float: right;
+    padding: 6px 36px; }
+  .panel.login .sign-up {
+    text-align: center; }
 
 /*# sourceMappingURL=app.css.map */
