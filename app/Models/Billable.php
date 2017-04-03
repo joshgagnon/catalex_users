@@ -57,6 +57,15 @@ trait Billable
 
     abstract public function accountNumber();
 
+    public function getBillableEntity()
+    {
+        if ($this->organisation) {
+            return $this->organisation->getBillableEntity();
+        }
+
+        return $this;
+    }
+
     public function inTrial()
     {
         $organisation = $this->organisation;

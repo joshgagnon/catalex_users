@@ -15,7 +15,7 @@ class Service extends Model
 
     public function organisations()
     {
-        return $this->belongsToMany(Organisation::class, 'service_registrations')->withPivot('price_in_cents', 'period', 'access_level')->withTimestamps();
+        return $this->belongsToMany(Organisation::class, 'service_registrations')->withPivot('price_in_cents', 'access_level')->withTimestamps();
     }
 
     public function billingItems()

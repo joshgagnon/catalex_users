@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\ChargeLog;
+use App\Service;
 use Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -171,44 +173,63 @@ class BillingController extends Controller
         $response = $gateway->completeCreateCard()->send();
         $responseData = $response->getData();
 
-        if (boolval((string)$responseData->Success) == false) {
+        // If the completion process failed, return the failed view
+        if (boolval((string)$responseData->Success) === false) {
             return view('billing.frames.pxpay-failed');
         }
 
-        $billableEntity = Auth::user();
-        $billableEntity = $billableEntity->organisation_id ? $billableEntity->organisation()->first() : $billableEntity;
+        $billableEntity = Auth::user()->getBillableEntity();
         $billingDetails = $billableEntity->billing_detail()->first();
 
+        // Get all the data we need to update the billing details
         $billingToken = (string)$responseData->DpsBillingId;
         $expiryDate = (string)$responseData->DateExpiry;
+        $billingPeriod = $request->session()->has('billing_period') ? $request->session()->pull('billing_period') : 'monthly'; // Default: monthly
 
-        if (!$billingDetails) {
-            $billingPeriod = $request->session()->has('billing_period') ? $request->session()->pull('billing_period') : 'monthly'; // Default: monthly
+        if ($billingDetails) {
+            // This user already has billing details - so update them
+            $billingDetails->update([
+                'period' => $billingPeriod,
+                'dps_billing_token' => $billingToken,
+                'expiry_date' => $expiryDate,
+            ]);
+        }
+        else {
+            // No current billing details for this user - so create billing details for them
+            $gcService = Service::where('name', 'Good Companies')->first();
+            $registration = $billableEntity->services()->where('name', 'Good Companies')->first();
+
+            $billingDay = null;
+
+            if ($registration && $registration->pivot && $registration->pivot->trial_start_date && $registration->pivot->days_in_trial) {
+                $lastDayOfTrial = Carbon::parse($registration->pivot->trial_start_date)->addDays($registration->pivot->days_in_trial);
+                $billingDay = Carbon::today()->lt($lastDayOfTrial) ? $lastDayOfTrial->day : Carbon::today()->day;
+            }
+            else {
+                // User hasn't started a trial yet - record their trial and set the billing day to the day after of their trial ends
+                $billingDay = Carbon::today()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day;
+                $billableEntity->services()->updateExistingPivot($gcService->id, ['trial_start_date' => Carbon::today(), 'days_in_trial' => Billing::DAYS_IN_TRIAL_PERIOD]);
+            }
 
             // This user or organisation hasn't already got billing details setup; create there billing details
-            $billingDetails = new BillingDetail();
-
-            $billingDetails->period = $billingPeriod;
-            $billingDetails->billing_day = Carbon::today()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day;
-            $billingDetails->dps_billing_token = $billingToken;
-            $billingDetails->expiry_date = $expiryDate;
-            $billingDetails->save();
+            $billingDetails = BillingDetail::create([
+                'period' => $billingPeriod,
+                'billing_day' => $billingDay,
+                'dps_billing_token' => $billingToken,
+                'expiry_date' => $expiryDate,
+            ]);
 
             // Link the newly created billing details to the user or organisation
-            $billableEntity->billing_detail_id = $billingDetails->id;
-            $billableEntity->save();
-        } else {
-            // Update billing details
-            $billingDetails->dps_billing_token = $billingToken;
-            $billingDetails->expiry_date = $expiryDate;
-            $billingDetails->save();
+            $billableEntity->update(['billing_detail_id' => $billingDetails->id]);
         }
 
-        // In both cases, try billing again
-        if (!$billableEntity->free && $billableEntity->needsBilled()) {
+        // If the user's billing is no longer up-to-date: rebill them
+        // for when the user is updating their billing info because the last bill failed
+        if (!$billableEntity->subscriptionUpToDate() && $billableEntity->needsBilled()) {
             $billableEntity->bill();
         }
 
+        // Return the billing success frame
         return view('billing.frames.pxpay-success');
     }
 }

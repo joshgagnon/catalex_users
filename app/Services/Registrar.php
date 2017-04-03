@@ -56,11 +56,9 @@ class Registrar implements RegistrarContract {
 		}
 
 		// Send out welcome email
-		$trialEnd = Carbon::now()->addMinutes(Config::get('constants.trial_length_minutes'));
 		Mail::queueStyledMail('emails.welcome', [
 			'name' => $user->fullName(),
 			'email' => $user->email,
-			//'trialEnd' => $trialEnd->format('F j'),
 		], $user->email, $user->fullName(), 'Welcome to CataLex');
 
 		return $user;
