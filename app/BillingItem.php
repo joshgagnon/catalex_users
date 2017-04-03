@@ -67,6 +67,16 @@ class BillingItem extends Model
         return $query->where('item_type', '=', $type);
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('billing_items.active', true);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
     public static function forTypeAndId(string $type, int $itemId)
     {
         return self::itemType($type)->where('item_id', '=', $itemId)->first();

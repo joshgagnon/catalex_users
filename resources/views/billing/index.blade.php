@@ -18,6 +18,38 @@
             @endif
         </h2>
 
+        <h3>Billing Items</h3>
+
+        <div class="scrollable-table-container">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Name</th>
+                        <th>Owner</th>
+                        <th>Created Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($billingItems as $billingItem)
+                        <tr>
+                            <td>{{ $billingItem->service->name }}</td>
+                            <td>{{ json_decode($billingItem->json_data)->company_name }}</td>
+                            <td>
+                                @if ($billingItem->user)
+                                    {{ $billingItem->user->fullName() }}
+                                @else
+                                    {{ $billingItem->organisation->name }}
+                                @endif
+                            </td>
+                            <td>{{ $billingItem->created_at->format('j M Y')  }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
         <h3>Past Invoices</h3>
 
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
