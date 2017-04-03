@@ -37,7 +37,7 @@ class DevelopmentSeeder extends Seeder
 
         // Create an organisation with two users and billing
         $johnny = $this->createUser(['name' => 'Johnny Bouy', 'email' => 'johnny@bouy.com']);
-        $org = $this->createOrganisationWithBilling($johnny, ['name' => 'Johnny Bouy\'s Adventure Group']);
+        $org = $this->createOrganisationWithBilling($johnny, ['name' => 'Johnny Bouy\'s Adventure Group'], ['dps_billing_token' => '0000030200794453']);
 
         // Add the GC service to this org
         $gcService = Service::where('name', 'Good Companies')->first();
@@ -74,17 +74,6 @@ class DevelopmentSeeder extends Seeder
         ChargeLog::create(['organisation_id' => $org->id, 'success' => true, 'total_amount' => $totalAmount, 'gst' => Billing::includingGst($totalAmount), 'timestamp' => $date, 'pending' => false]);
 
         Carbon::setTestNow($originalTime);
-    }
-
-    private function createBillingItemPayment($paidUntil, $billingItemId, $chargeLogId, $amount)
-    {
-        return BillingItemPayment::create([
-            'paid_until' => $paidUntil,
-            'billing_item_id' => $billingItemId,
-            'charge_log_id' => $chargeLogId,
-            'amount' => $amount,
-            'gst' => Billing::includingGst($amount)
-        ]);
     }
 
     protected function createUser($overrides=[])

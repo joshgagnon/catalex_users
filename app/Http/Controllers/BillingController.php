@@ -227,7 +227,7 @@ class BillingController extends Controller
             $trial = $billableEntity->trials()->where('trials.service_id', $gcService->id)->orderBy('created_at', 'DESC')->first();
 
             if (!$trial) {
-                Trial::create([
+                $trial = Trial::create([
                     $billableEntity->foreignIdName() => $billableEntity->id,
                     'service_id' => $gcService->id,
                     'start_date' => Carbon::today(),
