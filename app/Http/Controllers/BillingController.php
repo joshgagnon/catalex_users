@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ChargeLog;
 use App\Service;
+use App\Trial;
 use Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -195,31 +196,31 @@ class BillingController extends Controller
             ]);
         }
         else {
-            // No current billing details for this user - so create billing details for them
-            $gcService = Service::where('name', 'Good Companies')->first();
-            $registration = $billableEntity->services()->where('name', 'Good Companies')->first();
-
-            $billingDay = null;
-
-            if ($registration && $registration->pivot && $registration->pivot->trial_start_date && $registration->pivot->days_in_trial) {
-                $lastDayOfTrial = Carbon::parse($registration->pivot->trial_start_date)->addDays($registration->pivot->days_in_trial);
-                $billingDay = Carbon::today()->lt($lastDayOfTrial) ? $lastDayOfTrial->day : Carbon::today()->day;
-            }
-            else {
-                // User hasn't started a trial yet - record their trial and set the billing day to the day after of their trial ends
-                $billingDay = Carbon::today()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day;
-                $billableEntity->services()->updateExistingPivot($gcService->id, ['trial_start_date' => Carbon::today(), 'days_in_trial' => Billing::DAYS_IN_TRIAL_PERIOD]);
-            }
-
             // This user or organisation hasn't already got billing details setup; create there billing details
+            $billingDate = null;
+
+            $gcService = Service::where('name', 'Good Companies')->first();
+            $trial = $billableEntity->trials()->where('trials.service_id', $gcService->id)->orderBy('created_at', 'DESC')->first();
+
+            if (!$trial) {
+                Trial::create([
+                    $billableEntity->foreignIdName() => $billableEntity->id,
+                    'service_id' => $gcService->id,
+                    'start_date' => Carbon::today(),
+                    'days_in_trial' => Billing::DAYS_IN_TRIAL_PERIOD,
+                ]);
+            }
+
+            $billingDate = Carbon::now()->lt($trial->end_date) ? $trial->end_date->addDays(1) : Carbon::today();
+
+            // Create the billing details and attach it to the billable entity
             $billingDetails = BillingDetail::create([
                 'period' => $billingPeriod,
-                'billing_day' => $billingDay,
+                'billing_day' => $billingDate->day,
                 'dps_billing_token' => $billingToken,
                 'expiry_date' => $expiryDate,
             ]);
 
-            // Link the newly created billing details to the user or organisation
             $billableEntity->update(['billing_detail_id' => $billingDetails->id]);
         }
 

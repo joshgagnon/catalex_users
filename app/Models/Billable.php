@@ -1,12 +1,12 @@
 <?php namespace App\Models;
 
+use App\Trial;
+use League\Flysystem\Exception;
 use Log;
 use Config;
 use App\ChargeLog;
 use Carbon\Carbon;
-use App\Library\Mail;
 use App\Library\PXPay;
-use GuzzleHttp\Client;
 use App\Library\Billing;
 use App\Service;
 use App\BillingItem;
@@ -41,6 +41,11 @@ trait Billable
         return $this->hasMany(BillingItem::class);
     }
 
+    public function trials()
+    {
+        return $this->hasMany(Trial::class);
+    }
+
     abstract public function billableType();
 
     abstract public function shouldBill();
@@ -56,6 +61,20 @@ trait Billable
     abstract public function hasBillingSetup();
 
     abstract public function accountNumber();
+
+    public function foreignIdName()
+    {
+        switch ($this->billableType()) {
+            case 'user':
+                return 'user_id';
+
+            case 'organisation':
+                return 'organisation_id';
+
+            default:
+                throw new Exception('Unknown billable type');
+        }
+    }
 
     public function getBillableEntity()
     {

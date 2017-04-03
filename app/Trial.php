@@ -10,6 +10,8 @@ class Trial extends Model
 
     protected $dates = ['start_date'];
 
+    protected $appends = ['end_date'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -23,5 +25,10 @@ class Trial extends Model
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+
+    protected function getEndDateAttribute()
+    {
+        return $this->start_date->copy()->addDays($this->days_in_trial);
     }
 }
