@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BillingItem;
 use App\ChargeLog;
+use App\Library\BillingItemSummariser;
 use App\Service;
 use App\Trial;
 use Auth;
@@ -42,28 +43,7 @@ class BillingController extends Controller
         }
 
         $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
-
-        $billingItems = BillingItem::active();
-
-        if ($billableKeyName === 'organisation') {
-            $memberIds = $billable->members()->get()->pluck('id')->toArray();
-
-            $billingItems->where('organisation_id', $billable->id);
-            $billingItems->orWhereIn('user_id', $memberIds);
-        }
-        else {
-            $billingItems->where('user_id', $billable->id);
-        }
-
-        $billingItems = $billingItems->with(['service', 'user', 'organisation'])
-            ->orderBy('billing_items.service_id', 'ASC')
-            ->get();
-
-        $b = [];
-
-        for ($i = 0; $i < 100; $i++) {
-            $b[] = $billingItems->get($i % 3);
-        }
+        $billingItems = (new BillingItemSummariser($billable))->summarise();
 
         return view('billing.index')->with([
             'chargeLogs' => $chargeLogs,
