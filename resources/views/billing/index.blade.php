@@ -20,8 +20,10 @@
             @endif
         </h2>
 
-        <a href="{{ route('billing.edit') }}" class="btn btn-info btn-sm">Edit Billing Details</a>
-        <a href="{{ route('user-services.index') }}" class="btn btn-info btn-sm">Edit My Services</a>
+        @if (Request::path() === 'billing')
+            <a href="{{ route('billing.edit') }}" class="btn btn-info btn-sm">Edit Billing Details</a>
+            <a href="{{ route('user-services.index') }}" class="btn btn-info btn-sm">Edit My Services</a>
+        @endif
 
         <h3>Billing Items</h3>
 

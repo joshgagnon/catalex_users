@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\CreateOrganisationRequest;
 use App\Library\Invite;
+use App\Library\BillingItemSummariser;
 
 
 class AdminController extends Controller
@@ -270,10 +271,13 @@ class AdminController extends Controller
         }
 
         $chargeLogs = $billable->chargeLogs()->get();
+        $billingItems = (new BillingItemSummariser($billable))->summarise();
 
         return view('billing.index')->with([
             'chargeLogs' => $chargeLogs,
+            'billingItems' => $billingItems,
             $billableKeyName => $billable,
+            'subscriptionUpToDate' => $billable->subscriptionUpToDate(),
         ]);
 
         return view('billing.index');
