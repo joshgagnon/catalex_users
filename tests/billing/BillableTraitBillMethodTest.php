@@ -12,11 +12,6 @@ class User extends \App\User
 {
     public $totalDollarsDue;
 
-    public function sendInvoices($invoiceNumber, $listItems, $totalAmount, $gst, $orgName=null, $orgId=null)
-    {
-        // Do nothing
-    }
-
     protected function requestPayment($totalDollarsDue)
     {
         $this->totalDollarsDue = $totalDollarsDue;

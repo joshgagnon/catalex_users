@@ -42,20 +42,6 @@ class Organisation extends Model
         return $this->id === Config::get('constants.beta_organisation');
     }
 
-    public function owedAmount() {
-        // No pro-rating if never billed before
-        if(!$this->everBilled()) return '0.00';
-
-        // Pro-rate active but unpaid users
-        $sum = '0.00';
-
-        foreach($this->members as $member) {
-            $sum = bcadd($sum, $member->prorate($this->paid_until), 2);
-        }
-
-        return $sum;
-    }
-
     public function paymentAmount() {
         switch($this->billing_detail->period) {
             case 'monthly':
@@ -74,15 +60,6 @@ class Organisation extends Model
     public function accountNumber()
     {
         return 'CT' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
-    }
-
-    public function sendInvoices($invoiceNumber, $listItems, $totalAmount, $gst,  $orgName=null, $orgId=null) {
-        $orgId = 'CT' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
-        foreach ($this->members as $member) {
-            if ($member->can('edit_own_organisation')) {
-                $member->sendInvoices($invoiceNumber,  $listItems, $totalAmount, $gst,$this->name, $orgId);
-            }
-        }
     }
 
     public function getAllDueBillingItems($service)
