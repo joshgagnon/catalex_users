@@ -44,8 +44,10 @@ class BillingController extends Controller
 
         $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
         $billingItems = (new BillingItemSummariser($billable))->summarise();
+        $subscriptionUpToDate = Auth::user()->subscriptionUpToDate();
 
         return view('billing.index')->with([
+            'subscriptionUpToDate' => $subscriptionUpToDate,
             'chargeLogs' => $chargeLogs,
             'billingItems' => $billingItems,
             $billableKeyName => $billable,
@@ -177,6 +179,8 @@ class BillingController extends Controller
         $gateway = PXPay::getGateway();
         $response = $gateway->completeCreateCard()->send();
         $responseData = $response->getData();
+
+        dd($responseData);
 
         // If the completion process failed, return the failed view
         if (boolval((string)$responseData->Success) === false) {

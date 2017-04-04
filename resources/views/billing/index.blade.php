@@ -8,6 +8,8 @@
     <div class="container">
         @include('components.messages')
 
+        @include('billing.billing-alert')
+
         <h2>
             Billing Overview |
 

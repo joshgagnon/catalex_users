@@ -11,8 +11,14 @@ CataLex - Edit Billing Details
         <div class="alert alert-danger">
             <h3 class="alert-heading">Your last bill failed.</h3>
 
-            <p>Please click below to update your billing details below, before you can access your paid services.</p>
-            <p>Once you add your new card, we will retry the failed bill and you will be able to access your paid CataLex services.</p>
+            @if ($billingDetails)
+                <p>Please click the button below to retry billing. If that fails, plese check your card detailspx</p>
+
+                <a href="{{ route('billing.edit') }}" class="btn btn-danger">Retry Billing</a>
+            @else
+                <p>Please add a card below, so regain access to paid CataLex services.</p>
+                <p>Once you add your new card, we will retry the failed bill and you will be able to access your paid CataLex services.</p>
+            @endif
         </div>
     @endif
 
