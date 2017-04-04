@@ -83,6 +83,13 @@ ul.social-logins {
 		float: left;
 		margin-right: 8px;
 	}
+    .linkedin{
+        background-color: #0077B5;
+        display:block;
+        padding:4px 8px;
+        border-radius: 2px;
+            line-height: 21px;
+    }
 }
 
 .small-social {
@@ -255,5 +262,38 @@ form.form-inline .form-group label {
 
     table {
         margin: 0;
+    }
+}
+
+.login-heading{
+        font-size: 30px;
+    margin-bottom: 36px;
+    margin-top: 10px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.panel{
+    &.login{
+    padding: 16px 0;
+        label{
+            font-weight:normal;
+        }
+        .forgot-password{
+            font-size:0.8em;
+        }
+        .remember-me{
+            float:left;
+            input{
+                margin-top: 6px;
+            }
+        }
+        button[type="submit"]{
+            float:right;
+            padding:6px 36px;
+        }
+        .sign-up{
+            text-align:center;
+        }
     }
 }

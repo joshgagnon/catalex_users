@@ -31,7 +31,7 @@ class Authenticate {
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next)
+	public function handle($request, Closure $next, $product = null)
 	{
 		if ($this->auth->guest())
 		{
@@ -41,9 +41,15 @@ class Authenticate {
 			}
 			else
 			{
-				return redirect()->guest('auth/login');
+                if($product){
+				    return redirect()->guest('auth/login?product='.$product);
+                }
+                else{
+                    return redirect()->guest('auth/login');
+                }
 			}
 		}
+
 
 		return $next($request);
 	}
