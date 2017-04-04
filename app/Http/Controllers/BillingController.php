@@ -180,8 +180,6 @@ class BillingController extends Controller
         $response = $gateway->completeCreateCard()->send();
         $responseData = $response->getData();
 
-        dd($responseData);
-
         // If the completion process failed, return the failed view
         if (boolval((string)$responseData->Success) === false) {
             return view('billing.frames.pxpay-failed');
@@ -191,44 +189,23 @@ class BillingController extends Controller
         $billingDetails = $billableEntity->billing_detail()->first();
 
         // Get all the data we need to update the billing details
-        $billingToken = (string)$responseData->DpsBillingId;
-        $expiryDate = (string)$responseData->DateExpiry;
-        $billingPeriod = $request->session()->has('billing_period') ? $request->session()->pull('billing_period') : 'monthly'; // Default: monthly
+        $billingDetailData = [
+            'period' => $request->session()->has('billing_period') ? $request->session()->pull('billing_period') : 'monthly', // Default: monthly
+            'dps_billing_token' => (string)$responseData->DpsBillingId,
+            'expiry_date' => (string)$responseData->DateExpiry,
+            'masked_card_number' => (string)$responseData->CardNumber,
+        ];
 
         if ($billingDetails) {
-            // This user already has billing details - so update them
-            $billingDetails->update([
-                'period' => $billingPeriod,
-                'dps_billing_token' => $billingToken,
-                'expiry_date' => $expiryDate,
-            ]);
+            $billingDetails->update($billingDetailData); // This user already has billing details - so update them
         }
         else {
-            // This user or organisation hasn't already got billing details setup; create there billing details
-            $billingDate = null;
-
-            $gcService = Service::where('name', 'Good Companies')->first();
-            $trial = $billableEntity->trials()->where('trials.service_id', $gcService->id)->orderBy('created_at', 'DESC')->first();
-
-            if (!$trial) {
-                $trial = Trial::create([
-                    $billableEntity->foreignIdName() => $billableEntity->id,
-                    'service_id' => $gcService->id,
-                    'start_date' => Carbon::today(),
-                    'days_in_trial' => Billing::DAYS_IN_TRIAL_PERIOD,
-                ]);
-            }
-
-            $billingDate = Carbon::now()->lt($trial->end_date) ? $trial->end_date->addDays(1) : Carbon::today();
+            // This user or organisation hasn't already got billing details setup; create their billing details
+            $trial = Trial::findOrCreate($billableEntity, 'Good Companies');
+            $billingDate = Carbon::now()->lte($trial->end_date) ? $trial->end_date->addDays(1) : Carbon::today();
 
             // Create the billing details and attach it to the billable entity
-            $billingDetails = BillingDetail::create([
-                'period' => $billingPeriod,
-                'billing_day' => $billingDate->day,
-                'dps_billing_token' => $billingToken,
-                'expiry_date' => $expiryDate,
-            ]);
-
+            $billingDetails = BillingDetail::create($billingDetailData + ['billing_day' => $billingDate->day]);
             $billableEntity->update(['billing_detail_id' => $billingDetails->id]);
         }
 
