@@ -100,6 +100,10 @@ trait Billable
             return $this->organisation->subscriptionUpToDate();
         }
 
+        if ($this->billingExempt()) {
+            return true;
+        }
+
         // Get the latest charge log
         $chargeLog = $this->chargeLogs()->orderBy('timestamp', 'DESC')->first();
 

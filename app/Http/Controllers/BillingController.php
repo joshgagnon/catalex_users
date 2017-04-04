@@ -120,6 +120,24 @@ class BillingController extends Controller
         return redirect()->route('billing.edit')->withSuccess('Card deleted');
     }
 
+    public function retryBilling()
+    {
+        $billableEntity = Auth::user()->getBillableEntity();
+
+        if (!$billableEntity->subscriptionUpToDate() && $billableEntity->needsBilled()) {
+            $success = $billableEntity->bill();
+
+            if ($success) {
+                return redirect()->route('billing.edit')->withSuccess('Billing complete.');
+            }
+            else {
+                return redirect()->route('billing.edit')->withError('Billing failed. Please check your card details.');
+            }
+        }
+
+        return redirect()->route('billing.edit')->withSuccess('Your billing is already up-to-date.');
+    }
+
     public function createCard(Request $request)
     {
         $billableEntity = Auth::user()->getBillableEntity();

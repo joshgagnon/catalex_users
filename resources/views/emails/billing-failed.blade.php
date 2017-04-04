@@ -11,7 +11,7 @@
                                 <tr>
                                     <td>
                                         <p>Hi {{ $name }},</p>
-                                        <p>Unfortunately your last bill for CataLex failed. Please click <a href="{{ route('billing.edit') }}">here</a> to update your billing.</p>
+                                        <p>Unfortunately your last bill for CataLex failed. Please click <a href="{{ route('billing.edit') }}">here</a> to resolve the issue.</p>
 
                                         <p>Best regards</p>
                                         <p>The CataLex team</p>

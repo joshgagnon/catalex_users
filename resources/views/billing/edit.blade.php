@@ -12,9 +12,9 @@ CataLex - Edit Billing Details
             <h3 class="alert-heading">Your last bill failed.</h3>
 
             @if ($billingDetails)
-                <p>Please click the button below to retry billing. If that fails, plese check your card detailspx</p>
+                <p>Please click the button below to retry billing. If that fails, please check your card details.</p>
 
-                <a href="{{ route('billing.edit') }}" class="btn btn-danger">Retry Billing</a>
+                <a href="{{ route('billing.retry') }}" class="btn btn-danger">Retry Billing</a>
             @else
                 <p>Please add a card below, so regain access to paid CataLex services.</p>
                 <p>Once you add your new card, we will retry the failed bill and you will be able to access your paid CataLex services.</p>
@@ -30,65 +30,65 @@ CataLex - Edit Billing Details
                     @include('components.messages')
 
                     @if ($billingDetails)
+                        @if ($billingDetails->masked_card_number)
+                            <h4>Card: {{ $billingDetails->masked_card_number }}</h4>
+                        @else
+                            <h4>Card</h4>
+                        @endif
 
-                    <h4>Card</h4>
-
-                    <div class="row">
-                        <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <div class="col-xs-12">
-                                <!-- <a href="#">-&nbsp;&nbsp;Remove Card</a> -->
-                                <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <hr />
-
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <h4>Billing period</h4>
-
-                            <form method="POST" role="form" class="form" action="{{ route('billing.update') }}">
+                        <div class="row">
+                            <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="hidden" name="user_id" value="{{ $user->id }}">
-
-                                <p>Your billing day is the {!! Helper::ordinal($billingDetails->billing_day) !!} day of the month.</p>
-                                <div class="form-group">
-                                 <div class="row">
-                                    <div class="col-xs-3 ">
-                                            <label>
-                                                <input type="radio" name="period" value="monthly"  {{ $billingDetails->period == 'monthly' ? 'checked' : '' }} />
-                                                Monthly
-                                            </label>
-                                    </div>
-                                    <div class="col-xs-3">
-                                            <label>
-                                                <input type="radio" name="period" value="annually" {{ $billingDetails->period == 'annually' ? 'checked' : '' }}/>
-                                                Annually
-                                            </label>
-                                        </div>
-                                        </div>
-                                </div>
-
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <input type="hidden" name="_method" value="DELETE">
+                                <div class="col-xs-12">
+                                    <!-- <a href="#">-&nbsp;&nbsp;Remove Card</a> -->
+                                    <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
                                 </div>
                             </form>
                         </div>
-                    </div>
 
-                    @else
+                        <hr />
 
-                    <h4>Payments</h4>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h4>Billing period</h4>
 
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
+                                <form method="POST" role="form" class="form" action="{{ route('billing.update') }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+
+                                    <p>Your billing day is the {!! Helper::ordinal($billingDetails->billing_day) !!} day of the month.</p>
+                                    <div class="form-group">
+                                     <div class="row">
+                                        <div class="col-xs-3 ">
+                                                <label>
+                                                    <input type="radio" name="period" value="monthly"  {{ $billingDetails->period == 'monthly' ? 'checked' : '' }} />
+                                                    Monthly
+                                                </label>
+                                        </div>
+                                        <div class="col-xs-3">
+                                                <label>
+                                                    <input type="radio" name="period" value="annually" {{ $billingDetails->period == 'annually' ? 'checked' : '' }}/>
+                                                    Annually
+                                                </label>
+                                            </div>
+                                            </div>
+                                    </div>
+
+                                    <div class="form-group text-center">
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <h4>Payments</h4>
 
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
