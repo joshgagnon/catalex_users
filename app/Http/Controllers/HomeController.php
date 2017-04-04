@@ -85,6 +85,10 @@ class HomeController extends Controller {
             return view('auth.denied');
         }
 
+        if (!$user->subscriptionUpToDate()) {
+            return redirect()->route('index');
+        }
+
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Good Companies')->first();
         if(!$client) {

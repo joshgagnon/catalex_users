@@ -37,11 +37,9 @@
                     </div>
                 @else
                     <div class="disabled-service">
-                        <a href="{{ route('good-companies-login') }}">
-                            <i class="fa fa-briefcase"></i>
-                            <h4>Good Companies</h4>
-                            <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
-                        </a>
+                        <i class="fa fa-briefcase"></i>
+                        <h4>Good Companies</h4>
+                        <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
 
                         @if ($user->can('edit_own_organisation') || !$user->organisation)
                             <p class="dont-gray">Your last bill failed. Please click below to update your billing details, before you can access Good Companies.</p>
