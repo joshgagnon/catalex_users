@@ -45,6 +45,11 @@ class OrganisationController extends Controller
             'free' => false,
         ]);
 
+        // Attach the user's services to the org
+        $userServices = User::find(177)->services()->get()->pluck('id')->toArray();
+        $organisation->services()->attach($userServices);
+
+        // Give the user the role: org admin
         $user->addRole('organisation_admin');
 
         $user->organisation_id = $organisation->id;
