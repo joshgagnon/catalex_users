@@ -66,6 +66,7 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="{{ action('AdminController@getUsers') }}">Users</a></li>
                                     <li><a href="{{ action('AdminController@getOrganisations') }}">Organisations</a></li>
+                                    <li><a href="{{ route('admin.stats') }}">Stats</a></li>
                                     <li><a href="{{ action('AdminController@getAccessLog') }}">Access Log</a></li>
                                 </ul>
                             </li>
@@ -78,7 +79,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ action('UserController@getProfile') }}">My Profile</a></li>
 
-                                @if($user->can('edit_own_organisation'))
+                                @if($user->can('edit_own_organisation') || Session::has('admin_id'))
                                     <li><a href="{{ url('billing') }}">Billing</a></li>
                                 @endif
 

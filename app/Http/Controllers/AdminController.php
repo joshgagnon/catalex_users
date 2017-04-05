@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Library\AdminStats;
 use Auth;
 use Input;
 use Config;
@@ -281,5 +282,11 @@ class AdminController extends Controller
         ]);
 
         return view('billing.index');
+    }
+
+    public function stats()
+    {
+        $companyCount = AdminStats::companyCount();
+        return view('admin.stats')->with(['companyCount' => $companyCount]);
     }
 }

@@ -70,6 +70,8 @@ Route::group(['middleware' => 'csrf'], function() {
 
         Route::get('admin/billing/{billingDetail}', 'AdminController@billingOverview');
 
+        Route::get('admin/stats', 'AdminController@stats')->name('admin.stats');
+
         /**
          * Controllers
          */
