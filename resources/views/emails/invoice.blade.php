@@ -12,7 +12,7 @@
 								<td>
 									<p>Hi {{ $name }},</p>
 									<p>Thanks for your payment. An invoice/receipt for your CataLex subscription is attached.</p>
-									<p>Best regards</p>
+									<p>Kind regards</p>
 									<p>The CataLex team</p>
 									<p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
 								</td>

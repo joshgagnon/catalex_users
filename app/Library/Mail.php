@@ -18,8 +18,8 @@ class Mail
         $css = File::get(public_path('/css/email.css'));
 
         // Add the CSS to the view
-        $inliner = new CssToInlineStyles($html, $css);
-        $markup = $inliner->convert();
+        $inliner = new CssToInlineStyles();
+        $markup = $inliner->convert($html, $css);
 
         // Return the resulting markup
         return $markup;
@@ -39,8 +39,9 @@ class Mail
 
         $css = File::get(public_path('/css/email.css'));
 
-        $inliner = new CssToInlineStyles($html, $css);
-        $markup = $inliner->convert();
+        $inliner = new CssToInlineStyles();
+
+        $markup = $inliner->convert($html, $css);
         return $markup;
     }
 }
