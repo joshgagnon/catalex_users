@@ -110,3 +110,12 @@ p {
 		background-color: darken($facebook-blue, 10%) !important;
 	}
 }
+
+
+.container.main{
+    background-color: #f8f8f8;
+    td > p {
+        padding-left: 15px;
+        padding-right:15px;
+    }
+}

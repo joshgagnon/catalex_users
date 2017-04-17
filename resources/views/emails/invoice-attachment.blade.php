@@ -142,7 +142,6 @@
 		<div class="footer">
 			<div><label>Supplier:</label>CataLex Limited (NZCN 5311842)</div>
 			<div><label>Website:</label><a href="https://www.catalex.nz">www.catalex.nz</a></div>
-			<div><label>Address:</label>C/- Kanu Jeram Chartered Accountant Limited, 112 Kitchener Road, Milford, Auckland 0620</div>
 			<div><label>Email:</label><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></div>
 		</div>
 	</div>

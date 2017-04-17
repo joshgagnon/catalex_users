@@ -778,4 +778,10 @@ p {
 .btn-facebook.button:visited td {
   background-color: #2d4373 !important; }
 
+.container.main {
+  background-color: #f8f8f8; }
+  .container.main td > p {
+    padding-left: 15px;
+    padding-right: 15px; }
+
 /*# sourceMappingURL=email.css.map */

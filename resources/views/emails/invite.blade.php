@@ -21,7 +21,7 @@
 										<a href="{{ url('password/first-login/' . $token) }}">Click here</a> to confirm your user account and gain access.
 									</p>
 									<p>Your username is: {{ $user->email }}</p>
-									<p>Best regards</p>
+									<p>Kind regards</p>
 									<p>The CataLex team</p>
 									<p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
 								</td>
