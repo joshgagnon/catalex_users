@@ -59,8 +59,21 @@ class OrganisationController extends Controller
         return redirect()->action('OrganisationController@getIndex');
     }
 
-    public function postInvite(InviteFormRequest $request) {
+    public function postInvite(InviteFormRequest $request)
+    {
         $data = $request->all();
+        $userWithMatchingEmail = User::where('email', $data['email'])->first();
+
+        if ($userWithMatchingEmail) {
+            if ($userWithMatchingEmail->organisation_id) {
+                redirect()->back()->withErrors('User with email: ' . $data['email'] . ' already belongs to an organisation.');
+            }
+
+
+        }
+        else {
+
+        }
 
         $organisation = Auth::user()->organisation;
 
