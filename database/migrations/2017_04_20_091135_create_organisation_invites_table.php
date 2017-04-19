@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFirstLoginTokensTable extends Migration
+class CreateOrganisationInvitesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,13 @@ class CreateFirstLoginTokensTable extends Migration
      */
     public function up()
     {
-        Schema::create('first_login_tokens', function (Blueprint $table)
-        {
-            $table->increments('id');
-
+        Schema::create('organisation_invites', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->string('token');
-
+            $table->integer('organisation_id')->unsigned();
+            $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateFirstLoginTokensTable extends Migration
      */
     public function down()
     {
-        Schema::drop('first_login_tokens');
+        Schema::drop('organisation_invites');
     }
 }

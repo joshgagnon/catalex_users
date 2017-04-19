@@ -46,7 +46,7 @@ class OrganisationController extends Controller
         ]);
 
         // Attach the user's services to the org
-        $userServices = User::find(177)->services()->get()->pluck('id')->toArray();
+        $userServices = $user->services()->get()->pluck('id')->toArray();
         $organisation->services()->attach($userServices);
 
         // Give the user the role: org admin
@@ -59,8 +59,21 @@ class OrganisationController extends Controller
         return redirect()->action('OrganisationController@getIndex');
     }
 
-    public function postInvite(InviteFormRequest $request) {
+    public function postInvite(InviteFormRequest $request)
+    {
         $data = $request->all();
+        $userWithMatchingEmail = User::where('email', $data['email'])->first();
+
+        if ($userWithMatchingEmail) {
+            if ($userWithMatchingEmail->organisation_id) {
+                redirect()->back()->withErrors('User with email: ' . $data['email'] . ' already belongs to an organisation.');
+            }
+
+
+        }
+        else {
+
+        }
 
         $organisation = Auth::user()->organisation;
 
