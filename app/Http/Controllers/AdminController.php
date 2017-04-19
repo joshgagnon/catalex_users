@@ -134,6 +134,28 @@ class AdminController extends Controller
         return redirect()->action('AdminController@getUsers')->with('success', 'User ' . $newUser->fullName() . ' successfully created.');
     }
 
+    public function postCreateOrFindUser(UserCreateRequest $request) {
+        $data = $request->all();
+        $user = User::where('email', $data['email'])->first();
+
+        if(!$user) {
+            $userData = [
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt(str_random(40)),
+                'organisation_id' => null,
+                'billing_detail_id' => null,
+            ];
+
+            $newUser = User::create($userData);
+            $newUser->addRole('registered_user');
+
+            Invite::sendInvite($newUser, Auth::user()->fullName());
+        }
+
+        return response()->json(['id' => $user->id, 'name' => $user->name]);
+    }
+
     public function getCreateOrganisation() {
         return view('admin.create-organisation');
     }
