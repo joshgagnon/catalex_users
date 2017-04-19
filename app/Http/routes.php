@@ -63,6 +63,11 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**
+         * Organisation invite routes
+         */
+        Route::get('organisation-invites', 'OrganisationInviteController@index')->name('organisation-invites.index');
+
+        /**
          * Admin Routes
          */
         Route::post('impersonation/{user}', 'ImpersonationController@startImpersonation');

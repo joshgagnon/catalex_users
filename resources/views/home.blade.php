@@ -10,6 +10,16 @@
     @include('billing.billing-alert')
 </div>
 
+
+<div class="container">
+    <div class="alert alert-info inline clearfix">
+        @if (!$user->organisation)
+            <a href="{{ route('organisation-invites.index') }}" class="btn btn-info">View invites</a>
+            <p>You have pending organisation invites.</p>
+        @endif
+    </div>
+</div>
+
 <div class="services container">
 
     <div class="row">

@@ -46,7 +46,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $dates = ['deleted_at', 'paid_until'];
 
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
 
         // Delete first login tokens on boot
@@ -58,6 +59,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function organisation()
     {
         return $this->belongsTo('App\Organisation');
+    }
+
+    public function organisationInvites()
+    {
+        return $this->hasMany(OrganisationInvite::class, 'invited_user_id');
     }
 
     public function roles()

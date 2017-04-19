@@ -13,12 +13,17 @@ class CreateOrganisationInvitesTable extends Migration
     public function up()
     {
         Schema::create('organisation_invites', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->increments('id');
+
+            $table->integer('invited_user_id')->unsigned();
+            $table->foreign('invited_user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->integer('inviting_user_id')->unsigned();
+            $table->foreign('inviting_user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('organisation_id')->unsigned();
             $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }

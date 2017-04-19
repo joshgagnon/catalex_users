@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\OrganisationInvite;
 use Auth;
 use File;
 use App\Library\Invite;
@@ -62,40 +63,36 @@ class OrganisationController extends Controller
     public function postInvite(InviteFormRequest $request)
     {
         $data = $request->all();
-        $userWithMatchingEmail = User::where('email', $data['email'])->first();
+        $user = User::where('email', $data['email'])->first();
+        $organisation = Auth::user()->organisation;
 
-        if ($userWithMatchingEmail) {
-            if ($userWithMatchingEmail->organisation_id) {
+        if ($user) {
+            if ($user->organisation_id) {
                 redirect()->back()->withErrors('User with email: ' . $data['email'] . ' already belongs to an organisation.');
             }
 
-
+            // Send invite
+            OrganisationInvite::create([
+                'invited_user_id' => $user->id,
+                'inviting_user_id' => Auth::user()->id,
+                'organisation_id' => Auth::user()->organisation_id,
+            ]);
         }
         else {
+            // User doesn't exist - so create one
+            // Create a user for the invitee with random password
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt(str_random(40)),
+                'organisation_id' => $organisation->id,
+                'billing_detail_id' => null,
+            ]);
 
-        }
-
-        $organisation = Auth::user()->organisation;
-
-        // Create a user for the invitee with random password
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt(str_random(40)),
-            'organisation_id' => $organisation->id,
-            'billing_detail_id' => null,
-        ]);
-
-        if($organisation->id == Config::get('constants.beta_organisation')) {
-            $user->addRole('beta_tester');
-        }
-        else {
             $user->addRole('registered_user');
+            Invite::sendInvite($user, Auth::user()->fullName());
         }
 
-        Invite::sendInvite($user, Auth::user()->fullName());
-
-        Session::flash('success', 'An invite has been sent to ' . $data['email']);
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'An invite has been sent to ' . $data['email']]);
     }
 }
