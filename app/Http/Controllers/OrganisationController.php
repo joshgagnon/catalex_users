@@ -46,7 +46,7 @@ class OrganisationController extends Controller
         ]);
 
         // Attach the user's services to the org
-        $userServices = User::find(177)->services()->get()->pluck('id')->toArray();
+        $userServices = $user->services()->get()->pluck('id')->toArray();
         $organisation->services()->attach($userServices);
 
         // Give the user the role: org admin
