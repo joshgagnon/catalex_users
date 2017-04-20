@@ -299,10 +299,11 @@ form.form-inline .form-group label {
     }
 }
 
-.alert.inline {
+.alert.inline, .panel-body.inline {
     p {
         vertical-align: middle;
         line-height: 38px;
+        margin-bottom: 0;
     }
     .btn {
         float: right;

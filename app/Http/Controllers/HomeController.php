@@ -31,10 +31,14 @@ class HomeController extends Controller {
 
     public function index()
     {
-        $subscriptionUpToDate = Auth::user()->subscriptionUpToDate();
+        $user = Auth::user();
+
+        $subscriptionUpToDate = $user->subscriptionUpToDate();
+        $userHasPendingInvite = $user->organisationInvites()->count() > 0;
 
         return view('home')->with([
             'subscriptionUpToDate' => $subscriptionUpToDate,
+            'userHasPendingInvite' => $userHasPendingInvite,
         ]);
     }
 

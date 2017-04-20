@@ -2,6 +2,7 @@
 
 use App\BillingDetail;
 use App\ChargeLog;
+use App\OrganisationInvite;
 use App\User;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -30,6 +31,7 @@ class RouteServiceProvider extends ServiceProvider {
         $router->model('user', User::class);
         $router->model('invoice', ChargeLog::class);
         $router->model('billingDetail', BillingDetail::class);
+        $router->model('organisation_invite', OrganisationInvite::class);
 	}
 
 	/**

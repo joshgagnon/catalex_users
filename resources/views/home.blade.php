@@ -11,14 +11,14 @@
 </div>
 
 
-<div class="container">
-    <div class="alert alert-info inline clearfix">
-        @if (!$user->organisation)
-            <a href="{{ route('organisation-invites.index') }}" class="btn btn-info">View invites</a>
-            <p>You have pending organisation invites.</p>
-        @endif
+@if (!$user->organisation && $userHasPendingInvite)
+    <div class="container">
+        <div class="alert alert-info inline clearfix">
+            <a href="{{ route('organisation-invites.index') }}" class="btn btn-info">View invite</a>
+            <p>You have a pending organisation invite.</p>
+        </div>
     </div>
-</div>
+@endif
 
 <div class="services container">
 

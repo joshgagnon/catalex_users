@@ -25,6 +25,10 @@ class UserSummariser
             'free' => $this->user->free,
             'subscription_up_to_date' => $this->user->subscriptionUpToDate(),
             'roles' => $this->user->roles->pluck('name')->toArray(),
+            'services' => [
+                'Good Companies',
+                '...',
+            ]
         ];
 
         if ($this->user->organisation) {

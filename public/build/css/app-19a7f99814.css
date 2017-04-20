@@ -8177,11 +8177,12 @@ form.form-inline .form-group label {
   .panel.login .sign-up {
     text-align: center; }
 
-.alert.inline p {
+.alert.inline p, .panel-body.inline p {
   vertical-align: middle;
-  line-height: 38px; }
+  line-height: 38px;
+  margin-bottom: 0; }
 
-.alert.inline .btn {
+.alert.inline .btn, .panel-body.inline .btn {
   float: right;
   margin-top: 0; }
 
