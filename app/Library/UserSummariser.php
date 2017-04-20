@@ -16,6 +16,7 @@ class UserSummariser
     public function summarise()
     {
         $this->user->load('roles');
+        $billable = $this->user->getBillableEntity();
 
         // Build the rest of the summary
         $userSummary = [
@@ -25,10 +26,7 @@ class UserSummariser
             'free' => $this->user->free,
             'subscription_up_to_date' => $this->user->subscriptionUpToDate(),
             'roles' => $this->user->roles->pluck('name')->toArray(),
-            'services' => [
-                'Good Companies',
-                '...',
-            ]
+            'services' => $billable->services->pluck('name')->toArray(),
         ];
 
         if ($this->user->organisation) {

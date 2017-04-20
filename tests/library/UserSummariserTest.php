@@ -1,6 +1,7 @@
 <?php
 
 use App\Library\UserSummariser;
+use App\Service;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserSummariserTest extends TestCase
@@ -15,6 +16,12 @@ class UserSummariserTest extends TestCase
         // Create the user and the organisation
         $user = $this->createUser();
 
+        // Add some services to the user
+        $service1 = Service::find(1);
+        $service2 = Service::find(2);
+
+        $user->services()->sync([$service1->id, $service2->id]);
+
         $expected = [
             'id' => $user->id,
             'email' => $user->email,
@@ -22,6 +29,7 @@ class UserSummariserTest extends TestCase
             'free' => $user->free,
             'subscription_up_to_date' => true,
             'roles' => ['registered_user'],
+            'services' => [$service1->name, $service2->name],
         ];
 
         $actual = (new UserSummariser($user))->summarise();
@@ -38,6 +46,12 @@ class UserSummariserTest extends TestCase
         $user = $this->createUser();
         $org = $this->createOrganisation([], $user);
 
+        // Add some services to the org
+        $service1 = Service::find(1);
+        $service2 = Service::find(2);
+
+        $org->services()->sync([$service1->id, $service2->id]);
+
         // Add some more members to the organisation
         $orgMember2 = $this->createUser(['name' => 'Org member 2', 'email' => '2@org.com', 'organisation_id' => $org->id]);
         $orgMember3 = $this->createUser(['name' => 'Org member 3', 'email' => '3@org.com', 'organisation_id' => $org->id]);
@@ -49,6 +63,7 @@ class UserSummariserTest extends TestCase
             'free' => $user->free,
             'subscription_up_to_date' => $user->subscriptionUpToDate(),
             'roles' => ['organisation_admin', 'registered_user'],
+            'services' => [$service1->name, $service2->name],
             'organisation' => [
                 'organisation_id' => $org->id,
                 'name' => $org->name,
