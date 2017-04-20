@@ -309,6 +309,15 @@ class AdminController extends Controller
     public function stats()
     {
         $companyCount = AdminStats::companyCount();
-        return view('admin.stats')->with(['companyCount' => $companyCount]);
+        $totalCompanies = 0;
+
+        foreach ($companyCount as $count) {
+            $totalCompanies += $count->count;
+        }
+
+        return view('admin.stats')->with([
+            'totalCompanies' => $totalCompanies,
+            'companyCount' => $companyCount,
+        ]);
     }
 }

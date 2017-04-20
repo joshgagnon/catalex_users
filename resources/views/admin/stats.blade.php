@@ -6,6 +6,10 @@
 
         @include('components.messages')
 
+        <h4>Total companies: {{ $totalCompanies }}</h4>
+
+        <hr />
+
         <dl>
             @foreach($companyCount as $countRecord)
                 <dt>{{ $countRecord->count }}</dt>
