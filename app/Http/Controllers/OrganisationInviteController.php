@@ -54,7 +54,7 @@ class OrganisationInviteController extends Controller
         $user = Auth::user();
 
         // Check invite belongs to or was created by the current user - if not, deny access
-        if ($user->id !== $invite->invited_user_id || $user_id !== $invite->inviting_user_id) {
+        if ($user->id !== $invite->invited_user_id || $user->id !== $invite->inviting_user_id) {
             return view('auth.denied');
         }
 
