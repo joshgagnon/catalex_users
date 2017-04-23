@@ -5,8 +5,6 @@ use App\Services\ResetBroker as PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Auth;
-use App\User;
-use App\FirstLoginToken;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Library\Invite;
 
@@ -39,7 +37,7 @@ class PasswordController extends Controller
         $this->middleware('guest');
     }
 
-    public function getFirstLogin(Request $request, $token = null)
+    public function getFirstLogin($token = null)
     {
         if (!$token) {
             throw new NotFoundHttpException();

@@ -55,7 +55,7 @@ class OrganisationControllerTest extends TestCase
     }
 
     /**
-     * test
+     * @test
      */
     public function invite_existing_user()
     {
