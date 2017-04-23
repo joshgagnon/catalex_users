@@ -42,16 +42,6 @@ class OrganisationControllerTest extends TestCase
 
         // Check that a first login token was actually created
         $this->assertNotNull($tokenInstance);
-
-        // Use the first login token to set a password
-        $this->visit('/password/first-login/' . $tokenInstance->token)
-             ->type('pass123', 'password')
-             ->type('pass123', 'password_confirmation')
-             ->press('Login')
-             ->see('Password set');
-
-        // Check the first login token worked and logged us in
-        $this->assertEquals($newUser->id, Auth::id());
     }
 
     /**

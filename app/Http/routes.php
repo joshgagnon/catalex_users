@@ -18,7 +18,7 @@ Route::group(['middleware' => 'csrf'], function() {
 
     // Guest routes
     Route::group(['middleware' => 'guest'], function() {
-        Route::get('/password/first-login/{token}', 'Auth\FirstLoginController@index');
+        Route::get('/password/first-login/{token}', 'Auth\FirstLoginController@index')->name('first-login.index');
         Route::post('/password/first-login', 'Auth\FirstLoginController@setPassword')->name('first-login.set-password');
     });
 
