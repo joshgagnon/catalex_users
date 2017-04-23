@@ -16,15 +16,20 @@ Route::group(['middleware' => 'csrf'], function() {
     Route::get('/termsofuse', 'LegalController@termsofuse');
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
+    // Guest routes
+    Route::group(['middleware' => 'guest'], function() {
+        Route::get('/password/first-login/{token}', 'Auth\FirstLoginController@index');
+        Route::post('/password/first-login', 'Auth\FirstLoginController@setPassword')->name('first-login.set-password');
+    });
+
     Route::controllers([
         'auth' => 'Auth\AuthController',
         'password' => 'Auth\PasswordController'
     ]);
 
-    // Route::get('/auth/first-login', 'Auth\PasswordController@getFirstLogin');
-
     Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
 
+    // Authenticated routes
     Route::group(['middleware' => 'auth'], function() {
         /**
          * SSO routes

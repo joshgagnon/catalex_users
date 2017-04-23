@@ -2,86 +2,63 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Library\Invite;
+use Auth;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FirstLoginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index($token = null)
     {
-        //
+        if (!$token) {
+            throw new NotFoundHttpException();
+        }
+
+        // Get the user
+        $user = Invite::getUser($token);
+
+        if (!$user) {
+            throw new NotFoundHttpException();
+        }
+
+        $userOrganisation = $user->organisation;
+
+        return view('auth.first-login')->with([
+            'token' => $token,
+            'user' => $user,
+            'userOrganisation' => $userOrganisation
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function setPassword(Request $request)
     {
-        //
-    }
+        // Validate token and password exist and password is confirmed
+        $this->validate($request, [
+            'token' => 'required',
+            'password' => 'required|confirmed|min:6',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // Get the user for this token
+        $user = Invite::getUser($request->token);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        // Check we found a user
+        if (!$user) {
+            return redirect()->back()->with('errors', collect('Invalid token'));
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        // Change the user's password
+        $user->password = \Hash::make($request->password);
+        $user->save();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        // Delete the token - it's a single use deal
+        $user->firstLoginToken()->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        // Log the user in
+        Auth::login($user);
+
+        // Done. Redirect into app
+        return redirect('/')->with('status', 'Password set');
     }
 }

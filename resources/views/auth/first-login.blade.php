@@ -32,7 +32,7 @@
                         </div>
                     @endif
 
-                    <form class="form-horizontal" role="form" method="POST" action="/password/first-login">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('first-login.set-password') }}">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="token" value="{{ $token }}">
 
