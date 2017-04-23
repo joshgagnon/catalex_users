@@ -30,18 +30,15 @@ class OrganisationControllerTest extends TestCase
         $this->seePageIs('/organisation')
              ->see('An invite has been sent to johnny@example.com');
 
-        // All done with the organisation admin user, time to logout
-        Auth::logout();
-
-        // Find the user we just created, and grab the first login token that was just created for them
+        // Find the user we just created
         $newUser = User::where('email', '=', 'johnny@example.com')->first();
+
+        // Check a first login token was created for the new user
         $tokenInstance = FirstLoginToken::where('user_id', '=', $newUser->id)->first();
-
-        // Check the new user was added to the correct organisation
-        $this->assertEquals($orgAdmin->organisation_id, $newUser->organisation_id);
-
-        // Check that a first login token was actually created
         $this->assertNotNull($tokenInstance);
+
+        // Check the new user was added to the organisation
+        $this->assertEquals($orgAdmin->organisation_id, $newUser->organisation_id);
     }
 
     /**
@@ -69,10 +66,8 @@ class OrganisationControllerTest extends TestCase
         $this->seePageIs('/organisation')
             ->see('An invite has been sent to ' . $joiningUser->email);
 
-        // All done with the organisation admin user, time to logout
-        Auth::logout();
-
-        // Login as the invited user
-
+        // Check a first login token was created for the joining user
+        $loginToken = FirstLoginToken::where('user_id', $joiningUser->id);
+        $this->assertNotNull($loginToken);
     }
 }
