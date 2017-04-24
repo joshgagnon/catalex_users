@@ -24,7 +24,14 @@
                 <tr{!! $u->deleted_at ? ' class="deleted"' : '' !!}>
                     <td>
                         @if($user->hasRole('global_admin'))
-                            <span data-toggle="popover" data-html="true" data-trigger="hover" data-content="<b>Created at:</b> <br/> {{ Carbon\Carbon::parse($u->created_at)->format('d F, Y - g:i a') }}">{{ $u->fullName() }}</span>
+                            <span
+                                data-toggle="popover"
+                                data-html="true"
+                                data-trigger="hover"
+                                data-content="<b>ID:</b> {{ $u->id }} <br /> <b>Created at:</b> <br/> {{ Carbon\Carbon::parse($u->created_at)->format('d F, Y - g:i a') }}"
+                            >
+                                {{ $u->fullName() }}
+                            </span>
                         @else
                             {{ $u->fullName() }}
                         @endif

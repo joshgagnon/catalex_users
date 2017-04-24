@@ -275,7 +275,8 @@ form.form-inline .form-group label {
 
 .panel{
     &.login{
-    padding: 16px 0;
+        padding: 16px 0;
+
         label{
             font-weight:normal;
         }
@@ -295,5 +296,17 @@ form.form-inline .form-group label {
         .sign-up{
             text-align:center;
         }
+    }
+}
+
+.alert.inline, .panel-body.inline {
+    p {
+        vertical-align: middle;
+        line-height: 38px;
+        margin-bottom: 0;
+    }
+    .btn {
+        float: right;
+        margin-top: 0;
     }
 }

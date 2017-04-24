@@ -6,10 +6,19 @@ CataLex - {{ $organisation->name }}
 
 @section('content')
 <div class="container">
+    @include('components.messages')
+
 	<h2>{{ $organisation->name }}</h2>
+
+    @if (!$user->hasRole('organisation_admin'))
+        <form class="form-inline" role="form" method="POST" action="{{ route('organisation.leave') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-danger btn-xs">Leave Organisation</button>
+        </form>
+    @endif
+
 	<div class="row">
 		<div class="col-xs-12">
-			@include('components.messages')
 			@include('user.components.list', ['users' => $organisation->members()->paginate(Config::get('constants.items_per_page')), 'title' => 'Organisation Members', 'viewPermission' => 'view_organisation_user', 'editPermission' => 'edit_organisation_user'])
 			@if($user->can('edit_own_organisation'))
 				<form class="form-inline" role="form" method="POST" action="{{ action('OrganisationController@postInvite') }}">

@@ -1,10 +1,8 @@
 <?php namespace App\Http\Controllers;
 
 use Auth;
-use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
-use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 use DB;
-use League\OAuth2\Server\Entity\ClientEntity;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 class HomeController extends Controller {
 
@@ -31,10 +29,14 @@ class HomeController extends Controller {
 
     public function index()
     {
-        $subscriptionUpToDate = Auth::user()->subscriptionUpToDate();
+        $user = Auth::user();
+
+        $subscriptionUpToDate = $user->subscriptionUpToDate();
+        $userHasPendingInvite = $user->organisationInvites()->count() > 0;
 
         return view('home')->with([
             'subscriptionUpToDate' => $subscriptionUpToDate,
+            'userHasPendingInvite' => $userHasPendingInvite,
         ]);
     }
 

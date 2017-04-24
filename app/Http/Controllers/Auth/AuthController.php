@@ -1,12 +1,12 @@
-<?php namespace App\Http\Controllers\Auth;
+<?php
+
+namespace App\Http\Controllers\Auth;
 
 use Auth;
 use Config;
 use Session;
 use App\Library\Mail;
-use App\Library\PXPay;
 use App\User;
-use App\Organisation;
 use Validator;
 use App\Http\Requests\InitialRegisterRequest;
 use Carbon\Carbon;

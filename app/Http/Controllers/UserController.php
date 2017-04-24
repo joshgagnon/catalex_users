@@ -1,31 +1,30 @@
 <?php namespace App\Http\Controllers;
 
-use Auth;
-use App\User;
-use App\Role;
-
-use App\Http\Controllers\Controller;
 use App\Http\Requests\UserEditRequest;
-use LucaDegasperi\OAuth2Server\Authorizer;
-use Response;
+use App\Library\Invite;
 use App\Library\UserSummariser;
+use App\User;
+use Auth;
+use DB;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use LucaDegasperi\OAuth2Server\Authorizer;
 
-class UserController extends Controller {
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct() {
-	}
-
+/**
+ * Class UserController
+ *
+ * @package App\Http\Controllers
+ */
+class UserController extends Controller
+{
 	/**
 	 * Show current user profile details or edit form depending on permissions.
 	 *
-	 * @return Response
+	 * @return View
 	 */
-	public function getProfile() {
+	public function getProfile()
+    {
 		$user = Auth::user();
 
 		if ($user->can('edit_own_user')) {
@@ -45,24 +44,28 @@ class UserController extends Controller {
 
 		return view('auth.denied');
 	}
-
-	/**
-	 * Update a user's own details.
-	 *
-	 * @return Response
-	 */
-	public function postProfile(UserEditRequest $request) {
+    
+    /**
+     * Update a user's own details.
+     *
+     * @param UserEditRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */public function postProfile(UserEditRequest $request)
+    {
 		$this->updateUser($request->input());
 
 		return redirect()->action('UserController@getProfile');
 	}
-
-	/**
-	 * Show a user's details by id.
-	 *
-	 * @return Response
-	 */
-	public function getView($subjectId) {
+    
+    /**
+     * Show a user's details by id.
+     *
+     * @param $subjectId
+     *
+     * @return View
+     */public function getView($subjectId)
+    {
 		$user = Auth::user();
 
 		$subject = User::find($subjectId);
@@ -81,9 +84,10 @@ class UserController extends Controller {
 	/**
 	 * Show the user edit form by id.
 	 *
-	 * @return Response
+	 * @return View
 	 */
-	public function getEdit($subjectId) {
+	public function getEdit($subjectId)
+    {
 		$user = Auth::user();
 		$subject = User::find($subjectId);
 
@@ -115,7 +119,8 @@ class UserController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function postEdit(UserEditRequest $request, $subjectId) {
+	public function postEdit(UserEditRequest $request, $subjectId)
+    {
 		$this->updateUser($request->input());
 
 		return redirect()->action('UserController@getEdit', [$subjectId]);
@@ -126,7 +131,8 @@ class UserController extends Controller {
 	 *
 	 * @return void
 	 */
-	private function updateUser($input) {
+	private function updateUser($input)
+    {
 		$user = User::find($input['user_id']);
 
 		$user->name = $input['name'];
@@ -170,7 +176,8 @@ class UserController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function postDelete($subjectId) {
+	public function postDelete($subjectId)
+    {
 		$user = Auth::user();
 
 		$subject = User::withInactive()->find($subjectId);
@@ -192,7 +199,8 @@ class UserController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function postUndelete($subjectId) {
+	public function postUndelete($subjectId)
+    {
 		$user = Auth::user();
 
 		$subject = User::withInactive()->onlyTrashed()->find($subjectId);
@@ -207,11 +215,51 @@ class UserController extends Controller {
 
 		return view('auth.denied');
 	}
-
-    public function info(Authorizer $authorizer)
+    
+    /**
+     * @param Authorizer $authorizer
+     *
+     * @return array
+     */public function info(Authorizer $authorizer)
     {
         $user_id = $authorizer->getResourceOwnerId(); // the token user_id
         $user = User::find($user_id); // get the user data from database
+
+        $userSummary = (new UserSummariser($user))->summarise();
+
+        return $userSummary;
+    }
+
+    public function createOrFindUser(Request $request) {
+        $client = DB::table('oauth_clients')
+            ->where('id', $request->input('client_id'))
+            ->where('secret', $request->input('client_secret'))
+            ->first();
+
+        if (!$client) {
+            return view('auth.denied');
+        }
+
+        $data = $request->all();
+        $user = User::where('email', $data['email'])->first();
+
+        if(!$user) {
+            $userData = [
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt(str_random(40)),
+                'organisation_id' => null,
+                'billing_detail_id' => null,
+            ];
+
+            $user = User::create($userData);
+            $user->addRole('registered_user');
+
+            Invite::sendInviteNewUserToView($user, $request->input('company_name'), $request->input('sender_name'));
+        }
+        else{
+            Invite::sendInviteToView($user, $request->input('company_name'), $request->input('sender_name'));
+        }
 
         $userSummary = (new UserSummariser($user))->summarise();
 

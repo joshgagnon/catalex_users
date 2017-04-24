@@ -11,20 +11,28 @@
 |
 */
 
+
+Route::post('user/invite-user', 'UserController@createOrFindUser');
+
 Route::group(['middleware' => 'csrf'], function() {
     Route::get('/', 'HomeController@index')->name('index');
     Route::get('/termsofuse', 'LegalController@termsofuse');
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
+
+    // Guest routes
+    Route::group(['middleware' => 'guest'], function() {
+        Route::get('/password/first-login/{token}', 'Auth\FirstLoginController@index')->name('first-login.index');
+        Route::post('/password/first-login', 'Auth\FirstLoginController@setPassword')->name('first-login.set-password');
+    });
 
     Route::controllers([
         'auth' => 'Auth\AuthController',
         'password' => 'Auth\PasswordController'
     ]);
 
-    // Route::get('/auth/first-login', 'Auth\PasswordController@getFirstLogin');
-
     Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
 
+    // Authenticated routes
     Route::group(['middleware' => 'auth'], function() {
         /**
          * SSO routes
@@ -63,6 +71,18 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**
+         * Organisation invite routes
+         */
+        Route::get('organisation-invites', 'OrganisationInviteController@index')->name('organisation-invites.index');
+        Route::post('organisation-invites/{organisation_invite}/accept', 'OrganisationInviteController@accept')->name('organisation-invites.accept');
+        Route::delete('organisation-invites/{organisation_invite}/', 'OrganisationInviteController@dismiss')->name('organisation-invites.delete');
+    
+        /**
+         * Organisation member routes
+         */
+        Route::post('organisation/{organisation_id}/leave', 'OrganisationMemberController@leave')->name('organisation.leave');
+
+        /**
          * Admin Routes
          */
         Route::post('impersonation/{user}', 'ImpersonationController@startImpersonation');
@@ -83,6 +103,8 @@ Route::group(['middleware' => 'csrf'], function() {
         ]);
     });
 });
+
+
 
 
 Route::post('oauth/access_token', function() {
@@ -120,3 +142,4 @@ Route::get('login/good-companies', ['middleware' => ['check-authorization-params
 Route::post('mail/send', 'MailController@send');
 Route::post('mail/view', 'MailController@view');
 Route::post('mail/send-documents', 'MailController@sendDocuments');
+

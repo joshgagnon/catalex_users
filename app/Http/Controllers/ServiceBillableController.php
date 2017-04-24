@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Auth;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Library\StringManipulation;
 use App\Service;
 use App\Library\Mail;
 
@@ -15,8 +12,6 @@ class ServiceBillableController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct() {
         $this->middleware('auth');
@@ -31,14 +26,12 @@ class ServiceBillableController extends Controller
     
     /**
      * Allow the user to select the services they want to be registered to.
-     *
-     * @return Response
      */
     public function index()
     {
         $user = Auth::user();
         $services = Service::orderBy('is_paid_service', 'desc')->get();
-        $userServices = $user->services()->select('services.id')->get();
+        $userServices = $user->getBillableEntity()->services()->select('services.id')->get();
 
         foreach ($services as $service) {
             $service->userHasService = $userServices->contains($service->id);
@@ -53,7 +46,7 @@ class ServiceBillableController extends Controller
     public function update(Request $request)
     {
         // Get the services the user has set and turn it into an array of keys (the keys are the service ids)
-        $newServiceIds;
+        $newServiceIds = null;
 
         if ($request->services) {
             $data = !empty($request->services) ? $request->services : [];

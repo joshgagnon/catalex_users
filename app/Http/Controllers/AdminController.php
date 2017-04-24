@@ -134,6 +134,7 @@ class AdminController extends Controller
         return redirect()->action('AdminController@getUsers')->with('success', 'User ' . $newUser->fullName() . ' successfully created.');
     }
 
+
     public function getCreateOrganisation() {
         return view('admin.create-organisation');
     }
@@ -287,6 +288,15 @@ class AdminController extends Controller
     public function stats()
     {
         $companyCount = AdminStats::companyCount();
-        return view('admin.stats')->with(['companyCount' => $companyCount]);
+        $totalCompanies = 0;
+
+        foreach ($companyCount as $count) {
+            $totalCompanies += $count->count;
+        }
+
+        return view('admin.stats')->with([
+            'totalCompanies' => $totalCompanies,
+            'companyCount' => $companyCount,
+        ]);
     }
 }

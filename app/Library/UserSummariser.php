@@ -2,6 +2,7 @@
 
 namespace App\Library;
 
+use App\Service;
 use App\User;
 
 class UserSummariser
@@ -16,6 +17,19 @@ class UserSummariser
     public function summarise()
     {
         $this->user->load('roles');
+        $billable = $this->user->getBillableEntity();
+
+        if ($billable->billingExempt() || $this->user->billingExempt()) {
+            // User or their billable is exempt from billing - they get all services
+            $services = Service::get()->pluck('name')->toArray();
+        }
+        else if (!$billable->subscriptionUpToDate()) {
+            // The user's billing failed, they get only get free services
+            $services = Service::where('is_paid_service', false)->get()->pluck('name')->toArray();
+        }
+        else {
+            $services = $billable->services->pluck('name')->toArray();
+        }
 
         // Build the rest of the summary
         $userSummary = [
@@ -25,6 +39,7 @@ class UserSummariser
             'free' => $this->user->free,
             'subscription_up_to_date' => $this->user->subscriptionUpToDate(),
             'roles' => $this->user->roles->pluck('name')->toArray(),
+            'services' => $services,
         ];
 
         if ($this->user->organisation) {

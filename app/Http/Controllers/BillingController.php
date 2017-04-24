@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\BillingItem;
-use App\ChargeLog;
 use App\Library\BillingItemSummariser;
-use App\Service;
 use App\Trial;
 use Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Library\PXPay;
-use App\Library\Billing;
 use App\BillingDetail;
 
 class BillingController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct() {
         $this->middleware('auth');

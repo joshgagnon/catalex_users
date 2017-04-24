@@ -42,6 +42,11 @@ class Organisation extends Model
         return $this->id === Config::get('constants.beta_organisation');
     }
 
+    public function userInvites()
+    {
+        return $this->hasMany(OrganisationInvite::class);
+    }
+
     public function paymentAmount() {
         switch($this->billing_detail->period) {
             case 'monthly':
