@@ -3,7 +3,6 @@
 namespace App\Library;
 
 use App\User;
-use App\Library\Mail;
 use App\FirstLoginToken;
 
 class Invite

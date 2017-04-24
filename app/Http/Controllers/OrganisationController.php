@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\OrganisationInvite;
 use Auth;
@@ -8,17 +10,18 @@ use Config;
 use Session;
 use App\User;
 use App\Organisation;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\InviteFormRequest;
 use App\Http\Requests\CreateOrganisationRequest;
 
 class OrganisationController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
-    public function getIndex() {
+    public function getIndex()
+    {
         $user = Auth::user();
 
         if($user->can('view_own_organisation')) {
@@ -35,7 +38,8 @@ class OrganisationController extends Controller
         return redirect('/');
     }
 
-    public function postCreate(CreateOrganisationRequest $request) {
+    public function postCreate(CreateOrganisationRequest $request)
+    {
         $user = Auth::user();
 
         $data = $request->all();

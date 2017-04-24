@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Auth;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Library\StringManipulation;
 use App\Service;
 use App\Library\Mail;
 
@@ -15,8 +12,6 @@ class ServiceBillableController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct() {
         $this->middleware('auth');
@@ -31,8 +26,6 @@ class ServiceBillableController extends Controller
     
     /**
      * Allow the user to select the services they want to be registered to.
-     *
-     * @return Response
      */
     public function index()
     {

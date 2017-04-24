@@ -1,14 +1,7 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-
-class LegalController extends Controller {
-
-
-
+class LegalController extends Controller
+{
 	/**
 	 * Show the privacy policy
 	 *
@@ -19,7 +12,7 @@ class LegalController extends Controller {
 		return view('privacypolicy');
 	}
 
-		/**
+    /**
 	 * Show the terms
 	 *
 	 * @return Response
