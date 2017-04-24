@@ -14,7 +14,7 @@
                                     <p>Hi {{ $name }},</p>
                                     <p>
                                         {{ $inviter }} has invited you to access records for {{ $company_name }}.
-                                        <a href="{{ url('/') }}">Click here</a> to complete your account setup.
+                                        <a href="{{ route('first-login.index', $token) }}">Click here</a> to complete your account setup.
                                     </p>
                                     <p>Kind regards</p>
                                     <p>The CataLex team</p>
