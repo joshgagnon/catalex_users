@@ -14,7 +14,7 @@
                                     <p>Hi {{ $name }},</p>
                                     <p>
                                         {{ $inviter }} has invited you to join their CataLex organisation '{{ $organisation }}'.
-                                        <a href="{{ url('organisation') }}">Click here</a> to join this organisation, otherwise you can ignore this message.
+                                        <a href="{{ route('organisation-invites.index') }}">Click here</a> to join this organisation, otherwise you can ignore this message.
                                     </p>
                                     <p>Kind regards</p>
                                     <p>The CataLex team</p>
