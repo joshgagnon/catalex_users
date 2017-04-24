@@ -1,5 +1,6 @@
 <?php
 
+use App\OrganisationInvite;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\User;
 use App\FirstLoginToken;
@@ -54,20 +55,24 @@ class OrganisationControllerTest extends TestCase
         Auth::loginUsingId($orgAdmin->id);
 
         // Create user without an org - to be invited to the org
-        $joiningUser = $this->createUser(['name' => 'user two', 'email' => 'user2@gmail.com']);
+        $invitee = $this->createUser(['name' => 'user two', 'email' => 'user2@gmail.com']);
 
         // Invite a new user using and email address
         $this->visit('/organisation')
             ->type('Anything you want', 'name')
-            ->type($joiningUser->email, 'email')
+            ->type($invitee->email, 'email')
             ->press('Send invitation');
 
         // Check the invite form takes us back to the organisation page with a success message
         $this->seePageIs('/organisation')
-            ->see('An invite has been sent to ' . $joiningUser->email);
+            ->see('An invite has been sent to ' . $invitee->email);
 
-        // Check a first login token was created for the joining user
-        $loginToken = FirstLoginToken::where('user_id', $joiningUser->id);
-        $this->assertNotNull($loginToken);
+        // Check an organisation invite was created for the invited user
+        $invite = OrganisationInvite::where('invited_user_id', $invitee->id)
+            ->where('inviting_user_id', $orgAdmin->id)
+            ->where('organisation_id', $org->id)
+            ->first();
+
+        $this->assertNotNull($invite);
     }
 }
