@@ -77,7 +77,7 @@ To perform the initial deployment on a live server, clone the https://github.com
 
 For each service that needs to authenticate with CataLex, add a client and an endpoint for that client (example below).
 
-The `--name="whatever"` is important—we match on it to find the right oauth_client record. For Good Companies the name is "Good Companies", for Law Browser the name is "Law Browser", and for sign the name is "Sign".  
+The `--name="whatever"` is important—we match on it to find the right oauth_client record. For Good Companies the name is "Good Companies", for Law Browser the name is "Law Browser", and for sign the name is "Sign".
 
 `php artisan oauth:add-client --client_id=gc --secret=gc --name="Good Companies"`
 
@@ -110,3 +110,8 @@ All emails must pass through a css inliner before being sent, so do not use the 
 ### User Scope
 
 When using the `User` model, note that it has an applied scope which filters out inactive users in the same way the default `SoftDelete` scope does. The scope adds a `withInactive()` builder method equivalent to the Laravel `withTrashed()`. They can be used together to retrieve a user who was made inactive before being deleted.
+
+
+### Tests
+just run:
+./vendor/bin/phpunit
