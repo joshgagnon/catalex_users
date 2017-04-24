@@ -10,11 +10,11 @@
                         <table class="twelve columns">
                             <tr>
                                 <td>
-                                    <h2 class="center">Invitation to Access Good Companies </h2>
+                                    <h2 class="center">Invitation to Access {{ $company_name }}. </h2>
                                     <p>Hi {{ $name }},</p>
                                     <p>
                                         {{ $inviter }} has invited you to access records for {{ $company_name }}.
-                                        <a href="{{ url('/') }}">Click here</a> to complete your account setup.
+                                        <a href="{{ url('/good-companies-login') }}">Click here</a> to view.
                                     </p>
                                     <p>Kind regards</p>
                                     <p>The CataLex team</p>

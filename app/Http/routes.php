@@ -11,6 +11,8 @@
 |
 */
 
+
+    Route::post('user/invite-user', 'UserController@createOrFindUser');
 Route::group(['middleware' => 'csrf'], function() {
     Route::get('/', 'HomeController@index')->name('index');
     Route::get('/termsofuse', 'LegalController@termsofuse');
@@ -24,6 +26,8 @@ Route::group(['middleware' => 'csrf'], function() {
     // Route::get('/auth/first-login', 'Auth\PasswordController@getFirstLogin');
 
     Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
+
+
 
     Route::group(['middleware' => 'auth'], function() {
         /**
@@ -92,6 +96,8 @@ Route::group(['middleware' => 'csrf'], function() {
 });
 
 
+
+
 Route::post('oauth/access_token', function() {
     return Response::json(Authorizer::issueAccessToken());
 });
@@ -127,3 +133,4 @@ Route::get('login/good-companies', ['middleware' => ['check-authorization-params
 Route::post('mail/send', 'MailController@send');
 Route::post('mail/view', 'MailController@view');
 Route::post('mail/send-documents', 'MailController@sendDocuments');
+

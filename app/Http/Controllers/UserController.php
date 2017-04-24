@@ -3,12 +3,15 @@
 use Auth;
 use App\User;
 use App\Role;
-
+use DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserEditRequest;
+use Illuminate\Http\Request;
 use LucaDegasperi\OAuth2Server\Authorizer;
 use Response;
 use App\Library\UserSummariser;
+use App\Library\Invite;
+
 
 class UserController extends Controller {
 
@@ -212,6 +215,42 @@ class UserController extends Controller {
     {
         $user_id = $authorizer->getResourceOwnerId(); // the token user_id
         $user = User::find($user_id); // get the user data from database
+
+        $userSummary = (new UserSummariser($user))->summarise();
+
+        return $userSummary;
+    }
+
+    public function createOrFindUser(Request $request) {
+        $client = DB::table('oauth_clients')
+            ->where('id', $request->input('client_id'))
+            ->where('secret', $request->input('client_secret'))
+            ->first();
+
+        if (!$client) {
+            return view('auth.denied');
+        }
+
+        $data = $request->all();
+        $user = User::where('email', $data['email'])->first();
+
+        if(!$user) {
+            $userData = [
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt(str_random(40)),
+                'organisation_id' => null,
+                'billing_detail_id' => null,
+            ];
+
+            $user = User::create($userData);
+            $user->addRole('registered_user');
+
+            Invite::sendInviteNewUserToView($user, $request->input('company_name'), $request->input('sender_name'));
+        }
+        else{
+            Invite::sendInviteToView($user, $request->input('company_name'), $request->input('sender_name'));
+        }
 
         $userSummary = (new UserSummariser($user))->summarise();
 
