@@ -83,9 +83,10 @@ class HomeController extends Controller {
     public function getGoodCompaniesLogin() {
         $user = Auth::user();
 
-        if(!$user->hasGoodCompaniesAccess()) {
-            return view('auth.denied');
-        }
+        // everyone has gc access now :)
+//        if(!$user->hasGoodCompaniesAccess()) {
+//            return view('auth.denied');
+//        }
 
         if (!$user->subscriptionUpToDate()) {
             return redirect()->route('index');
