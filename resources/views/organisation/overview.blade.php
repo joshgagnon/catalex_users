@@ -7,6 +7,12 @@ CataLex - {{ $organisation->name }}
 @section('content')
 <div class="container">
 	<h2>{{ $organisation->name }}</h2>
+
+    <form class="form-inline" role="form" method="POST" action="{{ route('organisation.leave') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-danger btn-xs">Leave Organisation</button>
+    </form>
+
 	<div class="row">
 		<div class="col-xs-12">
 			@include('components.messages')

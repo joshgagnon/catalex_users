@@ -76,6 +76,11 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('organisation-invites', 'OrganisationInviteController@index')->name('organisation-invites.index');
         Route::post('organisation-invites/{organisation_invite}/accept', 'OrganisationInviteController@accept')->name('organisation-invites.accept');
         Route::delete('organisation-invites/{organisation_invite}/', 'OrganisationInviteController@dismiss')->name('organisation-invites.delete');
+    
+        /**
+         * Organisation member routes
+         */
+        Route::post('organisation/{organisation_id}/leave', 'OrganisationMemberController@leave')->name('organisation.leave');
 
         /**
          * Admin Routes
