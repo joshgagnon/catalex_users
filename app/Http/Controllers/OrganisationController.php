@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\Mail;
 use App\OrganisationInvite;
 use Auth;
 use File;
@@ -66,35 +67,46 @@ class OrganisationController extends Controller
 
     public function postInvite(InviteFormRequest $request)
     {
+        $inviter = Auth::user();
+        $inviter->load('organisation');
+    
         $data = $request->all();
-        $user = User::where('email', $data['email'])->first();
+        $invitee = User::where('email', $data['email'])->first();
         $organisation = Auth::user()->organisation;
 
-        if ($user) {
-            if ($user->organisation_id) {
+        if ($invitee) {
+            if ($invitee->organisation_id) {
                 redirect()->back()->withErrors('User with email: ' . $data['email'] . ' already belongs to an organisation.');
             }
-
+            
             // Send invite
             OrganisationInvite::create([
-                'invited_user_id' => $user->id,
-                'inviting_user_id' => Auth::user()->id,
-                'organisation_id' => Auth::user()->organisation_id,
+                'invited_user_id' => $invitee->id,
+                'inviting_user_id' => $inviter->id,
+                'organisation_id' => $inviter->organisation->id,
             ]);
+    
+            $inviteEmailData = [
+                'name' => $invitee->name,
+                'inviter' => $inviter->name,
+                'organisation' => $inviter->organisation->name,
+            ];
+    
+            Mail::queueStyledMail('emails.join-organisation', $inviteEmailData, $invitee->email, $invitee->name, 'You have been invited to join a CataLex organisation');
         }
         else {
             // User doesn't exist - so create one
             // Create a user for the invitee with random password
-            $user = User::create([
+            $invitee = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => bcrypt(str_random(40)),
                 'organisation_id' => $organisation->id,
                 'billing_detail_id' => null,
             ]);
-
-            $user->addRole('registered_user');
-            Invite::sendInvite($user, Auth::user()->fullName());
+    
+            $invitee->addRole('registered_user');
+            Invite::sendInvite($invitee, $inviter->fullName());
         }
 
         return redirect()->back()->with(['success' => 'An invite has been sent to ' . $data['email']]);
