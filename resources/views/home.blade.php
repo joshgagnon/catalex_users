@@ -35,43 +35,13 @@
         </div>
 
         <div class="col-md-6">
-            @if ($user->hasGoodCompaniesAccess())
-
-                @if ($subscriptionUpToDate)
-                    <div class="service">
-                        <a href="{{ route('good-companies-login') }}">
-                            <i class="fa fa-briefcase"></i>
-                            <h4>Good Companies</h4>
-                            <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
-                        </a>
-                    </div>
-                @else
-                    <div class="disabled-service">
-                        <i class="fa fa-briefcase"></i>
-                        <h4>Good Companies</h4>
-                        <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
-
-                        @if ($user->can('edit_own_organisation') || !$user->organisation)
-                            <p class="dont-gray">Your last bill failed. Please click below to update your billing details, before you can access Good Companies.</p>
-                            <a class="dont-gray btn btn-danger" href="{{ route('billing.edit') }}">Update Billing</a>
-                        @else
-                            <p class="dont-gray">You are unable to access Good Companies at the moment. Please contact one of your organisation's administrators to regain access.</p>
-                        @endif
-                    </div>
-                @endif
-            @else
-                <div class="disabled-service">
-                    <div>
-                        <i class="fa fa-briefcase"></i>
-
-                        <h4>Good Companies</h4>
-                        <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
-                    </div>
-
-                    <p><a href="{{ route('user-services.index', array(urlencode('Good Companies') => 1)) }}">Click here to subscribe</a></p>
-                    <p><a href="https://catalex.nz/good-companies.html" target="_blank">Click here for features and pricing</a></p>
-                </div>
-            @endif
+            <div class="service">
+                <a href="{{ route('good-companies-login') }}">
+                    <i class="fa fa-briefcase"></i>
+                    <h4>Good Companies</h4>
+                    <p>Takes care of a company’s disclosure and administrative requirements under the Companies Act 1993.</p>
+                </a>
+            </div>
         </div>
 
     </div>
