@@ -13,7 +13,7 @@
                                     <h2 class="center">Invitation to Access {{ $company_name }}. </h2>
                                     <p>Hi {{ $name }},</p>
                                     <p>
-                                        {{ $inviter }} has invited you to access records for {{ $company_name }}.
+                                        {{ $inviter }} has invited you to access the company records for {{ $company_name }}.
                                         <a href="{{ url('/good-companies-login') }}">Click here</a> to view.
                                     </p>
                                     <p>Kind regards</p>

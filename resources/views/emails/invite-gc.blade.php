@@ -13,8 +13,8 @@
                                     <h2 class="center">Invitation to Access Good Companies </h2>
                                     <p>Hi {{ $name }},</p>
                                     <p>
-                                        {{ $inviter }} has invited you to access records for {{ $company_name }}.
-                                        <a href="{{ route('first-login.index', $token) }}">Click here</a> to complete your account setup.
+                                        {{ $inviter }} has invited you to access the company records for {{ $company_name }}.
+                                        <a href="{{ route('first-login.index', $token) }}">Click here</a> to accept the invitation and setup your account.
                                     </p>
                                     <p>Kind regards</p>
                                     <p>The CataLex team</p>
