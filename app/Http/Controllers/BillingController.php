@@ -39,12 +39,19 @@ class BillingController extends Controller
         $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
         $billingItems = (new BillingItemSummariser($billable))->summarise();
         $subscriptionUpToDate = Auth::user()->subscriptionUpToDate();
-
+    
+        $discountPercent = null;
+        
+        if ($billable->billing_detail && $billable->billing_detail->discount_percent) {
+            $discountPercent = $billable->billing_detail->discount_percent;
+        }
+        
         return view('billing.index')->with([
             'subscriptionUpToDate' => $subscriptionUpToDate,
             'chargeLogs' => $chargeLogs,
             'billingItems' => $billingItems,
             $billableKeyName => $billable,
+            'discountPercent' => $discountPercent,
         ]);
     }
 

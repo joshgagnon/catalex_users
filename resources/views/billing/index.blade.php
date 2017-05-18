@@ -25,6 +25,11 @@
             <a href="{{ route('user-services.index') }}" class="btn btn-info btn-sm">Edit My Services</a>
         @endif
 
+        @if ($discountPercent)
+            <h3>Discount</h3>
+            <p>All of your bills will include a discount of <strong>{{ $discountPercent }}%</strong>.</p>
+        @endif
+
         <h3>Billing Items</h3>
 
         <div class="scrollable-table-container">
@@ -101,6 +106,11 @@
 
                                 <dt>Including GST</dt>
                                 <dd>${{ $chargeLog->gst }}</dd>
+
+                                @if ($chargeLog->discount_percent)
+                                    <dt>Including Discount</dt>
+                                    <dd>{{ $chargeLog->discount_percent }}%</dd>
+                                @endif
 
                                 <dt>Date</dt>
                                 <dd>{{ $chargeLog->timestamp->format('j M Y') }}</dd>
