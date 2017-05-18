@@ -293,9 +293,20 @@ trait Billable
             }
             $centsDue += $priceInCents * count($billingItems);
         }
-
-        // Request the payment
+        
         $totalDollarsDue = Billing::centsToDollars($centsDue);
+        
+        // Apply discount if the user has a discount. Make sure the discount is within a sensible range.
+        $discountPercent = $billingDetails->discount_percent;
+        
+        if ($discountPercent && is_numeric($discountPercent)
+            && $discountPercent > 0 && $discountPercent <= 90) {
+            // Apply discount and update charge log
+            $totalDollarsDue = Billing::applyDiscount($totalDollarsDue, $discountPercent);
+            $chargeLog->update(['discount_percent' => $discountPercent]);
+        }
+        
+        // Request payment
         $success = $this->requestPayment($totalDollarsDue);
 
         // Update the charge log

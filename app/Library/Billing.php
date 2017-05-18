@@ -22,6 +22,22 @@ class Billing
 
         return self::formatDollars($totalGst);
 	}
+    
+    /**
+     * Subtract discount for a value
+     *
+     * @param $amount
+     * @param $discountPercent
+     *
+     * @return string
+     */
+	public static function applyDiscount($amount, $discountPercent)
+    {
+        $payPercent = bcsub('100', (string) $discountPercent);
+        $amountAfterDiscount = bcmul((string) $amount, $payPercent);
+        
+        return $amountAfterDiscount;
+    }
 
 	/**
 	 * Convert number of cents to a string with the dollar amount
