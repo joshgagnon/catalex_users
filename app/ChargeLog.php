@@ -13,7 +13,7 @@ class ChargeLog extends Model
     // We don't have an updated timestamp, so turn off timestamps and manually set the created at timestamp below
     public $timestamps = false;
 
-    protected $fillable = ['success', 'pending', 'user_id', 'organisation_id', 'total_amount', 'gst'];
+    protected $fillable = ['success', 'pending', 'user_id', 'organisation_id', 'total_amount', 'gst', 'discount_percent'];
 
     protected $dates = ['timestamp'];
 
