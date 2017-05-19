@@ -90,6 +90,9 @@ class ChargeLog extends Model
             'gst' => $this->gst,
             'accountNumber' => $accountNumber,
             'listItems' => $this->itemSummary(),
+            'discountPercent' => $this->discount_percent,
+            'discountAmount' => bcsub($this->total_before_discount, $this->total_amount, 2),
+            'totalBeforeDiscount' => $this->total_before_discount,
         ]);
 
         return $invoice->render();

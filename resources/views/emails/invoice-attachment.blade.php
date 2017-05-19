@@ -117,11 +117,31 @@
 
         <hr />
 	@endif
+
+	@if ($discountPercent)
+		<div class="row">
+			<div class="half right bold">Total Before Discount</div>
+			<div class="half">
+				<div class="row">
+					<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">${{ $totalBeforeDiscount }}</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="half right bold">{{ $discountPercent }}% Discount</div>
+			<div class="half">
+				<div class="row">
+					<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">- ${{ $discountAmount }}</div>
+				</div>
+			</div>
+		</div>
+	@endif
+
 	<div class="row">
 		<div class="half right bold">Total Due</div>
 		<div class="half">
 			<div class="row">
-				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">${{  $totalAmount }}</div>
+				<div class="third">&nbsp;</div><div class="third">&nbsp;</div><div class="third right">${{ $totalAmount }}</div>
 			</div>
 		</div>
 	</div>
