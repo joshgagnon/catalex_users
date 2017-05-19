@@ -22,11 +22,6 @@ class AddTotalAmountAfterDiscountToChargeLog extends Migration
         foreach ($existingChargeLogs as $chargeLog) {
             $chargeLog->update(['total_before_discount' => $chargeLog->total_amount]);
         }
-    
-    
-        Schema::table('charge_logs', function(Blueprint $table) {
-            $table->string('total_before_discount', 16)->nullable(false)->change();
-        });
     }
 
     /**

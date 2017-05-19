@@ -294,24 +294,33 @@ trait Billable
             $centsDue += $priceInCents * count($billingItems);
         }
         
-        $totalDollarsDue = Billing::centsToDollars($centsDue);
+        $totalBeforeDiscount = Billing::centsToDollars($centsDue);
         
         // Apply discount if the user has a discount. Make sure the discount is within a sensible range.
+        $totalAfterDiscount = null;
         $discountPercent = $billingDetails->discount_percent;
         
         if ($discountPercent && is_numeric($discountPercent)
             && $discountPercent > 0 && $discountPercent <= 90) {
             // Apply discount and update charge log
-            $totalDollarsDue = Billing::applyDiscount($totalDollarsDue, $discountPercent);
+            $totalAfterDiscount = Billing::applyDiscount($totalBeforeDiscount, $discountPercent);
             $chargeLog->update(['discount_percent' => $discountPercent]);
+        }
+        else {
+            $totalAfterDiscount = $totalBeforeDiscount;
         }
         
         // Request payment
-        $success = $this->requestPayment($totalDollarsDue);
-
+        $success = $this->requestPayment($totalAfterDiscount);
+        
         // Update the charge log
-        $gst = Billing::includingGst($totalDollarsDue);
-        $chargeLog->update(['pending' => false, 'success' => $success, 'total_amount' => $totalDollarsDue, 'gst' => $gst]);
+        $chargeLog->update([
+            'pending' => false,
+            'success' => $success,
+            'total_before_discount' => $totalBeforeDiscount,
+            'total_amount' => $totalAfterDiscount,
+            'gst' => Billing::includingGst($totalAfterDiscount)
+        ]);
 
         // Above we optimistically set the paid until dates to the paying until date
         // if the payment fails we need to undo that
@@ -331,7 +340,8 @@ trait Billable
             }
 
             $chargeLog->sendFailedNotice();
-        } else if ($totalDollarsDue > 0) {
+        }
+        else if ($totalAfterDiscount > 0) {
             $chargeLog->sendInvoices();
         }
 
