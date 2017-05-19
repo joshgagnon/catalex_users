@@ -1,5 +1,6 @@
 <?php
 
+use App\Library\Billing;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Carbon\Carbon;
 use Tests\Stub\SyncCommand;
@@ -513,5 +514,66 @@ class LongPeriodBillingTest extends TestCase
         // Check the user was not charged
         $expectedTotal = 0;
         $this->assertEquals($expectedTotal, $totalAmountBilled);
+    }
+    
+    /**
+     *
+     * ##########
+     *
+     * Discounts
+     *
+     * ##########
+     *
+     */
+    
+    /**
+     * @test
+     */
+    public function monthlyBilling_oneUser_tenCompanies_15PercentDiscount()
+    {
+        $discountPercent = '15';
+        
+        $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
+        $billingDetails = $this->createBillingDetails(['discount_percent' => '15']);
+        $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
+        $user->services()->attach(Service::where('name', 'Good Companies')->first());
+        
+        $numberOfCompanies = 10;
+        $fakeCompanies = $this->massGenerateCompanies($user, $numberOfCompanies);
+        
+        $lastBilled = null;
+        $totalAmountBilled = 0;
+        
+        while (Carbon::now()->lt($dayAfterSimulation)) {
+            // Create the sync command object, hand it our fake companies, and run it
+            $syncCommand = new SyncCommand();
+            $syncCommand->fakeCompanies = $fakeCompanies;
+            $syncCommand->handle();
+            
+            if ($user->shouldBill()) {
+                $user->bill();
+                
+                $lastBilled = Carbon::today();
+                
+                $this->assertEquals($user->paymentLastRequested, $lastBilled);
+                $expectedAmountBeforeDiscount = self::MONTHLY_PRICE * $numberOfCompanies;
+                $expectedAmountAfterDiscount = Billing::applyDiscount($expectedAmountBeforeDiscount, $discountPercent);
+                $this->assertEquals($expectedAmountAfterDiscount, $user->amountRequested);
+                
+                $totalAmountBilled += $user->amountRequested;
+            }
+            
+            // Increment the day
+            Carbon::setTestNow(Carbon::today()->addDays(1));
+        }
+        
+        // Check the number of charge logs matches the number of times we tried to bill them
+        $numberOfChargeLogs = $user->chargeLogs()->count();
+        $this->assertEquals(self::MONTHS_IN_SIMULATION, $numberOfChargeLogs);
+        
+        // Check the total amount billed is what we think it should be (number of months * monthly price * number of companies)
+        $amountBeforeDiscount = self::MONTHS_IN_SIMULATION * self::MONTHLY_PRICE * $numberOfCompanies;
+        $amountAfterDiscount = Billing::applyDiscount($amountBeforeDiscount, $discountPercent);
+        $this->assertEquals($amountAfterDiscount , $totalAmountBilled);
     }
 }
