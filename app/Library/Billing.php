@@ -6,6 +6,7 @@ class Billing
 {
     const DECIMAL_PLACES = 2;
     const DAYS_IN_TRIAL_PERIOD = 14;
+    const PRECISION = 20;
 
 	/**
 	 * Calculate the included GST component given an inclusive total. Works with string
@@ -17,8 +18,8 @@ class Billing
 	public static function includingGst($totalAmount)
     {
         // IRD recommended way of calculating GST: (total amount x 3) / 23
-        $totalAmountTimesThree = bcmul((string) $totalAmount, '3', 2);
-        $totalGst = bcdiv($totalAmountTimesThree, '23', 2);
+        $totalAmountTimesThree = bcmul((string) $totalAmount, '3', self::PRECISION);
+        $totalGst = bcdiv($totalAmountTimesThree, '23', self::PRECISION);
 
         return self::formatDollars($totalGst);
 	}
@@ -33,10 +34,16 @@ class Billing
      */
 	public static function applyDiscount($amount, $discountPercent)
     {
-        $payPercent = bcsub('100', (string) $discountPercent);
-        $amountAfterDiscount = bcmul((string) $amount, $payPercent);
+        // Calculate the percent the use pays of the amount
+        $payPercent = bcsub('100', (string) $discountPercent, self::PRECISION);
         
-        return $amountAfterDiscount;
+        // Convert the pay percent to a decimal between 0 and 1
+        $payDecimal = bcdiv($payPercent, '100', self::PRECISION);
+        
+        // Calculate the amount after discount
+        $amountAfterDiscount = bcmul((string) $amount, $payDecimal, self::PRECISION);
+        
+        return number_format($amountAfterDiscount, self::DECIMAL_PLACES, null, '');
     }
 
 	/**

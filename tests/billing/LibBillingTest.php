@@ -5,6 +5,10 @@ use App\Library\Billing;
 class LibBillingTest extends TestCase
 {
     protected $runMigrations = false;
+    
+    /**
+     * includingGst
+     */
 
     /**
      * @test
@@ -47,6 +51,56 @@ class LibBillingTest extends TestCase
 
         $this->assertEquals($actualGst, $expectedGst);
     }
+    
+    /**
+     * applyDiscount
+     */
+    
+    /**
+     * @test
+     */
+    public function applyDiscount()
+    {
+        $discountPercent = '10';
+        $beforeDiscount = '10.00';
+        $expectedAfterDiscount = '9.00';
+        
+        $actualAfterDiscount = Billing::applyDiscount($beforeDiscount, $discountPercent);
+        
+        $this->assertEquals($expectedAfterDiscount, $actualAfterDiscount);
+    }
+    
+    /**
+     * @test
+     */
+    public function applyDiscount_bigNumbers()
+    {
+        $discountPercent = '12.521';
+        $beforeDiscount = '6548645148.45';
+        $expectedAfterDiscount = '5728689289.41';
+        
+        $actualAfterDiscount = Billing::applyDiscount($beforeDiscount, $discountPercent);
+        
+        $this->assertEquals($expectedAfterDiscount, $actualAfterDiscount);
+    }
+    
+    /**
+     * @test
+     */
+    public function applyDiscount_zero()
+    {
+        $discountPercent = '22.29';
+        $beforeDiscount = '0';
+        $expectedAfterDiscount = '0';
+        
+        $actualAfterDiscount = Billing::applyDiscount($beforeDiscount, $discountPercent);
+        
+        $this->assertEquals($expectedAfterDiscount, $actualAfterDiscount);
+    }
+    
+    /**
+     * centsToDollars
+     */
 
     /**
      * @test
@@ -86,6 +140,10 @@ class LibBillingTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+    
+    /**
+     * formatDollars
+     */
 
     /**
      * @test
