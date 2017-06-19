@@ -18,7 +18,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			@include('components.messages')
-			@include('user.components.list', ['users' => $userList, 'title' => 'All Users', 'viewPermission' => 'view_any_user', 'editPermission' => 'edit_any_user'])
+			@include('user.components.list', ['users' => $userList, 'title' => 'All Users', 'viewPermission' => 'view_any_user', 'editPermission' => 'edit_any_user', 'allowDeleteUsers' => true])
 		</div>
 	</div>
 </div>

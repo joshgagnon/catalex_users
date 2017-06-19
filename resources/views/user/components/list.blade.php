@@ -1,4 +1,9 @@
 @if($user->can($viewPermission))
+
+    <?php
+        $allowDeleteUsers = isset($allowDeleteUsers) ? : false; // Make sure $allowDeleteUsers is set - default being false
+    ?>
+
     <h3>{{ $title }}</h3>
     <table class="table table-condensed user-list">
         <thead>
@@ -12,7 +17,11 @@
                     <th class="small-cell">Has Billing</th>
                 @endif
                 @if($user->can($editPermission))
-                    <th class="small-cell">Delete</th>
+                    @if ($allowDeleteUsers)
+                        <th class="small-cell">Delete</th>
+                    @else
+                        <th class="small-cell">Remove</th>
+                    @endif
                 @endif
                 @if($user->hasRole('global_admin'))
                     <th class="small-cell">Login As</th>
@@ -64,19 +73,30 @@
                     </td>
                     @endif
                     @if($user->can($editPermission))
-                        <td class="small-cell">
-                            @if(!$u->deleted_at)
-                                <form action="{{ action('UserController@postDelete', $u->id) }}" method="post">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <button type="submit" class="btn btn-danger btn-xs">Delete</button>
-                                </form>
-                            @else
-                                <form action="{{ action('UserController@postUndelete', $u->id) }}" method="post">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <button type="submit" class="btn btn-warning btn-xs">Undelete</button>
-                                </form>
-                            @endif
-                        </td>
+                        @if ($allowDeleteUsers)
+                            <td class="small-cell">
+                                @if(!$u->deleted_at)
+                                    <form action="{{ action('UserController@postDelete', $u->id) }}" method="post">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                    </form>
+                                @else
+                                    <form action="{{ action('UserController@postUndelete', $u->id) }}" method="post">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-warning btn-xs">Undelete</button>
+                                    </form>
+                                @endif
+                            </td>
+                        @else
+                            <td class="small-cell">
+                                @if(!$u->hasRole('organisation_admin'))
+                                    <form action="{{ route('organisation.users.remove', $u->id) }}" method="post">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-danger btn-xs">Remove</button>
+                                    </form>
+                                @endif
+                            </td>
+                        @endif
                     @endif
 
                     @if($user->hasRole('global_admin'))
