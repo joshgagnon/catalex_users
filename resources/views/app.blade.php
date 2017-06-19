@@ -78,7 +78,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             </li>
                         @endif
                         @if($user->can('view_own_organisation'))
-                            <li><a href="{{ action('OrganisationController@getIndex') }}">Organisation</a></li>
+                            <li><a href="{{ route('organisation.index') }}">Organisation</a></li>
                         @endif
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>

@@ -21,7 +21,7 @@ class OrganisationController extends Controller
         $this->middleware('auth');
     }
 
-    public function getIndex()
+    public function index()
     {
         $user = Auth::user();
 
@@ -62,7 +62,7 @@ class OrganisationController extends Controller
         $user->billing_detail_id = null;
         $user->save();
 
-        return redirect()->action('OrganisationController@getIndex');
+        return redirect()->route('organisation.index');
     }
 
     public function postInvite(InviteFormRequest $request)

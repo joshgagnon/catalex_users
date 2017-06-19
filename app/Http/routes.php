@@ -71,16 +71,20 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**
-         * Organisation invite routes
+         * Organisation routes
          */
+        Route::get('/organisation', 'OrganisationController@index')->name('organisation.index');
+
+        // Organisation invite routes
         Route::get('organisation-invites', 'OrganisationInviteController@index')->name('organisation-invites.index');
         Route::post('organisation-invites/{organisation_invite}/accept', 'OrganisationInviteController@accept')->name('organisation-invites.accept');
         Route::delete('organisation-invites/{organisation_invite}/', 'OrganisationInviteController@dismiss')->name('organisation-invites.delete');
     
-        /**
-         * Organisation member routes
-         */
+        // Organisation member routes
         Route::post('organisation/{organisation_id}/leave', 'OrganisationMemberController@leave')->name('organisation.leave');
+
+        // Organisation admin routes
+        Route::post('organisation/users/{user_id}/remove', 'OrganisationAdminController@removeUser')->name('organisation.users.remove');
 
         /**
          * Admin Routes
