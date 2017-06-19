@@ -96,6 +96,8 @@ Route::group(['middleware' => 'csrf'], function() {
 
         Route::get('admin/stats', 'AdminController@stats')->name('admin.stats');
 
+        Route::get('admin/users', 'AdminController@allUsers')->name('admin.users');
+
         /**
          * Controllers
          */

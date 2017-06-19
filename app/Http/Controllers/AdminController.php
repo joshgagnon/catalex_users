@@ -24,7 +24,7 @@ class AdminController extends Controller
         $this->middleware('admin');
     }
 
-    public function getUsers() {
+    public function allUsers() {
         $showDeleted = Input::has('deleted') && boolval(Input::get('deleted'));
 
         $userModel = User::withInactive()->orderBy('name');
@@ -131,7 +131,7 @@ class AdminController extends Controller
             Invite::sendInvite($newUser, Auth::user()->fullName());
         }
 
-        return redirect()->action('AdminController@getUsers')->with('success', 'User ' . $newUser->fullName() . ' successfully created.');
+        return redirect()->route('admin.users')->with('success', 'User ' . $newUser->fullName() . ' successfully created.');
     }
 
 

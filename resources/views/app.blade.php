@@ -70,7 +70,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ action('AdminController@getUsers') }}">Users</a></li>
+                                    <li><a href="{{ route('admin.users') }}">Users</a></li>
                                     <li><a href="{{ action('AdminController@getOrganisations') }}">Organisations</a></li>
                                     <li><a href="{{ route('admin.stats') }}">Stats</a></li>
                                     <li><a href="{{ action('AdminController@getAccessLog') }}">Access Log</a></li>
