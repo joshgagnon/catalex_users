@@ -32,6 +32,6 @@ class OrganisationAdminController extends Controller
 
         $userToRemove->update(['organisation_id' => null]);
 
-        return redirect('organisation.index')->with(['success' => $userToRemove->name . ' removed from organisation.']);
+        return redirect()->route('organisation.index')->with(['success' => $userToRemove->name . ' removed from organisation.']);
     }
 }
