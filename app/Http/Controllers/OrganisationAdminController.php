@@ -25,6 +25,11 @@ class OrganisationAdminController extends Controller
             abort(403, 'Forbidden');
         }
 
+        // Check the user being deleted isn't a org admin themselves
+        if ($userToRemove->hasRole('organisation_admin')) {
+            return redirect()->back()->with(['success' => 'Cannot remove ' . $userToRemove->name . ' as they are an admin of this organisation.']);
+        }
+
         $userToRemove->update(['organisation_id' => null]);
 
         return redirect('organisation.index')->with(['success' => $userToRemove->name . ' removed from organisation.']);
