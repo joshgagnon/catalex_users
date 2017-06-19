@@ -84,7 +84,7 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::post('organisation/{organisation_id}/leave', 'OrganisationMemberController@leave')->name('organisation.leave');
 
         // Organisation admin routes
-        Route::post('organisation/users/{user_id}/remove', 'OrganisationAdminController@removeUser')->name('organisation.users.remove');
+        Route::post('organisation/users/{user}/remove', 'OrganisationAdminController@removeUser')->name('organisation.users.remove');
 
         /**
          * Admin Routes
