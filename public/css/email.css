@@ -706,11 +706,23 @@ body.outlook p {
 
 body, table.body, h1, h2, h3, h4, h5, h6, p, a, td,
 table.button td a, table.tiny-button td a, table.small-button td a, table.medium-button td a, table.large-button td a {
-  font-family: "Ubuntu", sans-serif; }
+  font-family: -apple-system, "Helvetica Neue", "Roboto", "Segoe UI", "Lucida Grande", sans-serif;
+  word-break: keep-all;
+  -webkit-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none; }
+
+table.button-wrapper {
+  margin: 15px auto; }
+
+table.button table {
+  text-align: center;
+  width: 100%; }
 
 table.button td, table.tiny-button td, table.small-button td, table.medium-button td, table.large-button td {
   border: none;
-  border-radius: 4px; }
+  border-radius: 4px;
+  text-align: center; }
 
 a {
   color: #d11820; }
@@ -755,7 +767,8 @@ p {
       background-image: none; } }
 
 .btn-primary td {
-  background-color: #e74c3c !important; }
+  background-color: #d11820 !important;
+  text-align: center; }
 
 .btn-primary.button:hover td,
 .btn-primary.button:active td,

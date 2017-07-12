@@ -14,6 +14,7 @@
                                     <p>Hi {{ $name }}</p>
                                     <p>{{ $feedbacker }} has provided feedback for the annual return of <strong>{{ $companyName }}</strong></p>
                                     <p>Click <a href={{ $link }}>here</a> to review.</p>
+                                     @include('emails.layouts.partials.button', array('text' => 'Clic here to review', 'url' => $link))
                                     <p>Best regards</p>
                                     <p>The CataLex team</p>
                                     <p><a href="mailto:mail@catalex.nz">mail@catalex.nz</a></p>
