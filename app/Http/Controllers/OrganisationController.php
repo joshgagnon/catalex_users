@@ -71,8 +71,15 @@ class OrganisationController extends Controller
         $inviter->load('organisation');
     
         $data = $request->all();
-        $invitee = User::where('email', $data['email'])->first();
+        $invitee = User::withTrashed()->where('email', $data['email'])->first();
         $organisation = Auth::user()->organisation;
+
+
+        if ($invitee && $invitee->trashed()) {
+            \Log::info('Force deleting user: ' . $invitee);
+            $invitee->forceDelete();
+            $invitee = null;
+        }
 
         if ($invitee) {
             if ($invitee->organisation_id) {

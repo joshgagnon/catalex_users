@@ -278,4 +278,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $this->billing_detail()->exists();
     }
+
+    public function forceDelete()
+    {
+        $this->accessLogs()->delete();
+        parent::forceDelete();
+    }
 }
