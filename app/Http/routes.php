@@ -15,7 +15,7 @@
 Route::post('user/invite-user', 'UserController@createOrFindUser');
 
 Route::group(['middleware' => 'csrf'], function() {
-    Route::get('/', 'HomeController@index')->name('index');
+
     Route::get('/termsofuse', 'LegalController@termsofuse');
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
@@ -39,7 +39,7 @@ Route::group(['middleware' => 'csrf'], function() {
          */
         Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
         Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin']);
-
+        Route::get('/services', 'HomeController@index')->name('services');
         /**
          * Services routes
          */
@@ -68,7 +68,7 @@ Route::group(['middleware' => 'csrf'], function() {
         /**
          * User routes
          */
-        Route::get('user', 'UserController@getHome')->name('user.home');
+        Route::get('/', 'UserController@getHome')->name('index');
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**
