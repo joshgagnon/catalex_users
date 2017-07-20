@@ -28,7 +28,7 @@ sudo -u $1 composer dump-autoload
 
 sudo -u $1 node_modules/.bin/gulp --production
 
-sudo -u $1 php artisan migrate
+sudo -u $1 php artisan migrate --force
 
 sudo -u $1 php artisan optimize
 
