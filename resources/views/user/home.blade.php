@@ -50,12 +50,12 @@
                             <i class="fa fa-briefcase"></i>
                             <span class="title">
                                 <span class="main-title">Good Companies</span>
-                                <span class="sub-title">Helps maintain legally compliant companies</span>
+                                <span class="sub-title">Maintain legally compliant companies</span>
                                 </span>
                         </span>
                     </a>
                     <a href="http://workingdays.catalex.nz/" class="section"><span class="with-icon"><i class="fa fa-calendar"></i><span class="title"><span class="main-title">Working Days</span><span class="sub-title">Calculate legal deadlines</span></span></span></a>
-                    <a href="https://concat.catalex.nz/" class="section"><span class="with-icon"><i class="fa fa-copy"></i><span class="title"><span class="main-title">ConCat</span><span class="sub-title">Combine PDF documents quickly and securely</span></span></span></a>
+                    <a href="https://concat.catalex.nz/" class="section"><span class="with-icon"><i class="fa fa-copy"></i><span class="title"><span class="main-title">ConCat</span><span class="sub-title">Combine PDF documents</span></span></span></a>
 
                 </div>
             </div>
