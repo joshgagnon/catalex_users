@@ -29,6 +29,12 @@ footer{
     }
 }
 
+.page-title{
+    text-align:center;
+    color:$gray-darker;
+    font-size:2em;
+    margin: 10px 0 30px 0;
+}
 
 nav.navbar{
     height: $header-height-sml;
@@ -222,7 +228,7 @@ form.form-inline .form-group label {
 
     .top-menu{
         border-bottom: 1px solid $panel-inner-border;
-        padding:12px;
+        padding: 20px 12px;
         a{
             color: $light-red;
             transition: all 500ms ease-out;

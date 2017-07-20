@@ -21,7 +21,9 @@
 @endif
 
 <div class="services container">
-
+<div class="container">
+    <h2 class="page-title">CataLex Home</h2>
+</div>
     <div class="row">
         <div class="col-md-4">
             <div class="user-menu-item panel panel-default ">
@@ -33,7 +35,7 @@
                  </a>
                  </div>
                  <div class="bottom-menu">
-                     <div class="section summary"><span class="sub-title">Access CataLex services, including:</span></div>
+                     <div class="section summary"><span class="sub-title">Access CataLex services</span></div>
                      <a href="{{ route('browser-login') }}" class="section ">
                         <span class="with-icon">
                             <i class="fa fa-search"></i>
@@ -48,7 +50,7 @@
                             <i class="fa fa-briefcase"></i>
                             <span class="title">
                                 <span class="main-title">Good Companies</span>
-                                <span class="sub-title">Takes care of your companys' disclosure and administrative requirements</span>
+                                <span class="sub-title">Helps maintain legally compliant companies</span>
                                 </span>
                         </span>
                     </a>
@@ -69,7 +71,7 @@
                  </a>
                  </div>
                  <div class="bottom-menu">
-                     <div class="section summary"><span class="sub-title"> Set your account details and subscriptions</span></div>
+                     <div class="section summary"><span class="sub-title">Manage your account and subscriptions</span></div>
                      <a href="{{ route('user.profile') }}" class="section ">
                         <span class="with-icon">
                             <i class="fa fa-user"></i>
@@ -112,13 +114,13 @@
                  </a>
                  </div>
                  <div class="bottom-menu">
-                     <div class="section summary"><span class="sub-title"> Invite and manage others user through a single billing account</span></div>
+                     <div class="section summary"><span class="sub-title">Create and manage your organisation</span></div>
                      <a href="{{ route('organisation.index') }}" class="section ">
                         <span class="with-icon">
                             <i class="fa fa-user-plus"></i>
                             <span class="title">
                                 <span class="main-title">Organisation Settings</span>
-                                <span class="sub-title">Invite and view organisations members </span>
+                                <span class="sub-title">Invite and view organisation members </span>
                             </span>
                         </span>
                      </a>
