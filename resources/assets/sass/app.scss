@@ -68,7 +68,9 @@ nav.navbar{
             text-decoration:none;
         }
     }
-
+    .navbar-collapse{
+        z-index: 3;
+    }
     .navbar-collapse.in li{
         background-color: $light-red;
             z-index: 1;

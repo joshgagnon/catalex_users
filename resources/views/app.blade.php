@@ -65,6 +65,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li><a href="{{ action('Auth\AuthController@getRegister') }}">Sign Up</a></li>
                     @elseif(isset($user)) {{-- Move View::share(['user'] such that $user is always correctly available here --}}
                         {{-- TODO: Use route helper --}}
+                        <li><a href="{{ route('index')}}">CataLex Home</a></li>
                         <li><a href="{{ route('services')}}">Services</a></li>
                         @if($user->hasRole('global_admin'))
                             <li class="dropdown">
@@ -83,8 +84,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li class="dropdown">
                             <a href="{{ route('index')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ route('index') }}">Home</a></li>
-                                <li><a href="{{ route('services') }}">Services</a></li>
                                 <li><a href="{{ action('UserController@getProfile') }}">My Profile</a></li>
 
                                 @if($user->can('edit_own_organisation') || Session::has('admin_id'))

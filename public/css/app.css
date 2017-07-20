@@ -8026,6 +8026,8 @@ nav.navbar {
       font-weight: 500; }
     nav.navbar a.nav-brand a:hover {
       text-decoration: none; }
+  nav.navbar .navbar-collapse {
+    z-index: 3; }
   nav.navbar .navbar-collapse.in li {
     background-color: #c51b24;
     z-index: 1; }
