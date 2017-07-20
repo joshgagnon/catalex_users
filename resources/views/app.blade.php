@@ -81,8 +81,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <li><a href="{{ route('organisation.index') }}">Organisation</a></li>
                         @endif
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
+                            <a href="{{ route('user.home')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ route('user.home') }}">Home</a></li>
+                                <li><a href="{{ route('index') }}">Services</a></li>
                                 <li><a href="{{ action('UserController@getProfile') }}">My Profile</a></li>
 
                                 @if($user->can('edit_own_organisation') || Session::has('admin_id'))

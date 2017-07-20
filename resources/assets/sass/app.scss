@@ -208,6 +208,82 @@ form.form-inline .form-group label {
         color: $deep-red;
     }
 }
+
+.user-menu-item{
+    padding:40px;
+    text-align: center;
+    padding:0px;
+    text-decoration: none;
+
+    h4{
+        font-size: 30px;
+         margin:0;
+    }
+
+    .top-menu{
+        border-bottom: 1px solid $panel-inner-border;
+        padding:12px;
+        a{
+            color: $light-red;
+            transition: all 500ms ease-out;
+        }
+        h4{
+            color: $light-red;
+        }
+        .fa{
+            font-size:4em;
+
+        }
+    }
+
+    .bottom-menu{
+        .section{
+            margin:4px;
+            background-color:white;
+             border: 1px solid $panel-inner-border;
+             padding: 12px;
+             display:block;
+             border-radius: 4px;
+
+             .with-icon{
+                text-align:left;
+                display:table;
+                width: 100%;
+                & > *{
+                    display: table-cell;
+                    vertical-align:middle;
+                }
+                .fa{
+                    font-size:2em;
+                    text-align: center;
+                    width:2em;
+                }
+             }
+             .main-title{
+                font-size:1.2em;
+                color: $gray-darker;
+                display:block;
+             }
+             .sub-title{
+                color: $gray-light;
+                font-style: italic;
+                display:block;
+             }
+        }
+        .section.summary{
+            border-radius:0;
+            margin:0;
+            border:none;
+             border-bottom: 1px solid $panel-inner-border;
+        }
+    }
+    a:hover{
+         text-decoration: none;
+        color: $deep-red;
+    }
+}
+
+
 .disabled-service{
     *:not(.dont-gray) {
         color: $gray;
