@@ -2,12 +2,14 @@
 
     <?php
         $allowDeleteUsers = isset($allowDeleteUsers) ? : false; // Make sure $allowDeleteUsers is set - default being false
+        $showFilterControls = isset($showFilterControls) ? : false;
     ?>
 
     <h3>{{ $title }}</h3>
     <div class="row">
   <div class="col-md-6 col-md-offset-3">
-  <form>
+  @if($showFilterControls)
+    <form>
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Filter records"  name="filter" value="{{ app('request')->input('filter') }}">
       <span class="input-group-btn">
@@ -23,6 +25,7 @@
       </div>
 
     </form>
+    @endif
     </div>
     </div>
     <table class="table table-condensed user-list">
