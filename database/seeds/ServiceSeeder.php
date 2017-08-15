@@ -16,5 +16,6 @@ class ServiceSeeder extends Seeder
         Service::create(['name' => 'ConCat']);
         Service::create(['name' => 'Working Days']);
         Service::create(['name' => 'Good Companies', 'is_paid_service' => true]);
+        Service::create(['name' => 'CataLex Sign', 'is_paid_service' => true]);
     }
 }
