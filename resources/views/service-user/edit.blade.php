@@ -65,7 +65,7 @@ CataLex - Edit Services
                                                 <h2><i class="fa fa-search"></i> CataLex Sign Unlimited</h2>
 
                                                 <div>
-                                                    <p>Digitally sign documents online.</p>
+                                                    <p>Sign legal documents online.</p>
                                                     <p>CataLex Sign is free for up to 10 signs per month. For unlimited signing, subscribe to CataLex Sign Unlimited for only <strong>$5 per month</strong>!</p>
                                                 </div>
                                             </div>
