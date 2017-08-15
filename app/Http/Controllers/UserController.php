@@ -18,6 +18,21 @@ use LucaDegasperi\OAuth2Server\Authorizer;
  */
 class UserController extends Controller
 {
+
+    public function getHome()
+    {
+        $user = Auth::user();
+        $subscriptionUpToDate = $user->subscriptionUpToDate();
+        $userHasPendingInvite = $user->organisationInvites()->count() > 0;
+
+        return view('user.home')->with([
+            'subscriptionUpToDate' => $subscriptionUpToDate,
+            'userHasPendingInvite' => $userHasPendingInvite,
+        ]);;
+    }
+
+
+
 	/**
 	 * Show current user profile details or edit form depending on permissions.
 	 *
@@ -44,7 +59,7 @@ class UserController extends Controller
 
 		return view('auth.denied');
 	}
-    
+
     /**
      * Update a user's own details.
      *
@@ -57,7 +72,7 @@ class UserController extends Controller
 
 		return redirect()->action('UserController@getProfile');
 	}
-    
+
     /**
      * Show a user's details by id.
      *
@@ -215,7 +230,7 @@ class UserController extends Controller
 
 		return view('auth.denied');
 	}
-    
+
     /**
      * @param Authorizer $authorizer
      *

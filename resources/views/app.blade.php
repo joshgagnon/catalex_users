@@ -65,7 +65,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li><a href="{{ action('Auth\AuthController@getRegister') }}">Sign Up</a></li>
                     @elseif(isset($user)) {{-- Move View::share(['user'] such that $user is always correctly available here --}}
                         {{-- TODO: Use route helper --}}
-                        <li><a href="/">Services</a></li>
+                        <li><a href="{{ route('index')}}">CataLex Home</a></li>
+                        <li><a href="{{ route('services')}}">Services</a></li>
                         @if($user->hasRole('global_admin'))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
@@ -81,7 +82,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <li><a href="{{ route('organisation.index') }}">Organisation</a></li>
                         @endif
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
+                            <a href="{{ route('index')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ action('UserController@getProfile') }}">My Profile</a></li>
 
@@ -106,7 +107,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <footer>
         <div class="container">
                 <p class="copyright">© Copyright {{ date('Y') }} - CataLex Limited. All rights reserved.  “CataLex” is a registered trademark of CataLex Limited</p>
-                    <a href="/">Account</a>
+                    <a href="/">CataLex Home</a>
                     <a href="//catalex.nz">catalex.nz</a>
                     <a href="//users.catalex.nz/privacypolicy">Privacy Policy</a>
                     <a href="//users.catalex.nz/termsofuse">Terms of Use</a>

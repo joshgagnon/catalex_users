@@ -26,10 +26,18 @@ class AdminController extends Controller
 
     public function allUsers() {
         $showDeleted = Input::has('deleted') && boolval(Input::get('deleted'));
-
         $userModel = User::withInactive()->orderBy('name');
         if($showDeleted) {
             $userModel = $userModel->withTrashed();
+        }
+        if(Input::has('filter') && strlen(Input::has('filter'))){
+            $userModel = $userModel
+            ->where(function ($query) {
+                $filter = '%'.(Input::get('filter')).'%';
+                $query
+                ->where('name', 'like', $filter)
+                ->orWhere('email', 'like', $filter);
+            });
         }
         $userList = $userModel->paginate(Config::get('constants.items_per_page'));
 

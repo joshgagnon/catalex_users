@@ -15,7 +15,7 @@
 Route::post('user/invite-user', 'UserController@createOrFindUser');
 
 Route::group(['middleware' => 'csrf'], function() {
-    Route::get('/', 'HomeController@index')->name('index');
+
     Route::get('/termsofuse', 'LegalController@termsofuse');
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
@@ -39,7 +39,7 @@ Route::group(['middleware' => 'csrf'], function() {
          */
         Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
         Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin']);
-
+        Route::get('/services', 'HomeController@index')->name('services');
         /**
          * Services routes
          */
@@ -68,6 +68,7 @@ Route::group(['middleware' => 'csrf'], function() {
         /**
          * User routes
          */
+        Route::get('/', 'UserController@getHome')->name('index');
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**
@@ -79,7 +80,7 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('organisation-invites', 'OrganisationInviteController@index')->name('organisation-invites.index');
         Route::post('organisation-invites/{organisation_invite}/accept', 'OrganisationInviteController@accept')->name('organisation-invites.accept');
         Route::delete('organisation-invites/{organisation_invite}/', 'OrganisationInviteController@dismiss')->name('organisation-invites.delete');
-    
+
         // Organisation member routes
         Route::post('organisation/{organisation_id}/leave', 'OrganisationMemberController@leave')->name('organisation.leave');
 
