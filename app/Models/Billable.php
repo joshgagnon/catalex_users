@@ -363,6 +363,12 @@ trait Billable
                     $constantName = $billingPeriod == 'monthly' ? 'constants.gc_monthly_price_in_cents' : 'constants.gc_yearly_price_in_cents';
                     $priceInCents = Config::get($constantName);
                     break;
+
+                case 'CataLex Sign':
+                    $constantName = $billingPeriod == 'monthly' ? 'constants.sign_monthly_price_in_cents' : 'constants.sign_yearly_price_in_cents';
+                    $priceInCents = Config::get($constantName);
+                    break;
+
                 default:
                     throw new \Exception('Unknown default price for service');
             }

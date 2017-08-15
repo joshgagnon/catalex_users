@@ -9,4 +9,6 @@ return [
 	'law_browser_features' => 'https://dev.catalex.nz/law-browser',
     'gc_monthly_price_in_cents' => 150,
     'gc_yearly_price_in_cents' => 1200,
+    'sign_monthly_price_in_cents' => 500,
+    'sign_yearly_price_in_cents' => 6000,
 ];
