@@ -35,28 +35,64 @@
                         </a>
                     </div>
                     <div class="bottom-menu">
-                        <div class="section summary"><span class="sub-title">Access CataLex services</span></div>
-                        <a href="{{ route('browser-login') }}" class="section ">
-                        <span class="with-icon">
-                            <i class="fa fa-search"></i>
-                            <span class="title">
-                                <span class="main-title">Law Browser</span>
-                                <span class="sub-title">Find New Zealand law faster</span>
-                            </span>
-                        </span>
-                        </a>
-                        <a href="{{ route('good-companies-login') }}" class="section">
-                        <span class="with-icon">
-                            <i class="fa fa-briefcase"></i>
-                            <span class="title">
-                                <span class="main-title">Good Companies</span>
-                                <span class="sub-title">Maintain legally compliant companies</span>
-                                </span>
-                        </span>
-                        </a>
-                        <a href="http://workingdays.catalex.nz/" class="section"><span class="with-icon"><i class="fa fa-calendar"></i><span class="title"><span class="main-title">Working Days</span><span class="sub-title">Calculate legal deadlines</span></span></span></a>
-                        <a href="https://concat.catalex.nz/" class="section"><span class="with-icon"><i class="fa fa-copy"></i><span class="title"><span class="main-title">ConCat</span><span class="sub-title">Combine PDF documents</span></span></span></a>
+                        <div class="section summary">
+                            <span class="sub-title">Access CataLex services</span>
+                        </div>
 
+                        <a href="{{ route('browser-login') }}" class="section ">
+                            <span class="with-icon">
+                                <i class="fa fa-search"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Law Browser</span>
+                                    <span class="sub-title">Find New Zealand law faster</span>
+                                </span>
+                            </span>
+                        </a>
+
+                        <a href="{{ route('good-companies-login') }}" class="section">
+                            <span class="with-icon">
+                                <i class="fa fa-briefcase"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Good Companies</span>
+                                    <span class="sub-title">Maintain legally compliant companies</span>
+                                </span>
+                            </span>
+                        </a>
+
+                        <a href="{{ route('sign-login') }}" class="section">
+                            <span class="with-icon">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+
+                                <span class="title">
+                                    <span class="main-title">CataLex Sign</span>
+                                    <span class="sub-title">Sign legal documents online</span>
+                                </span>
+                            </span>
+                        </a>
+
+                        <a href="http://workingdays.catalex.nz/" class="section">
+                            <span class="with-icon">
+                                <i class="fa fa-calendar"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Working Days</span>
+                                    <span class="sub-title">Calculate legal deadlines</span>
+                                </span>
+                            </span>
+                        </a>
+
+                        <a href="https://concat.catalex.nz/" class="section">
+                            <span class="with-icon">
+                                <i class="fa fa-copy"></i>
+
+                                <span class="title">
+                                    <span class="main-title">ConCat</span>
+                                    <span class="sub-title">Combine PDF documents</span>
+                                </span>
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -70,34 +106,43 @@
                             <h4>My Account</h4>
                         </a>
                     </div>
+
                     <div class="bottom-menu">
-                        <div class="section summary"><span class="sub-title">Manage your account and subscriptions</span></div>
+                        <div class="section summary">
+                            <span class="sub-title">Manage your account and subscriptions</span>
+                        </div>
+
                         <a href="{{ route('user.profile') }}" class="section ">
-                        <span class="with-icon">
-                            <i class="fa fa-user"></i>
-                            <span class="title">
-                                <span class="main-title">Account Details</span>
-                                <span class="sub-title">Set email address and password</span>
+                            <span class="with-icon">
+                                <i class="fa fa-user"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Account Details</span>
+                                    <span class="sub-title">Set email address and password</span>
+                                </span>
                             </span>
-                        </span>
                         </a>
+
                         <a href="{{ route('user-services.index') }}" class="section">
-                        <span class="with-icon">
-                            <i class="fa fa-check-square"></i>
-                            <span class="title">
-                                <span class="main-title">Subscriptions</span>
-                                <span class="sub-title">Manage CataLex service subscriptions</span>
+                            <span class="with-icon">
+                                <i class="fa fa-check-square"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Subscriptions</span>
+                                    <span class="sub-title">Manage CataLex service subscriptions</span>
                                 </span>
-                        </span>
+                            </span>
                         </a>
+
                         <a href="{{ route('billing') }}" class="section">
-                        <span class="with-icon">
-                            <i class="fa fa-credit-card"></i>
-                            <span class="title">
-                                <span class="main-title">Billing</span>
-                                <span class="sub-title">View invoices and manage billing details</span>
+                            <span class="with-icon">
+                                <i class="fa fa-credit-card"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Billing</span>
+                                    <span class="sub-title">View invoices and manage billing details</span>
                                 </span>
-                        </span>
+                            </span>
                         </a>
                     </div>
                 </div>
