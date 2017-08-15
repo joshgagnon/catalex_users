@@ -10,7 +10,6 @@
         @include('billing.billing-alert')
     </div>
 
-
     @if (!$user->organisation && $userHasPendingInvite)
         <div class="container">
             <div class="alert alert-info inline clearfix">
@@ -24,6 +23,7 @@
         <div class="container">
             <h2 class="page-title">CataLex Home</h2>
         </div>
+
         <div class="row">
             <div class="col-md-4">
                 <div class="user-menu-item panel panel-default ">
@@ -34,6 +34,7 @@
                             <h4>CataLex Services</h4>
                         </a>
                     </div>
+
                     <div class="bottom-menu">
                         <div class="section summary">
                             <span class="sub-title">Access CataLex services</span>
@@ -148,7 +149,6 @@
                 </div>
             </div>
 
-
             <div class="col-md-4">
                 <div class="user-menu-item panel panel-default ">
                     <div class="top-menu">
@@ -158,26 +158,26 @@
                             <h4>Organisation</h4>
                         </a>
                     </div>
-                    <div class="bottom-menu">
-                        <div class="section summary"><span class="sub-title">Create and manage your organisation</span></div>
-                        <a href="{{ route('organisation.index') }}" class="section ">
-                        <span class="with-icon">
-                            <i class="fa fa-user-plus"></i>
-                            <span class="title">
-                                <span class="main-title">Organisation Settings</span>
-                                <span class="sub-title">Invite and view organisation members </span>
-                            </span>
-                        </span>
-                        </a>
 
+                    <div class="bottom-menu">
+                        <div class="section summary">
+                            <span class="sub-title">Create and manage your organisation</span>
+                        </div>
+
+                        <a href="{{ route('organisation.index') }}" class="section ">
+                            <span class="with-icon">
+                                <i class="fa fa-user-plus"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Organisation Settings</span>
+                                    <span class="sub-title">Invite and view organisation members </span>
+                                </span>
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>
-
-
-
         </div>
-
     </div>
 
 @endsection
