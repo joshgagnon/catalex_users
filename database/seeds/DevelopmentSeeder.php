@@ -83,7 +83,7 @@ class DevelopmentSeeder extends Seeder
         $defaults = [
             'name' => 'User',
             'email' => 'user@example.com',
-            'password' => Hash::make('qssycu44'),
+            'password' => Hash::make('password'),
             'active' => true,
             'billing_detail_id' => null,
         ];
