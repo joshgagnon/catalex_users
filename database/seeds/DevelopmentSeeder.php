@@ -1,7 +1,6 @@
 <?php
 
 use App\BillingDetail;
-use App\BillingItemPayment;
 use App\ChargeLog;
 use App\Library\Billing;
 use App\Role;
@@ -58,9 +57,12 @@ class DevelopmentSeeder extends Seeder
         $this->billOrgForDate($org, $billingItems, $billingDay->copy()->subMonths(2));
         $this->billOrgForDate($org, $billingItems, $billingDay->copy()->subMonths(1));
 
-        // Setup GC oauth
+        // Setup oauth for GC and Sign
         Artisan::call('oauth:add-client', ['--client_id' => 'gc', '--secret' => 'gc', '--name' => 'Good Companies']);
         Artisan::call('oauth:add-endpoint', ['--client_id' => 'gc', '--endpoint' => 'http://localhost:5667/auth/catalex/login']);
+
+        Artisan::call('oauth:add-client', ['--client_id' => 'sign', '--secret' => 'test', '--name' => 'Sign']);
+        Artisan::call('oauth:add-endpoint', ['--client_id' => 'sign', '--endpoint' => 'http://localhost:5669/login']);
     }
 
     private function billOrgForDate($org, $billingItems, $date)
