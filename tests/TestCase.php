@@ -7,28 +7,28 @@ use App\Organisation;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
+    protected static $migrationsRun = false;
     protected $baseUrl = 'http://localhost';
 
-    protected $runMigrations = true;
-    protected $seeder = 'TestSeeder';
-
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
+    // Laravel boilerplate to create app for tests
     public function createApplication()
     {
-        $app = require __DIR__.'/../bootstrap/app.php';
+        $app = require __DIR__ . '/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-        if ($this->runMigrations) {
-            $mirgrationOptions = !empty($this->seeder) ? ['--seeder' => $this->seeder] : [];
-            $app['Illuminate\Contracts\Console\Kernel']->call('migrate:refresh', $mirgrationOptions);
-        }
-
         return $app;
+    }
+
+    // Run the migrations on setup, but only once
+    public function setUp()
+    {
+        parent::setUp();
+
+        if (!static::$migrationsRun) {
+            Artisan::call('migrate:refresh', ['--seed' => true]);
+            static::$migrationsRun = true;
+        }
     }
 
     protected function createUser($overrides=[])

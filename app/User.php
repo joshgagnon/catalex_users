@@ -190,7 +190,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * Return whether this user and another belong to the same organisation.
      *
-     * @param  App\User  $other
+     * @param  User  $other
      * @return bool
      */
     public function sharesOrganisation($other)
@@ -209,28 +209,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->{$this->getDeletedAtColumn()} = $time = $this->freshTimestamp();
 
         $query->update(array($this->getDeletedAtColumn() => $this->fromDateTime($time)));
-    }
-
-    /**
-     * Make this user active.
-     *
-     * @return void
-     */
-    public function activate()
-    {
-        $this->active = true;
-        $this->save();
-    }
-
-    /**
-     * Make this user inactive.
-     *
-     * @return void
-     */
-    public function deactivate()
-    {
-        $this->active = false;
-        $this->save();
     }
 
     protected function getAllDueBillingItems($service)
