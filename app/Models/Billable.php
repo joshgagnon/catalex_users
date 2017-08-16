@@ -83,17 +83,6 @@ trait Billable
         return $this;
     }
 
-    public function inTrial()
-    {
-        $organisation = $this->organisation;
-
-        if ($organisation) {
-            return $organisation->inTrial();
-        }
-
-        return $this->created_at->diffInMinutes(Carbon::now()) < Config::get('constants.trial_length_minutes');
-    }
-
     public function subscriptionUpToDate()
     {
         if ($this->organisation) {
@@ -118,21 +107,6 @@ trait Billable
         }
 
         return false;
-    }
-
-    public function hasBrowserAccess()
-    {
-        return true;
-    }
-
-    public function hasSignAccess()
-    {
-        return true;
-    }
-
-    public function hasGoodCompaniesAccess()
-    {
-        return $this->hasAccess(Service::where('name', 'Good Companies')->first());
     }
 
     public function hasAccess(Service $service)

@@ -40,12 +40,8 @@ class HomeController extends Controller {
         ]);
     }
 
-    public function getBrowserLogin() {
-        $user = Auth::user();
-
-        if(!$user->hasBrowserAccess()) {
-            return view('auth.denied');
-        }
+    public function getBrowserLogin()
+    {
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Law Browser')->first();
         if(!$client) {
@@ -58,14 +54,8 @@ class HomeController extends Controller {
         return redirect($redirect);
     }
 
-    public function getSignLogin() {
-        $user = Auth::user();
-
-
-        if(!$user->hasSignAccess()) {
-            return view('auth.denied');
-        }
-
+    public function getSignLogin()
+    {
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Sign')->first();
 
@@ -80,13 +70,9 @@ class HomeController extends Controller {
         return redirect($redirect);
     }
 
-    public function getGoodCompaniesLogin() {
+    public function getGoodCompaniesLogin()
+    {
         $user = Auth::user();
-
-        // everyone has gc access now :)
-//        if(!$user->hasGoodCompaniesAccess()) {
-//            return view('auth.denied');
-//        }
 
         if (!$user->subscriptionUpToDate()) {
             return redirect()->route('index');
