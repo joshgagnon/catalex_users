@@ -248,10 +248,12 @@ trait Billable
 
         $billingSummary = [];
         foreach ($services as $service) {
-            $priceInCents = $this->getPriceForService($service, $billingDetails->period);
             $billingItems = $this->getAllDueBillingItems($service);
 
             foreach ($billingItems as $item) {
+                $priceInCents = $this->getPriceForBillingItem($item->item_type, $billingDetails->period);
+                $centsDue += $priceInCents;
+
                 $itemPayment = new BillingItemPayment();
                 $itemPayment->paid_until = $payingUntil;
                 $itemPayment->billing_item_id = $item->id;
@@ -267,7 +269,6 @@ trait Billable
                     'amount' => $itemPayment->amount,
                 ];
             }
-            $centsDue += $priceInCents * count($billingItems);
         }
 
         // Handle discounts
@@ -329,15 +330,27 @@ trait Billable
 
         switch ($service->name) {
             case 'Good Companies':
-                $constantName = $billingPeriod == 'monthly' ? 'constants.gc_monthly_price_in_cents' : 'constants.gc_yearly_price_in_cents';
+                $constantName = $billingPeriod == 'monthly' ? 'constants.gc_monthly' : 'constants.gc_yearly';
                 return Config::get($constantName);
 
             case 'CataLex Sign':
-                $constantName = $billingPeriod == 'monthly' ? 'constants.sign_monthly_price_in_cents' : 'constants.sign_yearly_price_in_cents';
+                $constantName = $billingPeriod == 'monthly' ? 'constants.sign_monthly' : 'constants.sign_yearly';
                 return Config::get($constantName);
 
             default:
                 throw new \Exception('Unknown default price for service');
+        }
+    }
+
+    private function getPriceForBillingItem($itemType, $billingPeriod)
+    {
+        switch ($itemType) {
+            case BillingItem::ITEM_TYPE_GC_COMPANY:
+                $constantName = $billingPeriod == 'monthly' ? 'constants.gc_company_monthly' : 'constants.gc_company_yearly';
+                return Config::get($constantName);
+
+            default:
+                throw new \Exception('Unknown default price for item');
         }
     }
 

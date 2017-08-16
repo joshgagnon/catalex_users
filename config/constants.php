@@ -7,8 +7,13 @@ return [
 	'monthly_price' => '0.0',
 	'annual_price' => '0.0',
 	'law_browser_features' => 'https://dev.catalex.nz/law-browser',
-    'gc_monthly_price_in_cents' => 150,
-    'gc_yearly_price_in_cents' => 1200,
-    'sign_monthly_price_in_cents' => 500,
-    'sign_yearly_price_in_cents' => 6000,
+
+    'gc_monthly' => 0,
+    'gc_yearly' => 0,
+
+    'gc_company_monthly' => 150,
+    'gc_company_yearly' => 1200,
+
+    'sign_monthly' => 500,
+    'sign_yearly' => 6000,
 ];

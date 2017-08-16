@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\BillingItemPayment;
-use App\User;
 use \Carbon\Carbon;
 
 class BillingItem extends Model
