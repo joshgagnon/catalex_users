@@ -10,6 +10,10 @@ class ChargeLog extends Model
 {
     const CREATED_AT = 'timestamp';
 
+    const SUCCESSFUL = 'successful';
+    const PENDING = 'pending';
+    const FAILED = 'failed';
+
     // We don't have an updated timestamp, so turn off timestamps and manually set the created at timestamp below
     public $timestamps = false;
 
@@ -43,14 +47,14 @@ class ChargeLog extends Model
     public function status()
     {
         if ($this->pending) {
-            return 'pending';
+            return self::PENDING;
         }
 
         if ($this->success) {
-            return 'successful';
+            return self::SUCCESSFUL;
         }
 
-        return 'failed';
+        return self::FAILED;
     }
 
     public function itemSummary()
@@ -141,7 +145,7 @@ class ChargeLog extends Model
      */
     public function sendFailedNotice()
     {
-        if ($this->status() !== 'failed') {
+        if ($this->status() !== ChargeLog::FAILED) {
             return false;
         }
 

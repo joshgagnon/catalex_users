@@ -27,4 +27,18 @@ class BillingDetail extends Model {
 	{
 		return $this->hasMany(Organisation::class);
 	}
+
+    public function getDiscountPercent()
+    {
+        $discountPercent = $this->discount_percent;
+
+        if ($discountPercent && is_numeric($discountPercent)) {
+            $discountPercentIsSane = $discountPercent > 0 && $discountPercent <= 100;
+
+            return $discountPercentIsSane ? $discountPercent : 0;
+        }
+
+        // No discount percent
+        return null;
+    }
 }
