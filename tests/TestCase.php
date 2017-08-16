@@ -1,7 +1,9 @@
 <?php
 
 use App\BillingDetail;
+use App\BillingItem;
 use App\Role;
+use Carbon\Carbon;
 use Tests\Stub\User;
 use App\Organisation;
 
@@ -9,6 +11,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     protected static $migrationsRun = false;
     protected $baseUrl = 'http://localhost';
+
+    private $massCreateBillingItemIdCounter = 1;
 
     // Laravel boilerplate to create app for tests
     public function createApplication()
@@ -88,6 +92,26 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $orgAdmin->addRole('organisation_admin');
 
         return $organisation;
+    }
+
+    protected function massCreateBillingItems($userId, $serviceId, $numberOfItems)
+    {
+        $billingItems = [];
+
+        for ($index = 0; $index < $numberOfItems; $index++) {
+            $billingItems[] = [
+                'user_id'    => $userId,
+                'service_id' => $serviceId,
+                'item_id'    => 'item_id_' . $this->massCreateBillingItemIdCounter++,
+                'item_type'  => 'gc_company',
+                'json_data'  => '{\"company_name\": \"test\"}',
+                'active'     => true,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+        }
+
+        return BillingItem::insert($billingItems);
     }
 }
 

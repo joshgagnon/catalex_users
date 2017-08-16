@@ -1,12 +1,9 @@
 <?php
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\BillingDetail;
 use App\BillingItem;
-use App\BillingItemPayment;
 use App\Service;
 use Carbon\Carbon;
-use Illuminate\Database\QueryException;
 
 class User extends \App\User
 {
@@ -34,34 +31,12 @@ class BillableTraitBillMethodTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $itemIdCounter = 1;
-
     private function createService($name, $paid=null)
     {
         return Service::create([
             'name' => $name,
             'is_paid_service' => $paid ? : true,
         ]);
-    }
-
-    private function massCreateBillingItems($userId, $serviceId, $numberOfItems)
-    {
-        $billingItems = [];
-
-        for ($index = 0; $index < $numberOfItems; $index++) {
-            $billingItems[] = [
-                'user_id'    => $userId,
-                'service_id' => $serviceId,
-                'item_id'    => 'item_id_' . $this->itemIdCounter++,
-                'item_type'  => 'gc_company',
-                'json_data'  => '{\"company_name\": \"test\"}',
-                'active'     => true,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ];
-        }
-
-        return BillingItem::insert($billingItems);
     }
 
     private function massCreateUser($numberOfUsers, $organisationId=null)
