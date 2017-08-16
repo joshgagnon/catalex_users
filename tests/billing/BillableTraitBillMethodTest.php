@@ -34,7 +34,7 @@ class BillableTraitBillMethodTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected $seeder = 'DatabaseSeeder';
+    private $itemIdCounter = 1;
 
     private function createService($name, $paid=null)
     {
@@ -44,37 +44,24 @@ class BillableTraitBillMethodTest extends TestCase
         ]);
     }
 
-    private function createBillingItem($data)
-    {
-        return BillingItem::create([
-            'user_id' => $data['user_id'],
-            'service_id' => $data['service_id'],
-            'item_id' => $data['item_id'],
-            'item_type' => array_key_exists('item_type', $data) ? $data['item_type'] : 'gc_company',
-            'json_data' => array_key_exists('json_data', $data) ? $data['json_data'] : '{\"company_name\": \"test\"}',
-            'active' => array_key_exists('active', $data) ? $data['active'] : true,
-        ]);
-    }
-
     private function massCreateBillingItems($userId, $serviceId, $numberOfItems)
     {
         $billingItems = [];
 
         for ($index = 0; $index < $numberOfItems; $index++) {
-            $itemId = uniqid();
-
-            while (BillingItem::where('item_id', $itemId)->exists()) {
-                $itemId = uniqid();
-            }
-
-            $billingItems[] = $this->createBillingItem([
-                'user_id' => $userId,
+            $billingItems[] = [
+                'user_id'    => $userId,
                 'service_id' => $serviceId,
-                'item_id' => $itemId,
-            ]);
+                'item_id'    => 'item_id_' . $this->itemIdCounter++,
+                'item_type'  => 'gc_company',
+                'json_data'  => '{\"company_name\": \"test\"}',
+                'active'     => true,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
         }
 
-        return $billingItems;
+        return BillingItem::insert($billingItems);
     }
 
     private function massCreateUser($numberOfUsers, $organisationId=null)
@@ -83,10 +70,10 @@ class BillableTraitBillMethodTest extends TestCase
 
         for ($index = 0; $index < $numberOfUsers; $index++) {
             $users[] = User::create([
-                'name' => 'User ' . $index,
-                'email' => 'user' . $index . '@example.com',
-                'password' => bcrypt('password'),
-                'active' => true,
+                'name'            => 'User ' . $index,
+                'email'           => 'user' . $index . '@example.com',
+                'password'        => bcrypt('password'),
+                'active'          => true,
                 'organisation_id' => $organisationId,
             ]);
         }
@@ -107,7 +94,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing item
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+        BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
 
         // Bill the user
         $billingResult = $user->bill();
@@ -131,7 +118,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing item
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+        BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
 
         // Bill the user
         $user->bill();
@@ -139,7 +126,7 @@ class BillableTraitBillMethodTest extends TestCase
         // Check the result
         $actual = $user->totalDollarsDue;
         $expected = '12.00';
-        
+
         $this->assertEquals($expected, $actual);
     }
 
@@ -157,7 +144,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing item
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+        BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
 
         // Bill the user
         $user->bill();
@@ -228,9 +215,8 @@ class BillableTraitBillMethodTest extends TestCase
         $service = $this->createService('Good Companies');
         $user->services()->attach($service);
 
-        // Create a billing items
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
-        $billingItem2 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 2, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+        // Create the billing items
+        $this->massCreateBillingItems($user->id, $service->id, 2);
 
         // Bill the user
         $user->bill();
@@ -255,9 +241,8 @@ class BillableTraitBillMethodTest extends TestCase
         $service = $this->createService('Good Companies');
         $user->services()->attach($service);
 
-        // Create a billing items
-        $billingItem1 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 1, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
-        $billingItem2 = BillingItem::create(['user_id' => $user->id, 'service_id' => $service->id, 'item_id' => 2, 'item_type' => 'gc_company', 'json_data' => '{\"company_name\":\"test\"}', 'active' => true]);
+        // Create the billing items
+        $this->massCreateBillingItems($user->id, $service->id, 2);
 
         // Bill the user
         $user->bill();
@@ -283,16 +268,15 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing items
-        $numberOfBillingItems = 4674;
-        $billingItems = [];
+        $numberOfBillingItems = 277;
         $this->massCreateBillingItems($user->id, $service->id, $numberOfBillingItems);
-        
+
         // Bill the user
         $user->bill();
 
         // Check the result
         $actual = $user->totalDollarsDue;
-        $expected = '56088.00';
+        $expected = '3324.00';
 
         $this->assertEquals($expected, $actual);
     }
@@ -311,15 +295,14 @@ class BillableTraitBillMethodTest extends TestCase
         $user->services()->attach($service);
 
         // Create a billing items
-        $numberOfBillingItems = 4674;
-        $billingItems = [];
+        $numberOfBillingItems = 277;
         $this->massCreateBillingItems($user->id, $service->id, $numberOfBillingItems);
 
         // Bill the user
         $user->bill();
 
         // Check the result
-        $expected = '7011.00';
+        $expected = '415.50';
         $actual = $user->totalDollarsDue;
 
         $this->assertEquals($expected, $actual);
@@ -348,7 +331,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user1->services()->attach($service);
 
         // Create a billing item
-        $billingItem1 = BillingItem::create([
+        BillingItem::create([
             'user_id' => $user1->id,
             'service_id' => $service->id,
             'item_id' => 1,
@@ -363,7 +346,7 @@ class BillableTraitBillMethodTest extends TestCase
         // Check the result
         $actual = $organisation->totalDollarsDue;
         $expected = '12.00';
-        
+
         $this->assertEquals($expected, $actual);
     }
 
@@ -390,7 +373,6 @@ class BillableTraitBillMethodTest extends TestCase
         $user1->services()->attach($service);
 
         $numberOfBillingItems = 127;
-        $billingItems = [];
         $this->massCreateBillingItems($user1->id, $service->id, $numberOfBillingItems);
 
         // Bill the organisation
@@ -399,7 +381,7 @@ class BillableTraitBillMethodTest extends TestCase
         // Check the result
         $actual = $organisation->totalDollarsDue;
         $expected = '190.50';
-        
+
         $this->assertEquals($expected, $actual);
     }
 
@@ -419,18 +401,22 @@ class BillableTraitBillMethodTest extends TestCase
         $service = $this->createService('Good Companies');
         $organisation->services()->attach($service);
 
-        // Give each user the 
+        // Give each user some billing items
         $billingItems = [];
         foreach ($users as $index => $user) {
-            $billingItems[] = BillingItem::create([
+            $billingItems[] = [
                 'user_id' => $user->id,
                 'service_id' => $service->id,
                 'item_id' => $index,
                 'item_type' => 'gc_company',
                 'json_data' => '{\"company_name\":\"test\"}',
                 'active' => true,
-            ]);
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
         }
+
+        BillingItem::insert($billingItems);
 
         // Bill the organisation
         $organisation->bill();
@@ -438,7 +424,7 @@ class BillableTraitBillMethodTest extends TestCase
         // Check the result
         $actual = $organisation->totalDollarsDue;
         $expected = '48.00'; // 4 users * $12 a year
-        
+
         $this->assertEquals($expected, $actual);
     }
 
@@ -471,7 +457,7 @@ class BillableTraitBillMethodTest extends TestCase
         // Check the result
         $actual = $organisation->totalDollarsDue;
         $expected = '480.00'; // 4 users * 10 items per user * $12 a year
-        
+
         $this->assertEquals($expected, $actual);
     }
 }
