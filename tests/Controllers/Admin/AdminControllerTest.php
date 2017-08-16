@@ -11,7 +11,7 @@ class AdminControllerTest extends TestCase
     /**
      * @test
      */
-    public function adminCreateUser()
+    public function admin_can_create_user()
     {
         $adminUser = $this->createUser();
         $adminUser->addRole(Role::where('name', '=', 'global_admin')->first());

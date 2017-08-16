@@ -15,7 +15,7 @@ class InvoiceControllerTest extends TestCase
     /**
      * @test
      */
-    public function renderInvoice()
+    public function render_invoice()
     {
         // Create user and login
         $user = $this->createUserWithBilling();
