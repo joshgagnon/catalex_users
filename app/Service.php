@@ -10,12 +10,12 @@ class Service extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'service_registrations')->withPivot('price_in_cents', 'access_level')->withTimestamps();
+        return $this->belongsToMany(User::class, 'service_registrations')->withTimestamps();
     }
 
     public function organisations()
     {
-        return $this->belongsToMany(Organisation::class, 'service_registrations')->withPivot('price_in_cents', 'access_level')->withTimestamps();
+        return $this->belongsToMany(Organisation::class, 'service_registrations')->withTimestamps();
     }
 
     public function billingItems()

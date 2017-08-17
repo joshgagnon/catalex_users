@@ -45,7 +45,7 @@ trait Billable
      */
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'service_registrations')->withPivot('price_in_cents', 'access_level')->withTimestamps();
+        return $this->belongsToMany(Service::class, 'service_registrations')->withTimestamps();
     }
 
     /**
@@ -330,12 +330,6 @@ trait Billable
         // If this billable entity has is directly registered with the service see if it has a specified price
         // There are times where this billable entity wont have a registration record. This is when an organisation
         // isn't registered to a service, but one of it's users is
-        $registrationRecord = $this->services()->where('service_id', $service->id)->first();
-
-        if ($registrationRecord && $registrationRecord->pivot->price_in_cents) {
-            return $registrationRecord->pivot->price_in_cents;
-        }
-
         switch ($service->name) {
             case 'Good Companies':
                 $constantName = $billingPeriod == 'monthly' ? 'constants.gc_monthly' : 'constants.gc_yearly';
