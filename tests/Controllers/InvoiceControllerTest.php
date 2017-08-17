@@ -18,12 +18,11 @@ class InvoiceControllerTest extends TestCase
     public function render_invoice()
     {
         // Create user and login
-        $user = $this->createUserWithBilling();
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $user = $this->createUserWithBilling([], [], [$gcService->id]);
         Auth::login($user);
 
         // Create some billing items and bill the user to create a charge log
-        $gcService = Service::where('name', 'Good Companies')->first();
-
         BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
         BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
         BillingItem::create(['user_id' => $user->id, 'item_id' => 3, 'json_data' => json_encode(['company_name' => 'test company 3']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
@@ -75,12 +74,11 @@ class InvoiceControllerTest extends TestCase
         $discountPercent = '15';
         
         // Create user and login
-        $user = $this->createUserWithBilling([], ['discount_percent' => $discountPercent]);
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $user = $this->createUserWithBilling([], ['discount_percent' => $discountPercent], [$gcService->id]);
         Auth::login($user);
     
         // Create some billing items and bill the user to create a charge log
-        $gcService = Service::where('name', 'Good Companies')->first();
-    
         BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
         BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);
         BillingItem::create(['user_id' => $user->id, 'item_id' => 3, 'json_data' => json_encode(['company_name' => 'test company 3']), 'active' => true, 'service_id' => $gcService->id, 'item_type' => 'gc_company']);

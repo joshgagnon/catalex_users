@@ -11,9 +11,9 @@ return [
     'gc_monthly' => 0,
     'gc_yearly' => 0,
 
+    'sign_monthly' => 600,
+    'sign_yearly' => 6000,
+
     'gc_company_monthly' => 150,
     'gc_company_yearly' => 1200,
-
-    'sign_monthly' => 500,
-    'sign_yearly' => 6000,
 ];

@@ -218,7 +218,7 @@ trait Billable
         }
 
         // Get a list of paid CataLex services
-        $services = Service::where('is_paid_service', true)->get();
+        $services = $this->services()->where('is_paid_service', true)->get();
 
         // Check if they have any services that require billing
         if ($services->count() == 0) {
@@ -248,10 +248,13 @@ trait Billable
 
         $billingSummary = [];
         foreach ($services as $service) {
+//            $priceForService = $this->priceForService($service, $billingDetails->period);
+//            $centsDue += $priceForService;
+
             $billingItems = $this->getAllDueBillingItems($service);
 
             foreach ($billingItems as $item) {
-                $priceInCents = $this->getPriceForBillingItem($item->item_type, $billingDetails->period);
+                $priceInCents = $this->priceForBillingItem($item->item_type, $billingDetails->period);
                 $centsDue += $priceInCents;
 
                 $itemPayment = new BillingItemPayment();
@@ -317,7 +320,15 @@ trait Billable
         return $chargeLog->success;
     }
 
-    private function getPriceForService($service, $billingPeriod)
+    /**
+     * Get the price for a service
+     *
+     * @param $service
+     * @param $billingPeriod
+     * @return mixed
+     * @throws \Exception
+     */
+    private function priceForService($service, $billingPeriod)
     {
         // If this billable entity has is directly registered with the service see if it has a specified price
         // There are times where this billable entity wont have a registration record. This is when an organisation
@@ -342,7 +353,15 @@ trait Billable
         }
     }
 
-    private function getPriceForBillingItem($itemType, $billingPeriod)
+    /**
+     * Get the price for an individual billing item.
+     *
+     * @param $itemType
+     * @param $billingPeriod
+     * @return mixed
+     * @throws \Exception
+     */
+    private function priceForBillingItem($itemType, $billingPeriod)
     {
         switch ($itemType) {
             case BillingItem::ITEM_TYPE_GC_COMPANY:

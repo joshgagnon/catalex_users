@@ -292,6 +292,10 @@ class BillableTraitBillMethodTest extends TestCase
         $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
+        // Give the org access to the GC service
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $organisation->services()->attach($gcService->id);
+
         // Create a few users
         $user1 = User::create([
             'name' => 'User 1',
@@ -301,14 +305,10 @@ class BillableTraitBillMethodTest extends TestCase
             'organisation_id' => $organisation->id,
         ]);
 
-        // Create a service and attach it to the user
-        $service = $this->createService('Good Companies');
-        $user1->services()->attach($service);
-
         // Create a billing item
         BillingItem::create([
             'user_id' => $user1->id,
-            'service_id' => $service->id,
+            'service_id' => $gcService->id,
             'item_id' => 1,
             'item_type' => 'gc_company',
             'json_data' => '{\"company_name\":\"test\"}',
@@ -334,6 +334,10 @@ class BillableTraitBillMethodTest extends TestCase
         $billingDetails = $this->createBillingDetails(['period' => 'monthly']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
+        // Give the org access to the GC service
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $organisation->services()->attach($gcService->id);
+
         // Create a few users
         $user1 = User::create([
             'name' => 'User 1',
@@ -343,12 +347,8 @@ class BillableTraitBillMethodTest extends TestCase
             'organisation_id' => $organisation->id,
         ]);
 
-        // Create a service and attach it to the user
-        $service = $this->createService('Good Companies');
-        $user1->services()->attach($service);
-
         $numberOfBillingItems = 127;
-        $this->massCreateBillingItems($user1->id, $service->id, $numberOfBillingItems);
+        $this->massCreateBillingItems($user1->id, $gcService->id, $numberOfBillingItems);
 
         // Bill the organisation
         $organisation->bill();
