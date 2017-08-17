@@ -47,7 +47,7 @@ class BillableTrait_subscriptionUpToDate_Test extends TestCase
         $this->createChargeLogs($user, $gcService->id);
 
         // Change the charge log to pending
-        $user->chargeLogs()->first()->update(['success' => false, 'pending' => true]); // when a charge log is pending, it is not yet sucessful, therefore: set success to false
+        $user->chargeLogs()->first()->update(['success' => false, 'pending' => true]); // when a charge log is pending, it is not yet successful, therefore: set success to false
 
         $subscriptionUpToDate = $user->subscriptionUpToDate();
         $this->assertTrue($subscriptionUpToDate);

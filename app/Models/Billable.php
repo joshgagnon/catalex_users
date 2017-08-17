@@ -218,7 +218,7 @@ trait Billable
         }
 
         // Get a list of paid CataLex services
-        $services = $this->services()->where('is_paid_service', true)->get();
+        $services = Service::where('is_paid_service', true)->get();
 
         // Check if they have any services that require billing
         if ($services->count() == 0) {
@@ -248,9 +248,6 @@ trait Billable
 
         $billingSummary = [];
         foreach ($services as $service) {
-//            $priceForService = $this->priceForService($service, $billingDetails->period);
-//            $centsDue += $priceForService;
-
             $billingItems = $this->getAllDueBillingItems($service);
 
             foreach ($billingItems as $item) {
