@@ -296,18 +296,9 @@ class BillableTraitBillMethodTest extends TestCase
         $billingDetails = $this->createBillingDetails(['period' => 'annually']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
-        // Give the org access to the GC service
+        // Create a user that is subscribed to GC
         $gcService = Service::where('name', 'Good Companies')->first();
-        $organisation->services()->attach($gcService->id);
-
-        // Create a few users
-        $user1 = User::create([
-            'name' => 'User 1',
-            'email' => 'user1@example.com',
-            'password' => bcrypt('password'),
-            'active' => true,
-            'organisation_id' => $organisation->id,
-        ]);
+        $user1 = $this->createUser(['organisation_id' => $organisation->id], [$gcService->id]);
 
         // Create a billing item
         BillingItem::create([
@@ -338,18 +329,9 @@ class BillableTraitBillMethodTest extends TestCase
         $billingDetails = $this->createBillingDetails(['period' => 'monthly']);
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
-        // Give the org access to the GC service
+        // Create a user that is subscribed to GC
         $gcService = Service::where('name', 'Good Companies')->first();
-        $organisation->services()->attach($gcService->id);
-
-        // Create a few users
-        $user1 = User::create([
-            'name' => 'User 1',
-            'email' => 'user1@example.com',
-            'password' => bcrypt('password'),
-            'active' => true,
-            'organisation_id' => $organisation->id,
-        ]);
+        $user1 = $this->createUser(['organisation_id' => $organisation->id], [$gcService->id]);
 
         $numberOfBillingItems = 127;
         $this->massCreateBillingItems($user1->id, $gcService->id, $numberOfBillingItems);
