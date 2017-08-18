@@ -227,16 +227,11 @@ trait Billable
             return true;
         }
 
-        $chargeLog = ChargeLog::create([
-            'success' => false,
-            'pending' => true,
-            $this->foreignIdName() => $this->id,
-        ]);
+        // Create the charge log record for this bill - it is currently pending, but not yet successful
+        $chargeLog = ChargeLog::create([$this->foreignIdName() => $this->id, 'success' => false, 'pending' => true]);
 
-        // Check the user/organisation has billing setup
-        $billingDetails = $this->billing_detail()->first();
-
-        if (!$billingDetails) {
+        // If this user doesn't have billing setup, fail the bill and exit the biling process
+        if (!$this->hasBillingSetup()) {
             $chargeLog->update(['pending' => false]);
 
             $billableType = $this instanceof User ? 'user' : 'organisation';
@@ -245,10 +240,10 @@ trait Billable
             return false;
         }
 
+        $billingDetails = $this->billing_detail()->first();
         $payingUntil = $this->calculatePayingUntil($billingDetails->period);
         $centsDue = 0;
 
-        $billingSummary = [];
         foreach ($services as $service) {
             $billingItems = $this->getAllDueBillingItems($service);
 
@@ -256,26 +251,19 @@ trait Billable
                 $priceInCents = $this->priceForBillingItem($item->item_type, $billingDetails->period);
                 $centsDue += $priceInCents;
 
-                $itemPayment = new BillingItemPayment();
-                $itemPayment->paid_until = $payingUntil;
-                $itemPayment->billing_item_id = $item->id;
-                $itemPayment->charge_log_id = $chargeLog->id;
-                $itemPayment->amount = Billing::centsToDollars($priceInCents);
-                $itemPayment->gst= Billing::includingGst($priceInCents);
-
-                $itemPayment->save();
-
-                $billingSummary[] = [
-                    'description' =>  json_decode($item->json_data, true)['company_name'],
-                    'paidUntil' => $itemPayment->paid_until->format('j M Y'),
-                    'amount' => $itemPayment->amount,
-                ];
+                // Create the billing item record
+                BillingItemPayment::forceCreate([
+                    'paid_until' => $payingUntil,
+                    'billing_item_id' => $item->id,
+                    'charge_log_id' => $chargeLog->id,
+                    'amount' => Billing::centsToDollars($priceInCents),
+                    'gst' => Billing::includingGst($priceInCents),
+                ]);
             }
         }
 
         // Handle discounts
         $totalBeforeDiscount = Billing::centsToDollars($centsDue);
-
         $discountPercent = $billingDetails->getDiscountPercent();
         $totalAfterDiscount = $discountPercent ? Billing::applyDiscount($totalBeforeDiscount, $discountPercent) : $totalBeforeDiscount;
 
