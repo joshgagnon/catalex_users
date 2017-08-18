@@ -3,8 +3,6 @@
 namespace App;
 
 use Config;
-use Carbon\Carbon;
-use App\Library\Mail;
 use App\Models\Billable;
 use App\Models\ActiveUser;
 use Illuminate\Auth\Authenticatable;
@@ -13,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use DB;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -74,6 +73,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function fullName()
     {
         return $this->name;
+    }
+
+    public function isSubscribedTo($serviceId)
+    {
+        if ($this->organisation_id) {
+            return $this->organisation->isSubscribedTo($serviceId);
+        }
+
+        if (!is_array($serviceId)) {
+            $serviceId = [$serviceId];
+        }
+
+        return DB::table('service_registrations')->where('user_id', $this->id)->where('service_id', $serviceId)->exists();
     }
 
     public function billingExempt()

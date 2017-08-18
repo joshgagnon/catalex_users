@@ -6,6 +6,7 @@ use Config;
 use App\Models\Billable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class Organisation extends Model
 {
@@ -45,6 +46,16 @@ class Organisation extends Model
     public function userInvites()
     {
         return $this->hasMany(OrganisationInvite::class);
+    }
+
+    public function isSubscribedTo($serviceId)
+    {
+        if (!is_array($serviceId)) {
+            $serviceId = [$serviceId];
+        }
+
+        $memberIds = $this->members()->get()->pluck('id')->toArray();
+        return DB::table('service_registrations')->whereIn('user_id', $memberIds)->whereIn('service_id', $serviceId)->exists();
     }
 
     public function paymentAmount() {

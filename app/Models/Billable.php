@@ -61,6 +61,8 @@ trait Billable
         return $this->hasMany(Trial::class);
     }
 
+    abstract public function isSubscribedTo($serviceId);
+
     public function foreignIdName()
     {
         switch ($this->billableType()) {

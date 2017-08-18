@@ -184,9 +184,9 @@ class BillingController extends Controller
 
         if ($request->session()->has('redirect_route_name')) {
             $routeName = $request->session()->pull('redirect_route_name');
-            $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
+//            $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
 
-            return redirect()->route($routeName, $data);
+            return redirect()->route($routeName);
         }
 
         return redirect()->route('billing.edit')->withSuccess('Card successfully added');

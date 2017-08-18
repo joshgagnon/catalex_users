@@ -62,61 +62,51 @@ class SubscriptionController extends Controller
     public function update(Request $request)
     {
         $user = $request->user();
+        $membersSubscriptions = null;
 
-        // We handle users in orgs differently
-        if ($user->organisation_id) {
-            $organisation = $user->organisation;
-            $members = $organisation->members()->get();
-
-            $membersSubscriptions = $request->input('subscriptions');
-
-            if (!$membersSubscriptions) {
-                $membersSubscriptions = [];
-            }
-
-            foreach ($members as $member) {
-                $subscriptionIds = [];
-
-                // If this member has had subscriptions set in the request, add the to the subscriptions
-                // Otherwise the members be will remain empty
-                if (array_key_exists($member->id, $membersSubscriptions)) {
-                    $subscriptionIds = array_keys($membersSubscriptions[$member->id]);
-                }
-
-                $member->services()->sync($subscriptionIds);
-            }
+        // Handle incoming data differently depending on where it is coming from (redirect from billing setup; edit org subscriptions; edit user subscriptions)
+        if ($request->session()->has('redirect_data')) {
+            $redirectData = $request->session()->pull('redirect_data');
+            $membersSubscriptions = json_decode($redirectData['members_subscriptions'], true);
+        }
+        else if ($user->organisation_id) {
+            $membersSubscriptions = $request->input('subscriptions', []);
         }
         else {
-            // Get the services the user has set and turn it into an array of keys (the keys are the service ids)
-            $newServiceIds = null;
+            $subscriptions = $request->input('services');
+            $membersSubscriptions = $subscriptions  ? [$user->id => $subscriptions] : []; // if this user has opted for no subscriptions, don't include them in the membersSubscriptions array
+        }
 
-            if ($request->services) {
-                $data = !empty($request->services) ? $request->services : [];
-                $newServiceIds = array_keys($data);
-            } else {
-                $data = json_decode($request->services_json);
-                $newServiceIds = array_values($data ?: []);
+        // Check the user has billing setup (if they need billing setup)
+        if (!empty($membersSubscriptions) && !$user->billingExempt() && !$user->hasBillingSetup()) {
+            $request->session()->put('redirect_route_name', 'user-services.return-from-billing');
+            $request->session()->put('redirect_data', ['members_subscriptions' => json_encode($membersSubscriptions)]);
+
+            return redirect()->route('billing.register-card');
+        }
+
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $wasSubscribedToGC = $user->isSubscribedTo($gcService->id);
+
+        $members = $user->organisation_id ? $user->organisation->members()->get() : [$user];
+
+        foreach ($members as $member) {
+            $subscriptionIds = [];
+
+            // If this member has had subscriptions set in the request, add the to the subscriptions
+            // Otherwise the members be will remain empty
+            if (array_key_exists($member->id, $membersSubscriptions) && !empty($membersSubscriptions[$member->id])) {
+                $subscriptionIds = array_keys($membersSubscriptions[$member->id]);
             }
 
-            // Get the user or organisation
-            $servicesRequiringBilling = Service::whereIn('id', $newServiceIds)->where('is_paid_service', true)->get();
+            $member->services()->sync($subscriptionIds);
+        }
 
-            // Check the user has billing setup (if they need billing setup)
-            if (!$user->free && $servicesRequiringBilling->count() > 0 && !$user->billing_detail_id) {
-                $request->session()->put('redirect_route_name', 'user-services.return-from-billing');
-                $request->session()->put('redirect_data', ['services_json' => json_encode($newServiceIds)]);
+        $isSubscribedToGC = $user->isSubscribedTo($gcService->id);
 
-                return redirect()->route('billing.register-card');
-            }
-
-            // Sync the new services
-            $user->services()->sync($newServiceIds);
-
-            $goodCompanies = Service::where('name', 'Good Companies')->first();
-
-            if ($goodCompanies && in_array($goodCompanies->id, $newServiceIds)) {
-                Mail::queueStyledMail('emails.subscription', ['name' => $user->name], $user->email, $user->fullName(), 'Thanks for subscribing to Good Companies');
-            }
+        // If the user didn't used to be subscribed to GC, but is now: email them and thank them for subscribing.
+        if (!$wasSubscribedToGC && $isSubscribedToGC) {
+            Mail::queueStyledMail('emails.subscription', ['name' => $user->name], $user->email, $user->fullName(), 'Thanks for subscribing to Good Companies');
         }
 
         $redirectRouteName = $request->session()->has('redirect_route_name') ? $request->session()->pull('redirect_route_name') : 'index';
