@@ -43,14 +43,11 @@ class UserSummariserTest extends TestCase
     public function summarise()
     {
         // Create the user and the organisation
-        $user = $this->createUser();
-        $org = $this->createOrganisation([], $user);
-
-        // Add some services to the org
         $service1 = Service::find(1);
         $service2 = Service::find(2);
 
-        $org->services()->sync([$service1->id, $service2->id]);
+        $user = $this->createUser([], [$service1->id, $service2->id]);
+        $org = $this->createOrganisation([], $user);
 
         // Add some more members to the organisation
         $orgMember2 = $this->createUser(['name' => 'Org member 2', 'email' => '2@org.com', 'organisation_id' => $org->id]);

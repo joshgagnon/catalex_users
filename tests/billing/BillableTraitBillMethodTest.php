@@ -39,18 +39,22 @@ class BillableTraitBillMethodTest extends TestCase
         ]);
     }
 
-    private function massCreateUser($numberOfUsers, $organisationId=null)
+    private function massCreateUser($numberOfUsers, $organisationId=null, $serviceIds=[])
     {
         $users = [];
 
         for ($index = 0; $index < $numberOfUsers; $index++) {
-            $users[] = User::create([
+            $user = User::create([
                 'name'            => 'User ' . $index,
                 'email'           => 'user' . $index . '@example.com',
                 'password'        => bcrypt('password'),
                 'active'          => true,
                 'organisation_id' => $organisationId,
             ]);
+
+            $user->services()->attach($serviceIds);
+
+            $users[] = $user;
         }
 
         return $users;
@@ -370,18 +374,15 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation = Organisation::create(['name' => 'Org 1', 'billing_detail_id' => $billingDetails->id]);
 
         // Create a few users
-        $users = $this->massCreateUser(4, $organisation->id);
-
-        // Create a service and attach it to the user
-        $service = $this->createService('Good Companies');
-        $organisation->services()->attach($service);
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $users = $this->massCreateUser(4, $organisation->id, $gcService->id);
 
         // Give each user some billing items
         $billingItems = [];
         foreach ($users as $index => $user) {
             $billingItems[] = [
                 'user_id' => $user->id,
-                'service_id' => $service->id,
+                'service_id' => $gcService->id,
                 'item_id' => $index,
                 'item_type' => 'gc_company',
                 'json_data' => '{\"company_name\":\"test\"}',
@@ -415,15 +416,12 @@ class BillableTraitBillMethodTest extends TestCase
         // Create a few users
         $numberOfUsers = 4;
         $numberOfItemsPerUser = 10;
-        $users = $this->massCreateUser($numberOfUsers, $organisation->id);
+        $gcService = Service::where('name', 'Good Companies')->first();
+        $users = $this->massCreateUser($numberOfUsers, $organisation->id, $gcService->id);
 
-        // Create a service and attach it to the user
-        $service = $this->createService('Good Companies');
-        $organisation->services()->attach($service);
-
-        // Give each user the 
+        // Give each user the
         foreach ($users as $index => $user) {
-            $this->massCreateBillingItems($user->id, $service->id, $numberOfItemsPerUser);
+            $this->massCreateBillingItems($user->id, $gcService->id, $numberOfItemsPerUser);
         }
 
         // Bill the organisation

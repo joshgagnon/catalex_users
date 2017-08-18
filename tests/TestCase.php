@@ -35,7 +35,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
     }
 
-    protected function createUser($overrides=[])
+    protected function createUser($overrides=[], $serviceIds=[])
     {
         $defaults = [
             'name' => 'User',
@@ -52,6 +52,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         // Add the registered user role
         $registeredRole = Role::where('name', 'registered_user')->first();
         $user->addRole($registeredRole);
+
+        // Add the services
+        $user->services()->attach($serviceIds);
 
         return $user;
     }
@@ -74,9 +77,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         $userData = array_merge(['billing_detail_id' => $billingDetail->id], $userOverrides);
 
-        $user = $this->createUser($userData);
-
-        $user->services()->attach($serviceIds);
+        $user = $this->createUser($userData, $serviceIds);
 
         return $user;
     }

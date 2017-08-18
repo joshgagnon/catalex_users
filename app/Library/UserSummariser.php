@@ -28,7 +28,7 @@ class UserSummariser
             $services = Service::where('is_paid_service', false)->get()->pluck('name')->toArray();
         }
         else {
-            $services = $billable->services->pluck('name')->toArray();
+            $services = $this->user->services()->get()->pluck('name')->toArray();
         }
 
         // Build the rest of the summary
