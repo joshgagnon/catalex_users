@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
 class OrganisationAdminController extends Controller
 {
     public function removeUser(Request $request, User $userToRemove)

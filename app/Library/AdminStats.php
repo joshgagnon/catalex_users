@@ -2,7 +2,7 @@
 
 namespace App\Library;
 
-use \DB;
+use DB;
 
 class AdminStats
 {

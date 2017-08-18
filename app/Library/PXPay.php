@@ -2,7 +2,6 @@
 
 namespace App\Library;
 
-use App\BillingDetail;
 use GuzzleHttp\Client;
 use Log;
 use Omnipay\Omnipay;
