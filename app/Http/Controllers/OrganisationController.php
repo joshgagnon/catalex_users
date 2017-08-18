@@ -67,12 +67,11 @@ class OrganisationController extends Controller
 
     public function postInvite(InviteFormRequest $request)
     {
-        $inviter = Auth::user();
+        $inviter = $request->user();
         $inviter->load('organisation');
     
         $data = $request->all();
         $invitee = User::where('email', $data['email'])->first();
-        $organisation = Auth::user()->organisation;
 
         if ($invitee) {
             if ($invitee->organisation_id) {
@@ -101,11 +100,14 @@ class OrganisationController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => bcrypt(str_random(40)),
-                'organisation_id' => $organisation->id,
                 'billing_detail_id' => null,
             ]);
     
             $invitee->addRole('registered_user');
+
+            $organisation = $inviter->organisation;
+            $organisation->join($invitee);
+
             Invite::sendInvite($invitee, $inviter->fullName());
         }
 
