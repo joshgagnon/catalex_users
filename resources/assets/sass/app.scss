@@ -394,3 +394,41 @@ form.form-inline .form-group label {
         margin-top: 0;
     }
 }
+
+.subscriptions-table {
+    thead th:not(:first-child) {
+        text-align: center;
+        font-weight: 400;
+
+        .subscription-service-title {
+            color: $brand-primary;
+            font-size: 1.2em;
+        }
+
+        .subscription-service-unit {
+            font-size: .9em;
+            color: $gray;
+
+            &::before, &::after {
+                content: '-';
+                padding: 0 8px;
+            }
+        }
+
+        .subscription-service-price {
+            font-size: .95em;
+        }
+
+        i {
+            color: $brand-primary;
+            display: block;
+            font-size: 1.8em;
+        }
+    }
+
+    tbody {
+        td:not(:first-child) {
+            text-align: center;
+        }
+    }
+}

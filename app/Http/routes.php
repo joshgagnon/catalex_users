@@ -68,7 +68,7 @@ Route::group(['middleware' => 'csrf'], function() {
         /**
          * User routes
          */
-        Route::get('/', 'UserController@getHome')->name('index');
+        Route::get('/', 'HomeController@index')->name('index');
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
 
         /**

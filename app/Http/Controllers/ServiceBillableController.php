@@ -30,6 +30,22 @@ class ServiceBillableController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        if ($user->organisation_id) {
+            $organisation = $user->organisation;
+
+            // Get a list of paid CataLex services
+            $services = Service::where('is_paid_service', true)->get();
+
+            // Get a list of members in this org and their subscriptions
+            $members = $organisation->members()->with('services')->get();
+
+            return view('subscriptions.org.edit')->with([
+                'services' => $services,
+                'members' => $members,
+            ]);
+        }
+
         $services = Service::orderBy('is_paid_service', 'desc')->get();
         $userServices = $user->getBillableEntity()->services()->select('services.id')->get();
 

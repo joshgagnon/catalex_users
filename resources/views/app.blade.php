@@ -66,7 +66,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     @elseif(isset($user)) {{-- Move View::share(['user'] such that $user is always correctly available here --}}
                         {{-- TODO: Use route helper --}}
                         <li><a href="{{ route('index')}}">CataLex Home</a></li>
-                        <li><a href="{{ route('services')}}">Services</a></li>
                         @if($user->hasRole('global_admin'))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>

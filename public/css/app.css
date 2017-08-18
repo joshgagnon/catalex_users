@@ -8247,4 +8247,26 @@ form.form-inline .form-group label {
   float: right;
   margin-top: 0; }
 
+.subscriptions-table thead th:not(:first-child) {
+  text-align: center;
+  font-weight: 400; }
+  .subscriptions-table thead th:not(:first-child) .subscription-service-title {
+    color: #d11820;
+    font-size: 1.2em; }
+  .subscriptions-table thead th:not(:first-child) .subscription-service-unit {
+    font-size: .9em;
+    color: #555555; }
+    .subscriptions-table thead th:not(:first-child) .subscription-service-unit::before, .subscriptions-table thead th:not(:first-child) .subscription-service-unit::after {
+      content: '-';
+      padding: 0 8px; }
+  .subscriptions-table thead th:not(:first-child) .subscription-service-price {
+    font-size: .95em; }
+  .subscriptions-table thead th:not(:first-child) i {
+    color: #d11820;
+    display: block;
+    font-size: 1.8em; }
+
+.subscriptions-table tbody td:not(:first-child) {
+  text-align: center; }
+
 /*# sourceMappingURL=app.css.map */
