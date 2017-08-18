@@ -58,7 +58,7 @@
 
                                                 @foreach($services as $service)
                                                     <td>
-                                                        <input type="checkbox" name="{{ 'user_' . $member->id . '[service_' . $service->id . ']' }}" {{ in_array($service->id, $memberServices) ? 'checked' : '' }} />
+                                                        <input type="checkbox" name="{{ 'subscriptions[' . $member->id . ']' . '[' . $service->id .']' }}" {{ in_array($service->id, $memberServices) ? 'checked' : '' }} />
                                                     </td>
                                                 @endforeach
                                             </tr>

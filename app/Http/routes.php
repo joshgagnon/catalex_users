@@ -43,9 +43,9 @@ Route::group(['middleware' => 'csrf'], function() {
         /**
          * Services routes
          */
-        Route::get('my-services', 'ServiceBillableController@index')->name('user-services.index');
-        Route::post('my-services', 'ServiceBillableController@update')->name('user-services.update');
-        Route::get('my-services/return-from-billing', 'ServiceBillableController@update')->name('user-services.return-from-billing');
+        Route::get('my-services', 'SubscriptionController@index')->name('user-services.index');
+        Route::post('my-services', 'SubscriptionController@update')->name('user-services.update');
+        Route::get('my-services/return-from-billing', 'SubscriptionController@update')->name('user-services.return-from-billing');
 
         /**
          * Billing Routes
