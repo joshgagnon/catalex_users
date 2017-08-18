@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Organisation;
 use App\OrganisationInvite;
 use Auth;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class OrganisationInviteController extends Controller
 
     public function accept(Request $request, OrganisationInvite $invite)
     {
-        $user = Auth::user();
+        $user = $request->user();
 
         // Don't allow user to accept invites if they are already in an organisation
         if ($user->organisation) {
@@ -38,7 +39,8 @@ class OrganisationInviteController extends Controller
         }
 
         // Add the user to their new organisation
-        $request->user()->update(['organisation_id' => $invite->organisation_id]);
+        $organisation = Organisation::find($invite->organisation_id);
+        $organisation->join($user);
 
         // Delete the invite
         $invite->delete();

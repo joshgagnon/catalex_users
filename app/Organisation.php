@@ -2,11 +2,11 @@
 
 namespace App;
 
-use Config;
 use App\Models\Billable;
+use Config;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 
 class Organisation extends Model
 {
@@ -30,15 +30,18 @@ class Organisation extends Model
         'name' => 'required|max:255',
     ];
 
-    public function members() {
+    public function members()
+    {
         return $this->hasMany('App\User');
     }
 
-    public function membersWithTrashed() {
+    public function membersWithTrashed()
+    {
         return $this->hasMany('App\User')->withTrashed();
     }
 
-    public function billingExempt() {
+    public function billingExempt()
+    {
         // TODO: Remove beta org code
         return $this->id === Config::get('constants.beta_organisation');
     }
@@ -58,8 +61,9 @@ class Organisation extends Model
         return DB::table('service_registrations')->whereIn('user_id', $memberIds)->whereIn('service_id', $serviceId)->exists();
     }
 
-    public function paymentAmount() {
-        switch($this->billing_detail->period) {
+    public function paymentAmount()
+    {
+        switch ($this->billing_detail->period) {
             case 'monthly':
                 $periodCost = Config::get('constants.monthly_price');
                 break;
@@ -82,9 +86,9 @@ class Organisation extends Model
     {
         // Get due billing items for this organisation
         $billingItems = $service->billingItems()
-                                ->where('organisation_id', '=', $this->id)
-                                ->dueForPayment()
-                                ->get();
+            ->where('organisation_id', '=', $this->id)
+            ->dueForPayment()
+            ->get();
 
         // Get  due billing items for members of this organisation
         $members = $this->members()->get();
@@ -92,9 +96,9 @@ class Organisation extends Model
         if ($members->count() > 0) {
             $userIds = $members->pluck('id')->toArray();
             $membersBillingItems = $service->billingItems()
-                                           ->whereIn('user_id', $userIds)
-                                           ->dueForPayment()
-                                           ->get();
+                ->whereIn('user_id', $userIds)
+                ->dueForPayment()
+                ->get();
 
             $billingItems = $billingItems->merge($membersBillingItems);
         }
@@ -111,8 +115,8 @@ class Organisation extends Model
     public function shouldBill()
     {
         return $this->isBillingDay()
-               && $this->billing_detail_id
-               && $this->needsBilled();
+            && $this->billing_detail_id
+            && $this->needsBilled();
     }
 
     public function hasBillingSetup()
@@ -136,5 +140,39 @@ class Organisation extends Model
         }
 
         return $invoiceableUsers;
+    }
+
+    /**
+     * Join this organisation.
+     *
+     * @param \App\User $user
+     */
+    public function join(User $user)
+    {
+        $user->update(['organisation_id' => $this->id]);
+
+        // When a use joins an org, automatically give them GC access if anyone else in the org has GC access.
+        // Do not automatically give them sign.
+
+        $gcService = Service::where('name', 'Good Companies')->first();
+
+        if ($this->isSubscribedTo($gcService->id)) {
+            $user->services()->sync([$gcService->id]);
+        } else {
+            $user->services()->sync([]);
+        }
+    }
+
+    /**
+     * Leave this organisation
+     *
+     * @param \App\User $user
+     */
+    public function leave(User $user)
+    {
+        $user->update(['organisation_id' => null]);
+
+        // When a user leaves an org, remove all subscribed services.
+        $user->services()->sync([]);
     }
 }
