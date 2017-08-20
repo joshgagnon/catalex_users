@@ -1,8 +1,7 @@
 <?php
 
+use App\Role;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-
-Use App\Role;
 
 class AdminControllerTest extends TestCase
 {

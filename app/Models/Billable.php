@@ -15,7 +15,6 @@ use Log;
 
 trait Billable
 {
-
     abstract public function billableType();
 
     abstract public function shouldBill();
@@ -213,6 +212,8 @@ trait Billable
 
     /**
      * Bill a user or organisation, for all billing items that are due for payment
+     *
+     * @return bool
      */
     public function bill()
     {

@@ -10,9 +10,9 @@ class OrganisationInviteControllerTest extends TestCase
     private function createInvite($org, $inviter, $invitee)
     {
         return OrganisationInvite::create([
-            'organisation_id' => $org->id,
+            'organisation_id'  => $org->id,
             'inviting_user_id' => $inviter->id,
-            'invited_user_id' => $invitee->id,
+            'invited_user_id'  => $invitee->id,
         ]);
     }
 

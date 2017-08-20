@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\BillingItem;
 use App\Service;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class User extends \App\User
 {
@@ -31,15 +31,15 @@ class BillableTraitBillMethodTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private function createService($name, $paid=null)
+    private function createService($name, $paid = null)
     {
         return Service::create([
-            'name' => $name,
-            'is_paid_service' => $paid ? : true,
+            'name'            => $name,
+            'is_paid_service' => $paid ?: true,
         ]);
     }
 
-    private function massCreateUser($numberOfUsers, $organisationId=null, $serviceIds=[])
+    private function massCreateUser($numberOfUsers, $organisationId = null, $serviceIds = [])
     {
         $users = [];
 
@@ -302,12 +302,12 @@ class BillableTraitBillMethodTest extends TestCase
 
         // Create a billing item
         BillingItem::create([
-            'user_id' => $user1->id,
+            'user_id'    => $user1->id,
             'service_id' => $gcService->id,
-            'item_id' => 1,
-            'item_type' => 'gc_company',
-            'json_data' => '{\"company_name\":\"test\"}',
-            'active' => true,
+            'item_id'    => 1,
+            'item_type'  => 'gc_company',
+            'json_data'  => '{\"company_name\":\"test\"}',
+            'active'     => true,
         ]);
 
         // Bill the organisation
@@ -363,12 +363,12 @@ class BillableTraitBillMethodTest extends TestCase
         $billingItems = [];
         foreach ($users as $index => $user) {
             $billingItems[] = [
-                'user_id' => $user->id,
+                'user_id'    => $user->id,
                 'service_id' => $gcService->id,
-                'item_id' => $index,
-                'item_type' => 'gc_company',
-                'json_data' => '{\"company_name\":\"test\"}',
-                'active' => true,
+                'item_id'    => $index,
+                'item_type'  => 'gc_company',
+                'json_data'  => '{\"company_name\":\"test\"}',
+                'active'     => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];

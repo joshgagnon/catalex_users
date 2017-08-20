@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\Stub\SyncCommand;
-use App\User;
 use App\BillingItem;
 use App\Service;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\Stub\SyncCommand;
 
 /**
  * Run the tests on the above Sync Command with the stubbed out API request and logging
@@ -89,10 +89,10 @@ class SyncCompaniesFromGoodCompaniesTest extends TestCase
 
         // Create a billing item that matches one of the fake companies
         $billingItem = new BillingItem([
-            'item_id' => $fakeCompanies[0]['companyId'],
+            'item_id'   => $fakeCompanies[0]['companyId'],
             'item_type' => BillingItem::ITEM_TYPE_GC_COMPANY,
             'json_data' => $this->buildJsonData($fakeCompanies[0]),
-            'active' => $fakeCompanies[0]['active'],
+            'active'    => $fakeCompanies[0]['active'],
         ]);
 
         $billingItem->user_id = $fakeCompanies[0]['userId'];
@@ -153,10 +153,10 @@ class SyncCompaniesFromGoodCompaniesTest extends TestCase
         // NOTE: item_id and item_type must match as we use them to match companies
         // in Good Companies to Billing Items
         $billingItem = new BillingItem([
-            'item_id' => $fakeCompanies[0]['companyId'],
+            'item_id'   => $fakeCompanies[0]['companyId'],
             'item_type' => BillingItem::ITEM_TYPE_GC_COMPANY,
             'json_data' => '{"testing": {}}',
-            'active' => !$fakeCompanies[0]['active'], // reverse the companies active boolean
+            'active'    => !$fakeCompanies[0]['active'], // reverse the companies active boolean
         ]);
 
         $billingItem->user_id = $fakeCompanies[0]['userId'];

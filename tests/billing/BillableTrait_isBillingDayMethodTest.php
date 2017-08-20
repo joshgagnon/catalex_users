@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Carbon\Carbon;
-use App\BillingDetail;
-use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BillableTrait_isBillingDayMethodTest extends TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-use App\OrganisationInvite;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\User;
 use App\FirstLoginToken;
+use App\OrganisationInvite;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class OrganisationControllerTest extends TestCase
 {
@@ -23,13 +23,13 @@ class OrganisationControllerTest extends TestCase
 
         // Invite a new user using and email address
         $this->visit('/organisation')
-             ->type('Johnny', 'name')
-             ->type('johnny@example.com', 'email')
-             ->press('Send invitation');
+            ->type('Johnny', 'name')
+            ->type('johnny@example.com', 'email')
+            ->press('Send invitation');
 
         // Check the invite form takes us back to the organisation page with a success message
         $this->seePageIs('/organisation')
-             ->see('An invite has been sent to johnny@example.com');
+            ->see('An invite has been sent to johnny@example.com');
 
         // Find the user we just created
         $newUser = User::where('email', '=', 'johnny@example.com')->first();

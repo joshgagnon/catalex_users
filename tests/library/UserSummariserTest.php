@@ -23,13 +23,13 @@ class UserSummariserTest extends TestCase
         $user->services()->sync([$service1->id, $service2->id]);
 
         $expected = [
-            'id' => $user->id,
-            'email' => $user->email,
-            'name' => $user->name,
-            'free' => $user->free,
+            'id'                      => $user->id,
+            'email'                   => $user->email,
+            'name'                    => $user->name,
+            'free'                    => $user->free,
             'subscription_up_to_date' => true,
-            'roles' => ['registered_user'],
-            'services' => [$service1->name, $service2->name],
+            'roles'                   => ['registered_user'],
+            'services'                => [$service1->name, $service2->name],
         ];
 
         $actual = (new UserSummariser($user))->summarise();
@@ -54,39 +54,39 @@ class UserSummariserTest extends TestCase
         $orgMember3 = $this->createUser(['name' => 'Org member 3', 'email' => '3@org.com', 'organisation_id' => $org->id]);
 
         $expected = [
-            'id' => $user->id,
-            'email' => $user->email,
-            'name' => $user->name,
-            'free' => $user->free,
+            'id'                      => $user->id,
+            'email'                   => $user->email,
+            'name'                    => $user->name,
+            'free'                    => $user->free,
             'subscription_up_to_date' => $user->subscriptionUpToDate(),
-            'roles' => ['organisation_admin', 'registered_user'],
-            'services' => [$service1->name, $service2->name],
-            'organisation' => [
+            'roles'                   => ['organisation_admin', 'registered_user'],
+            'services'                => [$service1->name, $service2->name],
+            'organisation'            => [
                 'organisation_id' => $org->id,
-                'name' => $org->name,
-                'members' => [
+                'name'            => $org->name,
+                'members'         => [
                     [
-                        'id' => $user->id,
+                        'id'    => $user->id,
                         'email' => $user->email,
-                        'name' => $user->name,
-                        'roles' => ['organisation_admin', 'registered_user']
+                        'name'  => $user->name,
+                        'roles' => ['organisation_admin', 'registered_user'],
                     ],
                     [
 
-                        'id' => $orgMember2->id,
+                        'id'    => $orgMember2->id,
                         'email' => $orgMember2->email,
-                        'name' => $orgMember2->name,
-                        'roles' => ['registered_user']
+                        'name'  => $orgMember2->name,
+                        'roles' => ['registered_user'],
                     ],
                     [
 
-                        'id' => $orgMember3->id,
+                        'id'    => $orgMember3->id,
                         'email' => $orgMember3->email,
-                        'name' => $orgMember3->name,
-                        'roles' => ['registered_user']
-                    ]
-                ]
-            ]
+                        'name'  => $orgMember3->name,
+                        'roles' => ['registered_user'],
+                    ],
+                ],
+            ],
         ];
 
         $actual = (new UserSummariser($user))->summarise();

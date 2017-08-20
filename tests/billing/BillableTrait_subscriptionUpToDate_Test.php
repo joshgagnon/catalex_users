@@ -97,7 +97,7 @@ class BillableTrait_subscriptionUpToDate_Test extends TestCase
         $this->assertTrue($subscriptionUpToDate);
     }
 
-    private function createChargeLogs($user, $serviceId, $numberToCreate=1)
+    private function createChargeLogs($user, $serviceId, $numberToCreate = 1)
     {
         BillingItem::create(['user_id' => $user->id, 'item_id' => 1, 'json_data' => json_encode(['company_name' => 'test company 1']), 'active' => true, 'service_id' => $serviceId, 'item_type' => 'gc_company']);
         BillingItem::create(['user_id' => $user->id, 'item_id' => 2, 'json_data' => json_encode(['company_name' => 'test company 2']), 'active' => true, 'service_id' => $serviceId, 'item_type' => 'gc_company']);

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Role;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ImpersonationControllerTest extends TestCase
 {

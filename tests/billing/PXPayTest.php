@@ -36,9 +36,9 @@ class PXPayTest extends TestCase
         $txnType = 'Purchase';
 
         $billingDetails = $this->createBillingDetails([
-            'billing_day' => 31,
+            'billing_day'       => 31,
             'dps_billing_token' => $dpsBillingToken,
-            'expiry_date' => $expiry,
+            'expiry_date'       => $expiry,
         ]);
 
         $pxPay = new PXPay();

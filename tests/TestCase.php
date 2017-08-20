@@ -2,10 +2,10 @@
 
 use App\BillingDetail;
 use App\BillingItem;
+use App\Organisation;
 use App\Role;
 use Carbon\Carbon;
 use Tests\Stub\User;
-use App\Organisation;
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
@@ -35,13 +35,13 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
     }
 
-    protected function createUser($overrides=[], $serviceIds=[])
+    protected function createUser($overrides = [], $serviceIds = [])
     {
         $defaults = [
-            'name' => 'User',
-            'email' => 'user@example.com',
-            'password' => bcrypt('password'),
-            'active' => true,
+            'name'              => 'User',
+            'email'             => 'user@example.com',
+            'password'          => bcrypt('password'),
+            'active'            => true,
             'billing_detail_id' => null,
         ];
 
@@ -59,10 +59,10 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $user;
     }
 
-    protected function createBillingDetails($overrides=[])
+    protected function createBillingDetails($overrides = [])
     {
         $defaults = [
-            'period' => 'monthly',
+            'period'      => 'monthly',
             'billing_day' => 1,
         ];
 
@@ -71,7 +71,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return BillingDetail::create($billingData);
     }
 
-    protected function createUserWithBilling($userOverrides=[], $billingOverrides=[], $serviceIds=[])
+    protected function createUserWithBilling($userOverrides = [], $billingOverrides = [], $serviceIds = [])
     {
         $billingDetail = $this->createBillingDetails($billingOverrides);
 
@@ -82,11 +82,11 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $user;
     }
 
-    protected function createOrganisation($overrides=[], $orgAdmin)
+    protected function createOrganisation($overrides = [], $orgAdmin)
     {
         $defaults = ['name' => 'Test Org'];
         $orgData = array_merge($defaults, $overrides);
-        
+
         $organisation = Organisation::create($orgData);
 
         $orgAdmin->organisation_id = $organisation->id;
