@@ -283,11 +283,18 @@ class AdminController extends Controller
         $chargeLogs = $billable->chargeLogs()->get();
         $billingItems = (new BillingItemSummariser($billable))->summarise();
 
+        $discountPercent = null;
+
+        if ($billable->billing_detail && $billable->billing_detail->discount_percent) {
+            $discountPercent = $billable->billing_detail->discount_percent;
+        }
+
         return view('billing.index')->with([
             'chargeLogs' => $chargeLogs,
             'billingItems' => $billingItems,
             $billableKeyName => $billable,
             'subscriptionUpToDate' => $billable->subscriptionUpToDate(),
+            'discountPercent' => $discountPercent,
         ]);
 
         return view('billing.index');
