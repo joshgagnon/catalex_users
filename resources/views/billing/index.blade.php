@@ -71,15 +71,15 @@
                         <h5 class="panel-title">
                             <a role="button" data-toggle="collapse" data-parent="#accordion" href="{{ '#collapse' . $chargeLog->id }}" aria-expanded="false" aria-controls="{{ 'collapse' . $chargeLog->id }}">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-sm-3">
                                         {{ $chargeLog->timestamp->format('j M Y') }}
                                     </div>
 
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-sm-6 text-center">
                                         ${{ $chargeLog->total_amount }}
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-sm-3">
                                         @if ($chargeLog->pending)
                                             <span class="text-warning pull-right">
                                                 <i class="fa fa-ellipsis-h" aria-hidden="true"></i> Pending
@@ -118,8 +118,8 @@
 
                             @if ($chargeLog->success && !$chargeLog->pending)
                                 <div>
-                                    <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-info" target="_blank">View Invoice</a>
-                                    <a href="{{ route('invoices.download', $chargeLog->id) }}" class="btn btn-info">Download Invoice</a>
+                                    <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-default" target="_blank">View Invoice</a>
+                                    <a href="{{ route('invoices.download', $chargeLog->id) }}" class="btn btn-default">Download Invoice</a>
 
                                     @if ($user->hasRole('global_admin'))
                                         <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post" style="display: inline-block;">
