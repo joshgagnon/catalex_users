@@ -25,7 +25,9 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
+            <div class="row">
+            <div class="col-sm-6">
                 <div class="user-menu-item panel panel-default ">
                     <div class="top-menu">
                         <a href="{{ route('index') }}">
@@ -98,7 +100,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-sm-6">
                 <div class="user-menu-item panel panel-default ">
                     <div class="top-menu">
                         <a href="{{ route('user.profile') }}">
@@ -148,8 +150,10 @@
                     </div>
                 </div>
             </div>
+            </div>
+            </div>
 
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6">
                 <div class="user-menu-item panel panel-default ">
                     <div class="top-menu">
                         <a href="{{ route('organisation.index') }}">
