@@ -1,12 +1,10 @@
 <?php namespace App\Console\Commands;
 
-use Config;
+use App\Library\Mail;
 use App\User;
 use Carbon\Carbon;
-use App\Library\Mail;
+use Config;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 class SendExpiredTrialEmails extends Command {
 

@@ -1,17 +1,17 @@
 <?php namespace App\Models;
 
-use App\Trial;
-use League\Flysystem\Exception;
-use Log;
-use Config;
-use App\ChargeLog;
-use Carbon\Carbon;
-use App\Library\PXPay;
-use App\Library\Billing;
-use App\Service;
+use App\BillingDetail;
 use App\BillingItem;
 use App\BillingItemPayment;
-use App\BillingDetail;
+use App\ChargeLog;
+use App\Library\Billing;
+use App\Library\PXPay;
+use App\Service;
+use App\Trial;
+use Carbon\Carbon;
+use Config;
+use League\Flysystem\Exception;
+use Log;
 
 trait Billable
 {
@@ -129,7 +129,7 @@ trait Billable
 
         $billablesService = $this->services()->where('service_id', $service->id)->first();
 
-        if($billablesService && $billablesService->is_paid_service && !$this->billing_detail()->first()) {
+        if ($billablesService && $billablesService->is_paid_service && !$this->billing_detail()->first()) {
             return false;
         }
 
@@ -157,8 +157,7 @@ trait Billable
     {
         if ($this->organisation) {
             return $this->organisation->setBillingPeriod($period);
-        }
-        else {
+        } else {
             if (!in_array($period, ['monthly', 'annually'])) {
                 throw new \Exception('Billing period must be one of "monthly" or "annually"');
             }
@@ -172,6 +171,9 @@ trait Billable
      * Billing will take place monthly on the billing day (day of the month) specified in the
      * billing_detail of the organisation or user. If the billing day doesn't exist in the month
      * we are checking for (eg. 31st of November); bill on the last day of the month
+     *
+     * @param null $dateOfBilling
+     * @return bool
      */
     public function isBillingDay($dateOfBilling = null)
     {
@@ -253,11 +255,11 @@ trait Billable
 
                 // Create the billing item record
                 BillingItemPayment::forceCreate([
-                    'paid_until' => $payingUntil,
+                    'paid_until'      => $payingUntil,
                     'billing_item_id' => $item->id,
-                    'charge_log_id' => $chargeLog->id,
-                    'amount' => Billing::centsToDollars($priceInCents),
-                    'gst' => Billing::includingGst($priceInCents),
+                    'charge_log_id'   => $chargeLog->id,
+                    'amount'          => Billing::centsToDollars($priceInCents),
+                    'gst'             => Billing::includingGst($priceInCents),
                 ]);
             }
         }
@@ -272,20 +274,19 @@ trait Billable
 
         // Update the charge log
         $chargeLog->update([
-            'success' => $success,
-            'pending' => false,
+            'success'               => $success,
+            'pending'               => false,
             'total_before_discount' => $totalBeforeDiscount,
-            'discount_percent' => $discountPercent,
-            'total_amount' => $totalAfterDiscount,
-            'gst' => Billing::includingGst($totalAfterDiscount),
+            'discount_percent'      => $discountPercent,
+            'total_amount'          => $totalAfterDiscount,
+            'gst'                   => Billing::includingGst($totalAfterDiscount),
         ]);
 
         // Above we optimistically set the paid until dates to the paying until date
         // if the payment fails we need to undo that
         if ($chargeLog->success) {
             $chargeLog->sendInvoices();
-        }
-        else {
+        } else {
             // Set all item payments 'paid until' to the last payment (or today if there hasn't been a previous payment)
             $itemPayments = $chargeLog->billingItemPayments()->get();
 
@@ -364,7 +365,7 @@ trait Billable
 
     private function calculatePayingUntil($period)
     {
-         switch ($period) {
+        switch ($period) {
             case 'monthly':
                 return Carbon::now()->addMonthsNoOverflow(1);
 
