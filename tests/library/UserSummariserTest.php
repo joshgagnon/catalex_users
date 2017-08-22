@@ -20,7 +20,7 @@ class UserSummariserTest extends TestCase
         $service1 = Service::find(1);
         $service2 = Service::find(2);
 
-        $user->services()->sync([$service1->id, $service2->id]);
+        $user->syncSubscriptions([$service1->id, $service2->id]);
 
         $expected = [
             'id'                      => $user->id,

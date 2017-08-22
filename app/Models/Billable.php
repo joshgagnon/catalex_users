@@ -29,6 +29,8 @@ trait Billable
 
     abstract public function accountNumber();
 
+    abstract public function isSubscribedTo($serviceId);
+
     public function billing_detail()
     {
         return $this->belongsTo(BillingDetail::class);
@@ -59,8 +61,6 @@ trait Billable
     {
         return $this->hasMany(Trial::class);
     }
-
-    abstract public function isSubscribedTo($serviceId);
 
     public function foreignIdName()
     {
@@ -134,7 +134,7 @@ trait Billable
 
         // If this billable entity is registered for this service, check their service level
         if ($billablesService != null) {
-            return $billablesService->pivot->access_level == 'full_access';
+            return true;
         }
 
         // If not registered for the service and not belonging to an organisation: this billable entity has no access
@@ -211,6 +211,26 @@ trait Billable
     }
 
     /**
+     * Get a list of paid CataLex services that the current user is subscribed to
+     *
+     * @return array
+     */
+    public function subscribedServices()
+    {
+        // This wont scale: it is a n + 1 query, but it will do for now.
+        $paidServices = Service::where('is_paid_service', true)->get();
+        $billableServices = [];
+
+        foreach ($paidServices as $service) {
+            if ($this->isSubscribedTo($service->id)) {
+                $billableServices[] = $service;
+            }
+        }
+
+        return $billableServices;
+    }
+
+    /**
      * Bill a user or organisation, for all billing items that are due for payment
      *
      * @return bool
@@ -222,11 +242,11 @@ trait Billable
             return true;
         }
 
-        // Get a list of paid CataLex services
-        $services = Service::where('is_paid_service', true)->get();
+        // Get a list of paid CataLex services that the current user is subscribed to
+        $services = $this->subscribedServices();
 
         // Check if they have any services that require billing
-        if ($services->count() == 0) {
+        if (count($services) === 0) {
             return true;
         }
 
@@ -310,33 +330,6 @@ trait Billable
     }
 
     /**
-     * Get the price for a service
-     *
-     * @param $service
-     * @param $billingPeriod
-     * @return mixed
-     * @throws \Exception
-     */
-    private function priceForService($service, $billingPeriod)
-    {
-        // If this billable entity has is directly registered with the service see if it has a specified price
-        // There are times where this billable entity wont have a registration record. This is when an organisation
-        // isn't registered to a service, but one of it's users is
-        switch ($service->name) {
-            case 'Good Companies':
-                $constantName = $billingPeriod == 'monthly' ? 'constants.gc_monthly' : 'constants.gc_yearly';
-                return Config::get($constantName);
-
-            case 'CataLex Sign':
-                $constantName = $billingPeriod == 'monthly' ? 'constants.sign_monthly' : 'constants.sign_yearly';
-                return Config::get($constantName);
-
-            default:
-                throw new \Exception('Unknown default price for service');
-        }
-    }
-
-    /**
      * Get the price for an individual billing item.
      *
      * @param $itemType
@@ -349,6 +342,10 @@ trait Billable
         switch ($itemType) {
             case BillingItem::ITEM_TYPE_GC_COMPANY:
                 $constantName = $billingPeriod == 'monthly' ? 'constants.gc_company_monthly' : 'constants.gc_company_yearly';
+                return Config::get($constantName);
+
+            case BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION:
+                $constantName = $billingPeriod == 'monthly' ? 'constants.sign_monthly' : 'constants.sign_yearly';
                 return Config::get($constantName);
 
             default:

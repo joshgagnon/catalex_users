@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\BillingItem;
+use App\Library\Billing;
 use Illuminate\Http\Request;
 
 use Auth;
@@ -99,7 +101,7 @@ class SubscriptionController extends Controller
                 $subscriptionIds = array_keys($membersSubscriptions[$member->id]);
             }
 
-            $member->services()->sync($subscriptionIds);
+            $member->syncSubscriptions($subscriptionIds);
         }
 
         $isSubscribedToGC = $user->isSubscribedTo($gcService->id);

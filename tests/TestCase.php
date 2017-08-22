@@ -13,6 +13,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected $baseUrl = 'http://localhost';
 
     private $massCreateBillingItemIdCounter = 1;
+    private $userCounter = 1;
 
     // Laravel boilerplate to create app for tests
     public function createApplication()
@@ -39,7 +40,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         $defaults = [
             'name'              => 'User',
-            'email'             => 'user@example.com',
+            'email'             => 'user' . $this->userCounter++ . '@example.com',
             'password'          => bcrypt('password'),
             'active'            => true,
             'billing_detail_id' => null,
@@ -54,7 +55,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $user->addRole($registeredRole);
 
         // Add the services
-        $user->services()->attach($serviceIds);
+        $user->syncSubscriptions($serviceIds);
 
         return $user;
     }

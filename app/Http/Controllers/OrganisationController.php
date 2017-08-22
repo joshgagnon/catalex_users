@@ -42,7 +42,6 @@ class OrganisationController extends Controller
     public function postCreate(CreateOrganisationRequest $request)
     {
         $user = Auth::user();
-
         $data = $request->all();
 
         $organisation = Organisation::create([
@@ -50,10 +49,6 @@ class OrganisationController extends Controller
             'billing_detail_id' => $user->billing_detail ? $user->billing_detail->id : null,
             'free' => false,
         ]);
-
-        // Attach the user's services to the org
-        $userServices = $user->services()->get()->pluck('id')->toArray();
-        $organisation->services()->attach($userServices);
 
         // Give the user the role: org admin
         $user->addRole('organisation_admin');

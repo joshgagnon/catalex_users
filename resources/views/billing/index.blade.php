@@ -35,29 +35,35 @@
         <div class="scrollable-table-container">
             <table class="table table-condensed">
                 <thead>
-                    <tr>
-                        <th>Service</th>
-                        <th>Name</th>
-                        <th>Owner</th>
-                        <th>Created Date</th>
-                    </tr>
+                <tr>
+                    <th>Service</th>
+                    <th>Name</th>
+                    <th>Owner</th>
+                    <th>Created Date</th>
+                </tr>
                 </thead>
 
                 <tbody>
-                    @foreach ($billingItems as $billingItem)
-                        <tr>
-                            <td>{{ $billingItem->service->name }}</td>
-                            <td>{{ json_decode($billingItem->json_data)->company_name }}</td>
-                            <td>
-                                @if ($billingItem->user)
-                                    {{ $billingItem->user->fullName() }}
-                                @else
-                                    {{ $billingItem->organisation->name }}
-                                @endif
-                            </td>
-                            <td>{{ $billingItem->created_at->format('j M Y')  }}</td>
-                        </tr>
-                    @endforeach
+                @foreach ($billingItems as $billingItem)
+                    <?php
+                    $itemData = json_decode($billingItem->json_data, true);
+                    $itemType = $billingItem->item_type;
+                    $description = \App\BillingItem::description($itemType, $itemData);
+                    ?>
+
+                    <tr>
+                        <td>{{ $billingItem->service->name }}</td>
+                        <td>{{ $description }}</td>
+                        <td>
+                            @if ($billingItem->user)
+                                {{ $billingItem->user->fullName() }}
+                            @else
+                                {{ $billingItem->organisation->name }}
+                            @endif
+                        </td>
+                        <td>{{ $billingItem->created_at->format('j M Y')  }}</td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
         </div>
@@ -69,7 +75,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="{{ 'heading' . $chargeLog->id }}">
                         <h5 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="{{ '#collapse' . $chargeLog->id }}" aria-expanded="false" aria-controls="{{ 'collapse' . $chargeLog->id }}">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion"
+                               href="{{ '#collapse' . $chargeLog->id }}" aria-expanded="false"
+                               aria-controls="{{ 'collapse' . $chargeLog->id }}">
                                 <div class="row">
                                     <div class="col-sm-3">
                                         {{ $chargeLog->timestamp->format('j M Y') }}
@@ -98,7 +106,9 @@
                             </a>
                         </h5>
                     </div>
-                    <div id="{{ 'collapse' . $chargeLog->id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="{{ 'heading' . $chargeLog->id }}">
+                    <div id="{{ 'collapse' . $chargeLog->id }}"
+                         class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel"
+                         aria-labelledby="{{ 'heading' . $chargeLog->id }}">
                         <div class="panel-body">
                             <dl>
                                 <dt>Amount</dt>
@@ -118,11 +128,14 @@
 
                             @if ($chargeLog->success && !$chargeLog->pending)
                                 <div>
-                                    <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-default" target="_blank">View Invoice</a>
-                                    <a href="{{ route('invoices.download', $chargeLog->id) }}" class="btn btn-default">Download Invoice</a>
+                                    <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-default"
+                                       target="_blank">View Invoice</a>
+                                    <a href="{{ route('invoices.download', $chargeLog->id) }}" class="btn btn-default">Download
+                                        Invoice</a>
 
                                     @if ($user->hasRole('global_admin'))
-                                        <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                        <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post"
+                                              style="display: inline-block;">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <button type="submit" class="btn btn-danger">Resend Invoice</button>
                                         </form>

@@ -2,15 +2,17 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use \Carbon\Carbon;
 
 class BillingItem extends Model
 {
     const ITEM_TYPE_GC_COMPANY = 'gc_company';
+    const ITEM_TYPE_SIGN_SUBSCRIPTION = 'catalex_sign_subscription';
 
     private $itemTypes = [
-        self::ITEM_TYPE_GC_COMPANY
+        self::ITEM_TYPE_GC_COMPANY,
+        self::ITEM_TYPE_SIGN_SUBSCRIPTION,
     ];
 
     /**
@@ -26,7 +28,7 @@ class BillingItem extends Model
      * @var array
      */
     protected $casts = [
-        'json_data' => 'array'
+        'json_data' => 'array',
     ];
 
     public function user()
@@ -43,12 +45,12 @@ class BillingItem extends Model
     {
         // Check it hasn't been paid past tomorrow
         $query->whereNotExists(function ($query) {
-                    $query->select(\DB::raw(1))
-                          ->from('billing_item_payments')
-                          ->whereRaw('billing_item_payments.billing_item_id = billing_items.id')
-                          ->where('paid_until', '>=', Carbon::tomorrow())
-                          ->where('active', true);
-                });
+            $query->select(\DB::raw(1))
+                ->from('billing_item_payments')
+                ->whereRaw('billing_item_payments.billing_item_id = billing_items.id')
+                ->where('paid_until', '>=', Carbon::tomorrow())
+                ->where('active', true);
+        });
 
         // Check it is active
         $query->where('billing_items.active', true);
@@ -86,5 +88,20 @@ class BillingItem extends Model
     public function payments()
     {
         return $this->hasMany(BillingItemPayment::class);
+    }
+
+    public static function description($itemType, $itemData)
+    {
+        switch ($itemType) {
+            case BillingItem::ITEM_TYPE_GC_COMPANY:
+                return '' . $itemData['company_name'];
+
+            case BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION:
+                $userName = $itemData['user_name'];
+                return 'CataLex Sign subscription for ' . $userName;
+
+            default:
+                return '';
+        }
     }
 }

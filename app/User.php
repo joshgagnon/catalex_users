@@ -268,4 +268,44 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $this->billing_detail()->exists();
     }
+
+    public function syncSubscriptions($subscriptions)
+    {
+        $this->services()->sync($subscriptions);
+        $this->syncSubscriptionsWithBillingItems();
+    }
+
+    public function syncSubscriptionsWithBillingItems()
+    {
+        // This array maps service names to item types for the billing item.
+        // If a service is not in this array, then it wont be billed as a subscription (eg. Good Companies)
+        $serviceTypeMappings = [
+            Service::SERVICE_NAME_CATALEX_SIGN => BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION,
+        ];
+
+        $userServiceIds = $this->services()->where('is_paid_service', true)->get()->pluck('id')->toArray();
+        $paidServices = Service::where('is_paid_service', true)->get();
+
+        foreach ($paidServices as $service) {
+            if (array_key_exists($service->name, $serviceTypeMappings)) {
+                $isSubscribed = in_array($service->id, $userServiceIds);
+                $billingItem = $this->billingItems()->where('service_id', $service->id)->first();
+
+                if (!$billingItem && $isSubscribed) {
+                    // Create billing item
+                    BillingItem::forceCreate([
+                        'user_id' => $this->id,
+                        'service_id' => $service->id,
+                        'item_id' => $this->id, // we need something here that is unique to the service id, user id is the easiest option
+                        'item_type' => $serviceTypeMappings[$service->name],
+                        'json_data' => json_encode(['user_name' => $this->name]),
+                        'active' => true,
+                    ]);
+                }
+                else if ($billingItem && $billingItem->active !== $isSubscribed) {
+                    $billingItem->update(['active' => $isSubscribed]);
+                }
+            }
+        }
+    }
 }

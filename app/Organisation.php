@@ -156,11 +156,8 @@ class Organisation extends Model
 
         $gcService = Service::where('name', 'Good Companies')->first();
 
-        if ($this->isSubscribedTo($gcService->id)) {
-            $user->services()->sync([$gcService->id]);
-        } else {
-            $user->services()->sync([]);
-        }
+        $servicesToSync = $this->isSubscribedTo($gcService->id) ? [$gcService->id] : [];
+        $user->syncSubscriptions($servicesToSync);
     }
 
     /**
@@ -173,6 +170,6 @@ class Organisation extends Model
         $user->update(['organisation_id' => null]);
 
         // When a user leaves an org, remove all subscribed services.
-        $user->services()->sync([]);
+        $user->syncSubscriptions([]);
     }
 }

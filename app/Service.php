@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
+    const SERVICE_NAME_GOOD_COMPANIES = 'Good Companies';
+    const SERVICE_NAME_CATALEX_SIGN = 'CataLex Sign';
+
     protected $fillable = ['name', 'is_paid_service'];
 
     public function users()

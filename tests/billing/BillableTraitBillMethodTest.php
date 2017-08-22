@@ -4,25 +4,15 @@ use App\BillingItem;
 use App\Service;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-
-class User extends \App\User
-{
-    public $totalDollarsDue;
-
-    protected function requestPayment($totalDollarsDue)
-    {
-        $this->totalDollarsDue = $totalDollarsDue;
-        return true; // Don't do any payment stuff, just pretend it worked
-    }
-}
+use Tests\Stub\User;
 
 class Organisation extends \App\Organisation
 {
-    public $totalDollarsDue;
+    public $amountRequested;
 
-    protected function requestPayment($totalDollarsDue)
+    protected function requestPayment($amountRequested)
     {
-        $this->totalDollarsDue = $totalDollarsDue;
+        $this->amountRequested = $amountRequested;
         return true; // Don't do any payment stuff, just pretend it worked
     }
 }
@@ -44,17 +34,7 @@ class BillableTraitBillMethodTest extends TestCase
         $users = [];
 
         for ($index = 0; $index < $numberOfUsers; $index++) {
-            $user = User::create([
-                'name'            => 'User ' . $index,
-                'email'           => 'user' . $index . '@example.com',
-                'password'        => bcrypt('password'),
-                'active'          => true,
-                'organisation_id' => $organisationId,
-            ]);
-
-            $user->services()->attach($serviceIds);
-
-            $users[] = $user;
+            $users[] = $this->createUser(['organisation_id' => $organisationId], $serviceIds);
         }
 
         return $users;
@@ -80,7 +60,7 @@ class BillableTraitBillMethodTest extends TestCase
         $this->assertFalse($billingResult);
 
         // Check the user wasn't billed
-        $this->assertNull($user->totalDollarsDue);
+        $this->assertNull($user->amountRequested);
     }
 
     /**
@@ -103,7 +83,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
         $expected = '12.00';
 
         $this->assertEquals($expected, $actual);
@@ -129,7 +109,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
         $expected = '1.50';
 
         $this->assertEquals($expected, $actual);
@@ -152,7 +132,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
         $expected = '0.00';
 
         $this->assertEquals($expected, $actual);
@@ -175,7 +155,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
         $expected = '0.00';
 
         $this->assertEquals($expected, $actual);
@@ -201,7 +181,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
         $expected = '24.00';
 
         $this->assertEquals($expected, $actual);
@@ -227,7 +207,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
         $expected = '3.00';
 
         $this->assertEquals($expected, $actual);
@@ -254,7 +234,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
         $expected = '3324.00';
 
         $this->assertEquals($expected, $actual);
@@ -282,7 +262,7 @@ class BillableTraitBillMethodTest extends TestCase
 
         // Check the result
         $expected = '415.50';
-        $actual = $user->totalDollarsDue;
+        $actual = $user->amountRequested;
 
         $this->assertEquals($expected, $actual);
     }
@@ -314,7 +294,7 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->totalDollarsDue;
+        $actual = $organisation->amountRequested;
         $expected = '12.00';
 
         $this->assertEquals($expected, $actual);
@@ -340,7 +320,7 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->totalDollarsDue;
+        $actual = $organisation->amountRequested;
         $expected = '190.50';
 
         $this->assertEquals($expected, $actual);
@@ -357,7 +337,7 @@ class BillableTraitBillMethodTest extends TestCase
 
         // Create a few users
         $gcService = Service::where('name', 'Good Companies')->first();
-        $users = $this->massCreateUser(4, $organisation->id, $gcService->id);
+        $users = $this->massCreateUser(4, $organisation->id, [$gcService->id]);
 
         // Give each user some billing items
         $billingItems = [];
@@ -380,7 +360,7 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->totalDollarsDue;
+        $actual = $organisation->amountRequested;
         $expected = '48.00'; // 4 users * $12 a year
 
         $this->assertEquals($expected, $actual);
@@ -399,7 +379,7 @@ class BillableTraitBillMethodTest extends TestCase
         $numberOfUsers = 4;
         $numberOfItemsPerUser = 10;
         $gcService = Service::where('name', 'Good Companies')->first();
-        $users = $this->massCreateUser($numberOfUsers, $organisation->id, $gcService->id);
+        $users = $this->massCreateUser($numberOfUsers, $organisation->id, [$gcService->id]);
 
         // Give each user the
         foreach ($users as $index => $user) {
@@ -410,9 +390,39 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->totalDollarsDue;
+        $actual = $organisation->amountRequested;
         $expected = '480.00'; // 4 users * 10 items per user * $12 a year
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @test
+     *
+     * Test the bill method charges the monthly price for a subscription
+     */
+    public function bill_charges_for_monthly_subscriptions()
+    {
+        $sign = Service::where('name', 'CataLex Sign')->first();
+        $user = $this->createUserWithBilling([], [], [$sign->id]);
+
+        $user->bill();
+
+        $this->assertEquals($user->amountRequested, '6.00');
+    }
+
+    /**
+     * @test
+     *
+     * Test the bill method charges the yearly price for a subscription
+     */
+    public function bill_charges_for_annual_subscriptions()
+    {
+        $sign = Service::where('name', 'CataLex Sign')->first();
+        $user = $this->createUserWithBilling([], ['period' => 'annually'], [$sign->id]);
+
+        $user->bill();
+
+        $this->assertEquals($user->amountRequested, '60.00');
     }
 }

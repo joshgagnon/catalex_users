@@ -64,8 +64,11 @@ class ChargeLog extends Model
         $billingItems = $this->billingItemPayments()->with('billingItem')->get();
 
         foreach ($billingItems as $item) {
+            $itemType = $item->billingItem->item_type;
+            $itemData = json_decode($item->billingItem->json_data, true);
+
             $billingSummary[] = [
-                'description' => json_decode($item->billingItem->json_data, true)['company_name'],
+                'description' => BillingItem::description($itemType, $itemData),
                 'paidUntil' => $item->paid_until->format('j M Y'),
                 'amount' => $item->amount ?: null,
             ];
