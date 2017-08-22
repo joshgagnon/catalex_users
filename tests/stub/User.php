@@ -2,6 +2,7 @@
 
 namespace Tests\Stub;
 
+use App\ChargeLog;
 use Carbon\Carbon;
 
 class User extends \App\User
@@ -16,4 +17,9 @@ class User extends \App\User
 
         return true;
     }
+
+    /**
+     * @param \App\ChargeLog $chargeLog
+     */
+    protected function sendInvoices(ChargeLog $chargeLog) { } // do nothing
 }

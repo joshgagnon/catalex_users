@@ -306,7 +306,7 @@ trait Billable
         // Above we optimistically set the paid until dates to the paying until date
         // if the payment fails we need to undo that
         if ($chargeLog->success) {
-            $chargeLog->sendInvoices();
+            $this->sendInvoices($chargeLog);
         } else {
             // Set all item payments 'paid until' to the last payment (or today if there hasn't been a previous payment)
             $itemPayments = $chargeLog->billingItemPayments()->get();
@@ -327,6 +327,16 @@ trait Billable
 
         // Return whether payment was successful or not
         return $chargeLog->success;
+    }
+
+    /**
+     * Extract this, so we can override it in testing
+     *
+     * @param \App\ChargeLog $chargeLog
+     */
+    protected function sendInvoices(ChargeLog $chargeLog)
+    {
+        $chargeLog->sendInvoices();
     }
 
     /**

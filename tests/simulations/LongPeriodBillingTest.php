@@ -16,8 +16,6 @@ class LongPeriodBillingTest extends TestCase
     const MONTHLY_PRICE = '1.50';
     const YEARLY_PRICE = '12.00';
 
-    protected $seeder = 'ServiceSeeder';
-
     private function massGenerateCompanies($user, $numberOfCompanies)
     {
         $fakeCompanies = [];
@@ -42,9 +40,9 @@ class LongPeriodBillingTest extends TestCase
         Carbon::setTestNow(Carbon::parse('25 March 2017'));
 
         $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
-        $billingDetails = $this->createBillingDetails();
-        $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
-        $user->services()->attach(Service::where('name', 'Good Companies')->first());
+
+        $gc = Service::where('name', 'Good Companies')->first();
+        $user = $this->createUserWithBilling([], [], [$gc->id]);
 
         $fakeCompanies = [
             ['userId' => $user->id, 'companyId' => 72773, 'active' => true, 'companyName' => 'Johnny Mate'],
@@ -89,9 +87,9 @@ class LongPeriodBillingTest extends TestCase
     public function monthlyBilling_oneUser_tenCompanies()
     {
         $dayAfterSimulation = Carbon::now()->addMonths(self::MONTHS_IN_SIMULATION);
-        $billingDetails = $this->createBillingDetails();
-        $user = $this->createUser(['name' => 'User #1', 'email' => 'paddy+user1@catalex.nz', 'billing_detail_id' => $billingDetails->id]);
-        $user->services()->attach(Service::where('name', 'Good Companies')->first());
+
+        $gc = Service::where('name', 'Good Companies')->first();
+        $user = $this->createUserWithBilling([], [], [$gc->id]);
 
         $numberOfCompanies = 10;
         $fakeCompanies = $this->massGenerateCompanies($user, $numberOfCompanies);

@@ -2,7 +2,7 @@
 
 use App\BillingDetail;
 use App\BillingItem;
-use App\Organisation;
+use Tests\Stub\Organisation;
 use App\Role;
 use Carbon\Carbon;
 use Tests\Stub\User;
