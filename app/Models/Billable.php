@@ -267,6 +267,8 @@ trait Billable
         $payingUntil = $this->calculatePayingUntil($billingDetails->period);
         $centsDue = 0;
 
+        $itemPaymentsToCreate = [];
+
         foreach ($services as $service) {
             $billingItems = $this->getAllDueBillingItems($service);
 
@@ -274,16 +276,19 @@ trait Billable
                 $priceInCents = $this->priceForBillingItem($item->item_type, $billingDetails->period);
                 $centsDue += $priceInCents;
 
-                // Create the billing item record
-                BillingItemPayment::forceCreate([
+                $itemPaymentsToCreate[] = [
                     'paid_until'      => $payingUntil,
                     'billing_item_id' => $item->id,
                     'charge_log_id'   => $chargeLog->id,
                     'amount'          => Billing::centsToDollars($priceInCents),
                     'gst'             => Billing::includingGst($priceInCents),
-                ]);
+                    'created_at'      => Carbon::now(),
+                    'updated_at'      => Carbon::now(),
+                ];
             }
         }
+
+        BillingItemPayment::insert($itemPaymentsToCreate);
 
         // Handle discounts
         $totalBeforeDiscount = Billing::centsToDollars($centsDue);
