@@ -49,7 +49,6 @@ class LongPeriodBillingTest extends TestCase
         ];
 
         $lastBilled = null;
-        $totalAmountBilled = 0;
 
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
@@ -63,9 +62,7 @@ class LongPeriodBillingTest extends TestCase
                 $lastBilled = Carbon::today();
 
                 $this->assertEquals($user->paymentLastRequested, $lastBilled);
-                $this->assertEquals($user->amountRequested, self::MONTHLY_PRICE);
-
-                $totalAmountBilled += $user->amountRequested;
+                $this->assertEquals($user->amountLastRequested, self::MONTHLY_PRICE);
             }
 
             // Increment the day
@@ -78,7 +75,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of months * monthly price)
         $expectedTotal = self::MONTHS_IN_SIMULATION * self::MONTHLY_PRICE;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -95,7 +92,6 @@ class LongPeriodBillingTest extends TestCase
         $fakeCompanies = $this->massGenerateCompanies($user, $numberOfCompanies);
 
         $lastBilled = null;
-        $totalAmountBilled = 0;
 
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
@@ -109,9 +105,7 @@ class LongPeriodBillingTest extends TestCase
                 $lastBilled = Carbon::today();
 
                 $this->assertEquals($user->paymentLastRequested, $lastBilled);
-                $this->assertEquals($user->amountRequested, self::MONTHLY_PRICE * $numberOfCompanies);
-
-                $totalAmountBilled += $user->amountRequested;
+                $this->assertEquals($user->amountLastRequested, self::MONTHLY_PRICE * $numberOfCompanies);
             }
 
             // Increment the day
@@ -124,7 +118,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of months * monthly price * number of companies)
         $expectedTotal = self::MONTHS_IN_SIMULATION * self::MONTHLY_PRICE * $numberOfCompanies;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -140,7 +134,6 @@ class LongPeriodBillingTest extends TestCase
         $fakeCompanies = [];
 
         $lastBilled = null;
-        $totalAmountBilled = 0;
 
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
@@ -154,9 +147,7 @@ class LongPeriodBillingTest extends TestCase
                 $lastBilled = Carbon::today();
 
                 $this->assertEquals($user->paymentLastRequested, $lastBilled);
-                $this->assertEquals($user->amountRequested, self::MONTHLY_PRICE * count($fakeCompanies));
-
-                $totalAmountBilled += $user->amountRequested;
+                $this->assertEquals($user->amountLastRequested, self::MONTHLY_PRICE * count($fakeCompanies));
             }
 
             // Increment the day
@@ -169,7 +160,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of months * monthly price * number of companies)
         $expectedTotal = self::MONTHS_IN_SIMULATION * self::MONTHLY_PRICE * count($fakeCompanies);
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -187,7 +178,6 @@ class LongPeriodBillingTest extends TestCase
         ];
 
         $lastBilled = null;
-        $totalAmountBilled = 0;
 
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
@@ -200,11 +190,8 @@ class LongPeriodBillingTest extends TestCase
 
                 $lastBilled = Carbon::today();
 
-
                 $this->assertEquals($user->paymentLastRequested, $lastBilled);
-                $this->assertEquals($user->amountRequested, self::MONTHLY_PRICE);
-
-                $totalAmountBilled += $user->amountRequested;
+                $this->assertEquals($user->amountLastRequested, self::MONTHLY_PRICE);
             }
 
             // Increment the day
@@ -217,7 +204,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of months * monthly price)
         $expectedTotal = self::MONTHS_IN_SIMULATION * self::MONTHLY_PRICE;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -234,9 +221,6 @@ class LongPeriodBillingTest extends TestCase
             ['userId' => $user->id, 'companyId' => 72773, 'active' => true, 'companyName' => 'Johnny Mate'],
         ];
 
-        $totalAmountBilled = 0;
-        $timesCharged = 0;
-
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
             $syncCommand = new SyncCommand();
@@ -248,12 +232,9 @@ class LongPeriodBillingTest extends TestCase
 
                 $this->assertEquals($user->paymentLastRequested, Carbon::today());
 
-                if ($user->amountRequested > 0) {
-                    $this->assertEquals($user->amountRequested, self::YEARLY_PRICE);
-                    $timesCharged++;
+                if ($user->amountLastRequested > 0) {
+                    $this->assertEquals($user->amountLastRequested, self::YEARLY_PRICE);
                 }
-
-                $totalAmountBilled += $user->amountRequested;
             }
 
             // Increment the day
@@ -261,7 +242,7 @@ class LongPeriodBillingTest extends TestCase
         }
 
         // Check the user was charged the correct number of times
-        $this->assertEquals(self::PART_YEARS_IN_SIMULATION, $timesCharged);
+        $this->assertEquals(self::PART_YEARS_IN_SIMULATION, $user->timesBilled);
 
         // Check the number of charge logs matches the number of times we tried to bill them
         $numberOfChargeLogs = $user->chargeLogs()->count();
@@ -269,7 +250,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of years * yearly price)
         $expectedTotal = self::PART_YEARS_IN_SIMULATION * self::YEARLY_PRICE;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -285,9 +266,6 @@ class LongPeriodBillingTest extends TestCase
         $numberOfCompanies = 3;
         $fakeCompanies = $this->massGenerateCompanies($user, $numberOfCompanies);
 
-        $totalAmountBilled = 0;
-        $timesCharged = 0;
-
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
             $syncCommand = new SyncCommand();
@@ -299,12 +277,9 @@ class LongPeriodBillingTest extends TestCase
 
                 $this->assertEquals($user->paymentLastRequested, Carbon::today());
 
-                if ($user->amountRequested > 0) {
-                    $this->assertEquals($user->amountRequested, self::YEARLY_PRICE * $numberOfCompanies);
-                    $timesCharged++;
+                if ($user->amountLastRequested > 0) {
+                    $this->assertEquals($user->amountLastRequested, self::YEARLY_PRICE * $numberOfCompanies);
                 }
-
-                $totalAmountBilled += $user->amountRequested;
             }
 
             // Increment the day
@@ -312,7 +287,7 @@ class LongPeriodBillingTest extends TestCase
         }
 
         // Check the user was charged the correct number of times
-        $this->assertEquals(self::PART_YEARS_IN_SIMULATION, $timesCharged);
+        $this->assertEquals(self::PART_YEARS_IN_SIMULATION, $user->timesBilled);
 
         // Check the number of charge logs matches the number of times we tried to bill them
         $numberOfChargeLogs = $user->chargeLogs()->count();
@@ -320,7 +295,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of years * yearly price)
         $expectedTotal = self::PART_YEARS_IN_SIMULATION * self::YEARLY_PRICE * $numberOfCompanies;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -336,9 +311,6 @@ class LongPeriodBillingTest extends TestCase
         $numberOfCompanies = 0;
         $fakeCompanies = $this->massGenerateCompanies($user, $numberOfCompanies);
 
-        $totalAmountBilled = 0;
-        $timesCharged = 0;
-
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
             $syncCommand = new SyncCommand();
@@ -350,12 +322,9 @@ class LongPeriodBillingTest extends TestCase
 
                 $this->assertEquals($user->paymentLastRequested, Carbon::today());
 
-                if ($user->amountRequested > 0) {
-                    $this->assertEquals($user->amountRequested, self::YEARLY_PRICE * $numberOfCompanies);
-                    $timesCharged++;
+                if ($user->amountLastRequested > 0) {
+                    $this->assertEquals($user->amountLastRequested, self::YEARLY_PRICE * $numberOfCompanies);
                 }
-
-                $totalAmountBilled += $user->amountRequested;
             }
 
             // Increment the day
@@ -363,7 +332,7 @@ class LongPeriodBillingTest extends TestCase
         }
 
         // Check the user was charged the correct number of times
-        $this->assertEquals(0, $timesCharged);
+        $this->assertEquals(0, $user->timesBilled);
 
         // Check the number of charge logs matches the number of times we tried to bill them
         $numberOfChargeLogs = $user->chargeLogs()->count();
@@ -371,7 +340,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of years * yearly price)
         $expectedTotal = self::PART_YEARS_IN_SIMULATION * self::YEARLY_PRICE * $numberOfCompanies;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -387,9 +356,6 @@ class LongPeriodBillingTest extends TestCase
         $numberOfCompanies = 0;
         $fakeCompanies = $this->massGenerateCompanies($user, $numberOfCompanies);
 
-        $totalAmountBilled = 0;
-        $timesCharged = 0;
-
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
             $syncCommand = new SyncCommand();
@@ -401,12 +367,9 @@ class LongPeriodBillingTest extends TestCase
 
                 $this->assertEquals($user->paymentLastRequested, Carbon::today());
 
-                if ($user->amountRequested > 0) {
-                    $this->assertEquals($user->amountRequested, self::YEARLY_PRICE * $numberOfCompanies);
-                    $timesCharged++;
+                if ($user->amountLastRequested > 0) {
+                    $this->assertEquals($user->amountLastRequested, self::YEARLY_PRICE * $numberOfCompanies);
                 }
-
-                $totalAmountBilled += $user->amountRequested;
             }
 
             // Increment the day
@@ -414,7 +377,7 @@ class LongPeriodBillingTest extends TestCase
         }
 
         // Check the user was charged the correct number of times
-        $this->assertEquals(0, $timesCharged);
+        $this->assertEquals(0, $user->timesBilled);
 
         // Check the number of charge logs matches the number of times we tried to bill them
         $numberOfChargeLogs = $user->chargeLogs()->count();
@@ -422,7 +385,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of years * yearly price)
         $expectedTotal = self::PART_YEARS_IN_SIMULATION * self::YEARLY_PRICE * $numberOfCompanies;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -439,8 +402,6 @@ class LongPeriodBillingTest extends TestCase
             ['userId' => $user->id, 'companyId' => 72773, 'active' => true, 'companyName' => 'Johnny Mate'],
         ];
 
-        $totalAmountBilled = 0;
-
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
             $syncCommand = new SyncCommand();
@@ -451,9 +412,7 @@ class LongPeriodBillingTest extends TestCase
                 $user->bill();
 
                 $this->assertEquals($user->paymentLastRequested, Carbon::today());
-                $this->assertEquals($user->amountRequested, self::MONTHLY_PRICE);
-
-                $totalAmountBilled += $user->amountRequested;
+                $this->assertEquals($user->amountLastRequested, self::MONTHLY_PRICE);
             }
 
             // Increment the day
@@ -466,7 +425,7 @@ class LongPeriodBillingTest extends TestCase
 
         //heck nothing was charged
         $expectedTotal = 0;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -482,7 +441,6 @@ class LongPeriodBillingTest extends TestCase
         $fakeCompanies = [];
 
         $lastBilled = null;
-        $totalAmountBilled = 0;
 
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
@@ -496,9 +454,7 @@ class LongPeriodBillingTest extends TestCase
                 $lastBilled = Carbon::today();
 
                 $this->assertEquals($user->paymentLastRequested, $lastBilled);
-                $this->assertEquals($user->amountRequested, 0);
-
-                $totalAmountBilled += $user->amountRequested;
+                $this->assertEquals($user->amountLastRequested, 0);
             }
 
             // Increment the day
@@ -511,7 +467,7 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the user was not charged
         $expectedTotal = 0;
-        $this->assertEquals($expectedTotal, $totalAmountBilled);
+        $this->assertEquals($expectedTotal, $user->totalEverRequested);
     }
 
     /**
@@ -540,7 +496,6 @@ class LongPeriodBillingTest extends TestCase
         $fakeCompanies = $this->massGenerateCompanies($user, $numberOfCompanies);
 
         $lastBilled = null;
-        $totalAmountBilled = 0;
 
         while (Carbon::now()->lt($dayAfterSimulation)) {
             // Create the sync command object, hand it our fake companies, and run it
@@ -556,9 +511,7 @@ class LongPeriodBillingTest extends TestCase
                 $this->assertEquals($user->paymentLastRequested, $lastBilled);
                 $expectedAmountBeforeDiscount = self::MONTHLY_PRICE * $numberOfCompanies;
                 $expectedAmountAfterDiscount = Billing::applyDiscount($expectedAmountBeforeDiscount, $discountPercent);
-                $this->assertEquals($expectedAmountAfterDiscount, $user->amountRequested);
-
-                $totalAmountBilled += $user->amountRequested;
+                $this->assertEquals($expectedAmountAfterDiscount, $user->amountLastRequested);
             }
 
             // Increment the day
@@ -571,6 +524,6 @@ class LongPeriodBillingTest extends TestCase
 
         // Check the total amount billed is what we think it should be (number of months * monthly price * number of companies)
         $expectedAmount = self::MONTHS_IN_SIMULATION * Billing::applyDiscount(self::MONTHLY_PRICE * $numberOfCompanies, $discountPercent);
-        $this->assertEquals($expectedAmount, $totalAmountBilled);
+        $this->assertEquals($expectedAmount, $user->totalEverRequested);
     }
 }

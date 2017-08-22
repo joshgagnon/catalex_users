@@ -8,11 +8,11 @@ use Tests\Stub\User;
 
 class Organisation extends \App\Organisation
 {
-    public $amountRequested;
+    public $amountLastRequested;
 
     protected function requestPayment($amountRequested)
     {
-        $this->amountRequested = $amountRequested;
+        $this->amountLastRequested = $amountRequested;
         return true; // Don't do any payment stuff, just pretend it worked
     }
 }
@@ -60,7 +60,7 @@ class BillableTraitBillMethodTest extends TestCase
         $this->assertFalse($billingResult);
 
         // Check the user wasn't billed
-        $this->assertNull($user->amountRequested);
+        $this->assertNull($user->amountLastRequested);
     }
 
     /**
@@ -83,7 +83,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
         $expected = '12.00';
 
         $this->assertEquals($expected, $actual);
@@ -109,7 +109,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
         $expected = '1.50';
 
         $this->assertEquals($expected, $actual);
@@ -132,7 +132,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
         $expected = '0.00';
 
         $this->assertEquals($expected, $actual);
@@ -155,7 +155,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
         $expected = '0.00';
 
         $this->assertEquals($expected, $actual);
@@ -181,7 +181,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
         $expected = '24.00';
 
         $this->assertEquals($expected, $actual);
@@ -207,7 +207,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
         $expected = '3.00';
 
         $this->assertEquals($expected, $actual);
@@ -234,7 +234,7 @@ class BillableTraitBillMethodTest extends TestCase
         $user->bill();
 
         // Check the result
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
         $expected = '3324.00';
 
         $this->assertEquals($expected, $actual);
@@ -262,7 +262,7 @@ class BillableTraitBillMethodTest extends TestCase
 
         // Check the result
         $expected = '415.50';
-        $actual = $user->amountRequested;
+        $actual = $user->amountLastRequested;
 
         $this->assertEquals($expected, $actual);
     }
@@ -294,7 +294,7 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->amountRequested;
+        $actual = $organisation->amountLastRequested;
         $expected = '12.00';
 
         $this->assertEquals($expected, $actual);
@@ -320,7 +320,7 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->amountRequested;
+        $actual = $organisation->amountLastRequested;
         $expected = '190.50';
 
         $this->assertEquals($expected, $actual);
@@ -360,7 +360,7 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->amountRequested;
+        $actual = $organisation->amountLastRequested;
         $expected = '48.00'; // 4 users * $12 a year
 
         $this->assertEquals($expected, $actual);
@@ -390,7 +390,7 @@ class BillableTraitBillMethodTest extends TestCase
         $organisation->bill();
 
         // Check the result
-        $actual = $organisation->amountRequested;
+        $actual = $organisation->amountLastRequested;
         $expected = '480.00'; // 4 users * 10 items per user * $12 a year
 
         $this->assertEquals($expected, $actual);
@@ -408,7 +408,7 @@ class BillableTraitBillMethodTest extends TestCase
 
         $user->bill();
 
-        $this->assertEquals($user->amountRequested, '6.00');
+        $this->assertEquals($user->amountLastRequested, '6.00');
     }
 
     /**
@@ -423,6 +423,6 @@ class BillableTraitBillMethodTest extends TestCase
 
         $user->bill();
 
-        $this->assertEquals($user->amountRequested, '60.00');
+        $this->assertEquals($user->amountLastRequested, '60.00');
     }
 }

@@ -8,12 +8,19 @@ use Carbon\Carbon;
 class User extends \App\User
 {
     public $paymentLastRequested;
-    public $amountRequested;
+    public $amountLastRequested;
+
+    public $totalEverRequested = 0;
+    public $timesBilled = 0;
 
     protected function requestPayment($totalDollarsDue)
     {
         $this->paymentLastRequested = Carbon::today();
-        $this->amountRequested = $totalDollarsDue;
+        $this->amountLastRequested = $totalDollarsDue;
+
+        $this->totalEverRequested += $totalDollarsDue;
+
+        $this->timesBilled++;
 
         return true;
     }
