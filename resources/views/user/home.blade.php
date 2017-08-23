@@ -126,27 +126,31 @@
                             </span>
                         </a>
 
-                        <a href="{{ route('user-services.index') }}" class="section">
-                            <span class="with-icon">
-                                <i class="fa fa-check-square"></i>
+                        @if ($showSubscriptions)
+                            <a href="{{ route('user-services.index') }}" class="section">
+                                <span class="with-icon">
+                                    <i class="fa fa-check-square"></i>
 
-                                <span class="title">
-                                    <span class="main-title">Subscriptions</span>
-                                    <span class="sub-title">Manage CataLex service subscriptions</span>
+                                    <span class="title">
+                                        <span class="main-title">Subscriptions</span>
+                                        <span class="sub-title">Manage CataLex service subscriptions</span>
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
+                            </a>
+                        @endif
 
-                        <a href="{{ route('billing') }}" class="section">
-                            <span class="with-icon">
-                                <i class="fa fa-credit-card"></i>
+                        @if ($showBilling)
+                            <a href="{{ route('billing') }}" class="section">
+                                <span class="with-icon">
+                                    <i class="fa fa-credit-card"></i>
 
-                                <span class="title">
-                                    <span class="main-title">Billing</span>
-                                    <span class="sub-title">View invoices and manage billing details</span>
+                                    <span class="title">
+                                        <span class="main-title">Billing</span>
+                                        <span class="sub-title">View invoices and manage billing details</span>
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

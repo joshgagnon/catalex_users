@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
         $user = Auth::user();
 
         // Don't allow non-admin members of an org to try to pay
-        if ($user && $user->organisation && !$user->can('edit_own_organisation')) {
+        if ($user && $user->organisation_id && !$user->can('edit_own_organisation')) {
             abort(403, 'Forbidden');
         }
     }

@@ -3,6 +3,7 @@
 use View;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Session;
 
 class UserView {
 
@@ -31,9 +32,25 @@ class UserView {
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next) {
-		if($this->auth->check()) {
-			View::share(['user' => $this->auth->user()]);
+	    $user = null;
+        $showBilling = false;
+        $showSubscriptions = false;
+        $isImpersonating = false;
+
+		if ($this->auth->check()) {
+		    $user = $this->auth->user();
+
+            $showBilling = !$user->organisation_id || $user->can('edit_own_organisation');
+            $showSubscriptions = !$user->organisation || $user->can('edit_own_organisation');
+            $isImpersonating = Session::has('admin_id');
 		}
+
+        View::share([
+            'user' => $user,
+            'showBilling' => $showBilling,
+            'showSubscriptions' => $showSubscriptions,
+            'isImpersonating' => $isImpersonating,
+        ]);
 
 		return $next($request);
 	}

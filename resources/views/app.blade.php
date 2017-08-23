@@ -16,11 +16,13 @@
 
     {{-- Fonts --}}
     <link href='//brick.a.ssl.fastly.net/Ubuntu:300,400,400i,500,700' rel='stylesheet' type='text/css'>
+
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-5NXTBW3');</script>
+
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -29,7 +31,7 @@
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5NXTBW3"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    @if (Session::has('admin_id'))
+    @if ($isImpersonating)
         <div class="impersonation-banner">
             <div class="container">
                 <span class="pull-left">
@@ -64,8 +66,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <li><a href="{{ action('Auth\AuthController@getLogin') }}">Login</a></li>
                         <li><a href="{{ action('Auth\AuthController@getRegister') }}">Sign Up</a></li>
                     @elseif(isset($user)) {{-- Move View::share(['user'] such that $user is always correctly available here --}}
-                        {{-- TODO: Use route helper --}}
                         <li><a href="{{ route('index')}}">CataLex Home</a></li>
+
                         @if($user->hasRole('global_admin'))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin <span class="caret"></span></a>
@@ -77,19 +79,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                 </ul>
                             </li>
                         @endif
-                        @if($user->can('view_own_organisation'))
-                            <li><a href="{{ route('organisation.index') }}">Organisation</a></li>
-                        @endif
+
+                        <li><a href="{{ route('organisation.index') }}">Organisation</a></li>
                         <li class="dropdown">
                             <a href="{{ route('index')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ $user->fullName() }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ action('UserController@getProfile') }}">My Profile</a></li>
 
-                                @if($user->can('edit_own_organisation') || Session::has('admin_id'))
+                                @if ($showBilling)
                                     <li><a href="{{ url('billing') }}">Billing</a></li>
                                 @endif
 
-                                @if (Session::has('admin_id'))
+                                @if ($isImpersonating)
                                     <li><a href="#" onclick="document.getElementById('return-to-admin-form').submit()">Return to Admin</a></li>
                                 @else
                                     <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
