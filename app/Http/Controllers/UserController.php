@@ -2,6 +2,10 @@
 
 use App\Http\Requests\UserEditRequest;
 use App\Library\Invite;
+use App\Library\Mail\InviteNewUserToSignDocument;
+use App\Library\Mail\InviteNewUserToViewGCCompany;
+use App\Library\Mail\InviteToSignDocument;
+use App\Library\Mail\InviteToViewGCCompany;
 use App\Library\UserSummariser;
 use App\User;
 use Auth;
@@ -242,8 +246,9 @@ class UserController extends Controller
 
         $data = $request->all();
         $user = User::where('email', $data['email'])->first();
+        $isExistingUser = $user !== null;
 
-        if(!$user) {
+        if (!$isExistingUser) {
             $userData = [
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -254,11 +259,40 @@ class UserController extends Controller
 
             $user = User::create($userData);
             $user->addRole('registered_user');
-
-            Invite::sendInviteNewUserToView($user, $request->input('company_name'), $request->input('sender_name'));
         }
-        else{
-            Invite::sendInviteToView($user, $request->input('company_name'), $request->input('sender_name'));
+
+        $serviceType = $request->has('service') ? $request->input('service') : 'Good Companies';
+        $inviterName = $request->input('sender_name');
+
+        switch ($serviceType) {
+            case 'Good Companies':
+                if ($isExistingUser) {
+                    $invite = new InviteToViewGCCompany($user, $request->input('company_name'), $request->input('sender_name'));
+                    $invite->send();
+                }
+                else {
+                    $tokenInstance = FirstLoginToken::createToken($this->invitee);
+                    $companyName = $request->input('company_name');
+
+                    $invite = new InviteNewUserToViewGCCompany($user, $inviterName, $companyName, $tokenInstance->token);
+                    $invite->send();
+                }
+
+                break;
+
+            case 'CataLex Sign':
+                if ($isExistingUser) {
+                    $invite = new InviteNewUserToSignDocument($user, $inviterName, $token);
+                    $invite->send();
+                }
+                else {
+                    $tokenInstance = FirstLoginToken::createToken($this->invitee);
+
+                    $invite = new InviteToSignDocument($user, $inviterName, $tokenInstance->token);
+                    $invite->send();
+                }
+
+                break;
         }
 
         $userSummary = (new UserSummariser($user))->summarise();

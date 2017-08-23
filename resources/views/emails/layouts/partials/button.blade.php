@@ -7,7 +7,7 @@
     <td>
       <table>
         <tr>
-          <td><a href="{{ $link }}">{{ $text }}</a></td>
+          <td><a href="{{ $url }}">{{ $text }}</a></td>
         </tr>
       </table>
     </td>
