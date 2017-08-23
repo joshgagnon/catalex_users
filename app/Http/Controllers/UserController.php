@@ -266,13 +266,14 @@ class UserController extends Controller
 
         switch ($serviceType) {
             case 'Good Companies':
+                $companyName = $request->input('company_name');
+
                 if ($isExistingUser) {
-                    $invite = new InviteToViewGCCompany($user, $request->input('company_name'), $request->input('sender_name'));
+                    $invite = new InviteToViewGCCompany($user, $inviterName, $companyName);
                     $invite->send();
                 }
                 else {
                     $tokenInstance = FirstLoginToken::createToken($user);
-                    $companyName = $request->input('company_name');
 
                     $invite = new InviteNewUserToViewGCCompany($user, $inviterName, $companyName, $tokenInstance->token);
                     $invite->send();
