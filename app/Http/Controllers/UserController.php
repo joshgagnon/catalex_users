@@ -2,7 +2,7 @@
 
 use App\FirstLoginToken;
 use App\Http\Requests\UserEditRequest;
-use App\Library\Invite;
+use Config;
 use App\Library\Mail\InviteNewUserToSignDocument;
 use App\Library\Mail\InviteNewUserToViewGCCompany;
 use App\Library\Mail\InviteToSignDocument;
@@ -261,11 +261,10 @@ class UserController extends Controller
             $user->addRole('registered_user');
         }
 
-        $serviceType = $request->has('service') ? $request->input('service') : 'Good Companies';
         $inviterName = $request->input('sender_name');
 
-        switch ($serviceType) {
-            case 'Good Companies':
+        switch ($client->id) {
+            case Config::get('oauth_clients.gc.id'):
                 $companyName = $request->input('company_name');
 
                 if ($isExistingUser) {
@@ -281,7 +280,7 @@ class UserController extends Controller
 
                 break;
 
-            case 'CataLex Sign':
+            case Config::get('oauth_clients.sign.id'):
                 if ($isExistingUser) {
                     $invite = new InviteToSignDocument($user, $inviterName);
                     $invite->send();
