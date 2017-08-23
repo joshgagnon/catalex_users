@@ -3,6 +3,7 @@
 namespace App\Library\Mail;
 
 use App\Library\Mail;
+use App\User;
 
 class InviteNewUserToViewGCCompany
 {
@@ -29,6 +30,6 @@ class InviteNewUserToViewGCCompany
             'company_name' => $this->companyName,
         ];
 
-        Mail::queueStyledMail('emails.invite-gc', $inviteData, $this->user->email, $this->inviterName, 'You have been invited to Good Companies');
+        Mail::queueStyledMail('emails.invite-gc', $inviteData, $this->invitee->email, $this->invitee->name, 'You have been invited to Good Companies');
     }
 }

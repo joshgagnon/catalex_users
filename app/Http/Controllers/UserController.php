@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\FirstLoginToken;
 use App\Http\Requests\UserEditRequest;
 use App\Library\Invite;
 use App\Library\Mail\InviteNewUserToSignDocument;
@@ -244,14 +245,13 @@ class UserController extends Controller
             return view('auth.denied');
         }
 
-        $data = $request->all();
-        $user = User::where('email', $data['email'])->first();
+        $user = User::where('email', $request->input('email'))->first();
         $isExistingUser = $user !== null;
 
         if (!$isExistingUser) {
             $userData = [
-                'name' => $data['name'],
-                'email' => $data['email'],
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
                 'password' => bcrypt(str_random(40)),
                 'organisation_id' => null,
                 'billing_detail_id' => null,
@@ -271,7 +271,7 @@ class UserController extends Controller
                     $invite->send();
                 }
                 else {
-                    $tokenInstance = FirstLoginToken::createToken($this->invitee);
+                    $tokenInstance = FirstLoginToken::createToken($user);
                     $companyName = $request->input('company_name');
 
                     $invite = new InviteNewUserToViewGCCompany($user, $inviterName, $companyName, $tokenInstance->token);
@@ -282,13 +282,13 @@ class UserController extends Controller
 
             case 'CataLex Sign':
                 if ($isExistingUser) {
-                    $invite = new InviteNewUserToSignDocument($user, $inviterName, $token);
+                    $invite = new InviteToSignDocument($user, $inviterName);
                     $invite->send();
                 }
                 else {
-                    $tokenInstance = FirstLoginToken::createToken($this->invitee);
+                    $tokenInstance = FirstLoginToken::createToken($user);
 
-                    $invite = new InviteToSignDocument($user, $inviterName, $tokenInstance->token);
+                    $invite = new InviteNewUserToSignDocument($user, $inviterName, $tokenInstance->token);
                     $invite->send();
                 }
 
