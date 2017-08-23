@@ -299,4 +299,77 @@ class UserController extends Controller
 
         return $userSummary;
     }
+
+    public function findOrCreateUsers(Request $request)
+    {
+        $requestData = $request->all();
+
+        $client = DB::table('oauth_clients')
+            ->where('id', $requestData['client_id'])
+            ->where('secret', $requestData['client_secret'])
+            ->first();
+
+        if (!$client) {
+            return view('auth.denied');
+        }
+
+        $users = json_decode($requestData['users'], true);
+        $userSummaries = [];
+
+        $inviterName = $requestData['sender_name'];
+
+        foreach ($users as $userData) {
+            $user = User::where('email', $userData['email'])->first();
+            $isExistingUser = $user !== null;
+
+            if (!$isExistingUser) {
+                $userData = [
+                    'name' => $userData['name'],
+                    'email' => $userData['email'],
+                    'password' => bcrypt(str_random(40)),
+                    'organisation_id' => null,
+                    'billing_detail_id' => null,
+                ];
+
+                $user = User::create($userData);
+                $user->addRole('registered_user');
+            }
+
+            switch ($client->id) {
+                case Config::get('oauth_clients.gc.id'):
+                    $companyName = $requestData['company_name'];
+
+                    if ($isExistingUser) {
+                        $invite = new InviteToViewGCCompany($user, $inviterName, $companyName);
+                        $invite->send();
+                    }
+                    else {
+                        $tokenInstance = FirstLoginToken::createToken($user);
+
+                        $invite = new InviteNewUserToViewGCCompany($user, $inviterName, $companyName, $tokenInstance->token);
+                        $invite->send();
+                    }
+
+                    break;
+
+                case Config::get('oauth_clients.sign.id'):
+                    if ($isExistingUser) {
+                        $invite = new InviteToSignDocument($user, $inviterName);
+                        $invite->send();
+                    }
+                    else {
+                        $tokenInstance = FirstLoginToken::createToken($user);
+
+                        $invite = new InviteNewUserToSignDocument($user, $inviterName, $tokenInstance->token);
+                        $invite->send();
+                    }
+
+                    break;
+            }
+
+            $userSummaries[] = (new UserSummariser($user))->summarise();
+        }
+
+        return $userSummaries;
+    }
 }

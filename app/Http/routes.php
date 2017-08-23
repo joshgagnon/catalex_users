@@ -13,6 +13,7 @@
 
 
 Route::post('user/invite-user', 'UserController@createOrFindUser');
+Route::post('api/user/invite-users', 'UserController@findOrCreateUsers');
 
 Route::group(['middleware' => 'csrf'], function() {
 
