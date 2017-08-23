@@ -71,3 +71,8 @@ All emails must pass through a css inliner before being sent, so do not use the 
 When using the `User` model, note that it has an applied scope which filters out inactive users in the same way the default `SoftDelete` scope does. The scope adds a `withInactive()` builder method equivalent to the Laravel `withTrashed()`. They can be used together to retrieve a user who was made inactive before being deleted.
 
 
+## Create new service
+
+`php artisan tinker`
+
+`App\Service::create(['name' => 'CataLex Sign', 'is_paid_service' => true]);`
