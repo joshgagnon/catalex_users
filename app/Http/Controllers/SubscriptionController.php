@@ -2,30 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\BillingItem;
-use App\Library\Billing;
-use Illuminate\Http\Request;
-
-use Auth;
-use App\Service;
 use App\Library\Mail;
+use App\Service;
+use Auth;
+use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
 {
     /**
      * Create a new controller instance.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
 
         $user = Auth::user();
 
         // Don't allow non-admin members of an org to try to pay
-        if($user && $user->organisation && !$user->can('edit_own_organisation')) {
+        if ($user && $user->organisation && !$user->can('edit_own_organisation')) {
             abort(403, 'Forbidden');
         }
     }
-    
+
     /**
      * Allow the user to select the services they want to be registered to.
      */
@@ -44,7 +42,7 @@ class SubscriptionController extends Controller
 
             return view('subscriptions.org.edit')->with([
                 'services' => $services,
-                'members' => $members,
+                'members'  => $members,
             ]);
         }
 
@@ -56,7 +54,7 @@ class SubscriptionController extends Controller
         }
 
         return view('service-user.edit')->with([
-            'user' => $user,
+            'user'     => $user,
             'services' => $services,
         ]);
     }
@@ -70,13 +68,11 @@ class SubscriptionController extends Controller
         if ($request->session()->has('redirect_data')) {
             $redirectData = $request->session()->pull('redirect_data');
             $membersSubscriptions = json_decode($redirectData['members_subscriptions'], true);
-        }
-        else if ($user->organisation_id) {
+        } else if ($user->organisation_id) {
             $membersSubscriptions = $request->input('subscriptions', []);
-        }
-        else {
+        } else {
             $subscriptions = $request->input('services');
-            $membersSubscriptions = $subscriptions  ? [$user->id => $subscriptions] : []; // if this user has opted for no subscriptions, don't include them in the membersSubscriptions array
+            $membersSubscriptions = $subscriptions ? [$user->id => $subscriptions] : []; // if this user has opted for no subscriptions, don't include them in the membersSubscriptions array
         }
 
         // Check the user has billing setup (if they need billing setup)
