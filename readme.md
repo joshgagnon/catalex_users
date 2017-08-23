@@ -113,5 +113,11 @@ When using the `User` model, note that it has an applied scope which filters out
 
 
 ### Tests
-just run:
-./vendor/bin/phpunit
+
+`./vendor/bin/phpunit`
+
+#### Options
+
+**Log testing stats:** `--log-junit=log_name.xml`
+
+**Run specific test:** `--filter=test_class_name_or_test_name`
