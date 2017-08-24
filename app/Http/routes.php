@@ -132,10 +132,15 @@ Route::get('login/law-browser', ['middleware' => ['check-authorization-params', 
     return Redirect::to($redirectUri);
 }]);
 
-Route::get('login/sign', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function() {
+Route::get('login/sign', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function(\Illuminate\Http\Request $request) {
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
+
+    if ($request->next) {
+        $redirectUri = $redirectUri . '&next=' . $request->next;
+    }
+
     return Redirect::to($redirectUri);
 }]);
 

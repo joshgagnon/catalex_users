@@ -1,31 +1,34 @@
 <?php namespace App\Http\Controllers;
 
 use Auth;
+use Config;
 use DB;
+use Illuminate\Http\Request;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
-class HomeController extends Controller {
+class HomeController extends Controller
+{
 
-	/*
-	|--------------------------------------------------------------------------
-	| Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller renders your application's "dashboard" for users that
-	| are authenticated. Of course, you are free to change or remove the
-	| controller as you wish. It is just here to get your app started!
-	|
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Home Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller renders your application's "dashboard" for users that
+    | are authenticated. Of course, you are free to change or remove the
+    | controller as you wish. It is just here to get your app started!
+    |
+    */
 
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -43,29 +46,35 @@ class HomeController extends Controller {
     {
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Law Browser')->first();
-        if(!$client) {
+        if (!$client) {
             return view('auth.denied');
         }
         $params['client_id'] = $client->id;
         $params['redirect_uri'] = env('BROWSER_LOGIN_URL', 'http://localhost:3000/login');
         $params['response_type'] = 'code';
-        $redirect = '/login/law-browser?' . (http_build_query($params));
+        $redirect = '/login/law-browser?' . http_build_query($params);
         return redirect($redirect);
     }
 
-    public function getSignLogin()
+    public function getSignLogin(Request $request)
     {
         $params = Authorizer::getAuthCodeRequestParams();
-        $client = DB::table('oauth_clients')->where('name', 'Sign')->first();
+        $client = DB::table('oauth_clients')->where('id', Config::get('oauth_clients.sign.id'))->first();
 
         if (!$client) {
             return view('auth.denied');
         }
 
+        if ($request->next) {
+            $params['next'] = $request->next;
+        }
+
         $params['client_id'] = $client->id;
         $params['redirect_uri'] = env('SIGN_LOGIN_URL', 'http://localhost:3000/login');
         $params['response_type'] = 'code';
-        $redirect = '/login/sign?' . (http_build_query($params));
+
+        $redirect = '/login/sign?' . http_build_query($params);
+
         return redirect($redirect);
     }
 
@@ -79,13 +88,13 @@ class HomeController extends Controller {
 
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Good Companies')->first();
-        if(!$client) {
+        if (!$client) {
             return view('auth.denied');
         }
         $params['client_id'] = $client->id;
         $params['redirect_uri'] = env('GOOD_COMPANIES_LOGIN_URL', 'http://localhost:5667/auth/catalex/login');
         $params['response_type'] = 'code';
-        $redirect = '/login/good-companies?' . (http_build_query($params));
+        $redirect = '/login/good-companies?' . http_build_query($params);
         return redirect($redirect);
     }
 
