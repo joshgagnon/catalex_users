@@ -15,7 +15,7 @@
                                         <p>Hi {{ $inviteeName }},</p>
                                         <p>{{ $inviterName }} has invited you to sign a document with CataLex Sign. Click below to set up your CataLex account and sign the document.</p>
 
-                                        @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => $link])
+                                        @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => route('first-login.index', [$token, 'next' => $link])])
 
                                         <p>Kind regards</p>
                                         <p>The CataLex team</p>

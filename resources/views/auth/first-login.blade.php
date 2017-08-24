@@ -35,6 +35,9 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ route('first-login.set-password') }}">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="token" value="{{ $token }}">
+                        @if ($next)
+                            <input type="hidden" name="next" value="{{ $next }}">
+                        @endif
 
                         <div class="form-group">
                             <label class="col-md-4 control-label">Password</label>

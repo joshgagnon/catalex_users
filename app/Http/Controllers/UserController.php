@@ -11,6 +11,7 @@ use App\User;
 use Auth;
 use Config;
 use DB;
+use Hash;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use LucaDegasperi\OAuth2Server\Authorizer;
@@ -328,15 +329,14 @@ class UserController extends Controller
             $isExistingUser = $user !== null;
 
             if (!$isExistingUser) {
-                $userData = [
+                $user = User::create([
                     'name'              => $userData['name'],
                     'email'             => $userData['email'],
                     'password'          => Hash::make(str_random(40)),
                     'organisation_id'   => null,
                     'billing_detail_id' => null,
-                ];
+                ]);
 
-                $user = User::create($userData);
                 $user->addRole('registered_user');
             }
 
