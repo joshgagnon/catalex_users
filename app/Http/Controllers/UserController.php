@@ -281,14 +281,16 @@ class UserController extends Controller
                 break;
 
             case Config::get('oauth_clients.sign.id'):
+                $link = $request->input('link');
+
                 if ($isExistingUser) {
-                    $invite = new InviteToSignDocument($user, $inviterName);
+                    $invite = new InviteToSignDocument($user, $inviterName, $link);
                     $invite->send();
                 }
                 else {
                     $tokenInstance = FirstLoginToken::createToken($user);
 
-                    $invite = new InviteNewUserToSignDocument($user, $inviterName, $tokenInstance->token);
+                    $invite = new InviteNewUserToSignDocument($user, $inviterName, $link, $tokenInstance->token);
                     $invite->send();
                 }
 
@@ -326,7 +328,7 @@ class UserController extends Controller
                 $userData = [
                     'name' => $userData['name'],
                     'email' => $userData['email'],
-                    'password' => bcrypt(str_random(40)),
+                    'password' => Hash::make(str_random(40)),
                     'organisation_id' => null,
                     'billing_detail_id' => null,
                 ];
@@ -337,7 +339,7 @@ class UserController extends Controller
 
             switch ($client->id) {
                 case Config::get('oauth_clients.gc.id'):
-                    $companyName = $requestData['company_name'];
+                    $companyName = $userData['company_name'];
 
                     if ($isExistingUser) {
                         $invite = new InviteToViewGCCompany($user, $inviterName, $companyName);
@@ -353,14 +355,16 @@ class UserController extends Controller
                     break;
 
                 case Config::get('oauth_clients.sign.id'):
+                    $link = $userData['link'];
+
                     if ($isExistingUser) {
-                        $invite = new InviteToSignDocument($user, $inviterName);
+                        $invite = new InviteToSignDocument($user, $inviterName, $link);
                         $invite->send();
                     }
                     else {
                         $tokenInstance = FirstLoginToken::createToken($user);
 
-                        $invite = new InviteNewUserToSignDocument($user, $inviterName, $tokenInstance->token);
+                        $invite = new InviteNewUserToSignDocument($user, $inviterName, $link, $tokenInstance->token);
                         $invite->send();
                     }
 
