@@ -15,7 +15,7 @@
                                         <p>Hi {{ $inviteeName }},</p>
                                         <p>{{ $inviterName }} has invited you to sign a document in CataLex Sign.</p>
 
-                                        @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => route('sign-login')])
+                                        @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => $link])
 
                                         <p>Kind regards</p>
                                         <p>The CataLex team</p>
