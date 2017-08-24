@@ -10,10 +10,10 @@
                             <table class="twelve columns">
                                 <tr>
                                     <td>
-                                        <h2 class="center">Invitation to sign a document in CataLex Sign.</h2>
+                                        <h2 class="center">Invitation to sign a document with CataLex Sign</h2>
 
                                         <p>Hi {{ $inviteeName }},</p>
-                                        <p>{{ $inviterName }} has invited you to sign a document in CataLex Sign.</p>
+                                        <p>{{ $inviterName }} has invited you to sign a document with CataLex Sign.</p>
 
                                         @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => $link])
 
