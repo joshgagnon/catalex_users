@@ -9,12 +9,14 @@ class InviteNewUserToSignDocument
 {
     private $invitee;
     private $inviterName;
+    private $link;
     private $loginToken;
 
-    function __construct(User $invitee, $inviterName, $loginToken)
+    function __construct(User $invitee, $inviterName, $link, $loginToken)
     {
         $this->invitee = $invitee;
         $this->inviterName = $inviterName;
+        $this->link = $link;
         $this->loginToken = $loginToken;
     }
 
@@ -24,6 +26,7 @@ class InviteNewUserToSignDocument
             'inviteeName' => $this->invitee->name,
             'inviterName' => $this->inviterName,
             'token'       => $this->loginToken,
+            'link'        => $this->link,
         ];
 
         Mail::queueStyledMail('emails.sign.invite-new-user', $inviteData, $this->invitee->email, $this->invitee->name, 'You have been invited to sign a document in CataLex Sign');
