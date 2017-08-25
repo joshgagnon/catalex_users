@@ -3,6 +3,9 @@ language: php
 php:
   - 7.0
 
+addons:
+  postgresql: "9.5"
+
 services:
   - redis-server
 
