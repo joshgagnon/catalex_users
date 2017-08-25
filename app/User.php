@@ -70,6 +70,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsToMany('App\Role');
     }
 
+    public function meta()
+    {
+        return $this->hasOne(UserMeta::class);
+    }
+
     public function fullName()
     {
         return $this->name;

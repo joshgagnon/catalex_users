@@ -338,6 +338,14 @@ class UserController extends Controller
                 ]);
 
                 $user->addRole('registered_user');
+                $user->meta()->create([
+                    'data' => [
+                        'invite' => [
+                            'oauth_client_id' => $client->id,
+                            'inviter_name' => $inviterName
+                        ]
+                    ]
+                ]);
             }
 
             switch ($client->id) {
