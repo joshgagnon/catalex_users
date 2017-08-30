@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Http\Controllers\Controller;
 use Response;
 use Illuminate\Http\Request;
 use DB;
@@ -12,12 +10,6 @@ use App\Library\Mail;
 
 class MailController extends Controller
 {
-    /**
-     * Show the profile for the given user.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function send(Request $request)
     {
         // perhaps use the League/oauth stuff instead, but it has too many moving parts
@@ -58,14 +50,13 @@ class MailController extends Controller
         $files = $request->files->all();
         $senderName = $request->input('sender_name');
         $senderEmail = $request->input('sender_email');
-        \Log::info($files);
         $attachments = [];
 
         foreach ($files as $file) {
-            $file->move(base_path('storage/tmp'));
+            $newFile = $file->move(base_path('storage/tmp'));
 
             $attachments[] = [
-                'path' => base_path('storage') . $file->getPathname(),
+                'path' => $newFile->getPathname(),
                 'name' => $file->getClientOriginalName()
             ];
         }
