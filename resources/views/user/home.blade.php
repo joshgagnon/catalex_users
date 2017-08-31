@@ -64,16 +64,18 @@
                             </span>
                         </a>
 
-                        <a href="{{ route('sign-login') }}" class="section">
-                            <span class="with-icon">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                        @if (false)
+                            <a href="{{ route('sign-login') }}" class="section">
+                                <span class="with-icon">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
 
-                                <span class="title">
-                                    <span class="main-title">CataLex Sign</span>
-                                    <span class="sub-title">Sign legal documents online</span>
+                                    <span class="title">
+                                        <span class="main-title">CataLex Sign</span>
+                                        <span class="sub-title">Sign legal documents online</span>
+                                    </span>
                                 </span>
-                            </span>
-                        </a>
+                            </a>
+                        @endif
 
                         <a href="http://workingdays.catalex.nz/" class="section">
                             <span class="with-icon">
