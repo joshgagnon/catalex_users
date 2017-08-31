@@ -64,7 +64,7 @@
                             </span>
                         </a>
 
-                        @if (false)
+                        @if (!env('HIDE_SIGN', false))
                             <a href="{{ route('sign-login') }}" class="section">
                                 <span class="with-icon">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
