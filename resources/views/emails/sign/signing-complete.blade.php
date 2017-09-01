@@ -13,7 +13,7 @@
                                         <h2 class="center">Documents Signed & Ready</h2>
 
                                         <p>Hi {{ $name }},</p>
-                                        <p>The document set "{{ $setDescription }}" has now be signed by all recipients</p>
+                                        <p>The document set "{{ $setDescription }}" has now be signed by all recipients.</p>
 
                                         @include('emails.layouts.partials.button', ['text' => 'View Documents', 'url' => $link])
 
