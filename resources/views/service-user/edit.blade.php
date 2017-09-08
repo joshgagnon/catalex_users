@@ -62,11 +62,11 @@ CataLex - Edit Services
 
                                         @if($service->name == 'CataLex Sign')
                                             <div class="col-xs-10">
-                                                <h2><i class="fa fa-search"></i> CataLex Sign Unlimited</h2>
+                                                <h2><i class="fa fa-search"></i> CataLex Sign</h2>
 
                                                 <div>
                                                     <p>Sign legal documents online.</p>
-                                                    <p>CataLex Sign is free for up to 3 signs per month. For unlimited signing, subscribe to CataLex Sign Unlimited for only <strong>$6 per month</strong> ($60 annually)!</p>
+                                                    <p>CataLex Sign is free for up to 3 signs per month. For unlimited signing, subscribe to CataLex Sign for only <strong>$6 per month</strong> ($60 annually)!</p>
                                                 </div>
                                             </div>
                                         @endif
