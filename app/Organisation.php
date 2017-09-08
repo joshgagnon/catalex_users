@@ -30,6 +30,16 @@ class Organisation extends Model
         'name' => 'required|max:255',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Delete first login tokens when deleting
+        static::deleting(function($org) {
+            $org->userInvites()->delete();
+        });
+    }
+
     public function members()
     {
         return $this->hasMany('App\User');
