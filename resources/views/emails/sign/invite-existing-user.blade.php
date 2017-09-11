@@ -15,6 +15,10 @@
                                         <p>Hi {{ $inviteeName }},</p>
                                         <p>{{ $inviterName }} has invited you to sign a document with CataLex Sign.</p>
 
+                                        @if (!empty($message))
+                                            <p>Message from {{ $inviteeName }}: {{ $message }}</p>
+                                        @endif
+
                                         @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => $link])
 
                                         <p>Kind regards</p>
