@@ -366,14 +366,15 @@ class UserController extends Controller
 
                 case Config::get('oauth_clients.sign.id'):
                     $link = $userData['link'];
+                    $message = empty($userData['message']) ? null : $userData['message'];
 
                     if ($isExistingUser) {
-                        $invite = new InviteToSignDocument($user, $inviterName, $link);
+                        $invite = new InviteToSignDocument($user, $inviterName, $link, $message);
                         $invite->send();
                     } else {
                         $tokenInstance = FirstLoginToken::createToken($user);
 
-                        $invite = new InviteNewUserToSignDocument($user, $inviterName, $link, $tokenInstance->token);
+                        $invite = new InviteNewUserToSignDocument($user, $inviterName, $link, $tokenInstance->token, $message);
                         $invite->send();
                     }
 

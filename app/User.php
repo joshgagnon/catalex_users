@@ -75,6 +75,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne(UserMeta::class);
     }
 
+    public function emailVerificationToken()
+    {
+        return $this->hasOne(EmailVerificationToken::class);
+    }
+
     public function fullName()
     {
         return $this->name;
