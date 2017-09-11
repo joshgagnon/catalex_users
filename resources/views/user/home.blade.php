@@ -19,6 +19,15 @@
         </div>
     @endif
 
+    @if ($emailNeedsVerified)
+        <div class="container">
+            <div class="alert alert-info inline clearfix">
+                <a href="{{ route('email-verification.send-email') }}" class="btn btn-info">Send Verification Email</a>
+                <p>You need to verify your CataLex email, please click the "Send Verification Email" button to verify your email.</p>
+            </div>
+        </div>
+    @endif
+
     <div class="services container">
         <div class="container">
             <h2 class="page-title">CataLex Home</h2>

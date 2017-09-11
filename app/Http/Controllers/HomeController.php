@@ -22,8 +22,6 @@ class HomeController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -35,10 +33,12 @@ class HomeController extends Controller
         $user = Auth::user();
         $subscriptionUpToDate = $user->subscriptionUpToDate();
         $userHasPendingInvite = $user->organisationInvites()->count() > 0;
+        $emailNeedsVerified = !$user->email_verified;
 
         return view('user.home')->with([
             'subscriptionUpToDate' => $subscriptionUpToDate,
             'userHasPendingInvite' => $userHasPendingInvite,
+            'emailNeedsVerified'   => $emailNeedsVerified,
         ]);
     }
 

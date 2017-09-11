@@ -101,6 +101,12 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::get('admin/users', 'AdminController@allUsers')->name('admin.users');
 
         /**
+         * Email verification
+         */
+        Route::get('email-verification', 'EmailVerificationController@sendEmail')->name('email-verification.send-email');
+        Route::get('email-verification/{token}', 'EmailVerificationController@verify')->name('email-verification.verify');
+
+        /**
          * Controllers
          */
         Route::controllers([
