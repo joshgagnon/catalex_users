@@ -50,6 +50,7 @@ class FirstLoginController extends Controller
 
         // Change the user's password
         $user->password = Hash::make($request->password);
+        $user->email_verified = true; // this route is accessed by an email, this means their account is verified
         $user->save();
 
         // Delete the token - it's a single use deal
