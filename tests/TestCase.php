@@ -48,7 +48,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         $userData = array_merge($defaults, $overrides);
 
-        $user = User::create($userData);
+        $user = User::forceCreate($userData);
 
         // Add the registered user role
         $registeredRole = Role::where('name', 'registered_user')->first();
