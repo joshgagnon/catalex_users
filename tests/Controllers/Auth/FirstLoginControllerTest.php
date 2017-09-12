@@ -26,6 +26,9 @@ class FirstLoginControllerTest extends TestCase
             ->seePageIs(route('index'))
             ->see('Password set');
 
+        // Grab a fresh copy of the user, as the controller made changes to it
+        $user = $user->fresh();
+
         // Check we are automatically logged in
         $this->assertEquals($user->id, Auth::id());
 
@@ -33,6 +36,9 @@ class FirstLoginControllerTest extends TestCase
         Auth::logout();
         $loginSuccess = Auth::attempt(['email' => $user->email, 'password' => $password], false, false);
         $this->assertTrue($loginSuccess);
+
+        // Check the process verified the users email
+        $this->assertTrue($user->email_verified);
     }
 
     /**
