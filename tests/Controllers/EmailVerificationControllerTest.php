@@ -37,7 +37,7 @@ class EmailVerificationControllerTest extends TestCase
 
         // Create a second token
         $this->visit(route('index'))
-            ->click('Send Verification Email')
+            ->click('Resend Verification Email')
             ->see('Email verification sent, please check your emails.');
 
         $nTokens = $user->emailVerificationToken()->count();
