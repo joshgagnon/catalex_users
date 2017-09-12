@@ -4,14 +4,8 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
+			<div class="login-heading">Create Your CataLex Account</div>
 			<div class="panel panel-default">
-				<div class="panel-heading">
-					@if(Session::get('oauth.register', false))
-						Please confirm your details
-					@else
-						Sign Up
-					@endif
-				</div>
 				<div class="panel-body">
 					@include('components.messages')
 
