@@ -22,8 +22,13 @@
     @if ($emailNeedsVerified)
         <div class="container">
             <div class="alert alert-info inline clearfix">
-                <a href="{{ route('email-verification.send-email') }}" class="btn btn-info">Send Verification Email</a>
-                <p>You need to verify your CataLex email, please click the "Send Verification Email" button to verify your email.</p>
+                @if ($emailVerificationSent)
+                    <a href="{{ route('email-verification.send-email') }}" class="btn btn-info">Resend Verification Email</a>
+                    <p>You need to verify your CataLex email. An email has been sent to you, please click the link in the email to verify your email address. If you can't find this email, please click the "Resend Verification Email" to get another email.</p>
+                @else
+                    <a href="{{ route('email-verification.send-email') }}" class="btn btn-info">Send Verification Email</a>
+                    <p>You need to verify your CataLex email, please click the "Send Verification Email" button to verify your email.</p>
+                @endif
             </div>
         </div>
     @endif

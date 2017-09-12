@@ -34,11 +34,13 @@ class HomeController extends Controller
         $subscriptionUpToDate = $user->subscriptionUpToDate();
         $userHasPendingInvite = $user->organisationInvites()->count() > 0;
         $emailNeedsVerified = !$user->email_verified;
+        $emailVerificationSent = $user->emailVerificationToken()->exists();
 
         return view('user.home')->with([
-            'subscriptionUpToDate' => $subscriptionUpToDate,
-            'userHasPendingInvite' => $userHasPendingInvite,
-            'emailNeedsVerified'   => $emailNeedsVerified,
+            'subscriptionUpToDate'  => $subscriptionUpToDate,
+            'userHasPendingInvite'  => $userHasPendingInvite,
+            'emailNeedsVerified'    => $emailNeedsVerified,
+            'emailVerificationSent' => $emailVerificationSent,
         ]);
     }
 
