@@ -12,6 +12,11 @@ class EmailVerificationController extends Controller
     {
         $user = $request->user();
 
+        // Redirect if user has already verified email
+        if ($user->email_verified) {
+            return redirect()->route('index')->withErrors('Email is already verified.');
+        }
+
         $tokenInstance = EmailVerificationToken::createToken($user);
 
         $email = new EmailVerification($user->name, $user->email, $tokenInstance->token);
@@ -23,16 +28,18 @@ class EmailVerificationController extends Controller
     public function verify(Request $request, $token)
     {
         $user = $request->user();
-        $tokenMatchesUser = EmailVerificationToken::where('token', $token)->where('user_id', $user->id)->exists();
+        $tokenInstance = EmailVerificationToken::where('token', $token)->where('user_id', $user->id)->first();
 
-        if ($tokenMatchesUser) {
+        if ($tokenInstance) {
             $user->email_verified = true;
             $user->save();
+
+            $tokenInstance->delete();
 
             return redirect()->route('index')->with(['success' => 'Email verified.']);
         }
         else {
-            return redirect()->route('index')->with(['error' => 'Failed to verify email: token did not match email.']);
+            return redirect()->route('index')->withErrors('Failed to verify email: token did not match email.');
         }
     }
 }
