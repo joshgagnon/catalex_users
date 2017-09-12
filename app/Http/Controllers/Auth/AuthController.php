@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\EmailVerificationToken;
 use Auth;
 use Config;
 use Session;
@@ -42,13 +43,6 @@ class AuthController extends Controller {
         redirectPath as defaultRedirectPath;
     }
 
-    /**
-     * Create a new authentication controller instance.
-     *
-     * @param  \Illuminate\Contracts\Auth\Guard  $auth
-     * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'getLogout']);
@@ -71,37 +65,22 @@ class AuthController extends Controller {
      * @return User
      */
     public function create(array $data) {
-        $organisation = null;
-
-        /*if(strlen(trim($data['business_name']))) {
-            $organisation = Organisation::create([
-                'name' => $data['business_name'],
-                //'billing_detail_id' => $billing->id,
-                'free' => true,
-            ]);
-        }*/
-
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-            // User should belong to organisation of be billed directly, not both
-            //'organisation_id' => $organisation ? $organisation->id : null,
-            //'billing_detail_id' => $organisation ? null : $billing->id,
         ]);
 
         // Add basic roles for the user
         $user->addRole('registered_user');
-        // And org roles if registering as an organistaion - it's assumed the first user is an admin
-       /*if($organisation) {
-            $user->addRole('organisation_admin');
-        }*/
 
         // Send out welcome email
         $trialEnd = Carbon::now()->addMinutes(Config::get('constants.trial_length_minutes'));
+        $tokenInstance = EmailVerificationToken::createToken($user);
         Mail::queueStyledMail('emails.welcome', [
             'name' => $user->fullName(),
             'email' => $user->email,
+            'verification_link' => route('email-verification.verify', $tokenInstance->token),
         ], $user->email, $user->fullName(), 'Welcome to CataLex');
 
         return $user;
