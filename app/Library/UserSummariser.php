@@ -37,6 +37,7 @@ class UserSummariser
             'email' => $this->user->email,
             'name' => $this->user->name,
             'free' => $this->user->free,
+            'email_verified' => $this->user->email_verified,
             'subscription_up_to_date' => $this->user->subscriptionUpToDate(),
             'roles' => $this->user->roles->pluck('name')->toArray(),
             'services' => $services,
