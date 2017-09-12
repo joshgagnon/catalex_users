@@ -28,6 +28,7 @@ class UserSummariserTest extends TestCase
             'name'                    => $user->name,
             'free'                    => $user->free,
             'subscription_up_to_date' => true,
+            'email_verified'          => false,
             'roles'                   => ['registered_user'],
             'services'                => [$service1->name, $service2->name],
         ];
@@ -58,6 +59,7 @@ class UserSummariserTest extends TestCase
             'email'                   => $user->email,
             'name'                    => $user->name,
             'free'                    => $user->free,
+            'email_verified'          => false,
             'subscription_up_to_date' => $user->subscriptionUpToDate(),
             'roles'                   => ['organisation_admin', 'registered_user'],
             'services'                => [$service1->name, $service2->name],
