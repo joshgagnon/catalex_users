@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\EmailVerificationToken;
 use App\Library\Mail;
 use App\Service;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -68,9 +70,11 @@ class SubscriptionController extends Controller
         if ($request->session()->has('redirect_data')) {
             $redirectData = $request->session()->pull('redirect_data');
             $membersSubscriptions = json_decode($redirectData['members_subscriptions'], true);
-        } else if ($user->organisation_id) {
+        }
+        else if ($user->organisation_id) {
             $membersSubscriptions = $request->input('subscriptions', []);
-        } else {
+        }
+        else {
             $subscriptions = $request->input('services');
             $membersSubscriptions = $subscriptions ? [$user->id => $subscriptions] : []; // if this user has opted for no subscriptions, don't include them in the membersSubscriptions array
         }
@@ -84,7 +88,9 @@ class SubscriptionController extends Controller
         }
 
         $gcService = Service::where('name', 'Good Companies')->first();
+        $signService = Service::where('name', Service::SERVICE_NAME_CATALEX_SIGN)->first();
         $wasSubscribedToGC = $user->isSubscribedTo($gcService->id);
+        $wasSubscribedToSign = $user->isSubscribedTo($signService->id);
 
         $members = $user->organisation_id ? $user->organisation->members()->get() : [$user];
 
@@ -101,13 +107,46 @@ class SubscriptionController extends Controller
         }
 
         $isSubscribedToGC = $user->isSubscribedTo($gcService->id);
+        $isSubscribedToSign = $user->isSubscribedTo($signService->id);
 
         // If the user didn't used to be subscribed to GC, but is now: email them and thank them for subscribing.
         if (!$wasSubscribedToGC && $isSubscribedToGC) {
             Mail::queueStyledMail('emails.subscription', ['name' => $user->name], $user->email, $user->fullName(), 'Thanks for subscribing to Good Companies');
         }
 
-        $redirectRouteName = $request->session()->has('redirect_route_name') ? $request->session()->pull('redirect_route_name') : 'index';
+        if (!$wasSubscribedToSign && $isSubscribedToSign) {
+            $verifyEmailLink = null;
+
+            if (!$user->email_verified) {
+                $tokenInstance = EmailVerificationToken::createToken($user);
+                $verifyEmailLink = route('email-verification.verify', $tokenInstance->token);
+            }
+
+            $billingDetail = $user->organisation_id ? $user->organisation->billing_detail : $user->billing_detail;
+
+            $billingDate = null;
+
+            if ($billingDetail) {
+                $billingDate = Carbon::createFromFormat('j', $billingDetail->billing_day);
+
+                if ($billingDate->lt(Carbon::now())) {
+                    $billingDate->addMonth();
+                }
+
+                $billingDate = $billingDate->format('jS F Y');
+            }
+
+            $emailData = [
+                'name' => $user->name,
+                'billingDate' => $billingDate,
+                'emailVerified' => $user->email_verified,
+                'verifyEmailLink' => $verifyEmailLink,
+            ];
+
+            Mail::queueStyledMail('emails.subscribed-to-sign', $emailData, $user->email, $user->fullName(), 'Thanks for subscribing to CataLex Sign');
+        }
+
+        $redirectRouteName = $request->session()->has('redirect_route_name') ? $request->session()->pull('redirect_route_name') : 'user-services.index';
         return redirect()->route($redirectRouteName)->with(['success' => 'Subscriptions updated']);
     }
 }
