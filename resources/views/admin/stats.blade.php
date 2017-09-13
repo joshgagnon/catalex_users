@@ -6,11 +6,9 @@
 
         @include('components.messages')
 
-        <h3>Good Companies</h3>
-        <p>
-            <strong>{{ $totalGCCompanies }}</strong>
-            total companies
-        </p>
+        <h3>
+            <strong>Good Companies:</strong> {{ $totalGCCompanies }} companies total
+        </h3>
 
         @foreach($gcCompanyCount as $countRecord)
             <p>
@@ -21,11 +19,9 @@
 
         <hr />
 
-        <h3>CataLex Sign</h3>
-        <p>
-            <strong>{{ $totalSignSubscriptions }}</strong>
-            total subscriptions
-        </p>
+        <h3>
+            <strong>CataLex Sign:</strong> {{ $totalSignSubscriptions }} subscriptions total
+        </h3>
 
         @foreach($signSubscriptionCount as $countRecord)
             <p>
