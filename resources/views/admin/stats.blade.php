@@ -12,7 +12,7 @@
 
         @foreach($gcCompanyCount as $countRecord)
             <p>
-                {{ $countRecord->count }}
+                <strong>{{ $countRecord->count }}</strong>
                 {{ $countRecord->condition }}
             </p>
         @endforeach
