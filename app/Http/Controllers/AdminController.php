@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\BillingItem;
 use App\Library\AdminStats;
 use Auth;
 use Input;
@@ -302,16 +303,26 @@ class AdminController extends Controller
 
     public function stats()
     {
-        $companyCount = AdminStats::companyCount();
-        $totalCompanies = 0;
+        $gcCompanyCount = AdminStats::itemCount(BillingItem::ITEM_TYPE_GC_COMPANY);
+        $totalGCCompanies = 0;
 
-        foreach ($companyCount as $count) {
-            $totalCompanies += $count->count;
+        foreach ($gcCompanyCount as $count) {
+            $totalGCCompanies += $count->count;
+        }
+
+        $signSubscriptionCount = AdminStats::itemCount(BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION);
+        $totalSignSubscriptions = 0;
+
+        foreach ($signSubscriptionCount as $count) {
+            $totalSignSubscriptions += $count->count;
         }
 
         return view('admin.stats')->with([
-            'totalCompanies' => $totalCompanies,
-            'companyCount' => $companyCount,
+            'totalGCCompanies' => $totalGCCompanies,
+            'gcCompanyCount' => $gcCompanyCount,
+
+            'totalSignSubscriptions' => $totalSignSubscriptions,
+            'signSubscriptionCount' => $signSubscriptionCount,
         ]);
     }
 }
