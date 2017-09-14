@@ -303,26 +303,32 @@ class AdminController extends Controller
 
     public function stats()
     {
-        $gcCompanyCount = AdminStats::itemCount(BillingItem::ITEM_TYPE_GC_COMPANY);
+        $gcCompaniesStats = AdminStats::itemCount(BillingItem::ITEM_TYPE_GC_COMPANY);
         $totalGCCompanies = 0;
-
-        foreach ($gcCompanyCount as $count) {
-            $totalGCCompanies += $count->count;
-        }
 
         $signSubscriptionCount = AdminStats::itemCount(BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION);
         $totalSignSubscriptions = 0;
 
-        foreach ($signSubscriptionCount as $count) {
-            $totalSignSubscriptions += $count->count;
+        $gcCompaniesCounts = [];
+        $signSubscriptionsCounts = [];
+
+        foreach ($gcCompaniesStats as $statsRecord) {
+            $gcCompaniesCounts[$statsRecord->condition] = $statsRecord->count;
+            $totalGCCompanies += $statsRecord->count;
+        }
+
+
+        foreach ($signSubscriptionCount as $statsRecord) {
+            $signSubscriptionsCounts[$statsRecord->condition] = $statsRecord->count;
+            $totalSignSubscriptions += $statsRecord->count;
         }
 
         return view('admin.stats')->with([
             'totalGCCompanies' => $totalGCCompanies,
-            'gcCompanyCount' => $gcCompanyCount,
+            'gcCompaniesCounts' => $gcCompaniesCounts,
 
             'totalSignSubscriptions' => $totalSignSubscriptions,
-            'signSubscriptionCount' => $signSubscriptionCount,
+            'signSubscriptionsCounts' => $signSubscriptionsCounts,
         ]);
     }
 }
