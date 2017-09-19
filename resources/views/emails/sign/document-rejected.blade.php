@@ -14,6 +14,10 @@
 
                                         <p>{{ $rejectorName }} has declined to sign one or more documents. Click below to view.</p>
 
+                                        @if (!empty($message))
+                                            <p>Message from {{ $rejectorName }}: {{ $message }}</p>
+                                        @endif
+
                                         @include('emails.layouts.partials.button', ['text' => 'View Documents', 'url' => $link])
 
                                         <p>Best regards</p>
