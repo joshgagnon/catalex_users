@@ -10,7 +10,7 @@
                             <table class="twelve columns">
                                 <tr>
                                     <td>
-                                        <h2 class="center">Documents Signed & Ready</h2>
+                                        <h2 class="center">{{ $title }}</h2>
 
                                         <p>Hi {{ $name }},</p>
                                         <p>{{ $setDescription }}</p>
