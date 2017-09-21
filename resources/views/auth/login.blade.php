@@ -4,8 +4,10 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-6 col-sm-offset-3">
-            @if(Request::query('product') == 'gc')
+            @if (Request::query('product') == 'gc')
                 <div class="login-heading">Login to Good Companies</div>
+			@elseif (Request::query('product') == 'sign')
+				<div class="login-heading">Login to CataLex Sign</div>
             @else
                 <div class="login-heading">Login to CataLex</div>
             @endif
