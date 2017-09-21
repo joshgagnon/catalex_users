@@ -350,11 +350,24 @@ form.form-inline .form-group label {
 }
 
 .login-heading{
-        font-size: 30px;
+    font-size: 30px;
     margin-bottom: 36px;
     margin-top: 10px;
     font-weight: 300;
     text-align: center;
+}
+
+.login-heading-with-sub {
+    font-size: 30px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.login-sub-heading{
+    font-size: 18px;
+    margin-bottom: 36px;
+    text-align: center;
+    color: $gray-dark;
 }
 
 .panel{

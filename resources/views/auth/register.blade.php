@@ -4,7 +4,12 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
-			<div class="login-heading">Create Your CataLex Account</div>
+			@if (Request::query('redirectToSign'))
+				<div class="login-heading-with-sub">CataLex Sign</div>
+				<div class="login-sub-heading">Create Your CataLex Account</div>
+			@else
+				<div class="login-heading">Create Your CataLex Account</div>
+			@endif
 			<div class="panel panel-default">
 				<div class="panel-body">
 					@include('components.messages')

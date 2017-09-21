@@ -8222,6 +8222,17 @@ form.form-inline .form-group label {
   font-weight: 300;
   text-align: center; }
 
+.login-heading-with-sub {
+  font-size: 30px;
+  margin-top: 10px;
+  text-align: center; }
+
+.login-sub-heading {
+  font-size: 18px;
+  margin-bottom: 36px;
+  text-align: center;
+  color: #333333; }
+
 .panel.login {
   padding: 16px 0; }
   .panel.login label {
