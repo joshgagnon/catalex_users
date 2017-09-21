@@ -99,6 +99,7 @@ class AuthController extends Controller {
     public function postRegister(Request $request)
     {
         $registerToGoodCompanies = $request->has('gc');
+        $registerToSign = $request->has('sign');
 
         // Fold previous step post data into this request
         //$request->replace($request->input() + Session::get('register.personal'));
@@ -106,6 +107,10 @@ class AuthController extends Controller {
 
         if($registerToGoodCompanies){
             $this->redirectTo = route('user-services.index', array(urlencode('Good Companies') => 1));
+        }
+
+        if($registerToSign){
+            $this->redirectTo = route('user-services.index', array(urlencode('CataLex Sign') => 1));
         }
 
         // For OAuth registrations, generate a long random password so we can
