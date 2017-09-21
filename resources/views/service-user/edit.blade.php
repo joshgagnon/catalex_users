@@ -4,14 +4,50 @@
 CataLex - Edit Services
 @endsection
 
+<?php
+    $showQuickLinks = false;
+
+    foreach ($services as $service) {
+        if ($service->is_paid_service && $service->userHasService) {
+            $showQuickLinks = true;
+        }
+    }
+?>
+
 @section('content')
 <div class="container">
+    @include('components.messages')
     <h2 class="text-center">Edit My Services</h2>
+
+    @if ($showQuickLinks)
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Quick Links</h3>
+                        <hr />
+
+                        <div style="padding-left: 25px;">
+                            @foreach ($services as $service)
+                                @if ($service->userHasService && $service->is_paid_service)
+                                    @if ($service->name === 'Good Companies')
+                                        <div>Go to <a href="{{ route('good-companies-login') }}">Good Companies</a></div>
+                                    @elseif ($service->name === 'CataLex Sign')
+                                        <div>Go to <a href="{{ route('sign-login') }}">CataLex Sign</a></div>
+                                    @endif
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    @include('components.messages')
 
                     <form method="POST" role="form" class="form">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">

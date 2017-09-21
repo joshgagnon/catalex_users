@@ -147,6 +147,6 @@ class SubscriptionController extends Controller
         }
 
         $redirectRouteName = $request->session()->has('redirect_route_name') ? $request->session()->pull('redirect_route_name') : 'user-services.index';
-        return redirect()->route($redirectRouteName)->with(['success' => 'Subscriptions updated']);
+        return redirect()->route($redirectRouteName)->with(['success' => 'Subscriptions updated.']);
     }
 }
