@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
-			@if (Request::query('redirectToSign'))
+			@if (Request::query('redirectToSign') || Request::query('sign'))
 				<div class="login-heading-with-sub">CataLex Sign</div>
 				<div class="login-sub-heading">Create Your CataLex Account</div>
 			@else
