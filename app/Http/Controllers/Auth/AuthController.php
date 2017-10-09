@@ -98,6 +98,12 @@ class AuthController extends Controller {
 
     public function postRegister(Request $request)
     {
+
+        $user = User::where('email',  'ilike', $request->input('email'))->first();
+        if($user) {
+            return redirect()->back()->with('errors', collect('The email has already been taken'));
+        }
+
         $registerToGoodCompanies = $request->has('gc');
         $registerToSign = $request->has('sign');
 
