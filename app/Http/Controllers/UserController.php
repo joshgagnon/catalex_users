@@ -251,7 +251,7 @@ class UserController extends Controller
             return view('auth.denied');
         }
 
-        $user = User::where('email', $request->input('email'))->first();
+        $user = User::where('email',  'ilike', $request->input('email'))->first();
         $isExistingUser = $user !== null;
 
         if (!$isExistingUser) {
@@ -325,7 +325,7 @@ class UserController extends Controller
         $inviterName = $requestData['sender_name'];
 
         foreach ($users as $userData) {
-            $user = User::where('email', $userData['email'])->first();
+            $user = User::where('email', 'ilike', $userData['email'])->first();
             $isExistingUser = $user !== null;
 
             if (!$isExistingUser) {
@@ -380,8 +380,9 @@ class UserController extends Controller
 
                     break;
             }
-
-            $userSummaries[] = (new UserSummariser($user))->summarise();
+            $userSummary = (new UserSummariser($user))->summarise();
+            $userSummary['requestedEmail'] = $userData['email'];
+            $userSummaries[] = $userSummary;
         }
 
         return $userSummaries;
