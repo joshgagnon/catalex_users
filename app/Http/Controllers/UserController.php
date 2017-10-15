@@ -159,21 +159,29 @@ class UserController extends Controller
 
         // Update submitted roles, verifying the authed user is allowed to change them
         $submitter = Auth::user();
-        if (isset($input['global_admin']) &&
-            $submitter->hasRole('global_admin')
-        ) {
-            if (boolval($input['global_admin'])) {
-                $user->addRole('global_admin');
-            } else {
-                $user->removeRole('global_admin');
+        $submitterIsGlobalAdmin = $submitter->hasRole('global_admin');
+        $submitterCanSetOrgAdmin = $submitter->can('edit_organisation_user') && $submitter->sharesOrganisation($user);
+
+        if ($submitterIsGlobalAdmin) {
+            if (isset($input['global_admin'])) {
+                if (boolval($input['global_admin'])) {
+                    $user->addRole('global_admin');
+                }
+                else {
+                    $user->removeRole('global_admin');
+                }
+            }
+
+            if (isset($input['invoice_customer'])) {
+//                $input->input()
             }
         }
-        if (isset($input['organisation_admin']) &&
-            ($submitter->hasRole('global_admin') || ($submitter->can('edit_organisation_user') && $submitter->sharesOrganisation($user)))
-        ) {
+
+        if (isset($input['organisation_admin']) && ($submitterIsGlobalAdmin || $submitterCanSetOrgAdmin)) {
             if (boolval($input['organisation_admin'])) {
                 $user->addRole('organisation_admin');
-            } else {
+            }
+            else {
                 $user->removeRole('organisation_admin');
             }
         }

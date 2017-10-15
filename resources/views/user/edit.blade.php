@@ -69,9 +69,11 @@ CataLex - Edit User
 								@endforeach
 							</div>
 						@endif
-						@if($user->hasRole('global_admin'))
+
+						@if ($user->hasRole('global_admin') && $subject->organisation_id)
 							<hr />
 							<h4>Billing Options</h4>
+
 							<div class="form-group">
 								<div class="col-xs-12 col-md-4">
 									<div class="checkbox">
@@ -81,8 +83,18 @@ CataLex - Edit User
 										</label>
 									</div>
 								</div>
+
+								<div class="col-xs-12 col-md-4">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="1" name="invoice_customer" {{ $subject->free ? 'checked' : '' }}>
+											Invoice Customer
+										</label>
+									</div>
+								</div>
 							</div>
 						@endif
+
 						<hr />
 						<h4>Change Password</h4>
 						<div class="form-group">
