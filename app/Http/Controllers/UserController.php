@@ -166,15 +166,12 @@ class UserController extends Controller
             if (isset($input['global_admin'])) {
                 if (boolval($input['global_admin'])) {
                     $user->addRole('global_admin');
-                }
-                else {
+                } else {
                     $user->removeRole('global_admin');
                 }
             }
 
-            if (isset($input['invoice_customer'])) {
-//                $input->input()
-            }
+            $user->is_invoice_customer = empty($input['is_invoice_customer']) ? false : boolval($input['is_invoice_customer']);
         }
 
         if (isset($input['organisation_admin']) && ($submitterIsGlobalAdmin || $submitterCanSetOrgAdmin)) {

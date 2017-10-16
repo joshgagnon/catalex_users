@@ -87,7 +87,7 @@ CataLex - Edit User
 								<div class="col-xs-12 col-md-4">
 									<div class="checkbox">
 										<label>
-											<input type="checkbox" value="1" name="invoice_customer" {{ $subject->free ? 'checked' : '' }}>
+											<input type="checkbox" value="1" name="is_invoice_customer" {{ $subject->is_invoice_customer ? 'checked' : '' }}>
 											Invoice Customer
 										</label>
 									</div>
