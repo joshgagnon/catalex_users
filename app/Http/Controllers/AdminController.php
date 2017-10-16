@@ -181,7 +181,6 @@ class AdminController extends Controller
         }
 
         $input = $request->all();
-
         $organisation->name = $input['name'];
 
         $submitter = Auth::user();
