@@ -248,6 +248,21 @@ class UserController extends Controller
         return $userSummary;
     }
 
+    public function apiUserInfo(Request $request, User $user)
+    {
+        $client = DB::table('oauth_clients')
+            ->where('id', $request->input('client_id'))
+            ->where('secret', $request->input('client_secret'))
+            ->first();
+
+        if (!$client) {
+            return view('auth.denied');
+        }
+
+        $userSummary = (new UserSummariser($user))->summarise();
+        return $userSummary;
+    }
+
     public function createOrFindUser(Request $request)
     {
         $client = DB::table('oauth_clients')

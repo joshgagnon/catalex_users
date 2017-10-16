@@ -16,7 +16,7 @@
                                         <p>{{ $inviterName }} has invited you to sign a document with CataLex Sign. Click below to set up your CataLex account and sign the document.</p>
 
                                         @if (!empty($message))
-                                            <p>Message from {{ $inviteeName }}: {{ $message }}</p>
+                                            <p>Message from {{ $inviterName }}: {{ $message }}</p>
                                         @endif
 
                                         @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => route('first-login.index', [$token, 'next' => $link])])

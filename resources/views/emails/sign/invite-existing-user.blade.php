@@ -16,7 +16,7 @@
                                         <p>{{ $inviterName }} has invited you to sign a document with CataLex Sign.</p>
 
                                         @if (!empty($message))
-                                            <p>Message from {{ $inviteeName }}: {{ $message }}</p>
+                                            <p>Message from {{ $inviterName }}: {{ $message }}</p>
                                         @endif
 
                                         @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => $link])
