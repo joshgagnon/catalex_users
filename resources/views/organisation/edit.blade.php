@@ -36,6 +36,9 @@ CataLex - Edit Organisation
 								<input type="text" class="form-control" name="name" value="{{ $organisation->name }}">
 							</div>
 						</div>
+
+						<hr />
+
 						<h4>Members</h4>
 						<div class="form-group">
 							<div class="col-xs-12 col-md-12">
@@ -51,7 +54,22 @@ CataLex - Edit Organisation
 						</div>
 						@if ($user->hasRole('global_admin'))
 							<hr />
+							<h4>Billing Options</h4>
+
+							<div class="form-group">
+								<div class="col-xs-12 col-md-4">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="1" name="is_invoice_customer" {{ $organisation->is_invoice_customer ? 'checked' : '' }}>
+											Invoice Customer
+										</label>
+									</div>
+								</div>
+							</div>
 						@endif
+
+						<hr />
+
 						<div class="form-group">
 							<div class="col-xs-12">
 								<button type="submit" class="btn btn-primary">Update</button>

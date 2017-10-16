@@ -168,19 +168,32 @@ class AdminController extends Controller
         return view('organisation.edit', compact('organisation'));
     }
 
-    public function postEditOrganisation(Request $request, $id, $addMembers=null) {
+    public function postEditOrganisation(Request $request, $id, $addMembers=null)
+    {
         $organisation = Organisation::find($id);
 
-        if(!$organisation) abort(404);
+        if (!$organisation) {
+            abort(404);
+        }
 
-        if($addMembers === 'add-members') return $this->postAddMembers($request, $organisation);
+        if ($addMembers === 'add-members') {
+            return $this->postAddMembers($request, $organisation);
+        }
 
         $input = $request->all();
 
         $organisation->name = $input['name'];
+
+        $submitter = Auth::user();
+        $submitterIsGlobalAdmin = $submitter->hasRole('global_admin');
+
+        if ($submitterIsGlobalAdmin) {
+            $organisation->is_invoice_customer = boolval($request->input('is_invoice_customer', false));
+        }
+
         $organisation->save();
 
-        return redirect()->action('AdminController@getOrganisations')->with('success', 'Organisation "' . $organisation->name . '" successfully updated.');
+        return redirect()->action('AdminController@postEditOrganisation', $organisation->id)->with('success', 'Organisation "' . $organisation->name . '" successfully updated.');
     }
 
     private function getAddMembers(Organisation $organisation) {
