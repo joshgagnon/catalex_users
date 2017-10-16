@@ -70,7 +70,7 @@ CataLex - Edit User
 							</div>
 						@endif
 
-						@if ($user->hasRole('global_admin') && $subject->organisation_id)
+						@if ($user->hasRole('global_admin') && !$subject->organisation_id)
 							<hr />
 							<h4>Billing Options</h4>
 

@@ -49,6 +49,9 @@ CataLex - Edit Organisation
 								<a href="{{ action('AdminController@getEditOrganisation', [$organisation->id, 'add-members']) }}" class="btn btn-info">Add Users</a>
 							</div>
 						</div>
+						@if ($user->hasRole('global_admin'))
+							<hr />
+						@endif
 						<div class="form-group">
 							<div class="col-xs-12">
 								<button type="submit" class="btn btn-primary">Update</button>
