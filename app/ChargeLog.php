@@ -69,8 +69,8 @@ class ChargeLog extends Model
 
             $billingSummary[] = [
                 'description' => BillingItem::description($itemType, $itemData),
-                'paidUntil' => $item->paid_until->format('j M Y'),
-                'amount' => $item->amount ?: null,
+                'paidUntil'   => $item->paid_until->format('j M Y'),
+                'amount'      => $item->amount ?: null,
             ];
         }
 
@@ -89,16 +89,16 @@ class ChargeLog extends Model
         $accountNumber = $organisation ? $organisation->accountNumber() : $this->user->accountNumber();
 
         $invoice = view('emails.invoice-attachment')->with([
-            'orgName' => $organisation ? $organisation->name : null,
-            'name' => $recipientName ?: 'CataLex User',
-            'date' => $this->timestamp->format('d/m/Y'),
-            'invoiceNumber' => $this->id,
-            'totalAmount' => $this->total_amount,
-            'gst' => $this->gst,
-            'accountNumber' => $accountNumber,
-            'listItems' => $this->itemSummary(),
-            'discountPercent' => $this->discount_percent,
-            'discountAmount' => bcsub($this->total_before_discount, $this->total_amount, 2),
+            'orgName'             => $organisation ? $organisation->name : null,
+            'name'                => $recipientName ?: 'CataLex User',
+            'date'                => $this->timestamp->format('d/m/Y'),
+            'invoiceNumber'       => $this->id,
+            'totalAmount'         => $this->total_amount,
+            'gst'                 => $this->gst,
+            'accountNumber'       => $accountNumber,
+            'listItems'           => $this->itemSummary(),
+            'discountPercent'     => $this->discount_percent,
+            'discountAmount'      => bcsub($this->total_before_discount, $this->total_amount, 2),
             'totalBeforeDiscount' => $this->total_before_discount,
         ]);
 
@@ -111,7 +111,7 @@ class ChargeLog extends Model
      * @param null $recipientName
      * @return string
      */
-    public function generateInvoice($recipientName=null)
+    public function generateInvoice($recipientName = null)
     {
         $invoiceHtml = $this->renderInvoice($recipientName);
         $pdfPath = PhantomJS::htmlToPdf($invoiceHtml);
@@ -127,7 +127,7 @@ class ChargeLog extends Model
     public function sendInvoices()
     {
         // Get the users to send the invoice to
-        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [ $this->user ];
+        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [$this->user];
 
         // Send all users a copy of the invoice
         foreach ($users as $user) {
@@ -153,7 +153,7 @@ class ChargeLog extends Model
         }
 
         // Get the users responsible for this charge log
-        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [ $this->user ];
+        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [$this->user];
 
         // Send all users a notice that the bill failed
         foreach ($users as $user) {
