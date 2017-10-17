@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class InvoiceRecipient extends Model
 {
-    protected $fillable = ['email', 'name'];
+    protected $fillable = ['name', 'email'];
+
+    public static $validationRules = [
+        'name'  => 'required',
+        'email' => 'required|email',
+    ];
 
     public function organisation()
     {

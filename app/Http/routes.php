@@ -89,6 +89,14 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::post('organisation/users/{user}/remove', 'OrganisationAdminController@removeUser')->name('organisation.users.remove');
 
         /**
+         * Invoice recipient routes
+         */
+        Route::get('organisation/invoice-recipients', 'InvoiceRecipientController@index')->name('invoice-recipients.index');
+        Route::get('organisation/invoice-recipients/{recipientId}/edit', 'InvoiceRecipientController@edit')->name('invoice-recipients.edit');
+        Route::put('organisation/invoice-recipients/{recipientId}', 'InvoiceRecipientController@update')->name('invoice-recipients.update');
+        Route::delete('organisation/invoice-recipients/{recipient}', 'InvoiceRecipientController@delete')->name('invoice-recipients.delete');
+
+        /**
          * Admin Routes
          */
         Route::post('impersonation/{user}', 'ImpersonationController@startImpersonation');

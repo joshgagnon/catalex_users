@@ -20,14 +20,26 @@
             @endif
         </h2>
 
+        <hr />
+
         @if (Request::path() === 'billing')
-            <a href="{{ route('billing.edit') }}" class="btn btn-default btn-sm">Edit Billing Details</a>
-            <a href="{{ route('user-services.index') }}" class="btn btn-default btn-sm">Edit My Services</a>
+            <h3>Options</h3>
+
+            <a href="{{ route('billing.edit') }}" class="btn btn-default btn-sm">Card Details</a>
+            <a href="{{ route('user-services.index') }}" class="btn btn-default btn-sm">Subscription</a>
+
+            @if ($organisation)
+                <a href="{{ route('invoice-recipients.index') }}" class="btn btn-default btn-sm">Invoice Recipients</a>
+            @endif
+
+            <hr />
         @endif
 
         @if ($discountPercent)
             <h3>Discount</h3>
             <p>All of your bills will include a discount of <strong>{{ $discountPercent }}%</strong>.</p>
+
+            <hr />
         @endif
 
         <h3>Billing Items</h3>
@@ -67,6 +79,8 @@
                 </tbody>
             </table>
         </div>
+
+        <hr />
 
         <h3>Past Invoices</h3>
 

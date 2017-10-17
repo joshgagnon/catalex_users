@@ -2,78 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\InvoiceRecipient;
 use Illuminate\Http\Request;
 
 class InvoiceRecipientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $orgId = $request->user()->organisation_id;
+        $recipients = InvoiceRecipient::where('organisation_id', $orgId)->get();
+
+        return view('invoice-recipients.index')->with(['recipients' => $recipients]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('invoice-recipients.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, InvoiceRecipient::$validationRules);
+
+        $requestInput = $request->all();
+        $orgId = $request->user()->organisation_id;
+
+        InvoiceRecipient::create(array_merge($requestInput, ['organisation_id' => $orgId]));
+
+        return redirect()->route('invoice-recipients.index')->with(['success' => 'Invoice recipient created.']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function edit($recipientId)
     {
-        //
+        $recipient = InvoiceRecipient::find($recipientId);
+
+        if (!$recipient) {
+            abort(404);
+        }
+
+        return view('invoice-recipients.edit')->with(['recipient' => $recipient]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(Request $request, $recipientId)
     {
-        //
+        $recipient = InvoiceRecipient::find($recipientId);
+
+        if (!$recipient) {
+            abort(404);
+        }
+
+        $this->validate($request, InvoiceRecipient::$validationRules);
+        $recipient->update($request->all());
+
+        return redirect()->route('invoice-recipients.index')->with(['success' => 'Invoice recipient updated.']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function delete(InvoiceRecipient $recipient)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $recipient->delete();
+        return redirect()->route('invoice-recipients.index')->with(['success' => 'Invoice recipient deleted.']);
     }
 }

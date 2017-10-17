@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\InvoiceRecipient;
 use App\Library\BillingItemSummariser;
 use App\Trial;
 use Auth;
@@ -39,7 +40,7 @@ class BillingController extends Controller
         $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
         $billingItems = (new BillingItemSummariser($billable))->summarise();
         $subscriptionUpToDate = Auth::user()->subscriptionUpToDate();
-    
+
         $discountPercent = null;
         
         if ($billable->billing_detail && $billable->billing_detail->discount_percent) {
