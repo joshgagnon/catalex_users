@@ -21,8 +21,8 @@
         </h2>
 
         @if (Request::path() === 'billing')
-            <a href="{{ route('billing.edit') }}" class="btn btn-info btn-sm">Edit Billing Details</a>
-            <a href="{{ route('user-services.index') }}" class="btn btn-info btn-sm">Edit My Services</a>
+            <a href="{{ route('billing.edit') }}" class="btn btn-default btn-sm">Edit Billing Details</a>
+            <a href="{{ route('user-services.index') }}" class="btn btn-default btn-sm">Edit My Services</a>
         @endif
 
         @if ($discountPercent)
