@@ -91,10 +91,12 @@ Route::group(['middleware' => 'csrf'], function() {
         /**
          * Invoice recipient routes
          */
-        Route::get('organisation/invoice-recipients', 'InvoiceRecipientController@index')->name('invoice-recipients.index');
-        Route::get('organisation/invoice-recipients/{recipientId}/edit', 'InvoiceRecipientController@edit')->name('invoice-recipients.edit');
-        Route::put('organisation/invoice-recipients/{recipientId}', 'InvoiceRecipientController@update')->name('invoice-recipients.update');
-        Route::delete('organisation/invoice-recipients/{recipient}', 'InvoiceRecipientController@delete')->name('invoice-recipients.delete');
+        Route::get('billing/invoice-recipients', 'InvoiceRecipientController@index')->name('invoice-recipients.index');
+        Route::get('billing/invoice-recipients/create', 'InvoiceRecipientController@create')->name('invoice-recipients.create');
+        Route::post('billing/invoice-recipients', 'InvoiceRecipientController@store')->name('invoice-recipients.store');
+        Route::get('billing/invoice-recipients/{recipientId}/edit', 'InvoiceRecipientController@edit')->name('invoice-recipients.edit');
+        Route::put('billing/invoice-recipients/{recipientId}', 'InvoiceRecipientController@update')->name('invoice-recipients.update');
+        Route::delete('billing/invoice-recipients/{recipientId}', 'InvoiceRecipientController@delete')->name('invoice-recipients.delete');
 
         /**
          * Admin Routes

@@ -27,7 +27,11 @@ class InvoiceRecipientController extends Controller
         $requestInput = $request->all();
         $orgId = $request->user()->organisation_id;
 
-        InvoiceRecipient::create(array_merge($requestInput, ['organisation_id' => $orgId]));
+        InvoiceRecipient::forceCreate([
+            'name'            => $requestInput['name'],
+            'email'           => $requestInput['email'],
+            'organisation_id' => $orgId,
+        ]);
 
         return redirect()->route('invoice-recipients.index')->with(['success' => 'Invoice recipient created.']);
     }
@@ -57,8 +61,14 @@ class InvoiceRecipientController extends Controller
         return redirect()->route('invoice-recipients.index')->with(['success' => 'Invoice recipient updated.']);
     }
 
-    public function delete(InvoiceRecipient $recipient)
+    public function delete($recipientId)
     {
+        $recipient = InvoiceRecipient::find($recipientId);
+
+        if (!$recipient) {
+            abort(404);
+        }
+
         $recipient->delete();
         return redirect()->route('invoice-recipients.index')->with(['success' => 'Invoice recipient deleted.']);
     }

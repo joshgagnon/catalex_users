@@ -22,8 +22,8 @@
                             </form>
 
                             <strong>{{ $recipient->name }}:</strong> {{ $recipient->email }}
-                            <a href="{{ route('invoice-recipients.edit', $recipient->id) }}">Edit</a>
-                            <a href="#" onclick="document.getElementById('{{ 'delete-recipient-form-' . $recipient->id }}').submit()">Delete</a>
+                            &nbsp;&nbsp;<a href="{{ route('invoice-recipients.edit', $recipient->id) }}">Edit</a>
+                            &nbsp;&nbsp;<a href="#" onclick="document.getElementById('{{ 'delete-recipient-form-' . $recipient->id }}').submit()">Delete</a>
                         </li>
                     @endforeach
                 </ol>
@@ -31,7 +31,7 @@
                 <hr />
 
                 <div>
-                    <a href="#" class="btn btn-primary">Add Invoice Recipient</a>
+                    <a href="{{ route('invoice-recipients.create') }}" class="btn btn-primary">Add Invoice Recipient</a>
                 </div>
             </div>
         </div>
