@@ -295,43 +295,63 @@ trait Billable
         $discountPercent = $billingDetails->getDiscountPercent();
         $totalAfterDiscount = $discountPercent ? Billing::applyDiscount($totalBeforeDiscount, $discountPercent) : $totalBeforeDiscount;
 
-        // Request payment
-        $success = $this->requestPayment($totalAfterDiscount);
+        if ($this->is_invoice_customer) {
+            $this->invoiceBilling();
 
-        // Update the charge log
-        $chargeLog->update([
-            'success'               => $success,
-            'pending'               => false,
-            'total_before_discount' => $totalBeforeDiscount,
-            'discount_percent'      => $discountPercent,
-            'total_amount'          => $totalAfterDiscount,
-            'gst'                   => Billing::includingGst($totalAfterDiscount),
-        ]);
+            // Update the charge log
+            $chargeLog->update([
+                'success'               => false,
+                'pending'               => true,
+                'total_before_discount' => $totalBeforeDiscount,
+                'discount_percent'      => $discountPercent,
+                'total_amount'          => $totalAfterDiscount,
+                'gst'                   => Billing::includingGst($totalAfterDiscount),
+            ]);
 
-        // Above we optimistically set the paid until dates to the paying until date
-        // if the payment fails we need to undo that
-        if ($chargeLog->success) {
-            $this->sendInvoices($chargeLog);
-        } else {
-            // Set all item payments 'paid until' to the last payment (or today if there hasn't been a previous payment)
-            $itemPayments = $chargeLog->billingItemPayments()->get();
+            $this->sendInvoices();
 
-            foreach ($itemPayments as $item) {
-                $previousPayment = BillingItemPayment::join('charge_logs', 'charge_log_id', '=', 'charge_logs.id')
-                    ->where('billing_item_id', '=', $item->billing_item_id)
-                    ->where('charge_logs.success', '=', true)
-                    ->orderBy('paid_until', 'desc')
-                    ->first();
 
-                $item->paid_until = $previousPayment ? $previousPayment->paid_until : Carbon::today();
-                $item->save();
+            return true;
+        }
+        else {
+            // Request payment
+            $success = $this->requestPayment($totalAfterDiscount);
+
+            // Update the charge log
+            $chargeLog->update([
+                'success'               => $success,
+                'pending'               => false,
+                'total_before_discount' => $totalBeforeDiscount,
+                'discount_percent'      => $discountPercent,
+                'total_amount'          => $totalAfterDiscount,
+                'gst'                   => Billing::includingGst($totalAfterDiscount),
+            ]);
+
+            // Above we optimistically set the paid until dates to the paying until date
+            // if the payment fails we need to undo that
+            if ($chargeLog->success) {
+                $this->sendInvoices($chargeLog);
+            }
+            else {
+                // Set all item payments 'paid until' to the last payment (or today if there hasn't been a previous payment)
+                $itemPayments = $chargeLog->billingItemPayments()->get();
+
+                foreach ($itemPayments as $item) {
+                    $previousPayment = BillingItemPayment::join('charge_logs', 'charge_log_id', '=', 'charge_logs.id')
+                        ->where('billing_item_id', '=', $item->billing_item_id)
+                        ->where('charge_logs.success', '=', true)
+                        ->orderBy('paid_until', 'desc')
+                        ->first();
+
+                    $item->paid_until = $previousPayment ? $previousPayment->paid_until : Carbon::today();
+                    $item->save();
+                }
+
+                $chargeLog->sendFailedNotice();
             }
 
-            $chargeLog->sendFailedNotice();
+            return $chargeLog->success;
         }
-
-        // Return whether payment was successful or not
-        return $chargeLog->success;
     }
 
     /**
