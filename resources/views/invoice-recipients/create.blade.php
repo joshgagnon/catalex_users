@@ -33,7 +33,7 @@
 
                     <hr />
 
-                    <button type="submit" class="btn btn-primary">Add Recipient</button>
+                    <button type="submit" class="btn btn-primary">Save Recipient</button>
                 </form>
             </div>
         </div>
