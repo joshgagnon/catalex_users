@@ -67,7 +67,7 @@ class AdminController extends Controller
         $includeBrowserLogins = Input::has('browser_logins');
         $includeLogouts = Input::has('logouts');
 
-        $logModel = AccessLog::orderBy('timestamp', 'DESC');
+        $logModel = AccessLog::whereNotNull('user_id')->orderBy('timestamp', 'DESC');
 
         if($includeUserLogins || $includeBrowserLogins || $includeLogouts) {
             $logModel->whereNotNull('user_id');
