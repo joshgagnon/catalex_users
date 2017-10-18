@@ -35,7 +35,7 @@ class Organisation extends Model
         parent::boot();
 
         // Delete first login tokens when deleting
-        static::deleting(function($org) {
+        static::deleting(function ($org) {
             $org->userInvites()->delete();
         });
     }
@@ -145,7 +145,10 @@ class Organisation extends Model
 
         foreach ($this->members as $member) {
             if ($member->can('edit_own_organisation')) {
-                $invoiceableUsers[] = $member;
+                $invoiceableUsers[] = [
+                    'name'  => $member->name,
+                    'email' => $member->email,
+                ];
             }
         }
 

@@ -63,8 +63,7 @@
 	<h1>Invoice/Receipt for CataLex Good Companies</h1>
 	<div class="row">
 		<div class="half">
-			<div>{{ $orgName or '' }}</div>
-			<div>{{ $name }}</div>
+			<div>{{ $invoiceRecipient }}</div>
 		</div>
 		<div class="half">
 			<div class="row">

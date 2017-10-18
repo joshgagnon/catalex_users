@@ -80,17 +80,15 @@ class ChargeLog extends Model
     /**
      * Render the invoice for a charge log as HTML
      *
-     * @param null $recipientName
      * @return string
      */
-    public function renderInvoice($recipientName = null)
+    public function renderInvoice()
     {
         $organisation = $this->organisation;
         $accountNumber = $organisation ? $organisation->accountNumber() : $this->user->accountNumber();
 
         $invoice = view('emails.invoice-attachment')->with([
-            'orgName'             => $organisation ? $organisation->name : null,
-            'name'                => $recipientName ?: 'CataLex User',
+            'invoiceRecipient'    => $organisation ? $organisation->name : $this->user->name,
             'date'                => $this->timestamp->format('d/m/Y'),
             'invoiceNumber'       => $this->id,
             'totalAmount'         => $this->total_amount,
@@ -108,12 +106,11 @@ class ChargeLog extends Model
     /**
      * Generate an invoice from this charge log
      *
-     * @param null $recipientName
      * @return string
      */
-    public function generateInvoice($recipientName = null)
+    public function generateInvoice()
     {
-        $invoiceHtml = $this->renderInvoice($recipientName);
+        $invoiceHtml = $this->renderInvoice();
         $pdfPath = PhantomJS::htmlToPdf($invoiceHtml);
 
         return $pdfPath;
@@ -127,15 +124,17 @@ class ChargeLog extends Model
     public function sendInvoices()
     {
         // Get the users to send the invoice to
-        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [$this->user];
+        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [['name' => $this->user->name, 'email' => $this->user->email]];
+
+        // Create a PDF version of the invoice
+        $pdfPath = $this->generateInvoice();
 
         // Send all users a copy of the invoice
         foreach ($users as $user) {
-            // Create a PDF version of the invoice - needs to be recreated for each user because the recipient name changes
-            $pdfPath = $this->generateInvoice($user->fullName());
+            $data = ['name' => $user['name']];
+            $attachments = [['path' => $pdfPath, 'name' => 'Invoice.pdf']];
 
-            // Queue the invoice to be sent to the current user
-            Mail::queueStyledMail('emails.invoice', ['name' => $user->fullName()], $user->email, $user->fullName(), 'CataLex | Invoice/Receipt', [['path' => $pdfPath, 'name' => 'Invoice.pdf']]);
+            Mail::queueStyledMail('emails.invoice', $data, $user['email'], $user['name'], 'CataLex | Invoice/Receipt', $attachments);
         }
 
         return $users;

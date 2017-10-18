@@ -18,12 +18,7 @@ class InvoiceController extends Controller
             abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
-        $recipientName = null;
-        if (!$request->user()->hasRole('global_admin')) {
-            $recipientName = $request->user()->fullName();
-        }
-
-        return $chargeLog->renderInvoice($recipientName);
+        return $chargeLog->renderInvoice();
     }
 
     public function download(Request $request, ChargeLog $chargeLog)
