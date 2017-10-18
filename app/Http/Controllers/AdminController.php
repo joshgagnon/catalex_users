@@ -70,7 +70,6 @@ class AdminController extends Controller
         $logModel = AccessLog::whereNotNull('user_id')->orderBy('timestamp', 'DESC');
 
         if($includeUserLogins || $includeBrowserLogins || $includeLogouts) {
-            $logModel->whereNotNull('user_id');
             $logModel->where(function($q) use($includeUserLogins, $includeBrowserLogins, $includeLogouts) {
                 if($includeUserLogins) $q->orWhere('route', '=', 'auth/login');
                 if($includeBrowserLogins) $q->orWhere('route', '=', 'browser-login');
