@@ -124,20 +124,20 @@ class ChargeLog extends Model
     public function sendInvoices()
     {
         // Get the users to send the invoice to
-        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [['name' => $this->user->name, 'email' => $this->user->email]];
+        $recipients = $this->recipients();
 
         // Create a PDF version of the invoice
         $pdfPath = $this->generateInvoice();
 
         // Send all users a copy of the invoice
-        foreach ($users as $user) {
-            $data = ['name' => $user['name']];
+        foreach ($recipients as $recipient) {
+            $data = ['name' => $recipient['name']];
             $attachments = [['path' => $pdfPath, 'name' => 'Invoice.pdf']];
 
-            Mail::queueStyledMail('emails.invoice', $data, $user['email'], $user['name'], 'CataLex | Invoice/Receipt', $attachments);
+            Mail::queueStyledMail('emails.invoice', $data, $recipient['email'], $recipient['name'], 'CataLex | Invoice/Receipt', $attachments);
         }
 
-        return $users;
+        return $recipients;
     }
 
     /**
@@ -152,13 +152,29 @@ class ChargeLog extends Model
         }
 
         // Get the users responsible for this charge log
-        $users = $this->organisation ? $this->organisation->invoiceableUsers() : [$this->user];
+        $recipients = $this->recipients();
 
         // Send all users a notice that the bill failed
-        foreach ($users as $user) {
-            Mail::queueStyledMail('emails.billing-failed', ['name' => $user->fullName()], $user->email, $user->fullName(), 'CataLex | Bill Failed');
+        foreach ($recipients as $recipient) {
+            $data = ['name' => $recipient['name']];
+
+            Mail::queueStyledMail('emails.billing-failed', $data, $recipient['email'], $recipient['name'], 'CataLex | Bill Failed');
         }
 
         return true;
+    }
+
+    private function recipients()
+    {
+        if ($this->organisation_id) {
+            return $this->organisation->invoiceableUsers();
+        }
+
+        $recipients = [
+            'name' => $this->user->name,
+            'email' => $this->user->email
+        ];
+
+        return [$recipients];
     }
 }
