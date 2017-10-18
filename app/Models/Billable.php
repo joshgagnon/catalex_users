@@ -156,7 +156,8 @@ trait Billable
     {
         if ($this->organisation) {
             return $this->organisation->setBillingPeriod($period);
-        } else {
+        }
+        else {
             if (!in_array($period, ['monthly', 'annually'])) {
                 throw new \Exception('Billing period must be one of "monthly" or "annually"');
             }
@@ -310,7 +311,8 @@ trait Billable
             $this->sendInvoices();
 
             return true;
-        } else {
+        }
+        else {
             // Request payment
             $success = $this->requestPayment($totalAfterDiscount);
 
