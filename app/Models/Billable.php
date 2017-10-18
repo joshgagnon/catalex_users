@@ -296,8 +296,6 @@ trait Billable
         $totalAfterDiscount = $discountPercent ? Billing::applyDiscount($totalBeforeDiscount, $discountPercent) : $totalBeforeDiscount;
 
         if ($this->is_invoice_customer) {
-            $this->invoiceBilling();
-
             // Update the charge log
             $chargeLog->update([
                 'success'               => false,
@@ -306,14 +304,13 @@ trait Billable
                 'discount_percent'      => $discountPercent,
                 'total_amount'          => $totalAfterDiscount,
                 'gst'                   => Billing::includingGst($totalAfterDiscount),
+                'payment_type'          => ChargeLog::PAYMENT_TYPE_INVOICE,
             ]);
 
             $this->sendInvoices();
 
-
             return true;
-        }
-        else {
+        } else {
             // Request payment
             $success = $this->requestPayment($totalAfterDiscount);
 

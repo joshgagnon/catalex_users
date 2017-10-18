@@ -60,7 +60,10 @@
 </head>
 <body>
 	<div class="logo-colourx2"></div>
-	<h1>Invoice/Receipt for CataLex Good Companies</h1>
+	<h1>Invoice/Receipt for CataLex</h1>
+
+	<hr />
+
 	<div class="row">
 		<div class="half">
 			<div>{{ $invoiceRecipient }}</div>
@@ -83,8 +86,21 @@
 		</div>
 	</div>
 
+	<hr />
+
+	<h3>Payment</h3>
+
+	@if ($paymentType === \App\ChargeLog::PAYMENT_TYPE_DPS_CC)
+		<p>Paid by way of credit card deduction on {{ $date }}.</p>
+	@else
+		<p>Due date: <strong>{{ $dueDate }}</strong>.</p>
+		<p>Please pay by direct credit to account number <strong>{{ env('INVOICE_BANK_ACCOUNT_NUMBER') }}</strong> using the invoice number as a reference.</p>
+	@endif
+
 	@if($listItems)
-        <br />
+		<br />
+		<hr />
+		<h3>Line Items</h3>
 
         <div class="row bold">
             <div class="half">Description</div>
@@ -157,7 +173,6 @@
     <br />
 
 	<div class="footer-wrapper">
-		<div class="bold">Paid by way of credit card deduction on {{ $date }}</div>
 		<div class="footer">
 			<div><label>Supplier:</label>CataLex Limited (NZCN 5311842)</div>
 			<div><label>Website:</label><a href="https://www.catalex.nz">www.catalex.nz</a></div>

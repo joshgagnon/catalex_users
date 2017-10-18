@@ -7,6 +7,19 @@ use Illuminate\Http\Request;
 
 class InvoiceRecipientController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user->organisation_id) {
+            abort(404);
+        }
+
+        if (!$user->hasRole('organisation_admin')) {
+            abort(404);
+        }
+    }
+
     public function index(Request $request)
     {
         $orgId = $request->user()->organisation_id;

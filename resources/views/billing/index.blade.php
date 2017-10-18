@@ -28,7 +28,7 @@
             <a href="{{ route('billing.edit') }}" class="btn btn-default btn-sm">Card Details</a>
             <a href="{{ route('user-services.index') }}" class="btn btn-default btn-sm">Subscription</a>
 
-            @if ($organisation)
+            @if (!empty($organisation))
                 <a href="{{ route('invoice-recipients.index') }}" class="btn btn-default btn-sm">Invoice Recipients</a>
             @endif
 

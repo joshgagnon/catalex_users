@@ -14,10 +14,13 @@ class ChargeLog extends Model
     const PENDING = 'pending';
     const FAILED = 'failed';
 
+    const PAYMENT_TYPE_DPS_CC = 'dps_credit_card';
+    const PAYMENT_TYPE_INVOICE = 'invoice';
+
     // We don't have an updated timestamp, so turn off timestamps and manually set the created at timestamp below
     public $timestamps = false;
 
-    protected $fillable = ['success', 'pending', 'user_id', 'organisation_id', 'total_amount', 'gst', 'discount_percent', 'total_before_discount'];
+    protected $fillable = ['success', 'pending', 'user_id', 'organisation_id', 'total_amount', 'gst', 'discount_percent', 'total_before_discount', 'payment_type'];
 
     protected $dates = ['timestamp'];
 
@@ -87,7 +90,7 @@ class ChargeLog extends Model
         $organisation = $this->organisation;
         $accountNumber = $organisation ? $organisation->accountNumber() : $this->user->accountNumber();
 
-        $invoice = view('emails.invoice-attachment')->with([
+        $invoiceData = [
             'invoiceRecipient'    => $organisation ? $organisation->name : $this->user->name,
             'date'                => $this->timestamp->format('d/m/Y'),
             'invoiceNumber'       => $this->id,
@@ -98,7 +101,14 @@ class ChargeLog extends Model
             'discountPercent'     => $this->discount_percent,
             'discountAmount'      => bcsub($this->total_before_discount, $this->total_amount, 2),
             'totalBeforeDiscount' => $this->total_before_discount,
-        ]);
+            'paymentType'         => $this->payment_type,
+        ];
+
+        if ($this->payment_type === self::PAYMENT_TYPE_INVOICE) {
+            $invoiceData['dueDate'] = $this->timestamp->addWeeks(2)->format('d/m/Y');
+        }
+
+        $invoice = view('emails.invoice-attachment')->with($invoiceData);
 
         return $invoice->render();
     }
@@ -171,8 +181,8 @@ class ChargeLog extends Model
         }
 
         $recipients = [
-            'name' => $this->user->name,
-            'email' => $this->user->email
+            'name'  => $this->user->name,
+            'email' => $this->user->email,
         ];
 
         return [$recipients];
