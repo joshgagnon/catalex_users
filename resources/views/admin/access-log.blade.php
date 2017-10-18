@@ -39,11 +39,7 @@
 					@foreach($logs as $l)
 						<tr>
 							<td>
-								@if($l->user)
-									<a href="{{ action('UserController@getEdit', $l->user->id) }}">{{ $l->user->fullName() }}</a>
-								@else
-									Not Logged In
-								@endif
+								<a href="{{ action('UserController@getEdit', $l->user->id) }}">{{ $l->user->fullName() }}</a>
 							</td>
 							<td class="mid-cell">{{ $l->route }}</td>
 							<td class="mid-cell">{{ $l->timestamp->copy()->toDateTimeString() }}</td>
