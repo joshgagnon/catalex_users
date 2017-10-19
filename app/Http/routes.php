@@ -126,6 +126,15 @@ Route::group(['middleware' => 'csrf'], function() {
             'billing' => 'BillingController',
         ]);
     });
+
+    Route::group(['middleware' => 'admin'], function() {
+        /**
+         * Charge log routes
+         */
+        Route::put('charge-logs/{charge_log}/mark-as-successful', 'ChargeLogController@markAsSuccessful')->name('charge-logs.mark-as-successful');
+        Route::put('charge-logs/{charge_log}/mark-as-failed', 'ChargeLogController@markAsFailed')->name('charge-logs.mark-as-failed');
+        Route::put('charge-logs/{charge_log}/mark-as-pending', 'ChargeLogController@markAsPending')->name('charge-logs.mark-as-pending');
+    });
 });
 
 

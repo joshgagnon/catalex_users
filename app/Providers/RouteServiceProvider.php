@@ -32,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider {
         $router->model('invoice', ChargeLog::class);
         $router->model('billingDetail', BillingDetail::class);
         $router->model('organisation_invite', OrganisationInvite::class);
+        $router->model('charge_log', ChargeLog::class);
 	}
 
 	/**

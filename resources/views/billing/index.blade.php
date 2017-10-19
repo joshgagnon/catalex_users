@@ -20,7 +20,7 @@
             @endif
         </h2>
 
-        <hr />
+        <hr/>
 
         @if (Request::path() === 'billing')
             <h3>Options</h3>
@@ -32,14 +32,14 @@
                 <a href="{{ route('invoice-recipients.index') }}" class="btn btn-default btn-sm">Invoice Recipients</a>
             @endif
 
-            <hr />
+            <hr/>
         @endif
 
         @if ($discountPercent)
             <h3>Discount</h3>
             <p>All of your bills will include a discount of <strong>{{ $discountPercent }}%</strong>.</p>
 
-            <hr />
+            <hr/>
         @endif
 
         <h3>Billing Items</h3>
@@ -80,7 +80,7 @@
             </table>
         </div>
 
-        <hr />
+        <hr/>
 
         <h3>Past Invoices</h3>
 
@@ -148,12 +148,38 @@
                                         Invoice</a>
 
                                     @if ($user->hasRole('global_admin'))
-                                        <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post"
-                                              style="display: inline-block;">
+                                        <form action="{{ route('invoices.resend', $chargeLog->id) }}" method="post" style="display: inline-block;">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <button type="submit" class="btn btn-danger">Resend Invoice</button>
                                         </form>
                                     @endif
+                                </div>
+                            @endif
+
+                            @if ($user->hasRole('global_admin'))
+                                <hr />
+
+                                <div>
+                                    <form action="{{ route('charge-logs.mark-as-successful', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                        <button type="submit" class="btn btn-success">Mark as successful</button>
+                                    </form>
+
+                                    <form action="{{ route('charge-logs.mark-as-failed', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                        <button type="submit" class="btn btn-danger">Mark as failed</button>
+                                    </form>
+
+                                    <form action="{{ route('charge-logs.mark-as-pending', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                        <button type="submit" class="btn btn-info">Mark as pending</button>
+                                    </form>
                                 </div>
                             @endif
                         </div>
