@@ -160,26 +160,32 @@
                                 <hr />
 
                                 <div>
-                                    <form action="{{ route('charge-logs.mark-as-successful', $chargeLog->id) }}" method="post" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="PUT">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    @if (!$chargeLog->success || $chargeLog->pending)
+                                        <form action="{{ route('charge-logs.mark-as-successful', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                                        <button type="submit" class="btn btn-success">Mark as successful</button>
-                                    </form>
+                                            <button type="submit" class="btn btn-success">Mark as successful</button>
+                                        </form>
+                                    @endif
 
-                                    <form action="{{ route('charge-logs.mark-as-failed', $chargeLog->id) }}" method="post" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="PUT">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    @if ($chargeLog->success || $chargeLog->pending)
+                                        <form action="{{ route('charge-logs.mark-as-failed', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                                        <button type="submit" class="btn btn-danger">Mark as failed</button>
-                                    </form>
+                                            <button type="submit" class="btn btn-danger">Mark as failed</button>
+                                        </form>
+                                    @endif
 
-                                    <form action="{{ route('charge-logs.mark-as-pending', $chargeLog->id) }}" method="post" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="PUT">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    @if (!$chargeLog->pending)
+                                        <form action="{{ route('charge-logs.mark-as-pending', $chargeLog->id) }}" method="post" style="display: inline-block;">
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                                        <button type="submit" class="btn btn-info">Mark as pending</button>
-                                    </form>
+                                            <button type="submit" class="btn btn-info">Mark as pending</button>
+                                        </form>
+                                    @endif
                                 </div>
                             @endif
                         </div>
