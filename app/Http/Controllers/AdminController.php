@@ -292,7 +292,7 @@ class AdminController extends Controller
             $billableKeyName = 'organisation';
         }
 
-        $chargeLogs = $billable->chargeLogs()->get();
+        $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
         $billingItems = (new BillingItemSummariser($billable))->summarise();
 
         $discountPercent = null;
