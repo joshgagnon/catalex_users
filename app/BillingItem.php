@@ -94,7 +94,16 @@ class BillingItem extends Model
     {
         switch ($itemType) {
             case BillingItem::ITEM_TYPE_GC_COMPANY:
-                return '' . $itemData['company_name'];
+                $description = null;
+
+                if (!empty($itemData['company_name'])) {
+                    $description = 'Good Companies subscription for' . $itemData['company_name'];
+                }
+                else {
+                    $description = 'Good Companies company subscription';
+                }
+
+                return $description;
 
             case BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION:
                 $userName = $itemData['user_name'];
