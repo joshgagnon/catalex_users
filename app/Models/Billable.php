@@ -253,6 +253,7 @@ trait Billable
 
         // Create the charge log record for this bill - it is currently pending, but not yet successful
         $chargeLog = ChargeLog::create([$this->foreignIdName() => $this->id, 'success' => false, 'pending' => true]);
+        $chargeLog = $chargeLog->fresh(); // The create method doesn't populate the model instance with DB defaults, so call fresh() to fully populate the model instance
 
         // If this user doesn't have billing setup, fail the bill and exit the biling process
         if (!$this->hasBillingSetup()) {
