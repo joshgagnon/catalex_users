@@ -50,6 +50,11 @@ class Organisation extends Model
         return $this->hasMany('App\User')->withTrashed();
     }
 
+    public function invoiceRecipients()
+    {
+        return $this->hasMany(InvoiceRecipient::class);
+    }
+
     public function billingExempt()
     {
         // TODO: Remove beta org code
