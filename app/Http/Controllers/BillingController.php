@@ -92,6 +92,10 @@ class BillingController extends Controller
         $billableEntity = $user->organisation ? $user->organisation : $user;
         $billingDetails = $billableEntity->billing_detail()->first();
 
+        if ($billableEntity->is_invoice_customer) {
+            abort(404);
+        }
+
         $subscriptionUpToDate = $user->subscriptionUpToDate();
 
         return view('billing.edit')->with([
