@@ -97,7 +97,7 @@ class BillingItem extends Model
                 $description = null;
 
                 if (!empty($itemData['company_name'])) {
-                    $description = 'Good Companies subscription for' . $itemData['company_name'];
+                    $description = 'Good Companies subscription for ' . $itemData['company_name'];
                 }
                 else {
                     $description = 'Good Companies company subscription';
