@@ -79,8 +79,13 @@ class SubscriptionController extends Controller
             $membersSubscriptions = $subscriptions ? [$user->id => $subscriptions] : []; // if this user has opted for no subscriptions, don't include them in the membersSubscriptions array
         }
 
+        $isSubscribing = !empty($membersSubscriptions);
+        $isInvoiceCustomer = $user->organisation_id && $user->organisation->is_invoice_customer;
+        $needsBilling = !$isInvoiceCustomer && !$user->billingExempt();
+        $needsBillingSetup = $needsBilling && !$user->hasBillingSetup();
+
         // Check the user has billing setup (if they need billing setup)
-        if (!empty($membersSubscriptions) && !$user->billingExempt() && !$user->hasBillingSetup()) {
+        if ($isSubscribing && $needsBillingSetup) {
             $request->session()->put('redirect_route_name', 'user-services.return-from-billing');
             $request->session()->put('redirect_data', ['members_subscriptions' => json_encode($membersSubscriptions)]);
 
