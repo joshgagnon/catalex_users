@@ -49,6 +49,14 @@ class CreateCardDetailsTable extends Migration
      */
     public function down()
     {
+        Schema::table('billing_details', function (Blueprint $table) {
+            $table->dropColumn(['card_detail_id']);
+
+            $table->text('dps_billing_token')->nullable();
+            $table->text('expiry_date')->nullable();
+            $table->text('masked_card_number')->nullable();
+        });
+
         Schema::drop('card_details');
     }
 }
