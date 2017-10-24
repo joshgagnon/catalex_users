@@ -26,18 +26,19 @@ class PXPay
 
         // Get the user or organisation's billing details
         $billingDetails = $billable->billing_detail()->first();
+        $cardDetails = $billingDetails ? $billingDetails->cardDetail()->first() : null;
 
-        // Check the user has billing details
-        if (!$billingDetails) {
+        // Check the user has card details
+        if (!$cardDetails) {
             $billableType = $billable instanceof User ? 'user' : 'organisation';
-            Log::error('Tried to bill ' . $billableType . ' with id ' . $billable->id . ', but failed because they have no billing details');
+            Log::error('Tried to bill ' . $billableType . ' with id ' . $billable->id . ', but failed because they have no card details');
             
             // Failed
             return false;
         }
 
         // Build the XML and send the request
-        $xmlRequest = $this->buildPaymentRequestXML($totalDollars, $billingDetails);
+        $xmlRequest = $this->buildPaymentRequestXML($totalDollars, $cardDetails->card_token, $billingDetails->id);
         $success = $this->sendPaymentRequest($xmlRequest);
 
         // Return the successfulness
@@ -66,7 +67,7 @@ class PXPay
         return $success;
     }
 
-    protected function buildPaymentRequestXML($totalDollars, $billingDetails)
+    protected function buildPaymentRequestXML($totalDollars, $cardToken, $billingDetailId)
     {
         $username = env('PXPOST_USERNAME');
         $key = env('PXPOST_KEY');
@@ -79,8 +80,8 @@ class PXPay
             'postUsername' => $username,
             'postPassword' => $key,
             'amount' => $totalDollars,
-            'dpsBillingId' => $billingDetails->dps_billing_token,
-            'id' => $billingDetails->id,
+            'dpsBillingId' => $cardToken,
+            'id' => $billingDetailId,
         ])->render();
     }
 
