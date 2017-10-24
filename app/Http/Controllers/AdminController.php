@@ -182,12 +182,8 @@ class AdminController extends Controller
         $input = $request->all();
         $organisation->name = $input['name'];
 
-        $submitter = Auth::user();
-        $submitterIsGlobalAdmin = $submitter->hasRole('global_admin');
-
-        if ($submitterIsGlobalAdmin) {
-            $organisation->is_invoice_customer = boolval($request->input('is_invoice_customer', false));
-        }
+        $organisation->is_invoice_customer = boolval($request->input('is_invoice_customer', false));
+        $organisation->force_no_access = boolval($request->input('force_no_access', false));
 
         $organisation->save();
 
