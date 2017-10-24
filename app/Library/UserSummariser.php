@@ -19,7 +19,10 @@ class UserSummariser
         $this->user->load('roles');
         $billable = $this->user->getBillableEntity();
 
-        if ($billable->billingExempt() || $this->user->billingExempt()) {
+        if ($this->user->organisation_id && $billable->force_no_access) {
+            $services = [];
+        }
+        else if ($billable->billingExempt() || $this->user->billingExempt()) {
             // User or their billable is exempt from billing - they get all services
             $services = Service::get()->pluck('name')->toArray();
         }
