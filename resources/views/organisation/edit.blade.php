@@ -65,6 +65,15 @@ CataLex - Edit Organisation
 										</label>
 									</div>
 								</div>
+
+								<div class="col-xs-12 col-md-4">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="1" name="force_no_access" {{ $organisation->force_no_access ? 'checked' : '' }}>
+											Remove all service access
+										</label>
+									</div>
+								</div>
 							</div>
 						@endif
 
