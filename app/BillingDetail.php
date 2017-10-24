@@ -12,7 +12,7 @@ class BillingDetail extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['period', 'address_id', 'dps_billing_token', 'card_detail_id', 'masked_card_number', 'expiry_date', 'billing_day', 'discount_percent'];
+	protected $fillable = ['period', 'address_id', 'card_detail_id', 'billing_day', 'discount_percent'];
 
 	public function address() {
 		return $this->belongsTo('App\Address');
