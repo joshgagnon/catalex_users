@@ -76,3 +76,29 @@ When using the `User` model, note that it has an applied scope which filters out
 `php artisan tinker`
 
 `App\Service::create(['name' => 'CataLex Sign', 'is_paid_service' => true]);`
+
+# Todo
+
+Upgrade to Laravel 5.5 LTS.
+
+Move out all authorisation logic (eg. checking if a user is a global admin) from controllers to middleware applied in the routes file.
+
+Dead code elimination.
+
+Consistent styling of pages.
+
+Better, more intuitive navigation between pages. Construct Information Architecture first, so it is well thought out.
+
+Fix footer - it looks weird.
+
+Better documentation.
+
+More consistent use of Laravel features, eg. Route Model Binding, using $request->user() instead of facade, etc.
+
+Create code style and bring all code into new code style.
+
+Clean up billing simulation tests.
+
+Move to new Laravel OAuth.
+
+Use the OAuth classes for service based api auth, instead of looking in the db for the secret to match.
