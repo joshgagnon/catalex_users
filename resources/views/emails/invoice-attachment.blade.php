@@ -93,6 +93,7 @@
 	@if ($paymentType === \App\ChargeLog::PAYMENT_TYPE_DPS_CC)
 		<p>Paid by way of credit card deduction on {{ $date }}.</p>
 	@else
+		<p>Total due: <strong>${{ $totalAmount }}</strong>.</p>
 		<p>Due date: <strong>{{ $dueDate }}</strong>.</p>
 		<p>Please pay by direct credit to account number <strong>{{ env('INVOICE_BANK_ACCOUNT_NUMBER') }}</strong> using the invoice number as a reference.</p>
 	@endif
