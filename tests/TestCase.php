@@ -2,6 +2,7 @@
 
 use App\BillingDetail;
 use App\BillingItem;
+use App\CardDetail;
 use Tests\Stub\Organisation;
 use App\Role;
 use Carbon\Carbon;
@@ -70,6 +71,27 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         $billingData = array_merge($defaults, $overrides);
 
         return BillingDetail::create($billingData);
+    }
+
+    protected function createCardDetails($billingDetailId=null, $overrides = [], $billingDetailOverrides = null)
+    {
+        if (!$billingDetailId) {
+            $billingDetailId = $this->createBillingDetails($billingDetailOverrides)->id;
+        }
+
+        $defaults = [
+            'card_token' => '1234123412341234',
+            'expiry_date' => '0622',
+            'masked_card_number' => '1234xxxxxx1234',
+        ];
+
+        $cardData = array_merge($defaults, $overrides);
+
+        $cardDetails = CardDetail::create($cardData);
+
+        BillingDetail::find($billingDetailId)->update(['card_detail_id' => $cardDetails->id]);
+
+        return $cardDetails;
     }
 
     protected function createUserWithBilling($userOverrides = [], $billingOverrides = [], $serviceIds = [])

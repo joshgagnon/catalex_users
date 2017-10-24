@@ -6,9 +6,12 @@ class PXPay extends \App\Library\PXPay
 {
     public $paymentRequestSent = false;
 
-    public function buildPaymentRequestXML($totalDollars, $billingDetails)
+    /**
+     * Make this function public for testing
+     */
+    public function buildPaymentRequestXML($totalDollars, $cardToken, $billingDetailId)
     {
-        return parent::buildPaymentRequestXML($totalDollars, $billingDetails);
+        return parent::buildPaymentRequestXML($totalDollars, $cardToken, $billingDetailId);
     }
 
     protected function sendPaymentRequest($xmlRequest)
@@ -28,21 +31,15 @@ class PXPayTest extends TestCase
     public function buildPaymentRequestXML()
     {
         $dpsBillingToken = '1234123412341234';
-        $expiry = '1020';
+        $billingDetailId = 1;
         $totalDollars = '420.00';
         $username = env('PXPOST_USERNAME');
         $key = env('PXPOST_KEY');
         $currency = 'NZD';
         $txnType = 'Purchase';
 
-        $billingDetails = $this->createBillingDetails([
-            'billing_day'       => 31,
-            'dps_billing_token' => $dpsBillingToken,
-            'expiry_date'       => $expiry,
-        ]);
-
         $pxPay = new PXPay();
-        $xml = $pxPay->buildPaymentRequestXML($totalDollars, $billingDetails);
+        $xml = $pxPay->buildPaymentRequestXML($totalDollars, $dpsBillingToken, $billingDetailId);
         $xml = new \SimpleXMLElement($xml);
 
         $this->assertEquals($username, $xml->PostUsername);
@@ -51,7 +48,7 @@ class PXPayTest extends TestCase
         $this->assertEquals($currency, $xml->InputCurrency);
         $this->assertEquals($txnType, $xml->TxnType);
         $this->assertEquals($dpsBillingToken, $xml->DpsBillingId);
-        $this->assertEquals('CataLex Ltd - ID ' . $billingDetails->id, $xml->MerchantReference);
+        $this->assertEquals('CataLex Ltd - ID ' . $billingDetailId, $xml->MerchantReference);
     }
 
     /**
@@ -66,6 +63,7 @@ class PXPayTest extends TestCase
         $totalDollars = '327.00';
 
         $billingDetails = $this->createBillingDetails();
+        $this->createCardDetails($billingDetails->id);
         $user = $this->createUser(['billing_detail_id' => $billingDetails->id]);
 
         $pxPay = new PXPay();
