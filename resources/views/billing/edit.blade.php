@@ -23,7 +23,7 @@ CataLex - Edit Billing Details
     @endif
 
     @include('components.messages')
-    
+
     <h2>Edit Billing Details</h2>
 
     <div class="row">
@@ -44,7 +44,6 @@ CataLex - Edit Billing Details
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <div class="col-xs-12">
-                                        <!-- <a href="#">-&nbsp;&nbsp;Remove Card</a> -->
                                         <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
                                     </div>
                                 </form>
