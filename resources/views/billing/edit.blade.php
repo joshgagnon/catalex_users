@@ -30,38 +30,32 @@ CataLex - Edit Billing Details
         <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-
                     @if ($billingDetails)
-                        @if ($cardDetails)
-                            @if ($cardDetails->masked_card_number)
-                                <h4>Card: {{ $cardDetails->masked_card_number }}</h4>
-                            @else
-                                <h4>Card</h4>
-                            @endif
-
-                            <div class="row">
-                                <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <div class="col-xs-12">
-                                        <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <hr />
-                        @else
-                            <h4>Payments</h4>
-
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
-                                </div>
-                            </div>
-                        @endif
-
                         <div class="row">
                             <div class="col-xs-12">
+                                @if ($cardDetails)
+                                    @if ($cardDetails->masked_card_number)
+                                        <h4>Card: {{ $cardDetails->masked_card_number }}</h4>
+                                    @else
+                                        <h4>Card</h4>
+                                    @endif
+
+                                    <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="_method" value="DELETE">
+
+                                        <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
+                                    </form>
+                                @else
+                                    <h4>Payments</h4>
+
+                                    <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
+                                @endif
+                            </div>
+
+                            <div class="col-xs-12">
+                                <hr />
+
                                 <h4>Billing period</h4>
 
                                 <form method="POST" role="form" class="form" action="{{ route('billing.update') }}">
