@@ -22,32 +22,44 @@ CataLex - Edit Billing Details
         </div>
     @endif
 
+    @include('components.messages')
+    
     <h2>Edit Billing Details</h2>
+
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    @include('components.messages')
 
-                    @if ($cardDetails)
-                        @if ($cardDetails->masked_card_number)
-                            <h4>Card: {{ $cardDetails->masked_card_number }}</h4>
+                    @if ($billingDetails)
+                        @if ($cardDetails)
+                            @if ($cardDetails->masked_card_number)
+                                <h4>Card: {{ $cardDetails->masked_card_number }}</h4>
+                            @else
+                                <h4>Card</h4>
+                            @endif
+
+                            <div class="row">
+                                <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <div class="col-xs-12">
+                                        <!-- <a href="#">-&nbsp;&nbsp;Remove Card</a> -->
+                                        <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <hr />
                         @else
-                            <h4>Card</h4>
-                        @endif
+                            <h4>Payments</h4>
 
-                        <div class="row">
-                            <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="hidden" name="_method" value="DELETE">
+                            <div class="form-group">
                                 <div class="col-xs-12">
-                                    <!-- <a href="#">-&nbsp;&nbsp;Remove Card</a> -->
-                                    <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
+                                    <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
                                 </div>
-                            </form>
-                        </div>
-
-                        <hr />
+                            </div>
+                        @endif
 
                         <div class="row">
                             <div class="col-xs-12">
@@ -79,14 +91,6 @@ CataLex - Edit Billing Details
                                         <button type="submit" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </form>
-                            </div>
-                        </div>
-                    @else
-                        <h4>Payments</h4>
-
-                        <div class="form-group">
-                            <div class="col-xs-12">
-                                <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
                             </div>
                         </div>
                     @endif
