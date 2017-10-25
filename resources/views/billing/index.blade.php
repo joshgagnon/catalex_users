@@ -25,10 +25,7 @@
         @if (Request::path() === 'billing')
             <h3>Options</h3>
 
-            @if (!empty($organisation) && !$organisation->is_invoice_customer)
-                <a href="{{ route('billing.edit') }}" class="btn btn-default btn-sm">Card Details</a>
-            @endif
-
+            <a href="{{ route('billing.edit') }}" class="btn btn-default btn-sm">Billing Options</a>
             <a href="{{ route('user-services.index') }}" class="btn btn-default btn-sm">Subscriptions</a>
 
             @if (!empty($organisation))

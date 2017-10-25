@@ -24,7 +24,7 @@
 
         @include('components.messages')
 
-        <h2>Edit Billing Details</h2>
+        <h2>Billing Options</h2>
 
         <div class="row">
             <div class="col-xs-12">

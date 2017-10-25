@@ -86,17 +86,12 @@ class BillingController extends Controller
         return view('billing.subscription-success');
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
-        // Get the user (or their organisation's) billing details
-        $user = Auth::user();
+        $user = $request->user();
         $billableEntity = $user->organisation ? $user->organisation : $user;
         $billingDetails = $billableEntity->billing_detail()->first();
         $cardDetails = $billingDetails ? $billingDetails->cardDetail ()->first() : null;
-
-        if ($billableEntity->is_invoice_customer) {
-            abort(404);
-        }
 
         $subscriptionUpToDate = $user->subscriptionUpToDate();
 
