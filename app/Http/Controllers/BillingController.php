@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CardDetail;
 use App\InvoiceRecipient;
 use App\Library\BillingItemSummariser;
 use App\Trial;
@@ -91,6 +92,7 @@ class BillingController extends Controller
         $user = Auth::user();
         $billableEntity = $user->organisation ? $user->organisation : $user;
         $billingDetails = $billableEntity->billing_detail()->first();
+        $cardDetails = $billingDetails ? $billingDetails->cardDetail ()->first() : null;
 
         if ($billableEntity->is_invoice_customer) {
             abort(404);
@@ -100,7 +102,8 @@ class BillingController extends Controller
 
         return view('billing.edit')->with([
             'billingDetails' => $billingDetails,
-            'subscriptionUpToDate' => $subscriptionUpToDate
+            'subscriptionUpToDate' => $subscriptionUpToDate,
+            'cardDetails' => $cardDetails,
         ]);
     }
 
@@ -116,12 +119,15 @@ class BillingController extends Controller
         return redirect()->route('billing.edit')->withSuccess('Billing period updated.');
     }
 
-    public function delete()
+    public function delete(Request $request)
     {
-        $billableEntity = Auth::user()->getBillableEntity();
+        // Get the billing details
+        $billableEntity = $request->user()->getBillableEntity();
+        $billingDetails = $billableEntity->billing_detail()->first();
 
-        $billableEntity->billing_detail()->delete();
-        $billableEntity->update(['billing_detail_id' => null]);
+        // Delete the card
+        $billingDetails->update(['card_detail_id' => null]);
+        $billingDetails->cardDetail()->delete();
 
         return redirect()->route('billing.edit')->withSuccess('Card deleted');
     }
@@ -146,14 +152,17 @@ class BillingController extends Controller
 
     public function createCard(Request $request)
     {
-        $billableEntity = Auth::user()->getBillableEntity();
+        $billableEntity = $request->user()->getBillableEntity();
 
-        // Don't allow non-admin members of an org to try to pay
-        if ($billableEntity->billing_detail_id) {
+        // Get the card details
+        $billingDetails = $billableEntity->billing_detail()->first();
+        $cardDetails = $billingDetails ? $billingDetails->cardDetail()->first() : null;
+
+        if ($cardDetails) {
             return redirect()->route('billing.edit')->withErrors('You already have a card setup, please remove it to add a new one.');
         }
 
-        // Create a new payment gayway request to get iframe url to show
+        // Create a new payment gateway request to get iframe url to show
         $gateway = PXPay::getGateway();
 
         // Start the request to DPS
@@ -166,9 +175,9 @@ class BillingController extends Controller
             return redirect()->back()->withErrors(['An error occurred contacting the payment gateway, please try again.']);
         }
 
-        return view('billing.register-card')->with([
-            'gatewayURL' => $response->getRedirectUrl()
-        ]);
+        $gatewayUrl = $response->getRedirectUrl();
+
+        return view('billing.register-card')->with(['gatewayURL' => $gatewayUrl]);
     }
 
     public function finishCreateCard(Request $request)
@@ -189,8 +198,6 @@ class BillingController extends Controller
 
         if ($request->session()->has('redirect_route_name')) {
             $routeName = $request->session()->pull('redirect_route_name');
-//            $data = $request->session()->has('redirect_data') ? $request->session()->pull('redirect_data') : [];
-
             return redirect()->route($routeName);
         }
 
@@ -209,27 +216,31 @@ class BillingController extends Controller
             return view('billing.frames.pxpay-failed');
         }
 
-        $billableEntity = Auth::user()->getBillableEntity();
+        $billableEntity = $request->user()->getBillableEntity();
         $billingDetails = $billableEntity->billing_detail()->first();
 
-        // Get all the data we need to update the billing details
-        $billingDetailData = [
-            'period' => $request->session()->has('billing_period') ? $request->session()->pull('billing_period') : 'monthly', // Default: monthly
-            'dps_billing_token' => (string)$responseData->DpsBillingId,
+        $cardDetail = CardDetail::create([
+            'card_token' => (string)$responseData->DpsBillingId,
             'expiry_date' => (string)$responseData->DateExpiry,
             'masked_card_number' => (string)$responseData->CardNumber,
-        ];
+        ]);
 
         if ($billingDetails) {
-            $billingDetails->update($billingDetailData); // This user already has billing details - so update them
+            $billingDetails->cardDetail()->delete();
+            $billingDetails->update(['card_detail_id' => $cardDetail->id]);
         }
         else {
-            // This user or organisation hasn't already got billing details setup; create their billing details
             $trial = Trial::findOrCreate($billableEntity, 'Good Companies');
             $billingDate = Carbon::now()->lte($trial->end_date) ? $trial->end_date->addDays(1) : Carbon::today();
 
-            // Create the billing details and attach it to the billable entity
-            $billingDetails = BillingDetail::create($billingDetailData + ['billing_day' => $billingDate->day]);
+            $period = $request->session()->has('billing_period') ? $request->session()->pull('billing_period') : 'monthly'; // Default: monthly
+
+            $billingDetails = BillingDetail::create([
+                'period' => $period,
+                'billing_day' => $billingDate->day,
+                'card_detail_id' => $cardDetail->id,
+            ]);
+
             $billableEntity->update(['billing_detail_id' => $billingDetails->id]);
         }
 

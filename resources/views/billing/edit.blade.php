@@ -29,9 +29,9 @@ CataLex - Edit Billing Details
                 <div class="panel-body">
                     @include('components.messages')
 
-                    @if ($billingDetails)
-                        @if ($billingDetails->masked_card_number)
-                            <h4>Card: {{ $billingDetails->masked_card_number }}</h4>
+                    @if ($cardDetails)
+                        @if ($cardDetails->masked_card_number)
+                            <h4>Card: {{ $cardDetails->masked_card_number }}</h4>
                         @else
                             <h4>Card</h4>
                         @endif
