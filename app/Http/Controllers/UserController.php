@@ -34,17 +34,9 @@ class UserController extends Controller
         $user = Auth::user();
 
         if ($user->can('edit_own_user')) {
-            $editServicesAndBilling = true;
-
-            if ($user && $user->organisation && !$user->can('edit_own_organisation')) {
-                $editServicesAndBilling = false;
-            }
-
-            return view('user.edit')->with([
-                'subject'                => $user,
-                'editServicesAndBilling' => $editServicesAndBilling,
-            ]);
-        } elseif ($user->can('view_own_user')) {
+            return view('user.edit')->with(['subject' => $user]);
+        }
+        elseif ($user->can('view_own_user')) {
             return view('user.view', ['subject' => $user]);
         }
 
@@ -78,7 +70,9 @@ class UserController extends Controller
 
         $subject = User::find($subjectId);
 
-        if (!$subject) return view('auth.denied');
+        if (!$subject) {
+            return view('auth.denied');
+        }
 
         if ($user->can('view_any_user') ||
             ($user->can('view_organisation_user') && $user->sharesOrganisation($subject)) ||
@@ -113,7 +107,8 @@ class UserController extends Controller
 
             if ($user->hasRole('global_admin')) {
                 $roles = ['global_admin' => $subject->hasRole('global_admin'), 'organisation_admin' => $subject->hasRole('organisation_admin')];
-            } elseif ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) {
+            }
+            elseif ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject)) {
                 $roles = ['organisation_admin' => $subject->hasRole('organisation_admin')];
             }
 
@@ -201,7 +196,9 @@ class UserController extends Controller
 
         $subject = User::withInactive()->find($subjectId);
 
-        if (!$subject) return view('auth.denied');
+        if (!$subject) {
+            return view('auth.denied');
+        }
 
         if (($user->can('edit_any_user') || ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject))) && $user->id !== $subject->id) {
             $name = $subject->fullName();
@@ -224,7 +221,9 @@ class UserController extends Controller
 
         $subject = User::withInactive()->onlyTrashed()->find($subjectId);
 
-        if (!$subject) return view('auth.denied');
+        if (!$subject) {
+            return view('auth.denied');
+        }
 
         if (($user->can('edit_any_user') || ($user->can('edit_organisation_user') && $user->sharesOrganisation($subject))) && $user->id !== $subject->id) {
             $subject->restore();
@@ -275,7 +274,7 @@ class UserController extends Controller
             return view('auth.denied');
         }
 
-        $user = User::where('email',  'ilike', $request->input('email'))->first();
+        $user = User::where('email', 'ilike', $request->input('email'))->first();
         $isExistingUser = $user !== null;
 
         if (!$isExistingUser) {
@@ -300,7 +299,8 @@ class UserController extends Controller
                 if ($isExistingUser) {
                     $invite = new InviteToViewGCCompany($user, $inviterName, $companyName);
                     $invite->send();
-                } else {
+                }
+                else {
                     $tokenInstance = FirstLoginToken::createToken($user);
 
                     $invite = new InviteNewUserToViewGCCompany($user, $inviterName, $companyName, $tokenInstance->token);
@@ -315,7 +315,8 @@ class UserController extends Controller
                 if ($isExistingUser) {
                     $invite = new InviteToSignDocument($user, $inviterName, $link);
                     $invite->send();
-                } else {
+                }
+                else {
                     $tokenInstance = FirstLoginToken::createToken($user);
 
                     $invite = new InviteNewUserToSignDocument($user, $inviterName, $link, $tokenInstance->token);
@@ -366,9 +367,9 @@ class UserController extends Controller
                     'data' => [
                         'invite' => [
                             'oauth_client_id' => $client->id,
-                            'inviter_name' => $inviterName
-                        ]
-                    ]
+                            'inviter_name'    => $inviterName,
+                        ],
+                    ],
                 ]);
             }
 
@@ -379,7 +380,8 @@ class UserController extends Controller
                     if ($isExistingUser) {
                         $invite = new InviteToViewGCCompany($user, $inviterName, $companyName);
                         $invite->send();
-                    } else {
+                    }
+                    else {
                         $tokenInstance = FirstLoginToken::createToken($user);
 
                         $invite = new InviteNewUserToViewGCCompany($user, $inviterName, $companyName, $tokenInstance->token);
@@ -395,7 +397,8 @@ class UserController extends Controller
                     if ($isExistingUser) {
                         $invite = new InviteToSignDocument($user, $inviterName, $link, $message);
                         $invite->send();
-                    } else {
+                    }
+                    else {
                         $tokenInstance = FirstLoginToken::createToken($user);
 
                         $invite = new InviteNewUserToSignDocument($user, $inviterName, $link, $tokenInstance->token, $message);

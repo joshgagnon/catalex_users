@@ -44,7 +44,7 @@ CataLex - Edit User
 						<input type="text" style="display:none"><input type="password" style="display:none">
 
 						<h4>Personal Details</h4>
-						
+
 						<div class="form-group">
 							<div class="col-xs-12 col-md-6">
 								<label class="control-label">Name</label>
@@ -96,7 +96,9 @@ CataLex - Edit User
 						@endif
 
 						<hr />
+
 						<h4>Change Password</h4>
+
 						<div class="form-group">
 							<div class="col-md-6">
 								<label class="control-label">New Password</label>
@@ -107,28 +109,14 @@ CataLex - Edit User
 								<input type="password" class="form-control" name="new_password_confirmation">
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="col-xs-12">
-								<button type="submit" class="btn btn-primary">Update</button>
-							</div>
-						</div>
+
+						<hr />
+
+						<button type="submit" class="btn btn-primary">Update</button>
 					</form>
 				</div>
 			</div>
 		</div>
-		@if ($editServicesAndBilling)
-			<div class="col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<h4>More</h4>
-						<ul>
-							<li><a href="{{ route('user-services.index') }}">Edit My Services</a></li>
-							<li><a href="{{ route('billing.edit') }}">Edit Billing Details</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		@endif
 	</div>
 </div>
 @endsection
