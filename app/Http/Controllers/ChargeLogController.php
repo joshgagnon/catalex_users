@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\ChargeLog;
-use Illuminate\Http\Request;
 
 class ChargeLogController extends Controller
 {
