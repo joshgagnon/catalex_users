@@ -99,6 +99,7 @@ class BillingController extends Controller
             'billingDetails' => $billingDetails,
             'subscriptionUpToDate' => $subscriptionUpToDate,
             'cardDetails' => $cardDetails,
+            'is_invoice_customer' => $billableEntity->is_invoice_customer,
         ]);
     }
 
