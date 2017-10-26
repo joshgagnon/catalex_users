@@ -7,11 +7,13 @@ use App\BillingItem;
 use App\Http\Requests\CreateOrganisationRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Library\AdminStats;
+use App\Library\Billing;
 use App\Library\BillingItemSummariser;
 use App\Library\Invite;
 use App\Organisation;
 use App\User;
 use Auth;
+use Carbon\Carbon;
 use Config;
 use Illuminate\Http\Request;
 use Input;
@@ -202,6 +204,15 @@ class AdminController extends Controller
 
         $organisation->is_invoice_customer = boolval($request->input('is_invoice_customer', false));
         $organisation->force_no_access = boolval($request->input('force_no_access', false));
+
+        if ($organisation->is_invoice_customer && !$organisation->billing_detail_id) {
+            $billingDetails = BillingDetail::create([
+                'period' => 'monthly',
+                'billing_day' => Carbon::now()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day,
+            ]);
+
+            $organisation->billing_detail_id = $billingDetails->id;
+        }
 
         $organisation->save();
 
