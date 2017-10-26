@@ -1,21 +1,21 @@
 <?php namespace App\Http\Controllers;
 
-use App\BillingItem;
-use App\Library\AdminStats;
-use Auth;
-use Input;
-use Config;
-use App\User;
-use Validator;
-use App\Address;
 use App\AccessLog;
-use App\Organisation;
+use App\Address;
 use App\BillingDetail;
-use Illuminate\Http\Request;
-use App\Http\Requests\UserCreateRequest;
+use App\BillingItem;
 use App\Http\Requests\CreateOrganisationRequest;
-use App\Library\Invite;
+use App\Http\Requests\UserCreateRequest;
+use App\Library\AdminStats;
 use App\Library\BillingItemSummariser;
+use App\Library\Invite;
+use App\Organisation;
+use App\User;
+use Auth;
+use Config;
+use Illuminate\Http\Request;
+use Input;
+use Validator;
 
 
 class AdminController extends Controller
@@ -25,31 +25,33 @@ class AdminController extends Controller
         $this->middleware('admin');
     }
 
-    public function allUsers() {
+    public function allUsers()
+    {
         $showDeleted = Input::has('deleted') && boolval(Input::get('deleted'));
         $userModel = User::withInactive()->orderBy('name');
-        if($showDeleted) {
+        if ($showDeleted) {
             $userModel = $userModel->withTrashed();
         }
-        if(Input::has('filter') && strlen(Input::has('filter'))){
+        if (Input::has('filter') && strlen(Input::has('filter'))) {
             $userModel = $userModel
-            ->where(function ($query) {
-                $filter = '%'.(Input::get('filter')).'%';
-                $query
-                ->where('name', 'like', $filter)
-                ->orWhere('email', 'like', $filter);
-            });
+                ->where(function ($query) {
+                    $filter = '%' . (Input::get('filter')) . '%';
+                    $query
+                        ->where('name', 'like', $filter)
+                        ->orWhere('email', 'like', $filter);
+                });
         }
         $userList = $userModel->paginate(Config::get('constants.items_per_page'));
 
         return view('admin.users', compact('showDeleted', 'userList'));
     }
 
-    public function getOrganisations() {
+    public function getOrganisations()
+    {
         $showDeleted = Input::has('deleted') && boolval(Input::get('deleted'));
 
         $organisationModel = Organisation::orderBy('created_at');
-        if($showDeleted) {
+        if ($showDeleted) {
             $organisationModel = $organisationModel->withTrashed();
         }
         $organisations = $organisationModel->paginate(Config::get('constants.items_per_page'));
@@ -57,9 +59,10 @@ class AdminController extends Controller
         return view('admin.organisations', compact('showDeleted', 'organisations'));
     }
 
-    public function getAccessLog() {
+    public function getAccessLog()
+    {
         $filterEmail = trim(Input::get('filter_email', ''));
-        if(!strlen($filterEmail)) {
+        if (!strlen($filterEmail)) {
             $filterEmail = null;
         }
 
@@ -69,15 +72,21 @@ class AdminController extends Controller
 
         $logModel = AccessLog::whereNotNull('user_id')->orderBy('timestamp', 'DESC');
 
-        if($includeUserLogins || $includeBrowserLogins || $includeLogouts) {
-            $logModel->where(function($q) use($includeUserLogins, $includeBrowserLogins, $includeLogouts) {
-                if($includeUserLogins) $q->orWhere('route', '=', 'auth/login');
-                if($includeBrowserLogins) $q->orWhere('route', '=', 'browser-login');
-                if($includeLogouts) $q->orWhere('route', '=', 'auth/logout');
+        if ($includeUserLogins || $includeBrowserLogins || $includeLogouts) {
+            $logModel->where(function ($q) use ($includeUserLogins, $includeBrowserLogins, $includeLogouts) {
+                if ($includeUserLogins) {
+                    $q->orWhere('route', '=', 'auth/login');
+                }
+                if ($includeBrowserLogins) {
+                    $q->orWhere('route', '=', 'browser-login');
+                }
+                if ($includeLogouts) {
+                    $q->orWhere('route', '=', 'auth/logout');
+                }
             });
         }
-        if($filterEmail) {
-            $logModel->whereHas('user', function($q) use($filterEmail) {
+        if ($filterEmail) {
+            $logModel->whereHas('user', function ($q) use ($filterEmail) {
                 $q->where('email', 'like', '%' . $filterEmail . '%');
             });
         }
@@ -87,29 +96,31 @@ class AdminController extends Controller
         return view('admin.access-log', compact('logs', 'filterEmail', 'includeUserLogins', 'includeBrowserLogins', 'includeLogouts'));
     }
 
-    public function getAddUser() {
+    public function getAddUser()
+    {
         $organisations = Organisation::get()->pluck('name', 'id')->toArray();
         $organisations = array_merge([0 => 'None'], $organisations);
 
         return view('user.add', compact('organisations'));
     }
 
-    public function postAddUser(UserCreateRequest $request) {
+    public function postAddUser(UserCreateRequest $request)
+    {
         $data = $request->all();
 
         $userData = [
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt(str_random(40)),
-            'organisation_id' => null,
+            'name'              => $data['name'],
+            'email'             => $data['email'],
+            'password'          => bcrypt(str_random(40)),
+            'organisation_id'   => null,
             'billing_detail_id' => null,
         ];
 
         $orgId = null;
-        if(boolval($data['organisation_id'])) {
+        if (boolval($data['organisation_id'])) {
             $orgId = intval($data['organisation_id']);
 
-            if(!Organisation::find($orgId)) {
+            if (!Organisation::find($orgId)) {
                 return redirect()->back()->withErrors(['Unable to assign to organisation id ' . $data['organisation_id']]);
             }
 
@@ -117,15 +128,15 @@ class AdminController extends Controller
         }
         else {
             $address = Address::create([
-                'line_1' => $data['address_line_1'],
-                'line_2' => $data['address_line_2'],
-                'city' => $data['city'],
-                'state' => $data['state'],
+                'line_1'          => $data['address_line_1'],
+                'line_2'          => $data['address_line_2'],
+                'city'            => $data['city'],
+                'state'           => $data['state'],
                 'iso3166_country' => $data['country'],
             ]);
 
             $billing = BillingDetail::create([
-                'period' => !empty($data['billing_period']) ? $data['billing_period'] : 'monthly',
+                'period'     => !empty($data['billing_period']) ? $data['billing_period'] : 'monthly',
                 'address_id' => $address->id,
             ]);
 
@@ -135,7 +146,7 @@ class AdminController extends Controller
         $newUser = User::create($userData);
         $newUser->addRole('registered_user');
 
-        if($request->has('send_invite')) {
+        if ($request->has('send_invite')) {
             Invite::sendInvite($newUser, Auth::user()->fullName());
         }
 
@@ -143,31 +154,38 @@ class AdminController extends Controller
     }
 
 
-    public function getCreateOrganisation() {
+    public function getCreateOrganisation()
+    {
         return view('admin.create-organisation');
     }
 
-    public function postCreateOrganisation(CreateOrganisationRequest $request) {
+    public function postCreateOrganisation(CreateOrganisationRequest $request)
+    {
         $organisation = Organisation::create([
-            'name' => $request->get('organisation_name'),
+            'name'              => $request->get('organisation_name'),
             'billing_detail_id' => null,
-            'free' => true,
+            'free'              => true,
         ]);
 
         return redirect()->action('AdminController@getOrganisations')->with('success', 'Organisation "' . $organisation->name . '" successfully created.');
     }
 
-    public function getEditOrganisation($id, $addMembers=null) {
+    public function getEditOrganisation($id, $addMembers = null)
+    {
         $organisation = Organisation::find($id);
 
-        if(!$organisation) abort(404);
+        if (!$organisation) {
+            abort(404);
+        }
 
-        if($addMembers === 'add-members') return $this->getAddMembers($organisation);
+        if ($addMembers === 'add-members') {
+            return $this->getAddMembers($organisation);
+        }
 
         return view('organisation.edit', compact('organisation'));
     }
 
-    public function postEditOrganisation(Request $request, $id, $addMembers=null)
+    public function postEditOrganisation(Request $request, $id, $addMembers = null)
     {
         $organisation = Organisation::find($id);
 
@@ -190,11 +208,13 @@ class AdminController extends Controller
         return redirect()->action('AdminController@postEditOrganisation', $organisation->id)->with('success', 'Organisation "' . $organisation->name . '" successfully updated.');
     }
 
-    private function getAddMembers(Organisation $organisation) {
+    private function getAddMembers(Organisation $organisation)
+    {
         return view('organisation.add-members', compact('organisation'));
     }
 
-    private function postAddMembers(Request $request, Organisation $organisation) {
+    private function postAddMembers(Request $request, Organisation $organisation)
+    {
         $total = count($request->get('name'));
 
         $input = $request->all();
@@ -202,16 +222,16 @@ class AdminController extends Controller
         $succeeded = [];
         $failed = [];
 
-        for($i = 0; $i < $total; $i++) {
+        for ($i = 0; $i < $total; $i++) {
             $validator = Validator::make([
-                'name' => $input['name'][$i],
+                'name'  => $input['name'][$i],
                 'email' => $input['email'][$i],
             ], [
-                'name' => 'required|max:255',
+                'name'  => 'required|max:255',
                 'email' => 'required|email|max:255|unique:users',
             ]);
 
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 $failed[] = $input['name'][$i] . ' <' . $input['email'][$i] . '>';
                 continue;
             }
@@ -219,10 +239,10 @@ class AdminController extends Controller
             // TODO: Share code with OrganisationController@postInvite
             // Create a user for the invitee with random password
             $user = User::create([
-                'name' => $input['name'][$i],
-                'email' => $input['email'][$i],
-                'password' => bcrypt(str_random(40)),
-                'organisation_id' => $organisation->id,
+                'name'              => $input['name'][$i],
+                'email'             => $input['email'][$i],
+                'password'          => bcrypt(str_random(40)),
+                'organisation_id'   => $organisation->id,
                 'billing_detail_id' => null,
             ]);
             $user->addRole('registered_user');
@@ -233,23 +253,26 @@ class AdminController extends Controller
         }
 
         $message = 'Successfully added ' . count($succeeded) . ' members.';
-        if(count($failed)) {
+        if (count($failed)) {
             $message .= ' The following members could not be added: ' . implode(', ', $failed);
         }
 
         return redirect()->action('AdminController@getEditOrganisation', $organisation->id)->with('success', $message);
     }
 
-    public function postDeleteOrganisation($id, $confirm=null) {
+    public function postDeleteOrganisation($id, $confirm = null)
+    {
         $organisation = Organisation::find($id);
 
-        if(!$organisation) abort(404);
+        if (!$organisation) {
+            abort(404);
+        }
 
-        if($confirm !== 'confirm') {
+        if ($confirm !== 'confirm') {
             return view('organisation.delete', compact('organisation'));
         }
 
-        foreach($organisation->members as $member) {
+        foreach ($organisation->members as $member) {
             $member->delete();
         }
 
@@ -260,14 +283,17 @@ class AdminController extends Controller
         return redirect()->action('AdminController@getOrganisations')->with('success', 'Organisation "' . $orgName . '" successfully deleted.');
     }
 
-    public function postUndeleteOrganisation($id) {
+    public function postUndeleteOrganisation($id)
+    {
         $organisation = Organisation::onlyTrashed()->find($id);
 
-        if(!$organisation) abort(404);
+        if (!$organisation) {
+            abort(404);
+        }
 
         $organisation->restore();
 
-        foreach($organisation->membersWithTrashed as $member) {
+        foreach ($organisation->membersWithTrashed as $member) {
             $member->restore();
         }
 
@@ -298,11 +324,11 @@ class AdminController extends Controller
         }
 
         return view('billing.index')->with([
-            'chargeLogs' => $chargeLogs,
-            'billingItems' => $billingItems,
-            $billableKeyName => $billable,
+            'chargeLogs'           => $chargeLogs,
+            'billingItems'         => $billingItems,
+            $billableKeyName       => $billable,
             'subscriptionUpToDate' => $billable->subscriptionUpToDate(),
-            'discountPercent' => $discountPercent,
+            'discountPercent'      => $discountPercent,
         ]);
 
         return view('billing.index');
@@ -331,10 +357,10 @@ class AdminController extends Controller
         }
 
         return view('admin.stats')->with([
-            'totalGCCompanies' => $totalGCCompanies,
+            'totalGCCompanies'  => $totalGCCompanies,
             'gcCompaniesCounts' => $gcCompaniesCounts,
 
-            'totalSignSubscriptions' => $totalSignSubscriptions,
+            'totalSignSubscriptions'  => $totalSignSubscriptions,
             'signSubscriptionsCounts' => $signSubscriptionsCounts,
         ]);
     }
