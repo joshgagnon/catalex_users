@@ -1,6 +1,8 @@
 <?php
 
+use App\Library\Billing;
 use App\Role;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class AdminControllerTest extends TestCase
@@ -35,7 +37,6 @@ class AdminControllerTest extends TestCase
      */
     public function admin_can_edit_organisation()
     {
-
         $adminUser = $this->createUser();
         $adminUser->addRole(Role::where('name', '=', 'global_admin')->first());
 
@@ -56,5 +57,30 @@ class AdminControllerTest extends TestCase
         $org = $org->fresh();
 
         $this->assertEquals($editedName, $org->name);
+    }
+
+    /**
+     * @test
+     */
+    public function becoming_invoice_customer_creates_billing_details()
+    {
+        $admin = $this->createUser();
+        $admin->addRole(Role::where('name', '=', 'global_admin')->first());
+        $org = $this->createOrganisation();
+
+        Auth::loginUsingId($admin->id);
+
+        $this->visit('/admin/edit-organisation/' . $org->id)
+            ->dontSeeIsChecked('is_invoice_customer')
+            ->check('is_invoice_customer')
+            ->press('Update');
+
+        $org = $org->fresh();
+        $billingDetails = $org->billing_detail()->first();
+
+        $this->assertNotNull($billingDetails);
+
+        $expectedBillingDay = Carbon::now()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day;
+        $this->assertEquals($expectedBillingDay, $billingDetails->billing_day);
     }
 }
