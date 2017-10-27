@@ -30,32 +30,32 @@
             <div class="col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        @if ($billingDetails)
-                            <div class="row">
-                                @if (!$is_invoice_customer)
-                                    <div class="col-xs-12">
-                                        @if ($cardDetails)
-                                            @if ($cardDetails->masked_card_number)
-                                                <h4>Card: {{ $cardDetails->masked_card_number }}</h4>
-                                            @else
-                                                <h4>Card</h4>
-                                            @endif
-
-                                            <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="_method" value="DELETE">
-
-                                                <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
-                                            </form>
+                        <div class="row">
+                            @if (!$is_invoice_customer)
+                                <div class="col-xs-12">
+                                    @if ($cardDetails)
+                                        @if ($cardDetails->masked_card_number)
+                                            <h4>Card: {{ $cardDetails->masked_card_number }}</h4>
                                         @else
-                                            <h4>Payments</h4>
-
-                                            <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
+                                            <h4>Card</h4>
                                         @endif
 
-                                        <hr/>
-                                    </div>
-                                @endif
+                                        <form method="POST" role="form" class="form" action="{{ route('billing.delete') }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="_method" value="DELETE">
+
+                                            <button type="submit" class="btn btn-danger btn-xs">Remove Card</button>
+                                        </form>
+                                    @else
+                                        <h4>Payments</h4>
+
+                                        <a href="{{ route('billing.register-card') }}" class="btn btn-danger btn-xs">+&nbsp;&nbsp;Add Card</a>
+                                    @endif
+
+                                    <hr/>
+                                </div>
+                            @endif
+                            @if ($billingDetails)
 
                                 <div class="col-xs-12">
                                     <h4>Billing Period</h4>
@@ -90,8 +90,8 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
