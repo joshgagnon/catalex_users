@@ -122,8 +122,9 @@ class BillingController extends Controller
         $billingDetails = $billableEntity->billing_detail()->first();
 
         // Delete the card
+        $cardDetails = $billingDetails->cardDetail()->first();
         $billingDetails->update(['card_detail_id' => null]);
-        $billingDetails->cardDetail()->delete();
+        $cardDetails->delete();
 
         return redirect()->route('billing.edit')->withSuccess('Card deleted');
     }
