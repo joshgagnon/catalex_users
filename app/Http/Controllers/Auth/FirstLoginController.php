@@ -53,9 +53,6 @@ class FirstLoginController extends Controller
         $user->email_verified = true; // this route is accessed by an email, this means their account is verified
         $user->save();
 
-        // Delete the token - it's a single use deal
-        $user->firstLoginToken()->delete();
-
         // Log the user in
         Auth::login($user);
 

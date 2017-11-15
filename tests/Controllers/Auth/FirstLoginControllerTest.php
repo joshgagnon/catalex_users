@@ -13,7 +13,7 @@ class FirstLoginControllerTest extends TestCase
     public function use_first_login_token()
     {
         // Create a user and a token for them to login with
-        $user = $this->createUser();
+        $user = $this->createUser(['is_shadow_user' => true]);
         $tokenRecord = FirstLoginToken::createToken($user);
 
         $password = 'pass123';
@@ -44,10 +44,10 @@ class FirstLoginControllerTest extends TestCase
     /**
      * @test
      */
-    public function token_only_valid_for_one_use()
+    public function token_valid_for_multiple_uses()
     {
         // Create a user and token
-        $user = $this->createUser();
+        $user = $this->createUser(['is_shadow_user' => true]);
         $tokenRecord = FirstLoginToken::createToken($user);
 
         // Use the token
@@ -61,7 +61,7 @@ class FirstLoginControllerTest extends TestCase
 
         // Check that if we try to use the token again, we 404
         $this->get(route('first-login.index', $tokenRecord->token))
-            ->assertResponseStatus(404);
+            ->assertResponseStatus(200);
     }
 
     /**

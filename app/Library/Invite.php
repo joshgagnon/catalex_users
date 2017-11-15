@@ -26,9 +26,9 @@ class Invite
     public static function getUser($token)
     {
         $user = null;
-        $tokenInstance = FirstLoginToken::where('token', '=', $token)->valid()->first();
+        $tokenInstance = FirstLoginToken::where('token', '=', $token)->first();
 
-        if ($tokenInstance) {
+        if ($tokenInstance && $tokenInstance->isValid()) {
             $user = User::where('id', '=', $tokenInstance->user_id)->first();
         }
 
