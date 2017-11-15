@@ -36,14 +36,15 @@ class UserSummariser
 
         // Build the rest of the summary
         $userSummary = [
-            'id' => $this->user->id,
-            'email' => $this->user->email,
-            'name' => $this->user->name,
-            'free' => $this->user->free,
-            'email_verified' => $this->user->email_verified,
+            'id'                      => $this->user->id,
+            'email'                   => $this->user->email,
+            'name'                    => $this->user->name,
+            'free'                    => $this->user->free,
+            'email_verified'          => $this->user->email_verified,
             'subscription_up_to_date' => $this->user->subscriptionUpToDate(),
-            'roles' => $this->user->roles->pluck('name')->toArray(),
-            'services' => $services,
+            'roles'                   => $this->user->roles->pluck('name')->toArray(),
+            'services'                => $services,
+            'is_shadow_user'          => $this->user->is_shadow_user,
         ];
 
         if ($this->user->organisation) {
@@ -53,17 +54,17 @@ class UserSummariser
 
             foreach ($this->user->organisation->members as $member) {
                 $membersSummary[] = [
-                    'id' => $member->id,
+                    'id'    => $member->id,
                     'email' => $member->email,
-                    'name' => $member->name,
+                    'name'  => $member->name,
                     'roles' => $member->roles->pluck('name')->toArray(),
                 ];
             }
 
             $userSummary['organisation'] = [
                 'organisation_id' => $this->user->organisation->id,
-                'name' => $this->user->organisation->name,
-                'members' => $membersSummary,
+                'name'            => $this->user->organisation->name,
+                'members'         => $membersSummary,
             ];
         }
 

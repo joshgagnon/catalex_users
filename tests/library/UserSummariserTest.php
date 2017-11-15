@@ -31,6 +31,7 @@ class UserSummariserTest extends TestCase
             'email_verified'          => false,
             'roles'                   => ['registered_user'],
             'services'                => [$service1->name, $service2->name],
+            'is_shadow_user'          => $user->is_shadow_user,
         ];
 
         $actual = (new UserSummariser($user))->summarise();
@@ -63,6 +64,7 @@ class UserSummariserTest extends TestCase
             'subscription_up_to_date' => $user->subscriptionUpToDate(),
             'roles'                   => ['organisation_admin', 'registered_user'],
             'services'                => [$service1->name, $service2->name],
+            'is_shadow_user'          => $user->is_shadow_user,
             'organisation'            => [
                 'organisation_id' => $org->id,
                 'name'            => $org->name,
