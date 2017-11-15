@@ -38,6 +38,7 @@
                 @if($user->hasRole('global_admin'))
                     <th class="small-cell">Free</th>
                     <th class="small-cell">Has Billing</th>
+                    <th class="small-cell">Shadow</th>
                 @endif
                 @if($user->can($editPermission))
                     @if ($allowDeleteUsers)
@@ -84,16 +85,21 @@
                         @endif
                     </td>
                     @if($user->hasRole('global_admin'))
-                    <td class="small-cell">
-                        @if($u->free)
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                        @endif
-                    </td>
-                    <td class="small-cell">
-                        @if($u->hasBillingSetup())
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                        @endif
-                    </td>
+                        <td class="small-cell">
+                            @if($u->free)
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            @endif
+                        </td>
+                        <td class="small-cell">
+                            @if($u->hasBillingSetup())
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            @endif
+                        </td>
+                        <td class="small-cell">
+                            @if($u->is_shadow_user)
+                                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            @endif
+                        </td>
                     @endif
                     @if($user->can($editPermission))
                         @if ($allowDeleteUsers)
