@@ -1,5 +1,6 @@
 <?php namespace App\Http;
 
+use App\Http\Middleware\ForceShadowUserToSetPassword;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel {
@@ -32,6 +33,7 @@ class Kernel extends HttpKernel {
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
 		'admin' => 'App\Http\Middleware\CheckGlobalAdmin',
+        'redirect-shadow-users' => ForceShadowUserToSetPassword::class,
         'csrf' => 'App\Http\Middleware\VerifyCsrfToken',
         'oauth' => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
         'oauth-user' => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,

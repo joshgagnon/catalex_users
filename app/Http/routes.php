@@ -31,10 +31,15 @@ Route::group(['middleware' => 'csrf'], function() {
         'password' => 'Auth\PasswordController'
     ]);
 
+    Route::group(['middleware' => ['auth']], function() {
+        Route::get('shadow-user/promote', 'ShadowUserController@promote')->name('shadow-user.promote');
+        Route::post('shadow-user/promote', 'ShadowUserController@setPassword')->name('shadow-user.set-password');
+    });
+
     Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
 
     // Authenticated routes
-    Route::group(['middleware' => 'auth'], function() {
+    Route::group(['middleware' => ['auth', 'redirect-shadow-users']], function() {
         /**
          * SSO routes
          */
