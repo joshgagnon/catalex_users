@@ -44,29 +44,6 @@ class FirstLoginControllerTest extends TestCase
     /**
      * @test
      */
-    public function token_valid_for_multiple_uses()
-    {
-        // Create a user and token
-        $user = $this->createUser(['is_shadow_user' => true]);
-        $tokenRecord = FirstLoginToken::createToken($user);
-
-        // Use the token
-        $this->visit(route('first-login.index', $tokenRecord->token))
-            ->type('whatever', 'password')
-            ->type('whatever', 'password_confirmation')
-            ->press('Login');
-
-        // Logout
-        Auth::logout();
-
-        // Check that if we try to use the token again, we 404
-        $this->get(route('first-login.index', $tokenRecord->token))
-            ->assertResponseStatus(200);
-    }
-
-    /**
-     * @test
-     */
     public function invalid_token_returns_404()
     {
         $this->get(route('first-login.index', 'Some_non-existent_token'))

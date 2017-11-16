@@ -17,4 +17,16 @@ class IsShadowUserTest extends TestCase
              ->visit(route('shadow-user.promote'))
              ->seePageIs(route('index'));
     }
+
+    /**
+     * @test
+     */
+    public function shadow_users_arent_redirected()
+    {
+        $user = $this->createUser(['is_shadow_user' => true]);
+
+        $this->actingAs($user)
+            ->visit(route('shadow-user.promote'))
+            ->seePageIs(route('shadow-user.promote'));
+    }
 }
