@@ -7,12 +7,26 @@ class ForceShadowUserToSetPasswordTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * A basic test example.
-     *
-     * @return void
+     * @test
      */
-    public function testExample()
+    public function shadow_user_is_redirected_to_set_password_page()
     {
-        $this->assertTrue(true);
+        $user = $this->createUser(['is_shadow_user' => true]);
+
+        $this->actingAs($user)
+            ->visit(route('index'))
+            ->seePageIs(route('shadow-user.promote', ['next' => '/']));
+    }
+
+    /**
+     * @test
+     */
+    public function non_shadow_users_arent_redirected()
+    {
+        $user = $this->createUser();
+
+        $this->actingAs($user)
+            ->visit(route('index'))
+            ->seePageIs(route('index'));
     }
 }
