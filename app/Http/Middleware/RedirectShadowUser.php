@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ForceShadowUserToSetPassword
+class RedirectShadowUser
 {
     /**
      * Handle an incoming request.

@@ -31,7 +31,7 @@ Route::group(['middleware' => 'csrf'], function() {
         'password' => 'Auth\PasswordController'
     ]);
 
-    Route::group(['middleware' => ['auth']], function() {
+    Route::group(['middleware' => ['auth', 'is-shadow-user']], function() {
         Route::get('shadow-user/promote', 'ShadowUserController@promote')->name('shadow-user.promote');
         Route::post('shadow-user/promote', 'ShadowUserController@setPassword')->name('shadow-user.set-password');
     });
