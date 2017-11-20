@@ -9,7 +9,6 @@ class Invite
 {
     public static function sendInvite(User $newUser, $inviter = null)
     {
-        $newUser->update(['is_shadow_user' => true]);
         $tokenInstance = FirstLoginToken::createToken($newUser);
 
         $inviteData = [

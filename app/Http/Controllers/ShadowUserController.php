@@ -25,6 +25,8 @@ class ShadowUserController extends Controller
 
         $user->save();
 
+        $user->firstLoginToken()->delete();
+
         return redirect()->route('index');
     }
 }
