@@ -394,7 +394,7 @@ class UserController extends Controller
                     $link = $userData['link'];
                     $message = empty($userData['message']) ? null : $userData['message'];
 
-                    if ($isExistingUser) {
+                    if ($isExistingUser && !$user->is_shadow_user) {
                         $invite = new InviteToSignDocument($user, $inviterName, $link, $message);
                         $invite->send();
                     }
