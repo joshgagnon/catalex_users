@@ -58,6 +58,8 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         // Add the services
         $user->syncSubscriptions($serviceIds);
 
+        $user = $user->fresh();
+
         return $user;
     }
 
