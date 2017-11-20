@@ -399,6 +399,8 @@ class UserController extends Controller
                         $invite->send();
                     }
                     else {
+                        $user->update(['is_shadow_user' => true]);
+
                         $tokenInstance = FirstLoginToken::createToken($user);
 
                         $invite = new InviteNewUserToSignDocument($user, $inviterName, $link, $tokenInstance->token, $message);

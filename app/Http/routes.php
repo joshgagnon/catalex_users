@@ -37,15 +37,18 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::post('shadow-user/promote', 'ShadowUserController@setPassword')->name('shadow-user.set-password');
     });
 
+    /**
+     * SSO routes
+     */
     Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
+
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/browser-login', 'HomeController@getBrowserLogin')->name('browser-login');
+        Route::get('/sign-login', 'HomeController@getSignLogin')->name('sign-login');
+    });
 
     // Authenticated routes
     Route::group(['middleware' => ['auth', 'redirect-shadow-users']], function() {
-        /**
-         * SSO routes
-         */
-        Route::get('/browser-login', 'HomeController@getBrowserLogin')->name('browser-login');
-        Route::get('/sign-login', 'HomeController@getSignLogin')->name('sign-login');
         Route::get('/services', 'HomeController@index')->name('services');
         /**
          * Services routes
