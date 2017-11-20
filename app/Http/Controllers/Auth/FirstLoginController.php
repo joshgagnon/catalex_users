@@ -25,10 +25,10 @@ class FirstLoginController extends Controller
         }
 
         return view('auth.first-login')->with([
-            'token' => $token,
-            'user' => $user,
+            'token'            => $token,
+            'user'             => $user,
             'userOrganisation' => $user->organisation,
-            'next' => $request->next,
+            'next'             => $request->next,
         ]);
     }
 
@@ -36,7 +36,7 @@ class FirstLoginController extends Controller
     {
         // Validate token and password exist and password is confirmed
         $this->validate($request, [
-            'token' => 'required',
+            'token'    => 'required',
             'password' => 'required|confirmed|min:6',
         ]);
 
@@ -51,12 +51,32 @@ class FirstLoginController extends Controller
         // Change the user's password
         $user->password = Hash::make($request->password);
         $user->email_verified = true; // this route is accessed by an email, this means their account is verified
-        $user->is_shadow_user = false;
         $user->save();
 
         // Log the user in
         Auth::login($user);
 
         return $request->next ? redirect($request->next) : redirect('/')->with('status', 'Password set');
+    }
+
+    public function loginToSign(Request $request, $token = null)
+    {
+        if (!$token) {
+            throw new NotFoundHttpException();
+        }
+
+        $user = Invite::getUser($token);
+
+        if (!$user) {
+            throw new NotFoundHttpException();
+        }
+
+        $user->email_verified = true; // this route is accessed by an email, this means their account is verified
+        $user->save();
+
+        // Login the user
+        Auth::login($user);
+
+        return redirect($request->next);
     }
 }

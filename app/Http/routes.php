@@ -24,6 +24,7 @@ Route::group(['middleware' => 'csrf'], function() {
     Route::group(['middleware' => 'guest'], function() {
         Route::get('/password/first-login/{token}', 'Auth\FirstLoginController@index')->name('first-login.index');
         Route::post('/password/first-login', 'Auth\FirstLoginController@setPassword')->name('first-login.set-password');
+        Route::get('/password/login-to-sign/{token}', 'Auth\FirstLoginController@loginToSign')->name('first-login.sign');
     });
 
     Route::controllers([
@@ -43,8 +44,8 @@ Route::group(['middleware' => 'csrf'], function() {
         /**
          * SSO routes
          */
-        Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin']);
-        Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin']);
+        Route::get('/browser-login', 'HomeController@getBrowserLogin')->name('browser-login');
+        Route::get('/sign-login', 'HomeController@getSignLogin')->name('sign-login');
         Route::get('/services', 'HomeController@index')->name('services');
         /**
          * Services routes

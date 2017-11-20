@@ -13,7 +13,7 @@ class FirstLoginControllerTest extends TestCase
     public function use_first_login_token()
     {
         // Create a user and a token for them to login with
-        $user = $this->createUser(['is_shadow_user' => true]);
+        $user = $this->createUser();
         $tokenRecord = FirstLoginToken::createToken($user);
 
         $password = 'pass123';

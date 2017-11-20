@@ -27,6 +27,6 @@ class FirstLoginToken extends Model
 
     public function isValid()
     {
-        return $this->user->is_shadow_user;
+        return true;
     }
 }
