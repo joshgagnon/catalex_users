@@ -37,9 +37,6 @@ class PasswordController extends Controller
 
     /**
      * Reset the given user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function postReset(Request $request)
     {
