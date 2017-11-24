@@ -101,6 +101,10 @@ class AuthController extends Controller {
 
         $user = User::where('email',  'ilike', $request->input('email'))->first();
         if($user) {
+            if ($user->is_shadow_user) {
+                return redirect()->back()->with('errors', collect('If this is your email address, please go to Login -> Reset Password to complete your account setup.'));
+            }
+
             return redirect()->back()->with('errors', collect('The email has already been taken'));
         }
 
