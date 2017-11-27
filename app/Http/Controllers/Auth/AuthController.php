@@ -48,14 +48,13 @@ class AuthController extends Controller {
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
-    protected function authenticated(Request $request, $user)
+    protected function authenticated(Request $request)
     {
-        dd($request);
-    if ($request->next) {
-        return redirect($request->next);
-    }
+        if ($request->next) {
+            return redirect($request->next);
+        }
 
-     return redirect($this->defaultRedirectPath());
+        return redirect($this->defaultRedirectPath());
     }
 
 
