@@ -435,7 +435,7 @@ class UserController extends Controller
             // link to page, that has a button, which emails a token token
         }
         else {
-            return Response()->json(['url' => url() . '/auth/login?next=' . $request->next]);
+            return response()->json(['url' => url() . '/auth/login?next=' . $request->next]);
         }
     }
 }
