@@ -64,11 +64,16 @@ class FirstLoginController extends Controller
         if (!$token) {
             throw new NotFoundHttpException();
         }
+        //if logged, just redirect
+        if(!!Auth::user()) {
+            return redirect($request->next);
+        }
 
         $user = Invite::getUser($token);
 
         if (!$user) {
-            throw new NotFoundHttpException();
+            // if you get here, then you are not logged in, better just redirect to login page
+            return redirect('/auth/login?next='.$request->next);
         }
 
         $user->email_verified = true; // this route is accessed by an email, this means their account is verified

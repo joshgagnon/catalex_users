@@ -48,6 +48,17 @@ class AuthController extends Controller {
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
+    protected function authenticated(Request $request, $user)
+    {
+        dd($request);
+    if ($request->next) {
+        return redirect($request->next);
+    }
+
+     return redirect($this->defaultRedirectPath());
+    }
+
+
     public function validator(array $data) {
         return Validator::make($data, [
             'name' => 'required|max:255',

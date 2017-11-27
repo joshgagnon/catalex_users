@@ -21,10 +21,10 @@ Route::group(['middleware' => 'csrf'], function() {
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
     // Guest routes
+    Route::get('/password/login-to-sign/{token}', 'Auth\FirstLoginController@loginToSign')->name('first-login.sign');
     Route::group(['middleware' => 'guest'], function() {
         Route::get('/password/first-login/{token}', 'Auth\FirstLoginController@index')->name('first-login.index');
         Route::post('/password/first-login', 'Auth\FirstLoginController@setPassword')->name('first-login.set-password');
-        Route::get('/password/login-to-sign/{token}', 'Auth\FirstLoginController@loginToSign')->name('first-login.sign');
     });
 
     Route::controllers([
