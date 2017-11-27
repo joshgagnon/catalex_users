@@ -3,27 +3,24 @@
 namespace App\Http\Controllers\Auth;
 
 use App\EmailVerificationToken;
-use Auth;
-use Config;
-use Session;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\InitialRegisterRequest;
 use App\Library\Mail;
 use App\User;
-use Validator;
-use App\Http\Requests\InitialRegisterRequest;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Auth;
+use Config;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-
-use OAuth\ServiceFactory;
-use OAuth\OAuth2\Service\GitHub;
-use OAuth\Common\Storage\Session as OAuthSession;
-use OAuth\Common\Http\Uri\UriFactory;
+use Illuminate\Http\Request;
 use OAuth\Common\Consumer\Credentials;
+use OAuth\Common\Http\Uri\UriFactory;
+use OAuth\Common\Storage\Session as OAuthSession;
+use OAuth\OAuth2\Service\GitHub;
+use OAuth\ServiceFactory;
+use Session;
+use Validator;
 
-use Omnipay\Omnipay;
-
-class AuthController extends Controller {
+class AuthController extends Controller
+{
 
     protected $redirectTo = '/';
 
@@ -58,12 +55,12 @@ class AuthController extends Controller {
     }
 
 
-    public function validator(array $data) {
+    public function validator(array $data)
+    {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-           // 'business_name' => 'max:255',
+            'name'               => 'required|max:255',
+            'email'              => 'required|email|max:255|unique:users',
+            'password'           => 'required|confirmed|min:6',
             'customer_agreement' => 'accepted',
         ]);
     }
@@ -71,13 +68,14 @@ class AuthController extends Controller {
     /**
      * Create a new user and optionally an organisation for non-invite registrations
      *
-     * @param  array  $data
+     * @param  array $data
      * @return User
      */
-    public function create(array $data) {
+    public function create(array $data)
+    {
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'name'     => $data['name'],
+            'email'    => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
 
@@ -85,11 +83,10 @@ class AuthController extends Controller {
         $user->addRole('registered_user');
 
         // Send out welcome email
-        $trialEnd = Carbon::now()->addMinutes(Config::get('constants.trial_length_minutes'));
         $tokenInstance = EmailVerificationToken::createToken($user);
         Mail::queueStyledMail('emails.welcome', [
-            'name' => $user->fullName(),
-            'email' => $user->email,
+            'name'              => $user->fullName(),
+            'email'             => $user->email,
             'verification_link' => route('email-verification.verify', $tokenInstance->token),
         ], $user->email, $user->fullName(), 'Welcome to CataLex');
 
@@ -109,8 +106,8 @@ class AuthController extends Controller {
     public function postRegister(Request $request)
     {
 
-        $user = User::where('email',  'ilike', $request->input('email'))->first();
-        if($user) {
+        $user = User::where('email', 'ilike', $request->input('email'))->first();
+        if ($user) {
             if ($user->is_shadow_user) {
                 return redirect()->back()->with('errors', collect('If this is your email address, please go to Login -> Reset Password to complete your account setup.'));
             }
@@ -127,12 +124,12 @@ class AuthController extends Controller {
         //$request->replace($request->input() + Session::get('register.personal'));
         $request->replace($request->input());
 
-        if($registerToGoodCompanies){
-            $this->redirectTo = route('user-services.index', array(urlencode('Good Companies') => 1));
+        if ($registerToGoodCompanies) {
+            $this->redirectTo = route('user-services.index', [urlencode('Good Companies') => 1]);
         }
 
-        if($registerToSign){
-            $this->redirectTo = route('user-services.index', array(urlencode('CataLex Sign') => 1));
+        if ($registerToSign) {
+            $this->redirectTo = route('user-services.index', [urlencode('CataLex Sign') => 1]);
         }
 
         if ($redirectToSign) {
@@ -141,7 +138,7 @@ class AuthController extends Controller {
 
         // For OAuth registrations, generate a long random password so we can
         // still use Laravel default auth (ie. for password reset)
-        if(Session::get('oauth.register', false)) {
+        if (Session::get('oauth.register', false)) {
             $input = $request->input();
             $password = str_random(40);
             $request->replace($input + ['password' => $password, 'password_confirmation' => $password]);
@@ -158,11 +155,13 @@ class AuthController extends Controller {
         return $response;
     }
 
-    public function redirectPath() {
+    public function redirectPath()
+    {
         return $this->defaultRedirectPath();
     }
 
-    public function postBilling(InitialRegisterRequest $request) {
+    public function postBilling(InitialRegisterRequest $request)
+    {
         // Store current progress in Session and show form for billing step
         Session::put('register.personal', $request->except(['_token']));
 
@@ -192,7 +191,7 @@ class AuthController extends Controller {
         /** @var $gitHub GitHub */
         $gitHub = $serviceFactory->createService('GitHub', $credentials, $storage, ['user:email']);
 
-        if(!empty($_GET['code'])) {
+        if (!empty($_GET['code'])) {
             // This was a callback request from github, get the token
             $gitHub->requestAccessToken($_GET['code']);
 
@@ -201,7 +200,7 @@ class AuthController extends Controller {
             $emails = [];
             $primary = null;
 
-            foreach($result as $emailDetails) {
+            foreach ($result as $emailDetails) {
                 // TODO: If github is ever wanted, figure out how to get verified emails
                 //       Apparently the documentation is lying about this
                 /*
@@ -224,7 +223,7 @@ class AuthController extends Controller {
             $result = json_decode($gitHub->request('user'));
             $name = $result->name;
 
-            if(!$primary) {
+            if (!$primary) {
                 // TODO: Update to show error when correctly determining if email is verified above
             }
             else {
@@ -258,7 +257,7 @@ class AuthController extends Controller {
 
         $linkedIn = $serviceFactory->createService('linkedin', $credentials, $storage, ['r_basicprofile', 'r_emailaddress']);
 
-        if(!empty($_GET['code'])) {
+        if (!empty($_GET['code'])) {
             // retrieve the CSRF state parameter
             $state = isset($_GET['state']) ? $_GET['state'] : null;
 
@@ -267,12 +266,11 @@ class AuthController extends Controller {
 
             $result = json_decode($linkedIn->request('/people/~?format=json'));
             $firstName = $result->firstName;
-            $lastName = $result->lastName;
 
             $result = json_decode($linkedIn->request('/people/~/email-address?format=json'));
             $email = $result;
 
-            if($email && ($user = User::where('email', $email)->first())) {
+            if ($email && ($user = User::where('email', $email)->first())) {
                 Auth::login($user);
                 return redirect()->action('HomeController@index');
             }
@@ -289,6 +287,9 @@ class AuthController extends Controller {
 
     /**
      * Override logout to remove the session value we use for impersonation
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function getLogout(Request $request)
     {
