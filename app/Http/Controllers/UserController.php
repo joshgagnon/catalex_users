@@ -416,4 +416,27 @@ class UserController extends Controller
 
         return $userSummaries;
     }
+
+    public function userRedirectLogin(Request $request)
+    {
+        $requestData = $request->all();
+
+        $client = DB::table('oauth_clients')
+            ->where('id', $requestData['client_id'])
+            ->where('secret', $requestData['client_secret'])
+            ->first();
+
+        if (!$client) {
+            return view('auth.denied');
+        }
+
+        $user = User::where('email', 'ilike', $requestData['email')->first();
+        if($user->is_shadow_user){
+            // link to page, that has a button, which emails a token token
+        }
+        else{
+            return Response()->json(['url' => url().'/auth/login?next='.$request->next])
+        }
+    }
 }
+
