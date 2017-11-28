@@ -20,8 +20,12 @@ Route::group(['middleware' => 'csrf'], function() {
     Route::get('/termsofuse', 'LegalController@termsofuse');
     Route::get('/privacypolicy', 'LegalController@privacypolicy');
 
-    // Guest routes
+
     Route::get('/password/login-to-sign/{token}', 'Auth\FirstLoginController@loginToSign')->name('first-login.sign');
+    Route::get('/auth/request-login-token', 'Auth\FirstLoginController@requestLoginToken')->name('request-login-token');
+    Route::post('/auth/request-login-token', 'Auth\FirstLoginController@sendLoginToken')->name('send-login-token');
+
+    // Guest routes
     Route::group(['middleware' => 'guest'], function() {
         Route::get('/password/first-login/{token}', 'Auth\FirstLoginController@index')->name('first-login.index');
         Route::post('/password/first-login', 'Auth\FirstLoginController@setPassword')->name('first-login.set-password');

@@ -432,7 +432,7 @@ class UserController extends Controller
 
         $user = User::where('email', 'ilike', $requestData['email'])->first();
         if ($user->is_shadow_user) {
-            // link to page, that has a button, which emails a token token
+            return response()->json(['url' => route('request-login-token', ['user_id' => $user->id, 'next' => $request->next])]);
         }
         else {
             return response()->json(['url' => url() . '/auth/login?next=' . $request->next]);

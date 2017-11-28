@@ -10,16 +10,12 @@
                             <table class="twelve columns">
                                 <tr>
                                     <td>
-                                        <h2 class="center">Invitation to sign a document with CataLex Sign</h2>
+                                        <h2 class="center">Login to CataLex</h2>
 
-                                        <p>Hi {{ $inviteeName }},</p>
-                                        <p>{{ $inviterName }} has invited you to sign a document with CataLex Sign. Click below to sign the document.</p>
+                                        <p>Hi {{ $name }},</p>
+                                        <p>Please click the button below to login to CataLex.</p>
 
-                                        @if (!empty($message))
-                                            <p>Message from {{ $inviterName }}: {{ $message }}</p>
-                                        @endif
-
-                                        @include('emails.layouts.partials.button', ['text' => 'Sign Document', 'url' => route('first-login.sign', [$token, 'next' => $link])])
+                                        @include('emails.layouts.partials.button', ['text' => 'Login to CataLex', 'url' => route('first-login.sign', [$token, 'next' => $next])])
 
                                         <p>Kind regards</p>
                                         <p>The CataLex team</p>

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\FirstLoginToken;
 use App\Http\Controllers\Controller;
 use App\Library\Invite;
+use App\Library\Mail;
+use App\Library\Mail\InviteNewUserToSignDocument;
+use App\User;
 use Auth;
 use Hash;
 use Illuminate\Http\Request;
@@ -65,7 +69,7 @@ class FirstLoginController extends Controller
             throw new NotFoundHttpException();
         }
         //if logged, just redirect
-        if(!!Auth::user()) {
+        if (!!Auth::user()) {
             return redirect($request->next);
         }
 
@@ -73,7 +77,7 @@ class FirstLoginController extends Controller
 
         if (!$user) {
             // if you get here, then you are not logged in, better just redirect to login page
-            return redirect('/auth/login?next='.$request->next);
+            return redirect('/auth/login?next=' . $request->next);
         }
 
         $user->email_verified = true; // this route is accessed by an email, this means their account is verified
@@ -83,5 +87,43 @@ class FirstLoginController extends Controller
         Auth::login($user);
 
         return redirect($request->next);
+    }
+
+    public function requestLoginToken(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user) {
+            return redirect($request->next);
+        }
+
+        $user = User::find($request->user_id);
+
+        if (!$user || !$user->is_shadow_user) {
+            throw new NotFoundHttpException();
+        }
+
+        return view('auth.request-login-token');
+    }
+
+    public function sendLoginToken(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        if (!$user || !$user->is_shadow_user) {
+            throw new NotFoundHttpException();
+        }
+
+        $tokenInstance = FirstLoginToken::createToken($user);
+
+        $data = [
+            'name'  => $user->name,
+            'token' => $tokenInstance->token,
+            'next'  => $request->next,
+        ];
+
+        Mail::queueStyledMail('emails.login-token', $data, $user->email, $user->name, 'Login to CataLex');
+
+        return view('auth.login-token-sent');
     }
 }
