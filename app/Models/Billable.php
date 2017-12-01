@@ -309,7 +309,7 @@ trait Billable
                 'payment_type'          => ChargeLog::PAYMENT_TYPE_INVOICE,
             ]);
 
-            $this->sendInvoices();
+            $this->sendInvoices($chargeLog);
 
             return true;
         }
