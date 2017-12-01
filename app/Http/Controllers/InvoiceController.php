@@ -14,7 +14,7 @@ class InvoiceController extends Controller
             abort(403, 'Forbidden');
         }
 
-        if (!$chargeLog->success || $chargeLog->pending) {
+        if ((!$chargeLog->success || $chargeLog->pending) && !$chargeLog->payment_type === ChargeLog::PAYMENT_TYPE_INVOICE) {
             abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
@@ -27,7 +27,7 @@ class InvoiceController extends Controller
             abort(403, 'Forbidden');
         }
 
-        if (!$chargeLog->success || $chargeLog->pending) {
+        if ((!$chargeLog->success || $chargeLog->pending) && !$chargeLog->payment_type === ChargeLog::PAYMENT_TYPE_INVOICE) {
             abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
@@ -46,7 +46,7 @@ class InvoiceController extends Controller
             abort(403, 'Forbidden');
         }
 
-        if (!$chargeLog->success || $chargeLog->pending) {
+        if ((!$chargeLog->success || $chargeLog->pending) && !$chargeLog->payment_type === ChargeLog::PAYMENT_TYPE_INVOICE) {
             abort(400, 'Invoices can only be generated for successful charges. This charge is either pending or has failed.');
         }
 
