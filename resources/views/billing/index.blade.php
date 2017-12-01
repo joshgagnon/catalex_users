@@ -140,7 +140,7 @@
                                 <dd>{{ $chargeLog->timestamp->format('j M Y') }}</dd>
                             </dl>
 
-                            @if ($chargeLog->success && !$chargeLog->pending)
+                            @if (($chargeLog->success && !$chargeLog->pending) || (!empty($organisation) && $organisation->is_invoice_customer))
                                 <div>
                                     <a href="{{ route('invoices.view', $chargeLog->id) }}" class="btn btn-default"
                                        target="_blank">View Invoice</a>
