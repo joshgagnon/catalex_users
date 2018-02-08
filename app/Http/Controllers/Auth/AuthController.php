@@ -51,6 +51,16 @@ class AuthController extends Controller
             return redirect($request->next);
         }
 
+        if ($request->product) {
+            if ($request->product === 'gc') {
+                return redirect()->route('good-companies-login');
+            }
+
+            if ($request->product === 'sign') {
+                return redirect()->route('sign-login');
+            }
+        }
+
         return redirect($this->defaultRedirectPath());
     }
 

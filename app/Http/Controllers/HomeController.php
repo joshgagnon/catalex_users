@@ -87,7 +87,7 @@ class HomeController extends Controller
         if (!$user->subscriptionUpToDate()) {
             return redirect()->route('index');
         }
-
+        
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Good Companies')->first();
         if (!$client) {
