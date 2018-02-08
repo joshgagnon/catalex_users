@@ -50,6 +50,7 @@ Route::group(['middleware' => 'csrf'], function() {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/browser-login', 'HomeController@getBrowserLogin')->name('browser-login');
         Route::get('/sign-login', 'HomeController@getSignLogin')->name('sign-login');
+        Route::get('/cc-login', 'HomeController@getCCLogin')->name('cc-login');
     });
 
     // Authenticated routes
@@ -172,6 +173,18 @@ Route::get('login/law-browser', ['middleware' => ['check-authorization-params', 
 }]);
 
 Route::get('login/sign', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function(\Illuminate\Http\Request $request) {
+    $params = Authorizer::getAuthCodeRequestParams();
+    $params['user_id'] = Auth::user()->id;
+    $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
+
+    if ($request->next) {
+        $redirectUri = $redirectUri . '&next=' . $request->next;
+    }
+
+    return Redirect::to($redirectUri);
+}]);
+
+Route::get('login/cc', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function(\Illuminate\Http\Request $request) {
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);

@@ -80,6 +80,28 @@ class HomeController extends Controller
         return redirect($redirect);
     }
 
+    public function getCCLogin(Request $request)
+    {
+        $params = Authorizer::getAuthCodeRequestParams();
+        $client = DB::table('oauth_clients')->where('id', Config::get('oauth_clients.cc.id'))->first();
+
+        if (!$client) {
+            return view('auth.denied');
+        }
+
+        if ($request->next) {
+            $params['next'] = $request->next;
+        }
+
+        $params['client_id'] = $client->id;
+        $params['redirect_uri'] = env('CC_LOGIN_URL', 'http://localhost:5651/login');
+        $params['response_type'] = 'code';
+
+        $redirect = '/login/cc?' . http_build_query($params);
+
+        return redirect($redirect);
+    }
+
     public function getGoodCompaniesLogin()
     {
         $user = Auth::user();
@@ -87,7 +109,7 @@ class HomeController extends Controller
         if (!$user->subscriptionUpToDate()) {
             return redirect()->route('index');
         }
-        
+
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Good Companies')->first();
         if (!$client) {
