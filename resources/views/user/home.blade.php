@@ -118,7 +118,7 @@
                                 <i class="fa fa-university"></i>
 
                                 <span class="title">
-                                    <span class="main-title">Court Costst</span>
+                                    <span class="main-title">Court Costs</span>
                                     <span class="sub-title">Create Court Cost schedules</span>
                                 </span>
                             </span>
