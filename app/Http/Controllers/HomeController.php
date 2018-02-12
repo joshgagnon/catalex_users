@@ -98,7 +98,6 @@ class HomeController extends Controller
         $params['response_type'] = 'code';
 
         $redirect = '/login/cc?' . http_build_query($params);
-
         return redirect($redirect);
     }
 

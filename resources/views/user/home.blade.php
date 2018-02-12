@@ -112,6 +112,18 @@
                                 </span>
                             </span>
                         </a>
+
+                        <a href="{{ route('cc-login') }}" class="section">
+                            <span class="with-icon">
+                                <i class="fa fa-university"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Court Costst</span>
+                                    <span class="sub-title">Create Court Cost schedules</span>
+                                </span>
+                            </span>
+                        </a>
+
                     </div>
                 </div>
             </div>

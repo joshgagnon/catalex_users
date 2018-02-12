@@ -74,7 +74,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-sm-push-3">
+        <div class="col-md-6">
             <div class="service">
                 <a href="https://concat.catalex.nz/">
                     <i class="fa fa-copy"></i>
@@ -85,6 +85,19 @@
                 </a>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="service">
+                <a href="{{ route('cc-login') }} ">
+                    <i class="fa fa-university"></i>
+
+                    <h4>Court Costs</h4>
+
+                    <p>Create Court Costs schedules</p>
+                </a>
+            </div>
+        </div>
+
+
     </div>
 </div>
 

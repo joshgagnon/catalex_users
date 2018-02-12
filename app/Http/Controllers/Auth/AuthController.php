@@ -59,6 +59,11 @@ class AuthController extends Controller
             if ($request->product === 'sign') {
                 return redirect()->route('sign-login');
             }
+
+            if ($request->product === 'cc') {
+                return redirect()->route('cc-login');
+            }
+
         }
 
         return redirect($this->defaultRedirectPath());
