@@ -102,3 +102,43 @@ Clean up billing simulation tests.
 Move to new Laravel OAuth.
 
 Use the OAuth classes for service based api auth, instead of looking in the db for the secret to match.
+
+# To add new billing item
+
+1. Add new item type to database constraint:
+    1. Create a DB migration to add the new item type name to the billing item type constraint. See `2018_02_08_194348_add_court_costs_to_billing_item_types`.
+    1. Otherwise just drop this constraint all together.
+    1. Use this migration to also add the service to the database, see `2018_02_13_230335_add_court_costs_serivce.php`.
+    1. Run migrations.
+1. In `app/BillingItem.php`:
+    1. Add `const ITEM_TYPE_WHATEVER = 'item_type_whatever'`. This is what it is saved in the DB as and must add what was added in the DB constraint.
+    1. Add that to `$itemTypes`.
+    1. Add a case to the switch in the function `description()`. This is used on the invoice.
+1. Wire up the new stats
+    1. Add the new billing item to `AdminController`'s `stats()` function in `app/Http/Controllers/AdminController.php`.
+    1. Add the new stat item the the template `resources/views/admin/stats.blade.php`.
+    1. Alternatively, make this all more generic.
+1. Send welcome email when user subscribes:
+    1. In `SubscriptionController`'s `update()` method, see where other services are checking if they need to send an email, and add for the new service.
+    1. You will also need to create an email template, see how other services do this in the same method.
+1. Add pricing:
+    1. In `config/constants.php` add monthly and yearly pricing.
+    1. In `app/Models/Billable.php`'s `priceForBillingItem()` method, add a new switch case for the new billing item.
+1. Add ability for subscription to be added as a monthly or yearly billing item payment:
+    1. In `app/Service.php` add `const SERVICE_NAME_WHATEVER = 'Whatever'`.
+    1. In `app/User`'s `syncSubscriptionsWithBillingItems()` method, add the new service type to the `$serviceTypeMappings` array.
+1. Update the 'Edit Subscription' views (the first for organisations, the second individuals):
+    1. `resources/views/subscriptions/org/edit.blade.php`
+    1. `resources/views/service-user/edit.blade.php`
+1. Add to the home page `resources/views/user/home.blade.php`.
+1. TEST IT!
+1. Ask me why my instructions didn't work.
+
+**Lots of this could be done way nicer with a bit of TLC:**
+
+* stats could be more generic.
+* descriptions could be in a config file and have no need for a switch.
+* syncSubscriptionsWithBillingItems could be in a config file rather than code.
+* `SubscriptionController->update()` could be way way way nicer and easier to add to - could even be based on a config file.
+* other such improvements.
+

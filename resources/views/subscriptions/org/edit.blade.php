@@ -35,7 +35,6 @@
                                                     </th>
                                                 @endif
 
-
                                                 @if($service->name == 'CataLex Sign')
                                                     <th>
                                                         <i class="fa fa-pencil"></i>
@@ -46,6 +45,17 @@
                                                         <div class="subscription-service-price">$6 monthly, $60 annually</div>
                                                     </th>
                                                 @endif
+
+                                                    @if($service->name == 'CataLex Sign')
+                                                        <th>
+                                                            <i class="fa fa-pencil"></i>
+                                                            <div class="subscription-service-title">Court Costs</div>
+
+
+                                                            <div class="subscription-service-unit">per user</div>
+                                                            <div class="subscription-service-price">$5 monthly, $60 annually</div>
+                                                        </th>
+                                                    @endif
                                             @endforeach
                                         </tr>
                                     </thead>

@@ -91,6 +91,17 @@
                             </a>
                         @endif
 
+                        <a href="https://cc.catalex.nz" class="section">
+                            <span class="with-icon">
+                                <i class="fa fa-usd" aria-hidden="true"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Court Costs</span>
+                                    <span class="sub-title">Estimate legal costs easily</span>
+                                </span>
+                            </span>
+                        </a>
+
                         <a href="http://workingdays.catalex.nz/" class="section">
                             <span class="with-icon">
                                 <i class="fa fa-calendar"></i>

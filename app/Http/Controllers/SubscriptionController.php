@@ -94,8 +94,10 @@ class SubscriptionController extends Controller
 
         $gcService = Service::where('name', 'Good Companies')->first();
         $signService = Service::where('name', Service::SERVICE_NAME_CATALEX_SIGN)->first();
+        $courtCostsService = Service::where('name', Service::SERVICE_NAME_COURT_COSTS)->first();
         $wasSubscribedToGC = $user->isSubscribedTo($gcService->id);
         $wasSubscribedToSign = $user->isSubscribedTo($signService->id);
+        $wasSubscribedToCourtCosts = $user->isSubscribedTo($courtCostsService->id);
 
         $members = $user->organisation_id ? $user->organisation->members()->get() : [$user];
 
@@ -113,6 +115,7 @@ class SubscriptionController extends Controller
 
         $isSubscribedToGC = $user->isSubscribedTo($gcService->id);
         $isSubscribedToSign = $user->isSubscribedTo($signService->id);
+        $isSubscribedToCourtCosts = $user->isSubscribedTo($signService->id);
 
         // If the user didn't used to be subscribed to GC, but is now: email them and thank them for subscribing.
         if (!$wasSubscribedToGC && $isSubscribedToGC) {
@@ -129,17 +132,7 @@ class SubscriptionController extends Controller
 
             $billingDetail = $user->organisation_id ? $user->organisation->billing_detail : $user->billing_detail;
 
-            $billingDate = null;
-
-            if ($billingDetail) {
-                $billingDate = Carbon::createFromFormat('j', $billingDetail->billing_day);
-
-                if ($billingDate->lt(Carbon::now())) {
-                    $billingDate->addMonth();
-                }
-
-                $billingDate = $billingDate->format('jS F Y');
-            }
+            $billingDate = $billingDate = $this->getBillingDate($billingDetail);
 
             $emailData = [
                 'name' => $user->name,
@@ -151,7 +144,35 @@ class SubscriptionController extends Controller
             Mail::queueStyledMail('emails.subscribed-to-sign', $emailData, $user->email, $user->fullName(), 'Thanks for subscribing to CataLex Sign');
         }
 
+        if (!$wasSubscribedToCourtCosts && $isSubscribedToCourtCosts) {
+            $billingDetail = $user->organisation_id ? $user->organisation->billing_detail : $user->billing_detail;
+            $billingDate = $this->getBillingDate($billingDetail);
+
+            $emailData = [
+                'name' => $user->name,
+                'billingDate' => $billingDate,
+            ];
+
+            Mail::queueStyledMail('emails.subscribed-to-court-costs', $emailData, $user->email, $user->fullName(), 'Thanks for subscribing to Court Costs');
+        }
+
         $redirectRouteName = $request->session()->has('redirect_route_name') ? $request->session()->pull('redirect_route_name') : 'user-services.index';
         return redirect()->route($redirectRouteName)->with(['success' => 'Subscriptions updated.']);
+    }
+
+    private function getBillingDate($billingDetail) {
+        $billingDate = null;
+
+        if ($billingDetail) {
+            $billingDate = Carbon::createFromFormat('j', $billingDetail->billing_day);
+
+            if ($billingDate->lt(Carbon::now())) {
+                $billingDate->addMonth();
+            }
+
+            $billingDate = $billingDate->format('jS F Y');
+        }
+
+        return $billingDate;
     }
 }
