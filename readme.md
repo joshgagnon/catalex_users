@@ -127,10 +127,18 @@ Use the OAuth classes for service based api auth, instead of looking in the db f
 1. Add ability for subscription to be added as a monthly or yearly billing item payment:
     1. In `app/Service.php` add `const SERVICE_NAME_WHATEVER = 'Whatever'`.
     1. In `app/User`'s `syncSubscriptionsWithBillingItems()` method, add the new service type to the `$serviceTypeMappings` array.
-1. Make sure this seeds in future:
-    1. In `database/seeds/ServiceSeeder.php` add the new service.
 1. Update the 'Edit Subscription' views (the first for organisations, the second individuals):
     1. `resources/views/subscriptions/org/edit.blade.php`
     1. `resources/views/service-user/edit.blade.php`
 1. Add to the home page `resources/views/user/home.blade.php`.
+1. TEST IT!
+1. Ask me why my instructions didn't work.
+
+**Lots of this could be done way nicer with a bit of TLC:**
+
+* stats could be more generic.
+* descriptions could be in a config file and have no need for a switch.
+* syncSubscriptionsWithBillingItems could be in a config file rather than code.
+* `SubscriptionController->update()` could be way way way nicer and easier to add to - could even be based on a config file.
+* other such improvements.
 
