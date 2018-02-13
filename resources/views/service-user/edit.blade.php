@@ -113,7 +113,7 @@ CataLex - Edit Services
 
                                                 <div>
                                                     <p>Easily estimate court costs.</p>
-                                                    <p>Court Costs is only <strong>$5 per month</strong> ($60 annually)!</p>
+                                                    <p>Court Costs is only <strong>$5 per month</strong> ($50 annually)!</p>
                                                 </div>
                                             </div>
                                         @endif

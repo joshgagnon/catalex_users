@@ -12,7 +12,7 @@ return [
     'sign_yearly'  => 6000,
 
     'court_costs_monthly' => 500,
-    'court_costs_yearly'  => 6000,
+    'court_costs_yearly'  => 5000,
 
     'gc_company_monthly' => 150,
     'gc_company_yearly'  => 1200,

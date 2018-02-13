@@ -46,14 +46,14 @@
                                                     </th>
                                                 @endif
 
-                                                    @if($service->name == 'CataLex Sign')
+                                                    @if($service->name == 'Court Costs')
                                                         <th>
                                                             <i class="fa fa-pencil"></i>
                                                             <div class="subscription-service-title">Court Costs</div>
 
 
                                                             <div class="subscription-service-unit">per user</div>
-                                                            <div class="subscription-service-price">$5 monthly, $60 annually</div>
+                                                            <div class="subscription-service-price">$5 monthly, $50 annually</div>
                                                         </th>
                                                     @endif
                                             @endforeach
