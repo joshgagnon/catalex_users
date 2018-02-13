@@ -8,6 +8,7 @@ class Service extends Model
 {
     const SERVICE_NAME_GOOD_COMPANIES = 'Good Companies';
     const SERVICE_NAME_CATALEX_SIGN = 'CataLex Sign';
+    const SERVICE_NAME_COURT_COSTS = 'Court Costs';
 
     protected $fillable = ['name', 'is_paid_service'];
 

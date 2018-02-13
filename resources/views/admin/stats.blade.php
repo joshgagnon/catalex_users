@@ -52,5 +52,25 @@
             <p><strong>{{ $signSubscriptionsCounts['user_annually'] ?? 0 }}</strong> users</p>
             <p><strong>{{ $signSubscriptionsCounts['org_annually'] ?? 0 }}</strong> users in organisations</p>
         </div>
+
+        <hr />
+
+        <h3>
+            <strong>Court Costs:</strong> {{ $totalCourtCostsSubscriptions }} subscriptions total
+        </h3>
+
+        <h4>Paying Monthly</h4>
+
+        <div style="margin-left: 25px;">
+            <p><strong>{{ $courtCostsSubscriptionsCounts['user_monthly'] ?? 0 }}</strong> users</p>
+            <p><strong>{{ $courtCostsSubscriptionsCounts['org_monthly'] ?? 0 }}</strong> users in organisations</p>
+        </div>
+
+        <h4>Paying Annually</h4>
+
+        <div style="margin-left: 25px;">
+            <p><strong>{{ $courtCostsSubscriptionsCounts['user_annually'] ?? 0 }}</strong> users</p>
+            <p><strong>{{ $courtCostsSubscriptionsCounts['org_annually'] ?? 0 }}</strong> users in organisations</p>
+        </div>
     </div>
 @endsection

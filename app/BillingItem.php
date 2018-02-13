@@ -9,10 +9,12 @@ class BillingItem extends Model
 {
     const ITEM_TYPE_GC_COMPANY = 'gc_company';
     const ITEM_TYPE_SIGN_SUBSCRIPTION = 'catalex_sign_subscription';
+    const ITEM_TYPE_COURT_COSTS_SUBSCRIPTION = 'court_costs_subscription';
 
     private $itemTypes = [
         self::ITEM_TYPE_GC_COMPANY,
         self::ITEM_TYPE_SIGN_SUBSCRIPTION,
+        self::ITEM_TYPE_COURT_COSTS_SUBSCRIPTION,
     ];
 
     /**
@@ -108,6 +110,10 @@ class BillingItem extends Model
             case BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION:
                 $userName = $itemData['user_name'];
                 return 'CataLex Sign subscription for ' . $userName;
+
+            case BillingItem::ITEM_TYPE_COURT_COSTS_SUBSCRIPTION:
+                $userName = $itemData['user_name'];
+                return 'Court Costs subscription for ' . $userName;
 
             default:
                 return '';

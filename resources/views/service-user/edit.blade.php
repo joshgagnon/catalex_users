@@ -107,6 +107,17 @@ CataLex - Edit Services
                                             </div>
                                         @endif
 
+                                        @if($service->name == 'Court Costs')
+                                            <div class="col-xs-10">
+                                                <h2><i class="fa fa-search"></i> Court Costs</h2>
+
+                                                <div>
+                                                    <p>Easily estimate court costs.</p>
+                                                    <p>Court Costs is only <strong>$5 per month</strong> ($60 annually)!</p>
+                                                </div>
+                                            </div>
+                                        @endif
+
                                         @if($service->name == 'Working Days')
                                             <div class="col-xs-10">
                                                 <h2><i class="fa fa-calendar"></i> Working Days</h2>

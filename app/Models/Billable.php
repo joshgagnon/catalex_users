@@ -383,6 +383,10 @@ trait Billable
                 $constantName = $billingPeriod == 'monthly' ? 'constants.sign_monthly' : 'constants.sign_yearly';
                 return Config::get($constantName);
 
+            case BillingItem::ITEM_TYPE_COURT_COSTS_SUBSCRIPTION:
+                $constantName = $billingPeriod == 'monthly' ? 'constants.court_costs_monthly' : 'constants.court_costs_yearly';
+                return Config::get($constantName);
+
             default:
                 throw new \Exception('Unknown default price for item');
         }

@@ -291,6 +291,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         // If a service is not in this array, then it wont be billed as a subscription (eg. Good Companies)
         $serviceTypeMappings = [
             Service::SERVICE_NAME_CATALEX_SIGN => BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION,
+            Service::SERVICE_NAME_COURT_COSTS => BillingItem::ITEM_TYPE_COURT_COSTS_SUBSCRIPTION,
         ];
 
         $userServiceIds = $this->services()->where('is_paid_service', true)->get()->pluck('id')->toArray();

@@ -353,18 +353,26 @@ class AdminController extends Controller
         $signSubscriptionCount = AdminStats::itemCount(BillingItem::ITEM_TYPE_SIGN_SUBSCRIPTION);
         $totalSignSubscriptions = 0;
 
+        $courtCostsSubscriptionCount = AdminStats::itemCount(BillingItem::ITEM_TYPE_COURT_COSTS_SUBSCRIPTION);
+        $totalCourtCostsSubscriptions = 0;
+
         $gcCompaniesCounts = [];
         $signSubscriptionsCounts = [];
+        $courtCostsSubscriptionsCounts = [];
 
         foreach ($gcCompaniesStats as $statsRecord) {
             $gcCompaniesCounts[$statsRecord->condition] = $statsRecord->count;
             $totalGCCompanies += $statsRecord->count;
         }
 
-
         foreach ($signSubscriptionCount as $statsRecord) {
             $signSubscriptionsCounts[$statsRecord->condition] = $statsRecord->count;
             $totalSignSubscriptions += $statsRecord->count;
+        }
+
+        foreach ($courtCostsSubscriptionCount as $statsRecord) {
+            $courtCostsSubscriptionsCounts[$statsRecord->condition] = $statsRecord->count;
+            $totalCourtCostsSubscriptions += $statsRecord->count;
         }
 
         return view('admin.stats')->with([
@@ -373,6 +381,9 @@ class AdminController extends Controller
 
             'totalSignSubscriptions'  => $totalSignSubscriptions,
             'signSubscriptionsCounts' => $signSubscriptionsCounts,
+
+            'totalCourtCostsSubscriptions' => $totalCourtCostsSubscriptions,
+            'courtCostsSubscriptionCount'  => $courtCostsSubscriptionCount,
         ]);
     }
 }
