@@ -109,7 +109,7 @@ Use the OAuth classes for service based api auth, instead of looking in the db f
     1. Create a DB migration to add the new item type name to the billing item type constraint. See `2018_02_08_194348_add_court_costs_to_billing_item_types`.
     1. Otherwise just drop this constraint all together.
     1. Use this migration to also add the service to the database, see `2018_02_13_230335_add_court_costs_serivce.php`.
-    1. Run the migration.
+    1. Run migrations.
 1. In `app/BillingItem.php`:
     1. Add `const ITEM_TYPE_WHATEVER = 'item_type_whatever'`. This is what it is saved in the DB as and must add what was added in the DB constraint.
     1. Add that to `$itemTypes`.
@@ -118,7 +118,7 @@ Use the OAuth classes for service based api auth, instead of looking in the db f
     1. Add the new billing item to `AdminController`'s `stats()` function in `app/Http/Controllers/AdminController.php`.
     1. Add the new stat item the the template `resources/views/admin/stats.blade.php`.
     1. Alternatively, make this all more generic.
-1. Send email for sign up:
+1. Send welcome email when user subscribes:
     1. In `SubscriptionController`'s `update()` method, see where other services are checking if they need to send an email, and add for the new service.
     1. You will also need to create an email template, see how other services do this in the same method.
 1. Add pricing:
