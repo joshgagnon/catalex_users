@@ -92,7 +92,7 @@
 
                     <h4>Court Costs</h4>
 
-                    <p>Create Court Costs schedules</p>
+                    <p>Calculate court costs and disbursements</p>
                 </a>
             </div>
         </div>

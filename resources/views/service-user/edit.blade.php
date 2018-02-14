@@ -112,7 +112,7 @@ CataLex - Edit Services
                                                 <h2><i class="fa fa-search"></i> Court Costs</h2>
 
                                                 <div>
-                                                    <p>Easily estimate court costs.</p>
+                                                    <p>Calculate court costs and create formatted costs schedules.</p>
                                                     <p>Court Costs is only <strong>$5 per month</strong> ($50 annually)!</p>
                                                 </div>
                                             </div>
