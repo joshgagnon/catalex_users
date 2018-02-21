@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\EmailVerificationToken;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use App\Http\Requests\InitialRegisterRequest;
 use App\Library\Mail;
 use App\User;
@@ -39,6 +40,9 @@ class AuthController extends Controller
         postRegister as defaultPostRegister;
         redirectPath as defaultRedirectPath;
     }
+
+
+    use ThrottlesLogins;
 
     public function __construct()
     {
