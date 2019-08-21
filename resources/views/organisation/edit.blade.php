@@ -57,6 +57,18 @@ CataLex - Edit Organisation
 							<h4>Billing Options</h4>
 
 							<div class="form-group">
+
+								<div class="col-xs-12 col-md-4">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" value="1" name="skip_billing" {{ $organisation->skip_billing ? 'checked' : '' }}>
+											No Billing - Free Organisation
+										</label>
+									</div>
+								</div>
+
+
+
 								<div class="col-xs-12 col-md-4">
 									<div class="checkbox">
 										<label>

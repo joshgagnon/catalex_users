@@ -100,6 +100,7 @@ class BillingController extends Controller
             'subscriptionUpToDate' => $subscriptionUpToDate,
             'cardDetails' => $cardDetails,
             'is_invoice_customer' => $billableEntity->is_invoice_customer,
+            'skip_billing' => $billableEntity->skip_billing
         ]);
     }
 

@@ -36,7 +36,7 @@ class DevelopmentSeeder extends Seeder
 
         // Create an organisation with two users and billing
         $johnny = $this->createUser(['name' => 'Johnny Bouy', 'email' => 'johnny@bouy.com']);
-        $org = $this->createOrganisationWithBilling($johnny, ['name' => 'Johnny Bouy\'s Adventure Group'], ['dps_billing_token' => '0000030200794453']);
+        $org = $this->createOrganisationWithBilling($johnny, ['name' => 'Johnny Bouy\'s Adventure Group'], []);
 
         // Add the GC service to this org
         $gcService = Service::where('name', 'Good Companies')->first();

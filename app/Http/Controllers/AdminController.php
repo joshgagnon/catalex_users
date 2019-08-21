@@ -203,9 +203,10 @@ class AdminController extends Controller
         $organisation->name = $input['name'];
 
         $organisation->is_invoice_customer = boolval($request->input('is_invoice_customer', false));
+        $organisation->skip_billing = boolval($request->input('skip_billing', false));
         $organisation->force_no_access = boolval($request->input('force_no_access', false));
 
-        if ($organisation->is_invoice_customer && !$organisation->billing_detail_id) {
+        if (!$organisation->skip_billing && $organisation->is_invoice_customer && !$organisation->billing_detail_id) {
             $billingDetails = BillingDetail::create([
                 'period' => 'monthly',
                 'billing_day' => Carbon::now()->addDays(Billing::DAYS_IN_TRIAL_PERIOD)->day,

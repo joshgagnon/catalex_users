@@ -276,7 +276,7 @@ class AuthController extends Controller
             $currentUri->getAbsoluteUri()
         );
 
-        $linkedIn = $serviceFactory->createService('linkedin', $credentials, $storage, ['r_basicprofile', 'r_emailaddress']);
+        $linkedIn = $serviceFactory->createService('linkedin', $credentials, $storage, ['r_liteprofile', 'r_emailaddress']);
 
         if (!empty($_GET['code'])) {
             // retrieve the CSRF state parameter

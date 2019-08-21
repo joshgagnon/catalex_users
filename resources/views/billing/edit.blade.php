@@ -31,7 +31,12 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="row">
-                            @if (!$is_invoice_customer)
+                            @if($skip_billing)
+                                <div class="col-xs-12">
+                                    By an administrator's setting, you will not current be billed.
+                                </div>
+                            @endif
+                            @if (!$is_invoice_customer && !$skip_billing)
                                 <div class="col-xs-12">
                                     @if ($cardDetails)
                                         @if ($cardDetails->masked_card_number)
@@ -55,7 +60,7 @@
                                     <hr/>
                                 </div>
                             @endif
-                            @if ($billingDetails)
+                            @if ($billingDetails && !$skip_billing)
 
                                 <div class="col-xs-12">
                                     <h4>Billing Period</h4>
