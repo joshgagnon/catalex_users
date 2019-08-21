@@ -114,6 +114,11 @@ class HomeController extends Controller
         if (!$client) {
             return view('auth.denied');
         }
+
+        if ($request->next) {
+            $params['next'] = $request->next;
+        }
+        
         $params['client_id'] = $client->id;
         $params['redirect_uri'] = env('GOOD_COMPANIES_LOGIN_URL', 'http://localhost:5667/auth/catalex/login');
         $params['response_type'] = 'code';
