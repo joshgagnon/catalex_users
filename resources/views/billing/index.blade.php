@@ -22,7 +22,7 @@
 
         <hr/>
 
-        @if($skip_billing)
+        @if($skipBilling)
             <div class="col-xs-12">
                 By an administrator's setting, you will not current be billed.
             </div>
