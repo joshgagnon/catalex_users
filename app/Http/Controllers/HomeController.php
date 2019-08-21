@@ -101,7 +101,7 @@ class HomeController extends Controller
         return redirect($redirect);
     }
 
-    public function getGoodCompaniesLogin()
+    public function getGoodCompaniesLogin(Request $request)
     {
         $user = Auth::user();
 
