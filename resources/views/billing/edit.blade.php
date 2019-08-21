@@ -33,7 +33,7 @@
                         <div class="row">
                             @if($skip_billing)
                                 <div class="col-xs-12">
-                                    By an administrator's setting, you will not current be billed.
+                                    By an administrator's setting, you will not currently be billed.  
                                 </div>
                             @endif
                             @if (!$is_invoice_customer && !$skip_billing)

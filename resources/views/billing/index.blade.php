@@ -23,9 +23,9 @@
         <hr/>
 
         @if($skipBilling)
-            <div class="col-xs-12">
-                By an administrator's setting, you will not current be billed.
-            </div>
+           <h3>
+                By an administrator's setting, you will not currently be billed.
+            </h3>
         @endif
 
 
