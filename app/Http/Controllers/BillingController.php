@@ -49,6 +49,7 @@ class BillingController extends Controller
         }
         
         return view('billing.index')->with([
+            'skipBilling' => $billable->skip_billing,
             'subscriptionUpToDate' => $subscriptionUpToDate,
             'chargeLogs' => $chargeLogs,
             'billingItems' => $billingItems,

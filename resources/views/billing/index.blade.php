@@ -22,6 +22,13 @@
 
         <hr/>
 
+        @if($skip_billing)
+            <div class="col-xs-12">
+                By an administrator's setting, you will not current be billed.
+            </div>
+        @endif
+
+
         @if (Request::path() === 'billing')
             <h3>Options</h3>
 
