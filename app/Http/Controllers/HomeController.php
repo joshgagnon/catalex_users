@@ -111,6 +111,7 @@ class HomeController extends Controller
 
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Good Companies')->first();
+        
         if (!$client) {
             return view('auth.denied');
         }
