@@ -30,14 +30,14 @@
 							<label class="col-md-4 control-label">Sign in with</label>
 							<div class="col-md-6">
 								<ul class="social-logins">
-									{{-- TODO: Other auth methods <li><a href="/auth/github">Github</a></li> -
-									{{-- TODO: Other auth methods <li><a href="/auth/linkedin" class="linkedin"><img alt="LinkedIn" src="/images/social-login/Logo-White-21px-R.png"></a></li> 
+=
 								</ul>
 							</div>
 						</div>
-					
+
 						<div class="form-group text-center form-label">&mdash; or &mdash;</div>
 							--}}
+
 						<div class="form-group">
 							<label class="col-md-4 control-label">E-Mail Address</label>
 							<div class="col-md-8">
