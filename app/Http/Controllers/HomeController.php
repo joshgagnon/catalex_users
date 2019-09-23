@@ -61,7 +61,7 @@ class HomeController extends Controller
     public function getSignLogin(Request $request)
     {
         $params = Authorizer::getAuthCodeRequestParams();
-        $client = DB::table('oauth_clients')->where('id', Config::get('oauth_clients.sign.id'))->first();
+        $client = DB::table('oauth_clients')->where('name',' Sign')->first();
 
         if (!$client) {
             return view('auth.denied');
@@ -83,7 +83,7 @@ class HomeController extends Controller
     public function getCCLogin(Request $request)
     {
         $params = Authorizer::getAuthCodeRequestParams();
-        $client = DB::table('oauth_clients')->where('id', Config::get('oauth_clients.cc.id'))->first();
+        $client = DB::table('oauth_clients')->where('name', 'Court Costs')->first();
 
         if (!$client) {
             return view('auth.denied');
