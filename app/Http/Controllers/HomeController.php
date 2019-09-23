@@ -61,7 +61,7 @@ class HomeController extends Controller
     public function getSignLogin(Request $request)
     {
         $params = Authorizer::getAuthCodeRequestParams();
-        $client = DB::table('oauth_clients')->where('name',' Sign')->first();
+        $client = DB::table('oauth_clients')->where('name','Sign')->first();
 
         if (!$client) {
             return view('auth.denied');
