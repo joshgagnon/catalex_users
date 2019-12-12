@@ -46,15 +46,13 @@ Route::group(['middleware' => 'csrf'], function() {
      * SSO routes
      */
     Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
+
     Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin', 'middleware' => 'auth:browser']);
     Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin', 'middleware' => 'auth:sign']);
     Route::get('/cc-login', ['as' => 'cc-login', 'uses' => 'HomeController@getCCLogin', 'middleware' => 'auth:cc']);
 
-    /*Route::group(['middleware' => 'auth'], function () {
-        Route::get('/browser-login', 'HomeController@getBrowserLogin')->name('browser-login');
-        Route::get('/sign-login', 'HomeController@getSignLogin')->name('sign-login');
-        Route::get('/cc-login', 'HomeController@getCCLogin')->name('cc-login');
-    });*/
+
+
 
     // Authenticated routes
     Route::group(['middleware' => ['auth', 'redirect-shadow-users']], function() {
@@ -180,11 +178,6 @@ Route::get('login/sign', ['middleware' => ['check-authorization-params', 'csrf',
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
-
-    if ($request->next) {
-        $redirectUri = $redirectUri . '&next=' . $request->next;
-    }
-
     return Redirect::to($redirectUri);
 }]);
 
