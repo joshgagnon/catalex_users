@@ -42,6 +42,9 @@ class Authenticate {
 			else
 			{
                 if($product){
+                    if($request->next) {
+                        return redirect()->guest('auth/login?product='.$product.'&next='.$request->next);
+                    }
 				    return redirect()->guest('auth/login?product='.$product);
                 }
                 else{

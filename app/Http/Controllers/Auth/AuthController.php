@@ -48,16 +48,29 @@ class AuthController extends Controller
     protected function authenticated(Request $request)
     {
         // Redirect to given path - maybe we should only allow *.catalex.nz/*
-        if ($request->next) {
-            return redirect($request->next);
-        }
+
 
         // Old style redirect
         if ($request->has('redirectToSign')) {
             return redirect()->route('sign-login');
         }
 
+        if ($request->product && $request->next) {
+
+            if ($request->product === 'gc') {
+                return redirect()->route('good-companies-login', ['next' => $request->next]);
+            }
+
+            if ($request->product === 'sign') {
+                return redirect()->route('sign-login', ['next' => $request->next]);
+            }
+
+            if ($request->product === 'cc') {
+                return redirect()->route('cc-login', ['next' => $request->next]);
+            }
+        }
         // New style redirect - use this if just redirecting to home page of a service.
+
         if ($request->product) {
             if ($request->product === 'gc') {
                 return redirect()->route('good-companies-login');
@@ -70,6 +83,10 @@ class AuthController extends Controller
             if ($request->product === 'cc') {
                 return redirect()->route('cc-login');
             }
+        }
+
+        if ($request->next) {
+            return redirect($request->next);
         }
 
         return redirect($this->defaultRedirectPath());

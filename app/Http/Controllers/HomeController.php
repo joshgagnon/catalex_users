@@ -111,7 +111,7 @@ class HomeController extends Controller
 
         $params = Authorizer::getAuthCodeRequestParams();
         $client = DB::table('oauth_clients')->where('name', 'Good Companies')->first();
-        
+
         if (!$client) {
             return view('auth.denied');
         }
@@ -119,7 +119,7 @@ class HomeController extends Controller
         if ($request->next) {
             $params['next'] = $request->next;
         }
-        
+
         $params['client_id'] = $client->id;
         $params['redirect_uri'] = env('GOOD_COMPANIES_LOGIN_URL', 'http://localhost:5667/auth/catalex/login');
         $params['response_type'] = 'code';
