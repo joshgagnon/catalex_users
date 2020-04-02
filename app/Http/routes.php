@@ -87,6 +87,8 @@ Route::group(['middleware' => 'csrf'], function() {
          */
         Route::get('/', 'HomeController@index')->name('index');
         Route::get('user/profile', 'UserController@getProfile')->name('user.profile');
+        Route::get('user/add-user', 'UserController@getAddUser')->name('user.add');
+        Route::post('user/add-user', 'UserController@postAddUser')->name('user.addPost');
 
         /**
          * Organisation routes

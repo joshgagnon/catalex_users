@@ -25,6 +25,8 @@ CataLex - Add User
 								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
 							</div>
 						</div>
+
+                        @if($user->hasRole('global_admin'))
 						<h4>Organisation</h4>
 						<div class="row form-group">
 							<div class="col-xs-12">
@@ -32,6 +34,7 @@ CataLex - Add User
 								{!! Form::select('organisation_id', $organisations, ['class' => 'form-control']) !!}
 							</div>
 						</div>
+
 						<h4>Address Details</h4>
 						<p>Only required with no assigned organisation</p>
 						<div class="row form-group">
@@ -58,6 +61,7 @@ CataLex - Add User
 								</select>
 							</div>
 						</div>
+                        @endif
                         <!--
 						<h4>Billing</h4>
 						<p>Only required with no assigned organisation</p>
@@ -78,7 +82,7 @@ CataLex - Add User
 							<div class="col-xs-12">
 								<div class="checkbox">
 									<label>
-										<input type="checkbox" name="send_invite" checked> Send user invition (if not, you will have to edit this user to set a login password)
+										<input type="checkbox" name="send_invite" checked> Send user invitation (if not, you will have to edit this user to set a login password)
 									</label>
 								</div>
 							</div>

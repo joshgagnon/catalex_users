@@ -5,7 +5,7 @@
 	<h2>User Admin</h2>
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">
-			<a href="{{ action('AdminController@getAddUser') }}"><span class="glyphicon glyphicon-plus"></span>Add user</a>
+			<a href="{{ action('UserController@getAddUser') }}"><span class="glyphicon glyphicon-plus"></span>Add user</a>
 		</div>
 		<div class="col-xs-12 col-sm-6">
 			@if($showDeleted)

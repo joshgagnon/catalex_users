@@ -210,6 +210,19 @@
                                 </span>
                             </span>
                         </a>
+
+                        <a href="{{ route('user.add') }}" class="section ">
+                            <span class="with-icon">
+                                <i class="fa fa-user-plus"></i>
+
+                                <span class="title">
+                                    <span class="main-title">Invite Users</span>
+                                    <span class="sub-title">Invite users to CataLex Services without adding them to your organisation </span>
+                                </span>
+                            </span>
+                        </a>
+
+
                     </div>
                 </div>
             </div>
