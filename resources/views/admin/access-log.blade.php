@@ -37,13 +37,15 @@
 				</thead>
 				<tbody>
 					@foreach($logs as $l)
+                        @if($l->user)
 						<tr>
 							<td>
-								<a href="{{ action('UserController@getEdit', $l->user->id) }}">{{ $l->user ? $l->user->fullName() : 'Unknown' }}</a>
+								<a href="{{ action('UserController@getEdit', $l->user->id) }}">{{ $l->user->fullName() }}</a>
 							</td>
 							<td class="mid-cell">{{ $l->route }}</td>
 							<td class="mid-cell">{{ $l->timestamp->copy()->toDateTimeString() }}</td>
 						</tr>
+                        @endif
 					@endforeach
 				</tbody>
 			</table>
