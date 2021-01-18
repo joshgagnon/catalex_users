@@ -39,7 +39,7 @@
 					@foreach($logs as $l)
 						<tr>
 							<td>
-								<a href="{{ action('UserController@getEdit', $l->user->id) }}">{{ $l->user->fullName() }}</a>
+								<a href="{{ action('UserController@getEdit', $l->user->id) }}">{{ $l->user ? $l->user->fullName() : 'Unknown' }}</a>
 							</td>
 							<td class="mid-cell">{{ $l->route }}</td>
 							<td class="mid-cell">{{ $l->timestamp->copy()->toDateTimeString() }}</td>
