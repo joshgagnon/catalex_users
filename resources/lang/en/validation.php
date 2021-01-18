@@ -101,7 +101,11 @@ return [
 	| of "email". This simply helps us make messages a little cleaner.
 	|
 	*/
+    'captcha' => 'The :attribute is incorrect, please try again',
 
-	'attributes' => [],
+    'attributes' => [
+        'captcha' => 'Captcha',
+    ]
+
 
 ];

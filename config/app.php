@@ -150,6 +150,7 @@ return [
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
 
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class
 
     ],
 
