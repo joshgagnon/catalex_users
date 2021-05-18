@@ -14,14 +14,6 @@
 				<div class="panel-body">
 					@include('components.messages')
 
-					@if(!Session::get('oauth.register', false))
-						<div class="row form-group">
-							<div class="col-md-4"></div>
-							<div class="col-md-6">
-								<a href="/auth/linkedin">Sign up with <img class="small-social" alt="LinkedIn" src="/images/social-login/linkedin.png"></a>
-							</div>
-						</div>
-					@endif
 					<div class="row form-group">
 						<div class="col-md-4"></div>
 						<div class="col-md-6">
@@ -64,7 +56,7 @@
 
                             </div>
                             <div class="col-md-6">
-                                {!! captcha_img('flat') !!}
+                                {!! captcha_img() !!}
                                 <input type="text"  class="form-control"  name="captcha" />
                             </div>
 

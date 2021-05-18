@@ -5,7 +5,7 @@ use Illuminate\Foundation\Auth\ResetsPasswords;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-
+use Illuminate\Mail\Message;
 class PasswordController extends Controller
 {
     /*
@@ -35,6 +35,21 @@ class PasswordController extends Controller
         $this->middleware('guest');
     }
 
+    public function postEmail(Request $request)
+    {
+        $this->validate($request, ['email' => 'required|email', 'captcha'            => 'required|captcha']);
+
+        $response = Password::sendResetLink($request->only('email'), function (Message $message) {
+            $message->subject($this->getEmailSubject());
+        });
+
+        switch ($response) {
+            case Password::RESET_LINK_SENT:
+                return redirect()->back()->with('status', trans($response));
+            case Password::INVALID_USER:
+                return redirect()->back()->withErrors(['email' => trans($response)]);
+        }
+    }
     /**
      * Reset the given user's password.
      */

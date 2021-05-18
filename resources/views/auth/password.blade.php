@@ -17,7 +17,17 @@
 								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="col-md-4 control-label">Not a Robot *</label>
+							<div class="col-md-6">
 
+							</div>
+							<div class="col-md-6">
+								{!! captcha_img() !!}
+								<input type="text"  class="form-control"  name="captcha" />
+							</div>
+
+						</div>
 						<div class="form-group">
 							<div class="col-md-6 col-md-offset-4">
 								<button type="submit" class="btn btn-primary">
