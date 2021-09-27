@@ -149,7 +149,7 @@ return [
         LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
 
-        Sentry\Laravel\ServiceProvider::class,
+        #Sentry\Laravel\ServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
         PragmaRX\Google2FALaravel\ServiceProvider::class,
 
