@@ -33,6 +33,16 @@
         </div>
     @endif
 
+    @if ($requires2fa)
+        <div class="container">
+            <div class="alert alert-info inline clearfix">
+                    <a href="{{ route('setup-2fa') }}" class="btn btn-info">Setup 2FA</a>
+                    <p>Your organisation requires you to setup 2FA.</p>
+            </div>
+        </div>
+    @endif
+
+
     <div class="services container">
         <div class="container">
             <h2 class="page-title">CataLex Home</h2>

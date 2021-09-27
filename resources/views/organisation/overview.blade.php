@@ -40,5 +40,30 @@ CataLex - {{ $organisation->name }}
 			@endif
 		</div>
 	</div>
+	<br/>
+	<div class="row">
+		<div class="col-xs-12">
+			@if($user->can('edit_own_organisation'))
+				<form class="form-inline" role="form" method="POST" action="{{ action('OrganisationController@postEdit2fa') }}">
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					<div class="checkbox">
+						<input type="hidden" value="0" name="require_2fa">
+						<label><input type="checkbox" value="1" name="require_2fa" {{ $organisation->require_2fa ? 'checked' : '' }}> Require 2FA</label>
+					</div>
+					<div>
+						<button type="submit" class="btn btn-default">Save</button>
+					</div>
+					<br/>
+					<br/>
+					<br/>
+				</form>
+			@endif
+		</div>
+	</div>
 </div>
+
+
+
+
+
 @endsection

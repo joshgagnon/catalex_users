@@ -17,7 +17,7 @@ class Organisation extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'billing_detail_id'];
+    protected $fillable = ['name', 'billing_detail_id', 'require_2fa'];
 
     /**
      * The attributes that should be mutated to dates.

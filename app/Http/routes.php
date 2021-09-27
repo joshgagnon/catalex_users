@@ -106,6 +106,9 @@ Route::group(['middleware' => 'csrf'], function() {
         // Organisation admin routes
         Route::post('organisation/users/{user}/remove', 'OrganisationAdminController@removeUser')->name('organisation.users.remove');
 
+
+        Route::post('organisation/edit2fa', 'OrganisationController@postEdit2fa')->name('organisation.edit2fa');
+
         /**
          * Invoice recipient routes
          */
@@ -153,6 +156,13 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::put('charge-logs/{charge_log}/mark-as-failed', 'ChargeLogController@markAsFailed')->name('charge-logs.mark-as-failed');
         Route::put('charge-logs/{charge_log}/mark-as-pending', 'ChargeLogController@markAsPending')->name('charge-logs.mark-as-pending');
     });
+
+    Route::group(['middleware' => ['2fa']], function() {
+        Route::get('setup-2fa', 'HomeController@setup2FA')->name('setup-2fa');
+        Route::post('setup-2fa', 'HomeController@save2FA')->name('save-2fa');
+        Route::post('otp', 'HomeController@otp');
+    });
+
 });
 
 

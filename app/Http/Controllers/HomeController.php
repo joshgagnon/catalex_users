@@ -28,7 +28,7 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $subscriptionUpToDate = $user->subscriptionUpToDate();
@@ -41,6 +41,7 @@ class HomeController extends Controller
             'userHasPendingInvite'  => $userHasPendingInvite,
             'emailNeedsVerified'    => $emailNeedsVerified,
             'emailVerificationSent' => $emailVerificationSent,
+            'requires2fa' =>  $request->user()->organisation->require_2fa && !$request->user()->google2fa_secret
         ]);
     }
 
@@ -125,6 +126,69 @@ class HomeController extends Controller
         $params['response_type'] = 'code';
         $redirect = '/login/good-companies?' . http_build_query($params);
         return redirect($redirect);
+    }
+
+
+    public function setup2FA(Request $request)
+    {
+        $google2fa = new Google2FA();
+        $secret = $google2fa->generateSecretKey();
+        $qrCodeUrl = $google2fa->getQRCodeUrl(
+            "ELF",
+            $request->user()->email,
+            $secret
+        );
+        $writer = new Writer(
+            new ImageRenderer(
+                new RendererStyle(400),
+                new ImagickImageBackEnd()
+            )
+        );
+        $qrcode_image = base64_encode($writer->writeString($qrCodeUrl));
+        return view('auth.setup2FA')->with([
+            'secret' => $secret,
+            'qrcode_image' => $qrcode_image,
+            'name' => $request->user()->organisation->name
+        ]);
+    }
+
+    public function save2FA(Request $request)
+    {
+        $user = $request->user();
+        $secret = $request->input('secret');
+        $window = 8; // 8 keys (respectively 4 minutes) past and future
+        $key = $request->input('totp');
+        $google2fa = new Google2FA();
+        $valid = $google2fa->verifyKey($secret, $key, $window);
+        if(!$valid) {
+            $qrCodeUrl = $google2fa->getQRCodeUrl(
+                "ELF",
+                $user->email,
+                $secret
+            );
+            $writer = new Writer(
+                new ImageRenderer(
+                    new RendererStyle(400),
+                    new ImagickImageBackEnd()
+                )
+            );
+            $qrcode_image = base64_encode($writer->writeString($qrCodeUrl));
+            return view('auth.setup2FA')->with([
+                'secret' => $secret,
+                'qrcode_image' => $qrcode_image
+            ])->withErrors(["totp"=>"Code didn't match, please try again"]);
+        }
+        else{
+            $user->google2fa_secret = $secret;
+            $user->save();
+            G2FA::login();
+            return redirect('/');
+        }
+    }
+
+    public function otp(Request $request)
+    {
+        return redirect('/');
     }
 
 }

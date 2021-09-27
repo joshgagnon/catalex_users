@@ -151,7 +151,7 @@ return [
 
         Sentry\Laravel\ServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
-
+        PragmaRX\Google2FALaravel\ServiceProvider::class,
 
     ],
 

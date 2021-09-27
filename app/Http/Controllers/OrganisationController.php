@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\Organisation2faRequest;
+use Illuminate\Http\Request;
 use App\Http\Requests\CreateOrganisationRequest;
 use App\Http\Requests\InviteFormRequest;
 use App\Library\Invite;
@@ -112,5 +113,16 @@ class OrganisationController extends Controller
         }
 
         return redirect()->back()->with(['success' => 'An invite has been sent to ' . $data['email']]);
+    }
+
+    public function postEdit2fa(Organisation2faRequest $request)
+    {
+        $user = Auth::user();
+
+        $organisation = $user->organisation;
+        $organisation->require_2fa = (bool)$request->input()['require_2fa'];
+
+        $organisation->save();
+        return redirect()->action('OrganisationController@index');
     }
 }
