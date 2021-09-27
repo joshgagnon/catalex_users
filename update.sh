@@ -17,7 +17,7 @@ sudo -u $1 git pull
 
 rm -f vendor/compiled.php
 
-sudo -u $1 composer update
+sudo -u $1 composer install
 
 sudo -u $1 npm update
 
