@@ -30,7 +30,7 @@
         "App\\Providers\\RouteServiceProvider",
         "LucaDegasperi\\OAuth2Server\\Storage\\FluentStorageServiceProvider",
         "LucaDegasperi\\OAuth2Server\\OAuth2ServerServiceProvider",
-        "Sentry\\SentryLaravel\\SentryLaravelServiceProvider",
+        "Sentry\\Laravel\\ServiceProvider",
         "Mews\\Captcha\\CaptchaServiceProvider"
     ],
     "eager": [
@@ -51,7 +51,7 @@
         "App\\Providers\\RouteServiceProvider",
         "LucaDegasperi\\OAuth2Server\\Storage\\FluentStorageServiceProvider",
         "LucaDegasperi\\OAuth2Server\\OAuth2ServerServiceProvider",
-        "Sentry\\SentryLaravel\\SentryLaravelServiceProvider",
+        "Sentry\\Laravel\\ServiceProvider",
         "Mews\\Captcha\\CaptchaServiceProvider"
     ],
     "deferred": {

@@ -149,8 +149,9 @@ return [
         LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
 
-        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
-        Mews\Captcha\CaptchaServiceProvider::class
+        Sentry\Laravel\ServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
+        PragmaRX\Google2FALaravel\ServiceProvider::class,
 
     ],
 
@@ -203,7 +204,8 @@ return [
         'Form'       => 'Illuminate\Html\FormFacade',
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
         'Helper'     => App\Helpers\Helper::class,
-        'Sentry'     => Sentry\SentryLaravel\SentryFacade::class,
+        'Sentry'     => Sentry\Laravel\Facade::class,
+        'Google2FA' => PragmaRX\Google2FALaravel\Facade::class,
     ],
 
 ];
