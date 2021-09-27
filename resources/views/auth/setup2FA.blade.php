@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('app')
 
 @section('content')
     <div class="container login-container">
@@ -10,7 +10,7 @@
                         <form class="form-horizontal" role="form" method="POST" action="{{ route('save-2fa') }}">
                             <input id="secret" type="hidden"  name="secret" value="{{ $secret }}">
 
-                            @csrf
+
                             @if (session('csrf_error'))
                                 <span class="help-block text-center">
                                 <strong>{{ session('csrf_error') }}</strong>
@@ -45,6 +45,7 @@
                                     @endif
                                 </div>
                             </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary">
                                     Submit

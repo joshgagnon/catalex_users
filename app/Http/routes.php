@@ -158,8 +158,8 @@ Route::group(['middleware' => 'csrf'], function() {
     });
 
     Route::group(['middleware' => ['2fa']], function() {
+        Route::post('save-2fa', 'HomeController@save2FA')->name('save-2fa');
         Route::get('setup-2fa', 'HomeController@setup2FA')->name('setup-2fa');
-        Route::post('setup-2fa', 'HomeController@save2FA')->name('save-2fa');
         Route::post('otp', 'HomeController@otp');
     });
 

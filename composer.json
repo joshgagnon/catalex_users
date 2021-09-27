@@ -4,6 +4,12 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"type": "project",
+	"repositories": [
+		{
+			"type": "git",
+			"url": "https://github.com/joshgagnon/google2fa-laravel"
+		}
+	],
 	"require": {
 		"laravel/framework": "5.2.*",
 		"lusitanian/oauth": "dev-master",
@@ -16,7 +22,8 @@
 		"mews/captcha": "dev-master",
 		"sentry/sentry-laravel": "^2.0@dev",
 		"laravelcollective/html": "^5.2.0",
-		"pragmarx/google2fa-laravel": "^0.2.0@dev"
+		"pragmarx/google2fa-laravel": "dev-hack-for-old-laravel",
+		"bacon/bacon-qr-code": "dev-master"
 	},
 	"require-dev": {
 		"symfony/dom-crawler": "~3.0",

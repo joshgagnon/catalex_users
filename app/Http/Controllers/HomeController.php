@@ -5,6 +5,12 @@ use Config;
 use DB;
 use Illuminate\Http\Request;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
+use PragmaRX\Google2FA\Google2FA;
+use Google2FA as G2FA;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 
 class HomeController extends Controller
 {
