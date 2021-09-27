@@ -113,12 +113,12 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+       // 'Illuminate\Foundation\Providers\ArtisanServiceProvider',
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
         'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-        'Illuminate\Routing\ControllerServiceProvider',
+       // 'Illuminate\Routing\ControllerServiceProvider',
         'Illuminate\Cookie\CookieServiceProvider',
         'Illuminate\Database\DatabaseServiceProvider',
         'Illuminate\Encryption\EncryptionServiceProvider',
@@ -135,7 +135,7 @@ return [
         'Illuminate\Translation\TranslationServiceProvider',
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
+        Collective\Html\HtmlServiceProvider::class,
 
         'Illuminate\Broadcasting\BroadcastServiceProvider',
         /*
@@ -151,7 +151,7 @@ return [
 
         Sentry\Laravel\ServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
-        PragmaRX\Google2FALaravel\ServiceProvider::class,
+
 
     ],
 
@@ -200,8 +200,8 @@ return [
         'URL'        => 'Illuminate\Support\Facades\URL',
         'Validator'  => 'Illuminate\Support\Facades\Validator',
         'View'       => 'Illuminate\Support\Facades\View',
-        'Html'       => 'Illuminate\Html\HtmlFacade',
-        'Form'       => 'Illuminate\Html\FormFacade',
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
         'Helper'     => App\Helpers\Helper::class,
         'Sentry'     => Sentry\Laravel\Facade::class,
