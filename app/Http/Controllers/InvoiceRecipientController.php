@@ -10,13 +10,15 @@ class InvoiceRecipientController extends Controller
     public function __construct(Request $request)
     {
         $user = $request->user();
-
+        if(!$user) {
+            return;
+        }
         if (!$user->organisation_id) {
-            abort(404);
+           # abort(404);
         }
 
         if (!$user->hasRole('organisation_admin')) {
-            abort(404);
+           # abort(404);
         }
     }
 

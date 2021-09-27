@@ -45,17 +45,18 @@ Route::group(['middleware' => 'csrf'], function() {
     /**
      * SSO routes
      */
-    Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
 
-    Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin', 'middleware' => 'auth:browser']);
-    Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin', 'middleware' => 'auth:sign']);
-    Route::get('/cc-login', ['as' => 'cc-login', 'uses' => 'HomeController@getCCLogin', 'middleware' => 'auth:cc']);
+    Route::group(['middleware' => ['auth','redirect-if-2fa']], function() {
+        Route::get('/good-companies-login', ['as' => 'good-companies-login', 'uses' => 'HomeController@getGoodCompaniesLogin', 'middleware' => 'auth:gc']);
+        Route::get('/browser-login', ['as' => 'browser-login', 'uses' => 'HomeController@getBrowserLogin', 'middleware' => 'auth:browser']);
+        Route::get('/sign-login', ['as' => 'sign-login', 'uses' => 'HomeController@getSignLogin', 'middleware' => 'auth:sign']);
+        Route::get('/cc-login', ['as' => 'cc-login', 'uses' => 'HomeController@getCCLogin', 'middleware' => 'auth:cc']);
 
-
+    });
 
 
     // Authenticated routes
-    Route::group(['middleware' => ['auth', 'redirect-shadow-users']], function() {
+    Route::group(['middleware' => ['auth', 'redirect-shadow-users', 'redirect-if-2fa']], function() {
         Route::get('/services', 'HomeController@index')->name('services');
         /**
          * Services routes
@@ -146,6 +147,7 @@ Route::group(['middleware' => 'csrf'], function() {
             'organisation' => 'OrganisationController',
             'billing' => 'BillingController',
         ]);
+        Route::post('otp', 'HomeController@otp')->name('otp');;
     });
 
     Route::group(['middleware' => 'admin'], function() {
@@ -157,11 +159,11 @@ Route::group(['middleware' => 'csrf'], function() {
         Route::put('charge-logs/{charge_log}/mark-as-pending', 'ChargeLogController@markAsPending')->name('charge-logs.mark-as-pending');
     });
 
-    Route::group(['middleware' => ['2fa']], function() {
+    Route::group([], function() {
         Route::post('save-2fa', 'HomeController@save2FA')->name('save-2fa');
         Route::get('setup-2fa', 'HomeController@setup2FA')->name('setup-2fa');
-        Route::post('otp', 'HomeController@otp');
     });
+
 
 });
 
@@ -178,7 +180,7 @@ Route::group(['prefix'=>'api', 'middleware' => 'oauth'], function() {
 });
 
 
-Route::get('login/law-browser', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function() {
+Route::get('login/law-browser', ['middleware' => ['check-authorization-params', 'csrf', 'auth', 'redirect-if-2fa'], function() {
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
@@ -186,14 +188,14 @@ Route::get('login/law-browser', ['middleware' => ['check-authorization-params', 
     return Redirect::to($redirectUri);
 }]);
 
-Route::get('login/sign', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function(\Illuminate\Http\Request $request) {
+Route::get('login/sign', ['middleware' => ['check-authorization-params', 'csrf', 'auth', 'redirect-if-2fa'], function(\Illuminate\Http\Request $request) {
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
     return Redirect::to($redirectUri);
 }]);
 
-Route::get('login/cc', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function(\Illuminate\Http\Request $request) {
+Route::get('login/cc', ['middleware' => ['check-authorization-params', 'csrf', 'auth', 'redirect-if-2fa'], function(\Illuminate\Http\Request $request) {
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);
@@ -205,7 +207,7 @@ Route::get('login/cc', ['middleware' => ['check-authorization-params', 'csrf', '
     return Redirect::to($redirectUri);
 }]);
 
-Route::get('login/good-companies', ['middleware' => ['check-authorization-params', 'csrf', 'auth'], function(\Illuminate\Http\Request $request) {
+Route::get('login/good-companies', ['middleware' => ['check-authorization-params', 'csrf', 'auth', 'redirect-if-2fa'], function(\Illuminate\Http\Request $request) {
     $params = Authorizer::getAuthCodeRequestParams();
     $params['user_id'] = Auth::user()->id;
     $redirectUri = Authorizer::issueAuthCode('user', $params['user_id'], $params);

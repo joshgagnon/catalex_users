@@ -32,4 +32,9 @@ sudo -u $1 php artisan migrate --force
 
 sudo -u $1 php artisan optimize
 
+
+
+sudo service ntp stop
+sudo ntpd -gq
+sudo service ntp start
 php artisan up

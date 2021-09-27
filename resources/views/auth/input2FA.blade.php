@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('app')
 
 @section('content')
     <div class="container login-container">
@@ -9,7 +9,7 @@
                     <div class="panel-body">
                         <form class="form-horizontal" role="form" method="POST"  action="/otp" >
                             <p>Please your authenticator app to log in.</p>
-                            @csrf
+
                             @if (session('csrf_error'))
                                 <span class="help-block text-center">
                                 <strong>{{ session('csrf_error') }}</strong>
@@ -40,6 +40,8 @@
 
                                 </div>
                             </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary">
                                     Submit

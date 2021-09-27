@@ -140,7 +140,7 @@ class HomeController extends Controller
         $google2fa = new Google2FA();
         $secret = $google2fa->generateSecretKey();
         $qrCodeUrl = $google2fa->getQRCodeUrl(
-            "ELF",
+            "CataLex",
             $request->user()->email,
             $secret
         );
@@ -168,7 +168,7 @@ class HomeController extends Controller
         $valid = $google2fa->verifyKey($secret, $key, $window);
         if(!$valid) {
             $qrCodeUrl = $google2fa->getQRCodeUrl(
-                "ELF",
+                "CataLex",
                 $user->email,
                 $secret
             );
@@ -194,6 +194,9 @@ class HomeController extends Controller
 
     public function otp(Request $request)
     {
+        if($request->session()->get('next')) {
+            return redirect($request->session()->pull('next'));
+        }
         return redirect('/');
     }
 
