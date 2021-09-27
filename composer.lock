@@ -3097,7 +3097,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/joshgagnon/google2fa-laravel",
-                "reference": "2a558e7b55327fa5321681340d0062459ea16e37"
+                "reference": "faf18b77a88f77a3a39d6803aef1f2d3b7ced2ad"
             },
             "require": {
                 "laravel/framework": ">=5.2",
@@ -3153,7 +3153,7 @@
                 "laravel",
                 "two factor authentication"
             ],
-            "time": "2021-09-27T07:59:02+00:00"
+            "time": "2021-09-27T11:28:52+00:00"
         },
         {
             "name": "predis/predis",
