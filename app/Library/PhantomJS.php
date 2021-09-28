@@ -14,7 +14,7 @@ class PhantomJS
         fclose($handle);
 
         $pdfPath = $baseName . '.pdf';
-        exec(implode(' ', ['phantomjs', base_path('scripts/pdferize.js'), $htmlPath, $pdfPath]));
+        exec(implode(' ', ["DISPLAY=:0 QT_QPA_PLATFORM='offscreen' phantomjs", base_path('scripts/pdferize.js'), $htmlPath, $pdfPath]));
 
         return $pdfPath;
     }

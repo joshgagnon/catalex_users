@@ -22,7 +22,7 @@ class BillingItem extends Model
      *
      * @var array
      */
-    protected $fillable = ['item_id', 'item_type', 'json_data', 'active'];
+    protected $fillable = ['item_id', 'item_type', 'json_data', 'active', 'service_id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -45,6 +45,10 @@ class BillingItem extends Model
 
     public function scopeDueForPayment($query)
     {
+
+        return $query->join('billing_item_payments', 'billing_item_payments.billing_item_id', '=', 'billing_items.id')
+            ->where('paid_until', '<', Carbon::tomorrow())
+            ->where('billing_items.active', true);
         // Check it hasn't been paid past tomorrow
         $query->whereNotExists(function ($query) {
             $query->select(\DB::raw(1))

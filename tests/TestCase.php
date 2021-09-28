@@ -32,7 +32,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         parent::setUp();
 
         if (!static::$migrationsRun) {
-            Artisan::call('migrate:refresh', ['--seed' => true]);
+           # Artisan::call('migrate:refresh', ['--seed' => true]);
             static::$migrationsRun = true;
         }
     }
@@ -53,6 +53,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         // Add the registered user role
         $registeredRole = Role::where('name', 'registered_user')->first();
+
         $user->addRole($registeredRole);
 
         // Add the services

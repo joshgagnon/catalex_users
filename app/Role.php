@@ -23,7 +23,7 @@ class Role extends Model {
 			$permission = $permission->getKey();
 		}
 		elseif(is_string($permission)) {
-			$permission = Permission::where('name', '=', $permission)->pluck('id');
+			$permission = Permission::where('name', '=', $permission)->value('id');
 		}
 
 		$this->permissions()->attach($permission);
@@ -40,7 +40,7 @@ class Role extends Model {
 			$permission = $permission->getKey();
 		}
 		elseif(is_string($permission)) {
-			$permission = Permission::where('name', '=', $permission)->pluck('id');
+			$permission = Permission::where('name', '=', $permission)->value('id');
 		}
 
 		$this->permissions()->detach($permission);

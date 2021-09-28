@@ -159,7 +159,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $role = $role->getKey();
         }
         elseif(is_string($role)) {
-            $role = Role::where('name', '=', $role)->pluck('id');
+            $role = Role::where('name', '=', $role)->value('id');
         }
 
         $this->roles()->detach($role);

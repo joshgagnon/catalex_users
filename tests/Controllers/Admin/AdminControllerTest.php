@@ -19,7 +19,7 @@ class AdminControllerTest extends TestCase
 
         Auth::loginUsingId($adminUser->id);
 
-        $this->visit('/admin/add-user')
+        $this->visit('/user/add-user')
             ->type('Johnny', 'name')
             ->type('johnny@example.com', 'email')
             ->type('110 Street', 'address_line_1')

@@ -47,7 +47,7 @@ class HomeController extends Controller
             'userHasPendingInvite'  => $userHasPendingInvite,
             'emailNeedsVerified'    => $emailNeedsVerified,
             'emailVerificationSent' => $emailVerificationSent,
-            'requires2fa' =>  $request->user()->organisation->require_2fa && !$request->user()->google2fa_secret
+            'requires2fa' =>  $request->user()->organisation && $request->user()->organisation->require_2fa && !$request->user()->google2fa_secret
         ]);
     }
 
