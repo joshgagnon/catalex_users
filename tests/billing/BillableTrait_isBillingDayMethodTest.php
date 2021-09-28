@@ -69,6 +69,8 @@ class BillableTrait_isBillingDayMethodTest extends TestCase
     public function isBillingDay_lastDayOfMonth_isBeforeBillingDay_28DayMonth()
     {
         $billingDetails = $this->createBillingDetails(['period' => 'annually', 'billing_day' => 31]);
+        $billingDetails->created_at = Carbon::parse('last day of February 2014');
+        $billingDetails->save();
         $user = $this->createUser(['billing_detail_id' => $billingDetails->id]);
 
         $actual = $user->isBillingDay(Carbon::parse('last day of February 2015'));

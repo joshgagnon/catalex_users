@@ -72,7 +72,6 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         ];
 
         $billingData = array_merge($defaults, $overrides);
-
         return BillingDetail::create($billingData);
     }
 

@@ -22,7 +22,7 @@ class BillingItem extends Model
      *
      * @var array
      */
-    protected $fillable = ['item_id', 'item_type', 'json_data', 'active', 'service_id'];
+    protected $fillable = ['item_id', 'item_type', 'json_data', 'active', 'service_id', 'user_id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -46,10 +46,20 @@ class BillingItem extends Model
     public function scopeDueForPayment($query)
     {
 
-        return $query->join('billing_item_payments', 'billing_item_payments.billing_item_id', '=', 'billing_items.id')
-            ->where('paid_until', '<', Carbon::tomorrow())
-            ->where('billing_items.active', true);
+        $subQuery = $this->newQuery();
+        $subQuery->select(\DB::raw(1))
+        ->from('billing_item_payments')
+        ->whereRaw('billing_item_payments.billing_item_id = billing_items.id')
+        ->where('paid_until', '>=', Carbon::tomorrow())
+        ->where('active', true);
+
+        $query->wheres[] = ['NotExists', $subQuery, 'and'];
+
+        $query->where('billing_items.active', true);
+        return $query;
+
         // Check it hasn't been paid past tomorrow
+
         $query->whereNotExists(function ($query) {
             $query->select(\DB::raw(1))
                 ->from('billing_item_payments')
@@ -60,7 +70,7 @@ class BillingItem extends Model
 
         // Check it is active
         $query->where('billing_items.active', true);
-
+        fwrite(STDOUT, print_r($query->toSql()."\n", TRUE));
         return $query;
     }
 

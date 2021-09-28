@@ -234,6 +234,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected function getAllDueBillingItems($service)
     {
+       # fwrite(STDOUT, print_r($this->id, TRUE));
+       # fwrite(STDOUT, print_r($service->billingItems()->get(), TRUE));
+        ##fwrite(STDOUT, print_r($service->billingItems()->where('user_id', '=', $this->id)->get(), TRUE));
         return $service->billingItems()
                        ->where('user_id', '=', $this->id)
                        ->dueForPayment()

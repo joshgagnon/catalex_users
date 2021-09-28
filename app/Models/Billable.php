@@ -183,8 +183,14 @@ trait Billable
         if (!$billing) {
             return false;
         }
-
         $dateOfBilling = $dateOfBilling ?: Carbon::today();
+        if($billing->period === 'annually') {
+
+            if($billing->created_at->month !== $dateOfBilling->month) {
+                return false;
+            }
+        }
+
         $billingDay = $billing->billing_day;
         $daysThisMonth = $dateOfBilling->format('t');
 
@@ -239,6 +245,8 @@ trait Billable
     public function bill()
     {
         // Don't charge people who are billing exempt
+
+
         if ($this->billingExempt()) {
             return true;
         }
@@ -273,7 +281,6 @@ trait Billable
 
         foreach ($services as $service) {
             $billingItems = $this->getAllDueBillingItems($service);
-
             foreach ($billingItems as $item) {
                 $priceInCents = $this->priceForBillingItem($item->item_type, $billingDetails->period);
                 $centsDue += $priceInCents;
@@ -294,6 +301,7 @@ trait Billable
 
         // Handle discounts
         $totalBeforeDiscount = Billing::centsToDollars($centsDue);
+
         $discountPercent = $billingDetails->getDiscountPercent();
         $totalAfterDiscount = $discountPercent ? Billing::applyDiscount($totalBeforeDiscount, $discountPercent) : $totalBeforeDiscount;
 
