@@ -359,7 +359,7 @@ class UserController extends Controller
         $inviterName = $requestData['sender_name'];
 
         foreach ($users as $userData) {
-            $user = User::where('email', 'ilike', $userData['email'])->first();
+            $user = User::where('email', 'ilike', $userData['email'])->withTrashed()->first();
             $isExistingUser = $user !== null;
 
             if (!$isExistingUser) {
@@ -381,7 +381,11 @@ class UserController extends Controller
                     ],
                 ]);
             }
-
+            else {
+                if($user->trashed()) {
+                    $user->restore();
+                }
+            }
             switch ($client->id) {
                 case Config::get('oauth_clients.gc.id'):
                     $companyName = $userData['company_name'];
