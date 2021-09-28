@@ -283,7 +283,7 @@ class UserController extends Controller
             return view('auth.denied');
         }
 
-        $user = User::where('email', 'ilike', $request->input('email'))->first();
+        $user = User::where('email', 'ilike', $request->input('email'))->withTrashed()->first();
         $isExistingUser = $user !== null;
 
         if (!$isExistingUser) {
@@ -298,7 +298,11 @@ class UserController extends Controller
             $user = User::create($userData);
             $user->addRole('registered_user');
         }
-
+        else {
+            if($user->trashed()) {
+                $user->restore();
+            }
+        }
         $inviterName = $request->input('sender_name');
 
         switch ($client->id) {
