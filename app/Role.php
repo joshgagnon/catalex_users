@@ -8,6 +8,8 @@ class Role extends Model {
 		'name' => 'required|unique|between:3,128',
 	];
 
+    protected $fillable = ['name'];
+
 	public function users() {
 		return $this->belongsToMany('App\User');
 	}

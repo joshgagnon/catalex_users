@@ -141,9 +141,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         elseif (is_string($role)) {
             // Check named roles first to avoid attach collision
             if($this->hasRole($role)) return;
-            $role = Role::where('name', '=', $role)->pluck('id');
+            $role = Role::where('name', '=', $role)->value('id');
         }
-
         $this->roles()->attach($role);
     }
 
