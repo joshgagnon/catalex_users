@@ -60,7 +60,7 @@ class Organisation extends Model
         // TODO: Remove beta org code
 
         $skip = $this->id === Config::get('constants.beta_organisation') || $this->skip_billing;
-        return $skip || $this->name !== 'Evolution Lawyers';
+        return $skip;
     }
 
     public function userInvites()
