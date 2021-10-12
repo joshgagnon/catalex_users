@@ -263,10 +263,12 @@ class AdminController extends Controller
         if ($billingDetail->users()->first()) {
             $billable = $billingDetail->users()->first();
             $billableKeyName = 'subject';
+            $skipBilling = false;
         }
         else {
             $billable = $billingDetail->organisations()->first();
             $billableKeyName = 'organisation';
+            $skipBilling = $billable->skip_billing;
         }
 
         $chargeLogs = $billable->chargeLogs()->orderBy('timestamp', 'DESC')->get();
@@ -284,6 +286,7 @@ class AdminController extends Controller
             $billableKeyName       => $billable,
             'subscriptionUpToDate' => $billable->subscriptionUpToDate(),
             'discountPercent'      => $discountPercent,
+            'skipBilling' => $skipBilling
         ]);
 
         return view('billing.index');
