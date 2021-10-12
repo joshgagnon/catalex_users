@@ -58,7 +58,9 @@ class Organisation extends Model
     public function billingExempt()
     {
         // TODO: Remove beta org code
-        return $this->id === Config::get('constants.beta_organisation') || $this->skip_billing;
+
+        $skip = $this->id === Config::get('constants.beta_organisation') || $this->skip_billing;
+        return $skip || $this->name !== 'Evolution Lawyers';
     }
 
     public function userInvites()
