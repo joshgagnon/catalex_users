@@ -148,6 +148,7 @@ return [
 	|
 	*/
 
-	'secure' => false,
+	'secure' => true,
+    'same_site' => "none"
 
 ];
