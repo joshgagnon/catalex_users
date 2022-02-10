@@ -122,8 +122,6 @@ return [
 	|
 	*/
 
-	'path' => '/',
-
 	/*
 	|--------------------------------------------------------------------------
 	| Session Cookie Domain
@@ -147,8 +145,7 @@ return [
 	| the cookie from being sent to you if it can not be done securely.
 	|
 	*/
-
-	'secure' => true,
-    'same_site' => "none"
+    'path' => '/',
+    'secure' => env('APP_ENV') === 'local' ? false : true,
 
 ];

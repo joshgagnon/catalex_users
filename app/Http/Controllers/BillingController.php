@@ -175,8 +175,10 @@ class BillingController extends Controller
 
         $gatewayUrl = $response->getRedirectUrl();
 
-        return view('billing.register-card')->with(['gatewayURL' => $gatewayUrl]);
+        return view('billing.preamble')->with(['gatewayURL' => $gatewayUrl]);
     }
+
+
 
     public function finishCreateCard(Request $request)
     {
@@ -224,7 +226,11 @@ class BillingController extends Controller
         ]);
 
         if ($billingDetails) {
-            $billingDetails->cardDetail()->delete();
+            try {
+                $billingDetails->cardDetail()->delete();
+            } catch(\Exception $e) {
+
+            }
             $billingDetails->update(['card_detail_id' => $cardDetail->id]);
         }
         else {
@@ -249,6 +255,6 @@ class BillingController extends Controller
         }
 
         // Return the billing success frame
-        return view('billing.frames.pxpay-success');
+        return view('billing.finalize')->withSuccess('Card successfully added');
     }
 }
