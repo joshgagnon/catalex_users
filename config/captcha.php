@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'characters' => ['2', '3', '4', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'm', 'n', 'p', 'q', 'r', 't', 'u', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'M', 'N', 'P', 'Q', 'R', 'T', 'U', 'X', 'Y', 'Z'],
+    'characters' => ['2', '3', '4', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'm', 'n', 'p', 'q', 'r', 't', 'u', 'x', 'y', 'z'
+        , 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'M', 'N', 'P', 'Q', 'R', 'T', 'U', 'X', 'Y', 'Z'],
     'default' => [
         'length' => 9,
         'width' => 120,
@@ -20,12 +21,12 @@ return [
     ],
 
     'flat' => [
-        'length' => 6,
+        'length' => 8,
         'width' => 160,
         'height' => 46,
         'quality' => 90,
-        'lines' => 6,
-        'bgImage' => false,
+        'lines' => 3,
+        'bgImage' => true,
         'bgColor' => '#ecf2f4',
         'fontColors' => ['#2c3e50', '#c0392b', '#16a085', '#c0392b', '#8e44ad', '#303f9f', '#f57c00', '#795548'],
         'contrast' => -5,
