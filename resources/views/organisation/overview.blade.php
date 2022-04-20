@@ -11,7 +11,7 @@ CataLex - {{ $organisation->name }}
 	<h2>{{ $organisation->name }}</h2>
 
     @if (!$user->hasRole('organisation_admin'))
-        <form class="form-inline" role="form" method="POST" action="{{ route('organisation.leave') }}">
+        <form class="form-inline" role="form" method="POST" action="{{ route('organisation.leave', ['organisation_id' => $organisation->id]) }}">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn-danger btn-xs">Leave Organisation</button>
         </form>
